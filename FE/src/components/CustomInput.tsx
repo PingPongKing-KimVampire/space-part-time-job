@@ -40,20 +40,41 @@ const Input = styled("input", {
   },
 });
 
+interface EventHandlers {
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+}
+
 interface InputProps {
+  type?: string;
   placeholder: string;
   borderType: "multi-top" | "multi-middle" | "multi-bottom" | "single";
   invalid: boolean;
+  value: string;
+  eventHandlers: EventHandlers;
 }
 
 const CustomInput: React.FC<InputProps> = (props) => {
-  const { placeholder, borderType, invalid } = props;
+  const {
+    type = "text",
+    placeholder,
+    borderType,
+    invalid,
+    value,
+    eventHandlers,
+  } = props;
+  const { onChange, onFocus, onBlur } = eventHandlers;
   return (
     <Input
       className={invalid ? "invalid" : ""}
-      type="text"
+      type={type}
       placeholder={placeholder}
       borderType={borderType}
+      value={value}
+      onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
   );
 };
