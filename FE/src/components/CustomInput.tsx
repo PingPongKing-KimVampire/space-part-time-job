@@ -9,7 +9,7 @@ const Input = styled("input", {
   border: "0.6px solid #343434",
   width: "100%",
   padding: "17px",
-  fontSize: "22px",
+  fontSize: "18px",
   boxSizing: "border-box",
   "&::placeholder": {
     fontSize: "18px",

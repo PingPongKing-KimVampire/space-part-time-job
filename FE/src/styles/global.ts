@@ -35,4 +35,5 @@ export const MainButtonStyle = {
 export const WarningText = styled("div", {
   marginTop: "10px",
   color: "#FF4043",
+  fontSize: "14px",
 });

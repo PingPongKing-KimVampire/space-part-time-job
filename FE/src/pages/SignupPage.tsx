@@ -98,6 +98,7 @@ const SignupPage = () => {
           />
           <CustomInput
             placeholder="비밀번호 (8~16자의 영문 대/소문자, 숫자, 특수문자)"
+            type="password"
             borderType="multi-middle"
             invalid={!isValid.password && isBlured.password}
             value={inputValue.password}

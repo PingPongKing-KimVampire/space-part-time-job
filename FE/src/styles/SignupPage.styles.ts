@@ -11,7 +11,7 @@ export const Background = styled("div", {
 });
 
 export const Container = styled("div", {
-  width: "550px",
+  width: "500px",
   marginTop: "40px",
   display: "flex",
   flexDirection: "column",
@@ -31,7 +31,7 @@ export const SendNumberButton = styled("button", {
 });
 
 export const SignupButton = styled("button", {
-  width: "550px",
+  width: "500px",
   marginTop: "180px",
   ...MainButtonStyle,
 });
