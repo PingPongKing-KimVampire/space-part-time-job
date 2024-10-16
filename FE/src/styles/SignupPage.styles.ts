@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { activatedButton, inactivatedButton } from "./global.ts";
+import { MainButtonStyle } from "./global.ts";
 const { styled } = createStitches();
 
 export const Background = styled("div", {
@@ -26,20 +26,14 @@ export const PhoneNumberContainer = styled("div", {
 });
 
 export const SendNumberButton = styled("button", {
-  ...activatedButton,
+  ...MainButtonStyle,
   width: "100%",
 });
 
 export const SignupButton = styled("button", {
   width: "550px",
   marginTop: "180px",
-  "&.activated": activatedButton,
-  "&.inactivated": inactivatedButton,
-});
-
-export const WarningText = styled("div", {
-  marginTop: "10px",
-  color: "#FF4043",
+  ...MainButtonStyle,
 });
 
 export const TimeCounter = styled("div", {
@@ -50,15 +44,4 @@ export const TimeCounter = styled("div", {
   fontWeight: "400",
   fontSize: "20px",
   letterSpacing: "1px",
-});
-
-export const NotificationBox = styled("div", {
-  position: "fixed",
-  bottom: "30px",
-  background: "black",
-  color: "white",
-  width: "550px",
-  padding: "16px",
-  borderRadius: "10px",
-  boxSizing: "border-box",
 });

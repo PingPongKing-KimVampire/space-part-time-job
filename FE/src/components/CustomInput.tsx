@@ -1,5 +1,6 @@
 import React from "react";
 import { createStitches } from "@stitches/react";
+import { MainColor } from "../styles/global.ts";
 
 const { styled } = createStitches();
 
@@ -7,7 +8,7 @@ const Input = styled("input", {
   background: "white",
   border: "0.6px solid #343434",
   width: "100%",
-  padding: "16px",
+  padding: "17px",
   fontSize: "22px",
   boxSizing: "border-box",
   "&::placeholder": {
@@ -19,7 +20,7 @@ const Input = styled("input", {
     border: "2px solid #FF4043",
   },
   "&:focus": {
-    border: "2px solid #4361EE",
+    border: `2px solid ${MainColor}`,
   },
   variants: {
     borderType: {
@@ -50,9 +51,10 @@ interface InputProps {
   type?: string;
   placeholder: string;
   borderType: "multi-top" | "multi-middle" | "multi-bottom" | "single";
-  invalid: boolean;
+  invalid?: boolean;
   value: string;
   eventHandlers: EventHandlers;
+  children?: React.ReactNode;
 }
 
 const CustomInput: React.FC<InputProps> = (props) => {
@@ -60,22 +62,26 @@ const CustomInput: React.FC<InputProps> = (props) => {
     type = "text",
     placeholder,
     borderType,
-    invalid,
+    invalid = false,
     value,
     eventHandlers,
+    children,
   } = props;
   const { onChange, onFocus, onBlur } = eventHandlers;
   return (
-    <Input
-      className={invalid ? "invalid" : ""}
-      type={type}
-      placeholder={placeholder}
-      borderType={borderType}
-      value={value}
-      onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    />
+    <div style={{ position: "relative" }}>
+      <Input
+        className={invalid ? "invalid" : ""}
+        type={type}
+        placeholder={placeholder}
+        borderType={borderType}
+        value={value}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      ></Input>
+      {children}
+    </div>
   );
 };
 

@@ -6,9 +6,7 @@ import {
   PhoneNumberContainer,
   SendNumberButton,
   SignupButton,
-  WarningText,
   TimeCounter,
-  NotificationBox,
 } from "../styles/SignupPage.styles.ts";
 import {
   validateId,
@@ -16,6 +14,8 @@ import {
   validateNickname,
   validatePhoneNumber,
 } from "../utils/validation.ts";
+import NotificationBox from "../components/NotificationBox.tsx";
+import { WarningText } from "../styles/global.ts";
 
 const SignupPage = () => {
   let sent = true;
@@ -32,7 +32,6 @@ const SignupPage = () => {
     password: false,
     nickname: false,
     phoneNumber: false,
-    authNumber: false,
   });
   const [isBlured, setIsBlured] = useState({
     // 포커스아웃된 적이 있는가?
@@ -40,7 +39,6 @@ const SignupPage = () => {
     password: false,
     nickname: false,
     phoneNumber: false,
-    authNumber: false,
   });
 
   const [notiVisible, setNotiVisible] = useState(false); // 남은 인증번호 전송 가능 횟수를 표시하는 노티 표시 여부
@@ -178,6 +176,7 @@ const SignupPage = () => {
               },
             }}
           />
+          {/* TODO: 인증번호 전송 버튼 활성화 및 비활성화 */}
           <SendNumberButton onClick={sendNumberButtonClicked}>
             인증번호 {sent ? "재" : ""}전송
             <TimeCounter>4분 50초</TimeCounter>
@@ -202,14 +201,8 @@ const SignupPage = () => {
         <WarningText>{warningTexts[1]}</WarningText>
       </Container>
       <SignupButton
-        className={
-          isValid.id &&
-          isValid.password &&
-          isValid.nickname &&
-          isValid.phoneNumber
-            ? "activated"
-            : "inactivated"
-        }
+        className={Object.values(isValid).every(Boolean) ? "" : "inactivated"}
+        disabled={!Object.values(isValid).every(Boolean)}
       >
         시작하기
       </SignupButton>
