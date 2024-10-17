@@ -3,6 +3,7 @@ import { createStitches } from "@stitches/react";
 const { styled } = createStitches();
 
 export const MainColor = "#4361EE";
+export const MainHoverColor = "#2E4BD5";
 
 const ButtonStyle = {
   fontSize: "24px",
@@ -27,7 +28,7 @@ export const MainButtonStyle = {
     cursor: "pointer",
     transition: "background 0.2s",
     "&:hover": {
-      background: "#2E4BD5",
+      background: MainHoverColor,
     },
   },
 };
