@@ -7,7 +7,6 @@ const { styled } = createStitches();
 const Input = styled("input", {
   background: "white",
   border: "0.6px solid #343434",
-  width: "100%",
   padding: "17px",
   fontSize: "18px",
   boxSizing: "border-box",
@@ -48,29 +47,33 @@ interface EventHandlers {
 }
 
 interface InputProps {
+  id: string;
   type?: string;
-  placeholder: string;
-  borderType: "multi-top" | "multi-middle" | "multi-bottom" | "single";
+  placeholder?: string;
+  borderType?: "multi-top" | "multi-middle" | "multi-bottom" | "single";
   invalid?: boolean;
   value: string;
   eventHandlers: EventHandlers;
   children?: React.ReactNode;
+  width?: string;
 }
 
 const CustomInput: React.FC<InputProps> = (props) => {
   const {
     type = "text",
-    placeholder,
-    borderType,
+    placeholder = "",
+    borderType = "single",
     invalid = false,
     value,
     eventHandlers,
     children,
+    width = "100%",
   } = props;
   const { onChange, onFocus, onBlur } = eventHandlers;
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", width }}>
       <Input
+        style={{ width: "100%" }}
         className={invalid ? "invalid" : ""}
         type={type}
         placeholder={placeholder}

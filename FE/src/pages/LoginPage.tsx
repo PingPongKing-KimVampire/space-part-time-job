@@ -92,6 +92,7 @@ const LoginPage = () => {
             {selectedTab === ID_PW && (
               <div>
                 <CustomInput
+                  id="id"
                   placeholder="아이디"
                   borderType="multi-top"
                   value={inputValue.id}
@@ -105,6 +106,7 @@ const LoginPage = () => {
                   }}
                 />
                 <CustomInput
+                  id="password"
                   placeholder="비밀번호"
                   type="password"
                   borderType="multi-bottom"
@@ -123,6 +125,7 @@ const LoginPage = () => {
             {selectedTab === PHONE_NUMBER && (
               <div>
                 <CustomInput
+                  id="phoneNumber"
                   placeholder="휴대폰 번호 (- 없이 입력)"
                   borderType="multi-top"
                   value={inputValue.phoneNumber}
@@ -150,6 +153,7 @@ const LoginPage = () => {
                   </SendNumberButton>
                 </CustomInput>
                 <CustomInput
+                  id="authNumber"
                   placeholder="인증번호"
                   borderType="multi-bottom"
                   value={inputValue.authNumber}

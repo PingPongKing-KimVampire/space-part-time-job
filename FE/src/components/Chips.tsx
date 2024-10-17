@@ -17,7 +17,8 @@ const Option = styled("button", {
   fontSize: "16px",
   display: "flex",
   border: `1px solid ${MainColor}`,
-  transition: "background 0.2s",
+  transitionProperty: "background boxShadow",
+  transitionDuration: "0.2s",
   "&:not(.selected)": {
     background: "white",
     "&:hover": {
@@ -28,7 +29,7 @@ const Option = styled("button", {
   "&.selected": {
     background: MainColor,
     color: "white",
-    boxShadow: "0 0 7px 2px #9FB0FF",
+    boxShadow: "0 0 3px 1px #9FB0FF",
     "&:hover": {
       background: MainHoverColor,
     },
@@ -36,16 +37,26 @@ const Option = styled("button", {
 });
 
 interface ChipsPops {
+  id: string;
   options: string[];
+  // TODO : 이 물음표 없애야함
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  // option을 인자로 전달했을 때, selected 여부 반환
+  isSelected?: (day: string) => boolean;
 }
 
 const Chips: React.FC<ChipsPops> = (props) => {
-  const { options } = props;
+  const { id, options, onClick, isSelected } = props;
+
   return (
-    <Container>
+    <Container id={id}>
       {options &&
         options.map((option) => (
-          <Option className="" key={option}>
+          <Option
+            className={isSelected ? (isSelected(option) ? "selected" : "") : ""}
+            key={option}
+            onClick={onClick}
+          >
             {option}
           </Option>
         ))}

@@ -79,6 +79,7 @@ const SignupPage = () => {
       <Container>
         <div>
           <CustomInput
+            id="id"
             placeholder="아이디 (5~10자의 영문 소문자, 숫자)"
             borderType="multi-top"
             invalid={!isValid.id && isBlured.id}
@@ -97,6 +98,7 @@ const SignupPage = () => {
             }}
           />
           <CustomInput
+            id="password"
             placeholder="비밀번호 (8~16자의 영문 대/소문자, 숫자, 특수문자)"
             type="password"
             borderType="multi-middle"
@@ -119,6 +121,7 @@ const SignupPage = () => {
             }}
           />
           <CustomInput
+            id="nickname"
             placeholder="닉네임 (1~10자의 한글, 영문, 숫자)"
             borderType="multi-bottom"
             invalid={!isValid.nickname && isBlured.nickname}
@@ -143,6 +146,7 @@ const SignupPage = () => {
         <WarningText>{warningTexts[0]}</WarningText>
         <PhoneNumberContainer>
           <CustomInput
+            id="phoneNumber"
             placeholder="휴대전화번호 (- 없이 입력)"
             borderType="single"
             invalid={!isValid.phoneNumber && isBlured.phoneNumber}
@@ -184,6 +188,7 @@ const SignupPage = () => {
           </SendNumberButton>
           {sent && (
             <CustomInput
+              id="authNumber"
               placeholder="인증번호"
               borderType="single"
               invalid={false}
