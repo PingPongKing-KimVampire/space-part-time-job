@@ -15,6 +15,7 @@ import {
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import FormSection from "../components/CreateJobPage/FormSection.tsx";
 import FormField from "../components/CreateJobPage/FormField.tsx";
+import CustomCalendar from "../components/CreateJobPage/CustomCalendar.tsx";
 
 const CreateJobPage = () => {
   useBackgroundColor("#F9FBFC");
@@ -88,8 +89,8 @@ const CreateJobPage = () => {
             />
           </FormField>
 
-          {selectedPeriod === TERM.LONG_TERM && <div>캘린더 표시</div>}
-          {selectedPeriod !== TERM.LONG_TERM && (
+          {selectedPeriod === TERM.SHORT_TERM && <CustomCalendar />}
+          {selectedPeriod === TERM.LONG_TERM && (
             <FormField
               id="DAYS"
               title="요일 선택"
