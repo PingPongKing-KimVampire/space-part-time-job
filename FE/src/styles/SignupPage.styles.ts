@@ -8,11 +8,12 @@ export const Background = styled("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
+  justifyContent: "center",
 });
 
 export const Container = styled("div", {
-  width: "500px",
-  marginTop: "40px",
+  width: "700px",
+  marginBottom: "80px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "",
@@ -31,9 +32,10 @@ export const SendNumberButton = styled("button", {
 });
 
 export const SignupButton = styled("button", {
-  width: "500px",
-  marginTop: "180px",
   ...MainButtonStyle,
+  width: "700px",
+  position: "absolute",
+  bottom: "30px",
 });
 
 export const TimeCounter = styled("div", {

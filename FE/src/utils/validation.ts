@@ -28,10 +28,15 @@ export const validatePassword = (password: string): boolean => {
 
 export const validateNickname = (nickname: string): boolean => {
   if (nickname.length < 1 || 10 < nickname.length) return false;
-  return /[가-힣a-zA-Z0-9]/.test(nickname);
+  return /^[가-힣a-zA-Z0-9]+$/.test(nickname);
 };
 
 export const validatePhoneNumber = (phoneNumber: string): boolean => {
   if (phoneNumber.length !== 11) return false;
+  if (phoneNumber.slice(0, 3) !== "010") return false;
   return /^[0-9]+$/.test(phoneNumber);
+};
+
+export const validateAuthNumber = (authNumber: string): boolean => {
+  return authNumber.length > 0;
 };

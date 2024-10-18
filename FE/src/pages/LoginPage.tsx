@@ -38,6 +38,11 @@ const LoginPage = () => {
   // 이 로직을 NotificationBox 내부에 합쳐버릴까?
   const sendNumberButtonClicked = () => {
     // 인증번호 전송 버튼 클릭
+    // 전화번호 유효성 검증 및 오류 표시
+    if (!isValidPhoneNumber) {
+      setWarningText("* 휴대폰 번호가 유효하지 않습니다.");
+      return;
+    }
     // 남은 인증번호 전송 가능 횟수를 표시하는 노티를 표시했다가 3초 후 다시 제거
     setNotiVisible(true);
     setTimeout(() => {
@@ -49,12 +54,13 @@ const LoginPage = () => {
     e.preventDefault();
     const getWarningText = () => {
       if (selectedTab === ID_PW) {
-        if (inputValue.id === "") return "아이디를 입력해주세요.";
-        if (inputValue.password === "") return "비밀번호를 입력해주세요.";
+        if (inputValue.id === "") return "* 아이디를 입력해주세요.";
+        if (inputValue.password === "") return "* 비밀번호를 입력해주세요.";
       } else if (selectedTab === PHONE_NUMBER) {
-        if (inputValue.phoneNumber === "") return "휴대폰 번호를 입력해주세요.";
-        if (!isValidPhoneNumber) return "휴대폰 번호가 유효하지 않습니다.";
-        if (inputValue.authNumber === "") return "인증번호를 입력해주세요.";
+        if (inputValue.phoneNumber === "")
+          return "* 휴대폰 번호를 입력해주세요.";
+        if (!isValidPhoneNumber) return "* 휴대폰 번호가 유효하지 않습니다.";
+        if (inputValue.authNumber === "") return "* 인증번호를 입력해주세요.";
       }
       return "";
     };
@@ -144,10 +150,8 @@ const LoginPage = () => {
                   }}
                 >
                   <SendNumberButton
-                    className={isValidPhoneNumber ? "" : "inactivated"}
                     type="button"
                     onClick={sendNumberButtonClicked}
-                    disabled={!isValidPhoneNumber}
                   >
                     인증번호 전송
                   </SendNumberButton>
