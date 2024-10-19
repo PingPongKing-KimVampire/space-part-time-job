@@ -18,6 +18,7 @@ import {
 } from "../utils/validation.ts";
 import NotificationBox from "../components/NotificationBox.tsx";
 import { WarningText } from "../styles/global.ts";
+import useCountdownTimer from "../utils/useCountdownTimer.ts";
 
 const SignupPage = () => {
   const [inputValue, setInputValue] = useState({
@@ -38,8 +39,8 @@ const SignupPage = () => {
   const [isNotiVisible, setIsNotiVisible] = useState(false); // 남은 인증번호 전송 가능 횟수를 표시하는 노티 표시 여부
   const [warningTexts, setWarningTexts] = useState(["", ""]); // 경고 문구
   const [isSendButtonClicked, setIsSendButtonClicked] = useState(false); // 인증번호 전송 버튼이 클릭된 적 있나?
-
-  const [timeCountDown, setTimeCountDown] = useState(null); // 인증번호 전송 후 카운트다운 정보
+  const COUNTDOWN_SEC = 300;
+  const countdownTimer = useCountdownTimer(COUNTDOWN_SEC); // 5분 카운트다운 타이머
 
   const sendNumberButtonClicked = () => {
     // 인증번호 전송 버튼 클릭
@@ -50,6 +51,7 @@ const SignupPage = () => {
       setIsNotiVisible(false);
     }, 2000);
     // 5분 카운트다운 시작
+    countdownTimer.start();
   };
 
   useEffect(() => {
@@ -74,6 +76,17 @@ const SignupPage = () => {
   // 경고 문구 표시 여부 (비어있지 않으면서 유효하지 않은 경우)
   const getIsValid = (fieldName: string): boolean => {
     return isValid[fieldName] || inputValue[fieldName] === "";
+  };
+
+  const getIsActivatedSendNumberButton = () => {
+    if (!isValid.phoneNumber) return false;
+    // 인증번호 전송 후 10초 간 인증번호 전송 버튼 비활성화
+    if (
+      countdownTimer.isActive &&
+      COUNTDOWN_SEC - 10 < countdownTimer.timeLeft.totalSeconds
+    )
+      return false;
+    return true;
   };
 
   return (
@@ -155,11 +168,17 @@ const SignupPage = () => {
           />
           <SendNumberButton
             onClick={sendNumberButtonClicked}
-            className={!isValid.phoneNumber ? "inactivated" : ""}
-            disabled={!isValid.phoneNumber}
+            className={!getIsActivatedSendNumberButton() ? "inactivated" : ""}
+            disabled={!getIsActivatedSendNumberButton()}
           >
             인증번호 {isSendButtonClicked ? "재" : ""}전송
-            <TimeCounter>4분 50초</TimeCounter>
+            {countdownTimer.isActive && (
+              <TimeCounter>
+                {countdownTimer.timeLeft.minutes > 0
+                  ? `${countdownTimer.timeLeft.minutes}분 ${countdownTimer.timeLeft.seconds}초`
+                  : `${countdownTimer.timeLeft.seconds}초`}
+              </TimeCounter>
+            )}
           </SendNumberButton>
           {isSendButtonClicked && (
             <CustomInput
