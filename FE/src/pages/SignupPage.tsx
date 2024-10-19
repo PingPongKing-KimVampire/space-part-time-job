@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomInput from "../components/CustomInput.tsx";
 import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
+import PasswordInput from "../components/PasswordInput.tsx";
 import {
   Background,
   Container,
@@ -97,10 +98,9 @@ const SignupPage = () => {
               },
             }}
           />
-          <CustomInput
+          <PasswordInput
             id="password"
             placeholder="비밀번호 (8~16자의 영문 대/소문자, 숫자, 특수문자)"
-            type="password"
             borderType="multi-middle"
             invalid={!getIsValid("password")}
             value={inputValue.password}

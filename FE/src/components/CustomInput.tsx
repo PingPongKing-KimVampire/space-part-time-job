@@ -42,7 +42,7 @@ const Input = styled("input", {
   },
 });
 
-interface InputProps {
+export interface InputProps {
   id: string;
   type?: string;
   placeholder?: string;
@@ -54,7 +54,7 @@ interface InputProps {
   width?: string;
 }
 
-interface EventHandlers {
+export interface EventHandlers {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -62,6 +62,7 @@ interface EventHandlers {
 
 const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
+    id,
     type = "text",
     placeholder = "",
     borderType = "single",
@@ -77,6 +78,7 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       <Input
         ref={ref}
         style={{ width: "100%" }}
+        id={id}
         className={invalid ? "invalid" : ""}
         type={type}
         placeholder={placeholder}

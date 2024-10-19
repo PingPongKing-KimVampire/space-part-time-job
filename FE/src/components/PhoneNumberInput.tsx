@@ -3,7 +3,7 @@ import CustomInput from "./CustomInput.tsx";
 import { validatePhoneNumber } from "../utils/validation.ts";
 
 interface PhoneNumberInputProps {
-  borderType?: string;
+  borderType?: "multi-top" | "multi-middle" | "multi-bottom" | "single";
   invalid?: boolean;
   value: string;
   setValue: (value: string) => void;

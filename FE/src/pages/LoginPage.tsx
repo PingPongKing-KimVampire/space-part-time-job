@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/CustomInput.tsx";
 import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
+import PasswordInput from "../components/PasswordInput.tsx";
 import NotificationBox from "../components/NotificationBox.tsx";
 import { WarningText } from "../styles/global.ts";
-import { validatePhoneNumber } from "../utils/validation.ts";
 import {
   Background,
   Container,
@@ -112,10 +112,9 @@ const LoginPage = () => {
                     },
                   }}
                 />
-                <CustomInput
+                <PasswordInput
                   id="password"
                   placeholder="비밀번호"
-                  type="password"
                   borderType="multi-bottom"
                   value={inputValue.password}
                   eventHandlers={{
