@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { createStitches } from "@stitches/react";
 import { MainColor } from "../styles/global.ts";
 
@@ -6,7 +6,7 @@ const { styled } = createStitches();
 
 const Input = styled("input", {
   background: "white",
-  border: "0.6px solid #343434",
+  border: "1px solid #B2B2B2",
   padding: "17px",
   fontSize: "18px",
   boxSizing: "border-box",
@@ -16,22 +16,24 @@ const Input = styled("input", {
   },
   outline: "none",
   "&.invalid": {
-    border: "2px solid #FF4043",
+    borderColor: "#FF4043",
   },
   "&:focus": {
-    border: `2px solid ${MainColor}`,
+    borderColor: MainColor,
   },
   variants: {
     borderType: {
       "multi-top": {
         borderRadius: "16px 16px 0 0",
-        borderBottom: "none",
+        borderBottomWidth: "0.5px",
       },
       "multi-middle": {
-        borderBottom: "none",
+        borderTopWidth: "0.5px",
+        borderBottomWidth: "0.5px",
       },
       "multi-bottom": {
         borderRadius: "0 0 16px 16px",
+        borderTopWidth: "0.5px",
       },
       single: {
         borderRadius: "16px",
@@ -39,12 +41,6 @@ const Input = styled("input", {
     },
   },
 });
-
-interface EventHandlers {
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-}
 
 interface InputProps {
   id: string;
@@ -58,7 +54,13 @@ interface InputProps {
   width?: string;
 }
 
-const CustomInput: React.FC<InputProps> = (props) => {
+interface EventHandlers {
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+}
+
+const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     type = "text",
     placeholder = "",
@@ -73,6 +75,7 @@ const CustomInput: React.FC<InputProps> = (props) => {
   return (
     <div style={{ position: "relative", width }}>
       <Input
+        ref={ref}
         style={{ width: "100%" }}
         className={invalid ? "invalid" : ""}
         type={type}
@@ -86,6 +89,6 @@ const CustomInput: React.FC<InputProps> = (props) => {
       {children}
     </div>
   );
-};
+});
 
 export default CustomInput;

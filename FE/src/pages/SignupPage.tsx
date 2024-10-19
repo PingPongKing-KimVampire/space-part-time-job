@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CustomInput from "../components/CustomInput.tsx";
+import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import {
   Background,
   Container,
@@ -12,7 +13,6 @@ import {
   validateId,
   validatePassword,
   validateNickname,
-  validatePhoneNumber,
   validateAuthNumber,
 } from "../utils/validation.ts";
 import NotificationBox from "../components/NotificationBox.tsx";
@@ -70,6 +70,7 @@ const SignupPage = () => {
     setWarningTexts([getFirstWarning(), getSecondWarning()]);
   }, [isValid]);
 
+  // 경고 문구 표시 여부 (비어있지 않으면서 유효하지 않은 경우)
   const getIsValid = (fieldName: string): boolean => {
     return isValid[fieldName] || inputValue[fieldName] === "";
   };
@@ -142,43 +143,16 @@ const SignupPage = () => {
         </div>
         <WarningText>{warningTexts[0]}</WarningText>
         <PhoneNumberContainer>
-          <CustomInput
-            id="phoneNumber"
-            placeholder="휴대전화번호 (- 없이 입력)"
+          <PhoneNumberInput
             invalid={!getIsValid("phoneNumber")}
             value={inputValue.phoneNumber}
-            eventHandlers={{
-              onChange: (e) => {
-                // TODO: 최소 글자수 로직을 CustomInput 컴포넌트에 숨긴다면?
-                if (e.target.value.length <= 11)
-                  setInputValue((state) => ({
-                    ...state,
-                    phoneNumber: e.target.value,
-                  }));
-              },
-              onFocus: () => {
-                setInputValue((state) => ({
-                  ...state,
-                  phoneNumber: state.phoneNumber.replaceAll("-", ""),
-                }));
-              },
-              onBlur: () => {
-                setIsValid((state) => ({
-                  ...state,
-                  phoneNumber: validatePhoneNumber(inputValue.phoneNumber),
-                }));
-                // 전화번호 포맷으로 가공하기
-                const part1 = inputValue.phoneNumber.slice(0, 3);
-                const part2 = inputValue.phoneNumber.slice(3, 7);
-                const part3 = inputValue.phoneNumber.slice(7, 11);
-                setInputValue((state) => ({
-                  ...state,
-                  phoneNumber: [part1, part2, part3].filter(Boolean).join("-"),
-                }));
-              },
+            setValue={(value) => {
+              setInputValue((state) => ({ ...state, phoneNumber: value }));
+            }}
+            setIsValid={(isValid) => {
+              setIsValid((state) => ({ ...state, phoneNumber: isValid }));
             }}
           />
-          {/* TODO: 인증번호 전송 버튼 활성화 및 비활성화 */}
           <SendNumberButton
             onClick={sendNumberButtonClicked}
             className={!isValid.phoneNumber ? "inactivated" : ""}

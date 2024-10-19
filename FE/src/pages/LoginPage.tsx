@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/CustomInput.tsx";
+import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import NotificationBox from "../components/NotificationBox.tsx";
 import { WarningText } from "../styles/global.ts";
 import { validatePhoneNumber } from "../utils/validation.ts";
@@ -130,7 +131,28 @@ const LoginPage = () => {
             )}
             {selectedTab === PHONE_NUMBER && (
               <div>
-                <CustomInput
+                <PhoneNumberInput
+                  borderType="multi-top"
+                  value={inputValue.phoneNumber}
+                  setValue={(value) => {
+                    setInputValue((state) => ({
+                      ...state,
+                      phoneNumber: value,
+                    }));
+                  }}
+                  setIsValid={(isValid) => {
+                    setIsValidPhoneNumber(isValid);
+                  }}
+                >
+                  <SendNumberButton
+                    type="button"
+                    onClick={sendNumberButtonClicked}
+                  >
+                    인증번호 전송
+                  </SendNumberButton>
+                </PhoneNumberInput>
+
+                {/* <CustomInput
                   id="phoneNumber"
                   placeholder="휴대폰 번호 (- 없이 입력)"
                   borderType="multi-top"
@@ -155,7 +177,7 @@ const LoginPage = () => {
                   >
                     인증번호 전송
                   </SendNumberButton>
-                </CustomInput>
+                </CustomInput> */}
                 <CustomInput
                   id="authNumber"
                   placeholder="인증번호"
