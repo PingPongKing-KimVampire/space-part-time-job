@@ -8,12 +8,13 @@ export const Background = styled("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center",
+  // justifyContent: "center",
 });
 
 export const Container = styled("div", {
   width: "700px",
-  marginBottom: "80px",
+  // marginBottom: "80px",
+  marginTop: "60px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "",

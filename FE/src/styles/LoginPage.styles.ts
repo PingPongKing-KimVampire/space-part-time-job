@@ -14,14 +14,25 @@ export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  marginBottom: "80px",
+  marginBottom: "60px",
 });
 
-export const Title = styled("p", {
-  fontSize: "30px",
-  fontWeight: "900",
-  marginBottom: "50px",
-  "& span": {
+export const Title = styled("div", {
+  marginBottom: "40px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "5px",
+  "& .sub": {
+    fontSize: "24px",
+    fontWeight: "400",
+    span: {
+      color: MainColor,
+    },
+  },
+  "& .main": {
+    fontSize: "50px",
+    fontWeight: "900",
     color: MainColor,
   },
 });
@@ -38,6 +49,7 @@ export const TabButton = styled("button", {
   border: "1px solid #CDD2D7",
   background: "#F8F8F8",
   color: "#7C7C7C",
+  cursor: "pointer",
   "&.left": {
     borderTopLeftRadius: "10px",
     borderRight: "none",

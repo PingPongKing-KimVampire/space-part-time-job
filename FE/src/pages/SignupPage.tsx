@@ -19,6 +19,7 @@ import {
 import NotificationBox from "../components/NotificationBox.tsx";
 import { WarningText } from "../styles/global.ts";
 import useCountdownTimer from "../utils/useCountdownTimer.ts";
+import { Title } from "../styles/LoginPage.styles.ts";
 
 const SignupPage = () => {
   const [inputValue, setInputValue] = useState({
@@ -92,6 +93,12 @@ const SignupPage = () => {
   return (
     <Background>
       <Container>
+        <Title>
+          <div className="sub">
+            <span>우</span>리 <span>주</span>변의 <span>알바</span>
+          </div>
+          <div className="main">우주 알바</div>
+        </Title>
         <div>
           <CustomInput
             id="id"

@@ -72,7 +72,10 @@ const LoginPage = () => {
     <Background>
       <Container>
         <Title>
-          우리 주변의 <span>우주</span>
+          <div className="sub">
+            <span>우</span>리 <span>주</span>변의 <span>알바</span>
+          </div>
+          <div className="main">우주 알바</div>
         </Title>
         <LoginPanel>
           <div>

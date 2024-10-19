@@ -15,6 +15,7 @@ export const EyeButton = styled("button", {
   border: "none",
   background: "none",
   cursor: "pointer",
+  outline: "none",
   "& svg": {
     width: "100%",
     height: "100%",
