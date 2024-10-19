@@ -1,13 +1,12 @@
 import React, { useRef } from "react";
 import CustomInput from "./CustomInput.tsx";
-import { validatePhoneNumber } from "../utils/validation.ts";
 
 interface PhoneNumberInputProps {
   borderType?: "multi-top" | "multi-middle" | "multi-bottom" | "single";
   invalid?: boolean;
   value: string;
   setValue: (value: string) => void;
-  setIsValid: (isValid: boolean) => void;
+  onBlurStart: () => void;
   children?: React.ReactNode;
   width?: string;
 }
@@ -20,10 +19,11 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
     invalid = false,
     value,
     setValue,
-    setIsValid,
+    onBlurStart,
     children,
     width = "100%",
   } = props;
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +47,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   };
 
   const onBlur = () => {
-    setIsValid(validatePhoneNumber(value));
+    if (onBlurStart) onBlurStart();
     // 전화번호 포맷으로 가공하기
     const part1 = value.slice(0, 3);
     const part2 = value.slice(3, 7);

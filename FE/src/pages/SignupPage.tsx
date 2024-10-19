@@ -10,31 +10,62 @@ import {
   SignupButton,
   TimeCounter,
 } from "../styles/SignupPage.styles.ts";
-import {
-  validateId,
-  validatePassword,
-  validateNickname,
-  validateAuthNumber,
-} from "../utils/validation.ts";
+import checkRulePass from "../utils/checkRulePass.ts";
 import NotificationBox from "../components/NotificationBox.tsx";
 import { WarningText } from "../styles/global.ts";
 import useCountdownTimer from "../utils/useCountdownTimer.ts";
 import { Title } from "../styles/LoginPage.styles.ts";
 
+type InputValue = {
+  id: string;
+  password: string;
+  nickname: string;
+  phoneNumber: string;
+  authNumber: string;
+};
+
+type IsValid = {
+  id: {
+    isDuplicated: boolean;
+    isRulePassed: boolean;
+    hasError: boolean;
+    errorMessage: string;
+  };
+  password: { isRulePassed: boolean };
+  nickname: {
+    isDuplicated: boolean;
+    isRulePassed: boolean;
+    hasError: boolean;
+    errorMessage: string;
+  };
+  phoneNumber: { isRulePassed: boolean };
+  authNumber: { isRulePassed: boolean };
+};
+
 const SignupPage = () => {
-  const [inputValue, setInputValue] = useState({
+  const [inputValue, setInputValue] = useState<InputValue>({
     id: "",
     password: "",
     nickname: "",
     phoneNumber: "",
     authNumber: "",
   });
-  const [isValid, setIsValid] = useState({
-    id: false,
-    password: false,
-    nickname: false,
-    phoneNumber: false,
-    authNumber: false,
+  const [isValid, setIsValid] = useState<IsValid>({
+    id: {
+      isDuplicated: false,
+      isRulePassed: false,
+      hasError: false,
+      errorMessage: "",
+    },
+    password: { isRulePassed: false },
+    nickname: {
+      isDuplicated: false,
+      isRulePassed: false,
+      hasError: false,
+      errorMessage: "",
+    },
+    phoneNumber: { isRulePassed: false },
+    authNumber: { isRulePassed: false },
   });
 
   const [isNotiVisible, setIsNotiVisible] = useState(false); // 남은 인증번호 전송 가능 횟수를 표시하는 노티 표시 여부
@@ -57,30 +88,46 @@ const SignupPage = () => {
 
   useEffect(() => {
     const getFirstWarning = () => {
-      // 아이디, 비밀번호, 닉네임
-      if (!getIsValid("id"))
+      // 아이디 유효성
+      if (!getIsRulePassed("id"))
         return "* 아이디는 5~20자의 영문 소문자, 숫자를 사용해 주세요.";
-      if (!getIsValid("password"))
+      if (isValid.id.hasError) return `* ${isValid.id.errorMessage}`;
+      if (isValid.id.isDuplicated) return "* 중복되는 아이디입니다.";
+      // 비밀번호 유효성
+      if (!getIsRulePassed("password"))
         return "* 비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.";
-      if (!getIsValid("nickname"))
+      // 닉네임 유효성
+      if (!getIsRulePassed("nickname"))
         return "* 닉네임은 1~10자의 한글, 영문, 숫자를 사용해 주세요.";
+      if (isValid.nickname.hasError)
+        return `* ${isValid.nickname.errorMessage}`;
+      if (isValid.nickname.isDuplicated) return "* 중복되는 닉네임입니다.";
       return "";
     };
     const getSecondWarning = () => {
       // 전화번호
-      if (!getIsValid("phoneNumber")) return "* 전화번호가 유효하지 않습니다.";
+      if (!getIsRulePassed("phoneNumber"))
+        return "* 전화번호가 유효하지 않습니다.";
       return "";
     };
     setWarningTexts([getFirstWarning(), getSecondWarning()]);
   }, [isValid]);
 
-  // 경고 문구 표시 여부 (비어있지 않으면서 유효하지 않은 경우)
+  // 경고 문구 표시 여부 (비어있지 않으면서 규칙을 지키지 않은 경우)
+  const getIsRulePassed = (fieldName: string): boolean => {
+    if (inputValue[fieldName] === "") return true;
+    return isValid[fieldName].isRulePassed;
+  };
+
   const getIsValid = (fieldName: string): boolean => {
-    return isValid[fieldName] || inputValue[fieldName] === "";
+    if (!getIsRulePassed(fieldName)) return false;
+    if (isValid[fieldName].isDuplicated) return false;
+    if (isValid[fieldName].hasError) return false;
+    return true;
   };
 
   const getIsActivatedSendNumberButton = () => {
-    if (!isValid.phoneNumber) return false;
+    if (!isValid.phoneNumber.isRulePassed) return false;
     // 인증번호 전송 후 10초 간 인증번호 전송 버튼 비활성화
     if (
       countdownTimer.isActive &&
@@ -88,6 +135,45 @@ const SignupPage = () => {
     )
       return false;
     return true;
+  };
+
+  const checkDuplicated = async (
+    fieldName: "id" | "nickname",
+    value: string
+  ) => {
+    const response = await fetch(
+      `http://???/api/users/check-${fieldName}/${value}`
+    );
+    if (!response.ok) {
+      if (response.status === 409) {
+        return { isDuplicated: true, hasError: false, errorMessage: "" };
+      }
+      // 400, 500
+      return {
+        isDuplicated: false,
+        hasError: true,
+        errorMessage: "서버가 불안정합니다. 나중에 시도해주세요.",
+      };
+    }
+    return { isDuplicated: false, hasError: false, errorMessage: "" };
+  };
+
+  const checkValidation = async (fieldName: string, value: string) => {
+    // 규칙 통과 검사
+    const isRulePassed = checkRulePass[fieldName](value);
+    if (fieldName !== "id" && fieldName !== "nickname") {
+      setIsValid((state) => ({ ...state, [fieldName]: { isRulePassed } }));
+      return;
+    }
+    // 중복 검사
+    const { isDuplicated, hasError, errorMessage } = await checkDuplicated(
+      fieldName,
+      value
+    );
+    setIsValid((state) => ({
+      ...state,
+      [fieldName]: { isRulePassed, isDuplicated, hasError, errorMessage },
+    }));
   };
 
   return (
@@ -111,10 +197,7 @@ const SignupPage = () => {
                 setInputValue((state) => ({ ...state, id: e.target.value }));
               },
               onBlur: () => {
-                setIsValid((state) => ({
-                  ...state,
-                  id: validateId(inputValue.id),
-                }));
+                checkValidation("id", inputValue.id);
               },
             }}
           />
@@ -132,10 +215,7 @@ const SignupPage = () => {
                 }));
               },
               onBlur: () => {
-                setIsValid((state) => ({
-                  ...state,
-                  password: validatePassword(inputValue.password),
-                }));
+                checkValidation("password", inputValue.password);
               },
             }}
           />
@@ -152,11 +232,8 @@ const SignupPage = () => {
                   nickname: e.target.value,
                 }));
               },
-              onBlur: () => {
-                setIsValid((state) => ({
-                  ...state,
-                  nickname: validateNickname(inputValue.nickname),
-                }));
+              onBlur: async () => {
+                checkValidation("nickname", inputValue.nickname);
               },
             }}
           />
@@ -169,8 +246,9 @@ const SignupPage = () => {
             setValue={(value) => {
               setInputValue((state) => ({ ...state, phoneNumber: value }));
             }}
-            setIsValid={(isValid) => {
-              setIsValid((state) => ({ ...state, phoneNumber: isValid }));
+            onBlurStart={() => {
+              // blur 시작 시 호출할 함수 전달
+              checkValidation("phoneNumber", inputValue.phoneNumber);
             }}
           />
           <SendNumberButton
@@ -202,10 +280,7 @@ const SignupPage = () => {
                   }));
                 },
                 onBlur: () => {
-                  setIsValid((state) => ({
-                    ...state,
-                    authNumber: validateAuthNumber(inputValue.authNumber),
-                  }));
+                  checkValidation("authNumber", inputValue.authNumber);
                 },
               }}
             />
