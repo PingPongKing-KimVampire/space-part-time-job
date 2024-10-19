@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, OnModuleInit } from '@nestjs/common';
+import { Controller, Get, OnModuleInit } from '@nestjs/common';
 import { AppService } from './app.service';
 import Redis from 'ioredis';
 
@@ -12,7 +12,6 @@ export class AppController implements OnModuleInit {
       port: parseInt(process.env.REDIS_PORT),
     });
 
-    // Redis 연결 확인
     this.redisClient.on('connect', () => {
       console.log('Connected to Redis');
     });
@@ -22,9 +21,13 @@ export class AppController implements OnModuleInit {
     });
   }
 
+  async onModuleDestroy() {
+    await this.redisClient.quit();
+  }
+
   @Get()
   async getHello() {
-    await this.testRedisConnection();
+    // await this.testRedisConnection();
     return this.appService.getHello();
   }
 
