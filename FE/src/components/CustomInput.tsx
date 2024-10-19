@@ -52,6 +52,7 @@ export interface InputProps {
   eventHandlers: EventHandlers;
   children?: React.ReactNode;
   width?: string;
+  maxLength?: number;
 }
 
 export interface EventHandlers {
@@ -71,11 +72,13 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     eventHandlers,
     children,
     width = "100%",
+    maxLength = 50,
   } = props;
   const { onChange, onFocus, onBlur } = eventHandlers;
   return (
     <div style={{ position: "relative", width }}>
       <Input
+        maxLength={maxLength}
         ref={ref}
         style={{ width: "100%" }}
         id={id}

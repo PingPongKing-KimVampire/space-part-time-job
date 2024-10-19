@@ -82,20 +82,25 @@ export const FormFieldContainer = styled("div", {
 
 export const WorkTimeSection = styled("div", {
   display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  width: "100%",
-  marginTop: "20px",
-  "& .waveSymbol": {
-    fontSize: "30px",
-    fontWeight: "300",
-  },
-  "& label": {
-    position: "absolute",
-    top: "-24px",
-    left: "0px",
-    color: "#9A9A9A",
+  flexDirection: "column",
+  gap: "20px",
+  "& .timeSelection": {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginTop: "20px",
+    "& .waveSymbol": {
+      fontSize: "30px",
+      fontWeight: "300",
+    },
+    "& label": {
+      position: "absolute",
+      top: "-24px",
+      left: "0px",
+      color: "#9A9A9A",
+    },
   },
 });
 

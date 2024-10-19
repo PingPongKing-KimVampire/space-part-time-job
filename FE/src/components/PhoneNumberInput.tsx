@@ -27,10 +27,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: 최소 글자수 로직을 CustomInput 컴포넌트에 숨긴다면?
-    if (e.target.value.length <= 11) {
-      setValue(e.target.value);
-    }
+    setValue(e.target.value);
   };
 
   const onFocus = () => {
@@ -69,6 +66,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
         value={value}
         width={width}
         ref={inputRef}
+        maxLength={11}
       >
         {children && children}
       </CustomInput>

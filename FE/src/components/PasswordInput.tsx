@@ -33,6 +33,7 @@ const PasswordInput: React.FC<InputProps> = (props) => {
     value,
     eventHandlers,
     width = "100%",
+    maxLegnth = 35,
   } = props;
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 보이기 여부
@@ -52,6 +53,7 @@ const PasswordInput: React.FC<InputProps> = (props) => {
         value={value}
         eventHandlers={eventHandlers}
         width={width}
+        maxLegnth={maxLegnth}
       >
         <EyeButton type="button" onClick={onPasswordVisibleButtonClick}>
           {isPasswordVisible ? <EyeSlashIcon /> : <EyeIcon />}

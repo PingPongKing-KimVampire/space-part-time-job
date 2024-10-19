@@ -29,3 +29,8 @@ export const TERM = {
 export const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 
 export const PAY_TYPES = ["시급", "건당", "일급", "월급"];
+
+export const WORKTIME_TYPES = {
+  NEGOTIABLE: "협의 가능",
+  TIME_SETTING: "시간 설정",
+};
