@@ -1,14 +1,17 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpException,
+  Param,
   Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SignupRequestDto } from './dto/controller/signup.request.dto';
 import { SignupDto } from './dto/service/signup.dto';
 import { QueryFailedError } from 'typeorm';
+import { IdValidator } from './utils/CustomValidator';
 
 @Controller('users')
 export class UserController {
@@ -44,6 +47,19 @@ export class UserController {
         }
       }
       throw error;
+    }
+  }
+
+  @Get('check-id/:id')
+  @HttpCode(204)
+  async checkUserId(@Param('id') id: string) {
+    if (!IdValidator.isValidId(id)) {
+      throw new HttpException({ error: IdValidator.errorMessage }, 400);
+    }
+
+    const isUserIdAvailable = await this.usersService.isUserIdAvailable(id);
+    if (!isUserIdAvailable) {
+      throw new HttpException({ error: '휴대폰 번호 중복' }, 409);
     }
   }
 }
