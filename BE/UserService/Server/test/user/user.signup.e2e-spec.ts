@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
+import { AppModule } from '../../src/app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../src/user/entities/user.entity';
+import { User } from '../../src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { getUserDto1, getUserDto2, requestSignup } from './user.utils';
 
 describe('사용자 회원가입 (e2e)', () => {
   let app: INestApplication;
@@ -30,7 +31,7 @@ describe('사용자 회원가입 (e2e)', () => {
 
   it('성공', async () => {
     const userDto = getUserDto1();
-    await requestSignup(userDto);
+    await requestSignup(app, userDto);
   });
 
   it('잘못된 형식(비밀번호 형식 오류)', async () => {
@@ -49,7 +50,7 @@ describe('사용자 회원가입 (e2e)', () => {
     const userDto1 = getUserDto1();
     userDto1.id = duplicateId;
 
-    await requestSignup(userDto1);
+    await requestSignup(app, userDto1);
 
     const userDto2 = getUserDto2();
     userDto2.id = duplicateId;
@@ -69,7 +70,7 @@ describe('사용자 회원가입 (e2e)', () => {
     const userDto1 = getUserDto1();
     userDto1.nickname = duplicateNick;
 
-    await requestSignup(userDto1);
+    await requestSignup(app, userDto1);
 
     const userDto2 = getUserDto2();
     userDto2.nickname = duplicateNick;
@@ -89,7 +90,7 @@ describe('사용자 회원가입 (e2e)', () => {
     const userDto1 = getUserDto1();
     userDto1.phoneNumber = duplicatePhoneNumber;
 
-    await requestSignup(userDto1);
+    await requestSignup(app, userDto1);
 
     const userDto2 = getUserDto2();
     userDto2.phoneNumber = duplicatePhoneNumber;
@@ -103,38 +104,4 @@ describe('사용자 회원가입 (e2e)', () => {
         expect(response.body).toHaveProperty('error', '휴대폰 번호 중복');
       });
   });
-
-  function getUserDto1() {
-    return {
-      id: 'id123',
-      password: 'Password123!',
-      nickname: 'nick1',
-      phoneNumber: '01012345678',
-      smsCode: '123456',
-    };
-  }
-
-  function getUserDto2() {
-    return {
-      id: 'id124',
-      password: 'Password123!',
-      nickname: 'nick2',
-      phoneNumber: '01012345679',
-      smsCode: '123456',
-    };
-  }
-
-  function requestSignup(userDto: {
-    id: string;
-    password: string;
-    nickname: string;
-    phoneNumber: string;
-    smsCode: string;
-  }) {
-    return request(app.getHttpServer())
-      .post('/api/users')
-      .set('Content-Type', 'application/json; charset=utf-8')
-      .send(userDto)
-      .expect(204);
-  }
 });
