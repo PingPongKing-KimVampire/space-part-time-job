@@ -27,7 +27,8 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    setValue(value);
   };
 
   const onFocus = () => {

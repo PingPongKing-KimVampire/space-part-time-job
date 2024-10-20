@@ -8,10 +8,11 @@ const Box = styled("div", {
   bottom: "30px",
   background: "black",
   color: "white",
-  width: "550px",
+  width: "700px",
   padding: "16px",
   borderRadius: "10px",
   boxSizing: "border-box",
+  zIndex: "1",
 });
 
 interface NotificationBoxProps {
