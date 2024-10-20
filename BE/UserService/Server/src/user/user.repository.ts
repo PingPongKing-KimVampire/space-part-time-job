@@ -13,4 +13,9 @@ export class UserRepository {
   async createUser(user: User): Promise<User> {
     return this.usersRepository.save(user);
   }
+
+  async isUserIdExist(id: string): Promise<boolean> {
+    const count = await this.usersRepository.count({ where: { userId: id } });
+    return count > 0;
+  }
 }
