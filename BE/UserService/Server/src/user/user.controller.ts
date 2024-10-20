@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 import { SignupRequestDto } from './dto/controller/signup.request.dto';
 import { SignupDto } from './dto/service/signup.dto';
 import { QueryFailedError } from 'typeorm';
-import { IdValidator } from './utils/CustomValidator';
+import { IdValidator, NicknameValidator } from './utils/CustomValidator';
 
 @Controller('users')
 export class UserController {
@@ -60,6 +60,20 @@ export class UserController {
     const isUserIdAvailable = await this.usersService.isUserIdAvailable(id);
     if (!isUserIdAvailable) {
       throw new HttpException({ error: '휴대폰 번호 중복' }, 409);
+    }
+  }
+
+  @Get('check-nickname/:nickname')
+  @HttpCode(204)
+  async checkNickname(@Param('nickname') nickname: string) {
+    if (!NicknameValidator.isValidNickname(nickname)) {
+      throw new HttpException({ error: NicknameValidator.errorMessage() }, 400);
+    }
+
+    const isNicknameAvailable =
+      await this.usersService.isNicknameAvailable(nickname);
+    if (!isNicknameAvailable) {
+      throw new HttpException({ error: '닉네임 중복' }, 409);
     }
   }
 }

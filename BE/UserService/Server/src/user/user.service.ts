@@ -27,4 +27,10 @@ export class UserService {
     if (isExist) return false;
     return true;
   }
+
+  async isNicknameAvailable(nickname: string): Promise<boolean> {
+    const isExist = await this.userRepository.isNicknameExist(nickname);
+	if (isExist) return false;
+    return true;
+  }
 }
