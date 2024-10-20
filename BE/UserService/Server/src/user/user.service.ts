@@ -6,10 +6,7 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-  ) {}
+  constructor(private userRepository: UserRepository) {}
 
   signup(signupDto: SignupDto): Promise<User> {
     const { id, password, nickname, phoneNumber } = signupDto;
@@ -21,6 +18,6 @@ export class UserService {
       phoneNumber,
     });
 
-    return this.usersRepository.save(user);
+    return this.userRepository.createUser(user);
   }
 }
