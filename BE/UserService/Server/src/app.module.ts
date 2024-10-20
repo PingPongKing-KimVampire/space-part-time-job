@@ -3,7 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from './user/user.module';
 import { APP_PIPE } from '@nestjs/core';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -18,10 +20,11 @@ import { APP_PIPE } from '@nestjs/core';
         username: configService.get<string>('MYSQL_USER'),
         password: configService.get<string>('MYSQL_PASSWORD'),
         database: configService.get<string>('MYSQL_DB'),
-        entities: [],
-        synchronize: true,
+        entities: [User],
+        synchronize: true, //운영환경에서는 false가 되어야 함
       }),
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
