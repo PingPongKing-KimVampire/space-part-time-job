@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Background,
   Container,
@@ -60,6 +61,13 @@ const SignupPage = () => {
     phoneNumber: { isRulePassed: false },
     authNumber: { isRulePassed: false },
   });
+  const [signupInfo, setSignupInfo] = useState({
+    hasError: false,
+    status: 0,
+    errorMessage: "",
+  });
+
+  const navigate = useNavigate();
 
   // 경고 문구 표시 여부 결정
   const getIsValid = (fieldName: string): boolean => {
@@ -118,6 +126,44 @@ const SignupPage = () => {
     setInputValue((state) => ({ ...state, [fieldName]: value }));
   };
 
+  const signup = async () => {
+    // const response = await fetch(`http://???/api/users`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json; charset=utf-8",
+    //   },
+    //   body: JSON.stringify({
+    //     id: inputValue.id,
+    //     password: inputValue.password,
+    //     nickname: inputValue.nickname,
+    //     phoneNumber: inputValue.phoneNumber,
+    //     smsCode: inputValue.authNumber,
+    //   }),
+    // });
+    // if (!response.ok) {
+    //   const data = await response.json();
+    //   if (response.status === 409)
+    //     return { hasError: true, status: 409, errorMessage: data.error };
+    //   if (response.status === 401)
+    //     return { hasError: true, status: 401, errorMessage: data.error };
+    //   // 400, 500
+    //   return {
+    //     hasError: true,
+    //     status: response.status,
+    //     errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
+    //   };
+    // }
+    return {
+      hasError: false,
+    };
+  };
+
+  const SignupButtonClicked = async () => {
+    const result = await signup();
+    setSignupInfo((state) => ({ ...state, ...result }));
+    navigate("/create-job"); // 다음 페이지로 넘어가기
+  };
+
   return (
     <Background>
       <Container>
@@ -133,6 +179,7 @@ const SignupPage = () => {
           isValid={isValid}
           getIsValid={getIsValid}
           checkValidation={checkValidation}
+          signupInfo={signupInfo}
         />
         <PhoneNumberSection
           inputValue={inputValue}
@@ -140,11 +187,13 @@ const SignupPage = () => {
           isValid={isValid}
           getIsValid={getIsValid}
           checkValidation={checkValidation}
+          signupInfo={signupInfo}
         />
       </Container>
       <SignupButton
         className={isAllValid ? "" : "inactivated"}
         disabled={!isAllValid}
+        onClick={SignupButtonClicked}
       >
         시작하기
       </SignupButton>

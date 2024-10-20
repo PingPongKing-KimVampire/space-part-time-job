@@ -13,12 +13,20 @@ import { WarningText } from "../../styles/global.ts";
 // }
 
 const UserInfoSection = (props) => {
-  const { inputValue, updateValue, isValid, getIsValid, checkValidation } =
-    props;
+  const {
+    inputValue,
+    updateValue,
+    isValid,
+    getIsValid,
+    checkValidation,
+    signupInfo,
+  } = props;
   const [warning, setWarning] = useState(" ");
 
   useEffect(() => {
     const getWarning = () => {
+      if (signupInfo.hasError && signupInfo.status === "409")
+        return `* ${signupInfo.errorMessage}`;
       if (inputValue.id !== "" && !isValid.id.isRulePassed)
         return "* 아이디는 5~20자의 영문 소문자, 숫자를 사용해 주세요.";
       if (isValid.id.hasError) return `* ${isValid.id.errorMessage}`;

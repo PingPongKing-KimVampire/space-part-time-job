@@ -22,8 +22,14 @@ import { WarningText } from "../../styles/global.ts";
 const COUNTDOWN_SEC = 300;
 
 const PhoneNumberSection = (props) => {
-  const { inputValue, updateValue, isValid, getIsValid, checkValidation } =
-    props;
+  const {
+    inputValue,
+    updateValue,
+    isValid,
+    getIsValid,
+    checkValidation,
+    signupInfo,
+  } = props;
 
   const [isSendButtonClicked, setIsSendButtonClicked] = useState(false); // 인증번호 전송 버튼이 클릭된 적 있나?
   const [isNotiVisible, setIsNotiVisible] = useState(false); // 남은 인증번호 전송 가능 횟수를 표시하는 노티 표시 여부
@@ -38,6 +44,8 @@ const PhoneNumberSection = (props) => {
 
   useEffect(() => {
     const getWarning = () => {
+      if (signupInfo.hasError && signupInfo.status !== "409")
+        return `* ${signupInfo.errorMessage}`;
       if (inputValue.phoneNumber === "") return "";
       if (!isValid.phoneNumber.isRulePassed)
         return "* 전화번호가 유효하지 않습니다.";
@@ -140,7 +148,11 @@ const PhoneNumberSection = (props) => {
             invalid={false}
             value={inputValue.authNumber}
             eventHandlers={{
-              onChange: (e) => updateValue("authNumber", e.target.value),
+              onChange: (e) =>
+                updateValue(
+                  "authNumber",
+                  e.target.value.replaceAll(/[^0-9]/g, "")
+                ),
               onBlur: () => checkValidation("authNumber"),
             }}
           />
