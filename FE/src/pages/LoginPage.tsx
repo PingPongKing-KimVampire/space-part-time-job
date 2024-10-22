@@ -24,6 +24,13 @@ import { SEND_AUTHNUMBER_COUNTDOWN_SEC } from "../constants/constants.ts";
 const ID_PW = "ID_PW";
 const PHONE_NUMBER = "PHONE_NUMBER";
 
+type loginRequestBody = {
+  id?: string;
+  password?: string;
+  phoneNumber?: string;
+  smsCode?: string;
+};
+
 const LoginPage = () => {
   useBackgroundColor("#F9FBFC");
   const navigate = useNavigate();
@@ -124,21 +131,73 @@ const LoginPage = () => {
     return true;
   };
 
-  const LoginButtonClicked = (e) => {
+  const login = async () => {
+    // const body: loginRequestBody = {};
+    // if (selectedTab === ID_PW) {
+    //   body.id = inputValue.id;
+    //   body.password = inputValue.password;
+    // } else if (selectedTab === PHONE_NUMBER) {
+    //   body.phoneNumber = inputValue.phoneNumber.replaceAll("-", "");
+    //   body.smsCode = inputValue.authNumber;
+    // }
+    // const response = await fetch(`http://???/api/users/login`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json; charset=utf-8",
+    //   },
+    //   body: JSON.stringify(body),
+    // });
+    // if (!response.ok) {
+    //   if (response.status === 401) {
+    //     if (selectedTab === ID_PW) {
+    //       return {
+    //         hasError: true,
+    //         errorMessage: "아이디 또는 전화번호가 유효하지 않습니다.",
+    //       };
+    //     } else if (selectedTab === ID_PW) {
+    //       return {
+    //         hasError: true,
+    //         errorMessage: "인증번호가 유효하지 않습니다.",
+    //       };
+    //     }
+    //   }
+    //   // 400, 500
+    //   return {
+    //     hasError: true,
+    //     errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
+    //   };
+    // }
+    return { hasError: false, errorMessage: "" };
+  };
+
+  const LoginButtonClicked = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const getWarningText = () => {
+    // 기본 유효성 검사
+    try {
       if (selectedTab === ID_PW) {
-        if (inputValue.id === "") return "* 아이디를 입력해주세요.";
-        if (inputValue.password === "") return "* 비밀번호를 입력해주세요.";
+        if (inputValue.id === "") throw new Error("* 아이디를 입력해주세요.");
+        if (inputValue.password === "")
+          throw new Error("* 비밀번호를 입력해주세요.");
       } else if (selectedTab === PHONE_NUMBER) {
         if (inputValue.phoneNumber === "")
-          return "* 휴대폰 번호를 입력해주세요.";
-        if (!isValidPhoneNumber) return "* 휴대폰 번호가 유효하지 않습니다.";
-        if (inputValue.authNumber === "") return "* 인증번호를 입력해주세요.";
+          throw new Error("* 휴대폰 번호를 입력해주세요.");
+        if (!isValidPhoneNumber)
+          throw new Error("* 휴대폰 번호가 유효하지 않습니다.");
+        if (inputValue.authNumber === "")
+          throw new Error("* 인증번호를 입력해 주세요.");
       }
-      return "";
-    };
-    setWarning(getWarningText());
+    } catch (e) {
+      setWarning(e.message);
+      return;
+    }
+    // 기본 유효성 검사를 통과한 경우 로그인 API 요청
+    const result = await login();
+    if (!result.hasError) {
+      // TODO : 다음 페이지로 이동
+      console.log("로그인 성공!");
+    } else {
+      setWarning(`* ${result.errorMessage}`);
+    }
   };
 
   useEffect(() => {
