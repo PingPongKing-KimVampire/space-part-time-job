@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/CustomInput.tsx";
 import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
@@ -16,11 +16,14 @@ import {
   LoginButton,
   SignupMessage,
 } from "../styles/LoginPage.styles.ts";
+import useBackgroundColor from "../utils/useBackgroundColor.ts";
+import checkRulePass from "../utils/checkRulePass.ts";
 
 const ID_PW = "ID_PW";
 const PHONE_NUMBER = "PHONE_NUMBER";
 
 const LoginPage = () => {
+  useBackgroundColor("#F9FBFC");
   const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState(ID_PW);
@@ -33,15 +36,19 @@ const LoginPage = () => {
     authNumber: "",
   });
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
-  const [warningText, setWarningText] = useState("");
+  const [warning, setWarning] = useState("");
 
   // TODO : SignupPage와 중복되는 로직
   // 이 로직을 NotificationBox 내부에 합쳐버릴까?
-  const sendNumberButtonClicked = () => {
+  const sendNumberButtonClicked = async () => {
     // 인증번호 전송 버튼 클릭
     // 전화번호 유효성 검증 및 오류 표시
+    if (inputValue.phoneNumber === "") {
+      setWarning("* 휴대폰 번호를 입력해주세요.");
+      return;
+    }
     if (!isValidPhoneNumber) {
-      setWarningText("* 휴대폰 번호가 유효하지 않습니다.");
+      setWarning("* 휴대폰 번호가 유효하지 않습니다.");
       return;
     }
     // 남은 인증번호 전송 가능 횟수를 표시하는 노티를 표시했다가 3초 후 다시 제거
@@ -49,6 +56,9 @@ const LoginPage = () => {
     setTimeout(() => {
       setNotiVisible(false);
     }, 2000);
+    // 5분 카운트다운 시작
+
+    if (warning !== "") setWarning("");
   };
 
   const LoginButtonClicked = (e) => {
@@ -65,8 +75,13 @@ const LoginPage = () => {
       }
       return "";
     };
-    setWarningText(getWarningText());
+    setWarning(getWarningText());
   };
+
+  useEffect(() => {
+    setInputValue({ id: "", password: "", phoneNumber: "", authNumber: "" });
+    setWarning("");
+  }, [selectedTab]);
 
   return (
     <Background>
@@ -142,8 +157,11 @@ const LoginPage = () => {
                       phoneNumber: value,
                     }));
                   }}
-                  setIsValid={(isValid) => {
-                    setIsValidPhoneNumber(isValid);
+                  onBlurStart={() => {
+                    const isRulePassed = checkRulePass["phoneNumber"](
+                      inputValue.phoneNumber
+                    );
+                    setIsValidPhoneNumber(isRulePassed);
                   }}
                 >
                   <SendNumberButton
@@ -153,33 +171,6 @@ const LoginPage = () => {
                     인증번호 전송
                   </SendNumberButton>
                 </PhoneNumberInput>
-
-                {/* <CustomInput
-                  id="phoneNumber"
-                  placeholder="휴대폰 번호 (- 없이 입력)"
-                  borderType="multi-top"
-                  value={inputValue.phoneNumber}
-                  eventHandlers={{
-                    onChange: (e) => {
-                      setInputValue((state) => ({
-                        ...state,
-                        phoneNumber: e.target.value,
-                      }));
-                    },
-                    onBlur: () => {
-                      setIsValidPhoneNumber(
-                        validatePhoneNumber(inputValue.phoneNumber)
-                      );
-                    },
-                  }}
-                >
-                  <SendNumberButton
-                    type="button"
-                    onClick={sendNumberButtonClicked}
-                  >
-                    인증번호 전송
-                  </SendNumberButton>
-                </CustomInput> */}
                 <CustomInput
                   id="authNumber"
                   placeholder="인증번호"
@@ -196,7 +187,7 @@ const LoginPage = () => {
                 />
               </div>
             )}
-            <WarningText>{warningText}</WarningText>
+            <WarningText>{warning}</WarningText>
             <LoginButton onClick={LoginButtonClicked}>로그인</LoginButton>
           </LoginForm>
         </LoginPanel>
@@ -213,7 +204,7 @@ const LoginPage = () => {
       </Container>
       {notiVisible && (
         <NotificationBox>
-          일일 인증번호 전송 가능 횟수가 4회 남았습니다.
+          {`일일 인증번호 전송 가능 횟수가 4회 남았습니다.`}
         </NotificationBox>
       )}
     </Background>

@@ -6,7 +6,7 @@ interface PhoneNumberInputProps {
   invalid?: boolean;
   value: string;
   setValue: (value: string) => void;
-  onBlurStart: () => void;
+  onBlurStart?: () => void;
   children?: React.ReactNode;
   width?: string;
 }
@@ -19,7 +19,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
     invalid = false,
     value,
     setValue,
-    onBlurStart,
+    onBlurStart = () => {},
     children,
     width = "100%",
   } = props;
