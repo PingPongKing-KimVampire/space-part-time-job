@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useRef } from "react";
 
 // 초 단위 카운트다운에 유용한 타이머
 const useCountdownTimer = (initialSeconds) => {
@@ -25,14 +25,8 @@ const useCountdownTimer = (initialSeconds) => {
     }, 1000);
   };
 
-  const timeLeftFormatted = useMemo(() => {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    return { totalSeconds: timeLeft, minutes, seconds };
-  }, [timeLeft]);
-
   return {
-    timeLeft: timeLeftFormatted,
+    timeLeft,
     isActive,
     start,
   };

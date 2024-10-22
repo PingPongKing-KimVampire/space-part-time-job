@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Background,
@@ -9,6 +9,7 @@ import checkRulePass from "../utils/checkRulePass.ts";
 import { Title } from "../styles/LoginPage.styles.ts";
 import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
+import useBackgroundColor from "../utils/useBackgroundColor.ts";
 
 type InputValue = {
   id: string;
@@ -37,6 +38,7 @@ type IsValid = {
 };
 
 const SignupPage = () => {
+  useBackgroundColor("#F9FBFC");
   const [inputValue, setInputValue] = useState<InputValue>({
     id: "",
     password: "",
@@ -79,27 +81,28 @@ const SignupPage = () => {
   };
 
   const checkDuplicated = async (fieldName: "id" | "nickname") => {
-    // const response = await fetch(
-    //   `http://???/api/users/check-${fieldName}/${inputValue[fieldName]}`
-    // );
-    // if (!response.ok) {
-    //   if (response.status === 409) {
-    //     return { isDuplicated: true, hasError: false };
-    //   }
-    //   // 400, 500
-    //   return {
-    //     isDuplicated: false,
-    //     hasError: true,
-    //     errorMessage: "서버가 불안정합니다. 나중에 시도해주세요.",
-    //   };
-    // }
+    const response = await fetch(
+      `http://localhost/api/users/check-${fieldName}/${inputValue[fieldName]}`
+    );
+    if (!response.ok) {
+      if (response.status === 409) {
+        return { isDuplicated: true, hasError: false };
+      }
+      // 400, 500
+      return {
+        isDuplicated: false,
+        hasError: true,
+        errorMessage: "서버가 불안정합니다. 나중에 시도해주세요.",
+      };
+    }
     return { isDuplicated: false, hasError: false };
   };
 
-  const checkValidation = async (fieldName: string) => {
+  const checkValidation = async (fieldName: string, value?: string) => {
+    value = value || inputValue[fieldName];
     // 규칙 통과 검사
-    const isRulePassed = checkRulePass[fieldName](inputValue[fieldName]);
-    if (fieldName !== "id" && fieldName !== "nickname") {
+    const isRulePassed = checkRulePass[fieldName](value);
+    if ((fieldName !== "id" && fieldName !== "nickname") || !isRulePassed) {
       setIsValid((state) => ({ ...state, [fieldName]: { isRulePassed } }));
       return;
     }
@@ -122,37 +125,37 @@ const SignupPage = () => {
     return true;
   }, [isValid]);
 
-  const updateInputValue = (fieldName: string, value: string) => {
+  const updateInputValue = useCallback((fieldName: string, value: string) => {
     setInputValue((state) => ({ ...state, [fieldName]: value }));
-  };
+  }, []);
 
   const signup = async () => {
-    // const response = await fetch(`http://???/api/users`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json; charset=utf-8",
-    //   },
-    //   body: JSON.stringify({
-    //     id: inputValue.id,
-    //     password: inputValue.password,
-    //     nickname: inputValue.nickname,
-    //     phoneNumber: inputValue.phoneNumber,
-    //     smsCode: inputValue.authNumber,
-    //   }),
-    // });
-    // if (!response.ok) {
-    //   const data = await response.json();
-    //   if (response.status === 409)
-    //     return { hasError: true, status: 409, errorMessage: data.error };
-    //   if (response.status === 401)
-    //     return { hasError: true, status: 401, errorMessage: data.error };
-    //   // 400, 500
-    //   return {
-    //     hasError: true,
-    //     status: response.status,
-    //     errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
-    //   };
-    // }
+    const response = await fetch(`http://localhost/api/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        id: inputValue.id,
+        password: inputValue.password,
+        nickname: inputValue.nickname,
+        phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
+        smsCode: inputValue.authNumber,
+      }),
+    });
+    if (!response.ok) {
+      const data = await response.json();
+      if (response.status === 409)
+        return { hasError: true, status: 409, errorMessage: data.error };
+      if (response.status === 401)
+        return { hasError: true, status: 401, errorMessage: data.error };
+      // 400, 500
+      return {
+        hasError: true,
+        status: response.status,
+        errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
+      };
+    }
     return {
       hasError: false,
     };
@@ -161,7 +164,7 @@ const SignupPage = () => {
   const SignupButtonClicked = async () => {
     const result = await signup();
     setSignupInfo((state) => ({ ...state, ...result }));
-    navigate("/create-job"); // 다음 페이지로 넘어가기
+    if (!result.hasError) navigate("/create-job"); // 다음 페이지로 넘어가기
   };
 
   return (

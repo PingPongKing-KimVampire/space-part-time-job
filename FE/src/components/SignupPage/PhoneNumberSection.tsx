@@ -10,15 +10,6 @@ import {
 } from "../../styles/SignupPage.styles.ts";
 import { WarningText } from "../../styles/global.ts";
 
-// interface PhoneNumberSectionProps {
-//   phoneNumber: string;
-//   authNumber: string;
-//   phoneNumberValid: { isRulePassed: boolean };
-//   authNumberValid: { isRulePassed: boolean };
-//   updateValue: (fieldName: string, value: string) => void;
-//   checkValidation: (fieldName: string) => void;
-// }
-
 const COUNTDOWN_SEC = 300;
 
 const PhoneNumberSection = (props) => {
@@ -53,7 +44,14 @@ const PhoneNumberSection = (props) => {
       return "";
     };
     setWarning(getWarning());
-  }, [isValid]);
+  }, [isValid, signupInfo, sendNumberInfo]);
+
+  useEffect(() => {
+    if (!countdownTimer.isActive) {
+      updateValue("authNumber", "");
+      checkValidation("authNumber", "");
+    }
+  }, [countdownTimer.isActive, updateValue]);
 
   // 인증번호 전송 버튼 클릭
   const sendNumberButtonClicked = async () => {
@@ -74,10 +72,7 @@ const PhoneNumberSection = (props) => {
   const getIsSendingPossible = () => {
     if (!isValid.phoneNumber.isRulePassed) return false;
     // 인증번호 전송 후 10초 간 전송 불가능
-    if (
-      countdownTimer.isActive &&
-      COUNTDOWN_SEC - 10 < countdownTimer.timeLeft.totalSeconds
-    )
+    if (countdownTimer.isActive && COUNTDOWN_SEC - 10 < countdownTimer.timeLeft)
       return false;
     return true;
   };
@@ -135,35 +130,35 @@ const PhoneNumberSection = (props) => {
           인증번호 {isSendButtonClicked ? "재" : ""}전송
           {countdownTimer.isActive && (
             <TimeCounter>
-              {countdownTimer.timeLeft.minutes > 0
-                ? `${countdownTimer.timeLeft.minutes}분 ${countdownTimer.timeLeft.seconds}초`
-                : `${countdownTimer.timeLeft.seconds}초`}
+              {countdownTimer.timeLeft > 60
+                ? `${Math.floor(countdownTimer.timeLeft / 60)}분 ${
+                    countdownTimer.timeLeft % 60
+                  }초`
+                : `${countdownTimer.timeLeft}초`}
             </TimeCounter>
           )}
         </SendNumberButton>
-        {isSendButtonClicked && (
+        {countdownTimer.isActive && (
           <CustomInput
             id="authNumber"
             placeholder="인증번호"
             invalid={false}
             value={inputValue.authNumber}
             eventHandlers={{
-              onChange: (e) =>
-                updateValue(
-                  "authNumber",
-                  e.target.value.replaceAll(/[^0-9]/g, "")
-                ),
-              onBlur: () => checkValidation("authNumber"),
+              onChange: (e) => {
+                updateValue("authNumber", e.target.value);
+                checkValidation("authNumber", e.target.value);
+              },
             }}
           />
         )}
-        {isNotiVisible && (
-          <NotificationBox>
-            {`일일 인증번호 전송 가능 횟수가 ${sendNumberInfo.remainingCount}회 남았습니다.`}
-          </NotificationBox>
-        )}
       </PhoneNumberContainer>
       <WarningText>{warning}</WarningText>
+      {isNotiVisible && (
+        <NotificationBox>
+          {`일일 인증번호 전송 가능 횟수가 ${sendNumberInfo.remainingCount}회 남았습니다.`}
+        </NotificationBox>
+      )}
     </>
   );
 };

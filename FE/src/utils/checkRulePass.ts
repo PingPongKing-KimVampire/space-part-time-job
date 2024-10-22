@@ -30,7 +30,8 @@ const checkRulePass = {
     return /^[가-힣a-zA-Z0-9]+$/.test(nickname);
   },
   phoneNumber: (phoneNumber: string): boolean => {
-    if (phoneNumber.length !== 11) return false;
+    phoneNumber = phoneNumber.replaceAll("-", "");
+    if (phoneNumber.length < 11) return false;
     if (phoneNumber.slice(0, 3) !== "010") return false;
     return /^[0-9]+$/.test(phoneNumber);
   },

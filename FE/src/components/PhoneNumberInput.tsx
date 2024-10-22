@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import CustomInput from "./CustomInput.tsx";
 
 interface PhoneNumberInputProps {
@@ -27,32 +27,16 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, "");
-    setValue(value);
-  };
-
-  const onFocus = () => {
-    setValue(value.replaceAll("-", ""));
-    setTimeout(() => {
-      // onFocus 이벤트 직후 커서 위치 변경이 반영되지 않아 setTimeout 활용
-      if (!inputRef.current) return;
-      if (!inputRef.current.selectionStart) return;
-      let cursorPos = inputRef.current.selectionStart;
-      // - 삭제로 인해 커서 위치 밀리는 문제 해결
-      // TODO : 휴대폰 인풋에서 입력된 마지막 숫자의 뒷 부분을 누르면, 커서가 맨 마지막에서 한 칸 앞에 위치하는 문제가 있음
-      if (inputRef.current.selectionStart >= 4) {
-        cursorPos -= 1;
-      }
-      inputRef.current.setSelectionRange(cursorPos, cursorPos);
-    }, 0);
+    setValue(e.target.value);
   };
 
   const onBlur = () => {
     if (onBlurStart) onBlurStart();
+    const newValue = value.replaceAll("-", "");
     // 전화번호 포맷으로 가공하기
-    const part1 = value.slice(0, 3);
-    const part2 = value.slice(3, 7);
-    const part3 = value.slice(7, 11);
+    const part1 = newValue.slice(0, 3);
+    const part2 = newValue.slice(3, 7);
+    const part3 = newValue.slice(7, 11);
     setValue([part1, part2, part3].filter(Boolean).join("-"));
   };
 
@@ -63,11 +47,10 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
         placeholder="휴대전화번호 (- 없이 입력)"
         borderType={borderType}
         invalid={invalid}
-        eventHandlers={{ onChange, onFocus, onBlur }}
+        eventHandlers={{ onChange, onBlur }}
         value={value}
         width={width}
         ref={inputRef}
-        maxLength={11}
       >
         {children && children}
       </CustomInput>

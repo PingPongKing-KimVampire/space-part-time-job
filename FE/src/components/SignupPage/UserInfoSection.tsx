@@ -3,15 +3,6 @@ import CustomInput from "../CustomInput.tsx";
 import PasswordInput from "../PasswordInput.tsx";
 import { WarningText } from "../../styles/global.ts";
 
-// interface UserInfoSectionProps {
-//   id: string;
-//   password: string;
-//   nickname: string;
-//   getIsValid: (fieldName: string) => boolean;
-//   updateValue: (fieldName: string, value: string) => void;
-//   checkValidation: (fieldName: string) => void;
-// }
-
 const UserInfoSection = (props) => {
   const {
     inputValue,
