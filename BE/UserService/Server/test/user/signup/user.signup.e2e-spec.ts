@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../../../src/app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../../src/user/entities/user.entity';
+import { User } from '../../../src/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { getUserDto1, getUserDto2, requestSignup } from './user.utils';
+import { getUserDto1, getUserDto2, requestSignup } from './user.signup.utils';
 
 describe('사용자 회원가입 (e2e)', () => {
   let app: INestApplication;
