@@ -12,12 +12,14 @@ import {
   LoginPanel,
   TabButton,
   LoginForm,
-  SendNumberButton,
   LoginButton,
   SignupMessage,
+  PhoneNumberInputChild,
 } from "../styles/LoginPage.styles.ts";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import checkRulePass from "../utils/checkRulePass.ts";
+import useCountdownTimer from "../utils/useCountdownTimer.ts";
+import { SEND_AUTHNUMBER_COUNTDOWN_SEC } from "../constants/constants.ts";
 
 const ID_PW = "ID_PW";
 const PHONE_NUMBER = "PHONE_NUMBER";
@@ -25,6 +27,7 @@ const PHONE_NUMBER = "PHONE_NUMBER";
 const LoginPage = () => {
   useBackgroundColor("#F9FBFC");
   const navigate = useNavigate();
+  const countdownTimer = useCountdownTimer(SEND_AUTHNUMBER_COUNTDOWN_SEC);
 
   const [selectedTab, setSelectedTab] = useState(ID_PW);
   const [notiVisible, setNotiVisible] = useState(false);
@@ -37,6 +40,48 @@ const LoginPage = () => {
   });
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [warning, setWarning] = useState("");
+  const [sendNumberInfo, setSendNumberInfo] = useState({
+    // 휴대폰 번호 인증 API 관련 정보
+    hasError: false,
+    errorMessage: "",
+    remainingCount: 5,
+  });
+  const [isSent, setIsSent] = useState(false); // 인증번호를 전송한 적이 있나?
+
+  const sendAuthNumber = async () => {
+    // const response = await fetch(
+    //   `http://localhost/api/users/login/phone-auth-code`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json; charset=utf-8",
+    //     },
+    //     body: JSON.stringify({
+    //       phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
+    //     }),
+    //   }
+    // );
+    // const data = await response.json();
+    // if (!response.ok) {
+    //   if (response.status === 409) {
+    //     return { hasError: true, errorMessage: data.error };
+    //   }
+    //   // 400, 500
+    //   return {
+    //     hasError: true,
+    //     errorMessage: "서버가 불안정합니다. 나중에 시도해주세요.",
+    //   };
+    // }
+    const data = {
+      // 임시
+      remainingPhoneAuthenticationCount: sendNumberInfo.remainingCount - 1,
+    };
+    return {
+      remainingCount: data.remainingPhoneAuthenticationCount,
+      hasError: false,
+      errorMessage: "",
+    };
+  };
 
   // TODO : SignupPage와 중복되는 로직
   // 이 로직을 NotificationBox 내부에 합쳐버릴까?
@@ -51,14 +96,32 @@ const LoginPage = () => {
       setWarning("* 휴대폰 번호가 유효하지 않습니다.");
       return;
     }
-    // 남은 인증번호 전송 가능 횟수를 표시하는 노티를 표시했다가 3초 후 다시 제거
-    setNotiVisible(true);
-    setTimeout(() => {
-      setNotiVisible(false);
-    }, 2000);
-    // 5분 카운트다운 시작
+    // TODO : PhoneNumberSection 이랑 같은 로직..!
+    const result = await sendAuthNumber();
+    setSendNumberInfo((state) => ({ ...state, ...result }));
+    if (result.hasError) {
+      setWarning(result.errorMessage);
+    } else {
+      setWarning("");
+      setIsSent(true);
+      // 남은 인증번호 전송 가능 횟수를 표시하는 노티를 표시했다가 3초 후 다시 제거
+      setNotiVisible(true);
+      setTimeout(() => {
+        setNotiVisible(false);
+      }, 2000);
+      // 5분 카운트다운 시작
+      countdownTimer.start();
+    }
+  };
 
-    if (warning !== "") setWarning("");
+  const getIsSendingPossible = () => {
+    // 인증번호 전송 후 10초 간 전송 불가능
+    if (
+      countdownTimer.isActive &&
+      SEND_AUTHNUMBER_COUNTDOWN_SEC - 10 < countdownTimer.timeLeft
+    )
+      return false;
+    return true;
   };
 
   const LoginButtonClicked = (e) => {
@@ -164,12 +227,25 @@ const LoginPage = () => {
                     setIsValidPhoneNumber(isRulePassed);
                   }}
                 >
-                  <SendNumberButton
-                    type="button"
-                    onClick={sendNumberButtonClicked}
-                  >
-                    인증번호 전송
-                  </SendNumberButton>
+                  <PhoneNumberInputChild>
+                    <button
+                      type="button"
+                      onClick={sendNumberButtonClicked}
+                      className={`sendNumberButton ${
+                        !getIsSendingPossible() ? "inactivatede" : " "
+                      }`}
+                      disabled={!getIsSendingPossible()}
+                    >
+                      인증번호 {isSent ? "재" : ""}전송
+                    </button>
+                    {countdownTimer.isActive && (
+                      <div className="timeCounter">
+                        {`${Math.floor(countdownTimer.timeLeft / 60)}:${
+                          countdownTimer.timeLeft % 60
+                        }`}
+                      </div>
+                    )}
+                  </PhoneNumberInputChild>
                 </PhoneNumberInput>
                 <CustomInput
                   id="authNumber"
@@ -204,7 +280,7 @@ const LoginPage = () => {
       </Container>
       {notiVisible && (
         <NotificationBox>
-          {`일일 인증번호 전송 가능 횟수가 4회 남았습니다.`}
+          {`일일 인증번호 전송 가능 횟수가 ${sendNumberInfo.remainingCount}회 남았습니다.`}
         </NotificationBox>
       )}
     </Background>

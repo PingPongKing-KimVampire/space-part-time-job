@@ -72,18 +72,6 @@ export const LoginForm = styled("form", {
   borderRadius: "0 0 10px 10px",
 });
 
-export const SendNumberButton = styled("button", {
-  ...MainButtonStyle,
-  padding: "7px 10px",
-  position: "absolute",
-  right: "12px",
-  top: "50%",
-  transform: "translateY(-50%)",
-  borderRadius: "8px",
-  fontWeight: "600",
-  fontSize: "14px",
-});
-
 export const LoginButton = styled("button", {
   ...MainButtonStyle,
   width: "100%",
@@ -96,5 +84,27 @@ export const SignupMessage = styled("div", {
   "& span": {
     color: MainColor,
     cursor: "pointer",
+  },
+});
+
+export const PhoneNumberInputChild = styled("div", {
+  position: "absolute",
+  right: "12px",
+  top: "50%",
+  display: "flex",
+  flexDirection: "row-reverse",
+  alignItems: "center",
+  gap: "12px",
+  transform: "translateY(-50%)",
+  "& .sendNumberButton": {
+    ...MainButtonStyle,
+    padding: "7px 10px",
+    borderRadius: "8px",
+    fontWeight: "600",
+    fontSize: "14px",
+  },
+  "& .timeCounter": {
+    fontWeight: "400",
+    fontSize: "16px",
   },
 });

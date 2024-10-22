@@ -9,8 +9,7 @@ import {
   TimeCounter,
 } from "../../styles/SignupPage.styles.ts";
 import { WarningText } from "../../styles/global.ts";
-
-const COUNTDOWN_SEC = 300;
+import { SEND_AUTHNUMBER_COUNTDOWN_SEC } from "../../constants/constants.ts";
 
 const PhoneNumberSection = (props) => {
   const {
@@ -24,7 +23,7 @@ const PhoneNumberSection = (props) => {
 
   const [isSendButtonClicked, setIsSendButtonClicked] = useState(false); // 인증번호 전송 버튼이 클릭된 적 있나?
   const [isNotiVisible, setIsNotiVisible] = useState(false); // 남은 인증번호 전송 가능 횟수를 표시하는 노티 표시 여부
-  const countdownTimer = useCountdownTimer(COUNTDOWN_SEC); // 5분 카운트다운 타이머
+  const countdownTimer = useCountdownTimer(SEND_AUTHNUMBER_COUNTDOWN_SEC); // 5분 카운트다운 타이머
   const [sendNumberInfo, setSendNumberInfo] = useState({
     // 휴대폰 번호 인증 API 관련 정보
     hasError: false,
@@ -72,7 +71,10 @@ const PhoneNumberSection = (props) => {
   const getIsSendingPossible = () => {
     if (!isValid.phoneNumber.isRulePassed) return false;
     // 인증번호 전송 후 10초 간 전송 불가능
-    if (countdownTimer.isActive && COUNTDOWN_SEC - 10 < countdownTimer.timeLeft)
+    if (
+      countdownTimer.isActive &&
+      SEND_AUTHNUMBER_COUNTDOWN_SEC - 10 < countdownTimer.timeLeft
+    )
       return false;
     return true;
   };

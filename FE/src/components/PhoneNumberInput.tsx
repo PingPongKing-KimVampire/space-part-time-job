@@ -27,7 +27,10 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    // TODO : 숫자 아니면 다 지우기?
+    // 숫자, - 아니면 다 지우기?
+    const value = e.target.value.replace(/[^0-9-]/g, "");
+    setValue(value);
   };
 
   const onBlur = () => {
@@ -51,6 +54,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
         value={value}
         width={width}
         ref={inputRef}
+        maxLength={20}
       >
         {children && children}
       </CustomInput>

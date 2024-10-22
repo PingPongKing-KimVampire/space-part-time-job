@@ -34,3 +34,5 @@ export const WORKTIME_TYPES = {
   NEGOTIABLE: "협의 가능",
   TIME_SETTING: "시간 설정",
 };
+
+export const SEND_AUTHNUMBER_COUNTDOWN_SEC = 300;
