@@ -49,10 +49,11 @@ export interface InputProps {
   borderType?: "multi-top" | "multi-middle" | "multi-bottom" | "single";
   invalid?: boolean;
   value: string;
-  eventHandlers: EventHandlers;
+  eventHandlers?: EventHandlers;
   children?: React.ReactNode;
   width?: string;
   maxLength?: number;
+  disabled?: boolean;
 }
 
 export interface EventHandlers {
@@ -69,16 +70,16 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     borderType = "single",
     invalid = false,
     value,
-    eventHandlers,
+    eventHandlers = {},
     children,
     width = "100%",
     maxLength = 50,
+    disabled = false,
   } = props;
   const { onChange, onFocus, onBlur } = eventHandlers;
   return (
     <div style={{ position: "relative", width }}>
       <Input
-        maxLength={maxLength}
         ref={ref}
         style={{ width: "100%" }}
         id={id}
@@ -90,6 +91,8 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        maxLength={maxLength}
+        disabled={disabled}
       ></Input>
       {children}
     </div>

@@ -1,19 +1,12 @@
 import React, { useState } from "react";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
-import {
-  JOB_TYPES,
-  TERM,
-  DAYS,
-  PAY_TYPES,
-  WORKTIME_TYPES,
-} from "../constants/constants.ts";
+import { JOB_TYPES, TERM, DAYS, PAY_TYPES } from "../constants/constants.ts";
 import {
   Background,
   CancelButton,
   LoadButton,
   Container,
-  WorkTimeSection,
   PaySection,
   DescriptionSection,
   CreateButton,
@@ -22,6 +15,7 @@ import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import FormSection from "../components/CreateJobPage/FormSection.tsx";
 import FormField from "../components/CreateJobPage/FormField.tsx";
 import CustomCalendar from "../components/CreateJobPage/CustomCalendar.tsx";
+import TimeSection from "../components/CreateJobPage/TimeSection.tsx";
 
 const CreateJobPage = () => {
   useBackgroundColor("#F9FBFC");
@@ -29,9 +23,6 @@ const CreateJobPage = () => {
   const [selectedDAYS, setSelectedDAYS] = useState<string[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<string>(TERM.TODAY);
   const [description, setDescription] = useState<string>("");
-  const [workTime, setWorkTime] = useState({
-    type: WORKTIME_TYPES.NEGOTIABLE,
-  });
 
   const onDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const dayClicked = e.currentTarget.textContent || "";
@@ -60,13 +51,6 @@ const CreateJobPage = () => {
   };
 
   const isTERMelected = (period) => period === selectedPeriod;
-
-  const onWorkTimeSelected = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const workTimeClicked =
-      e.currentTarget.textContent || WORKTIME_TYPES.NEGOTIABLE;
-    setWorkTime((state) => ({ ...state, type: workTimeClicked }));
-  };
-  const isWorkTimeSelected = (type) => type === workTime.type;
 
   return (
     <Background>
@@ -125,35 +109,7 @@ const CreateJobPage = () => {
           )}
 
           <FormField id="time" title="일하는 시간" warning="">
-            <WorkTimeSection id="time">
-              <Chips
-                id="pay"
-                options={["협의 가능", "시간 설정"]}
-                onClick={onWorkTimeSelected}
-                isSelected={isWorkTimeSelected}
-              />
-              {workTime.type === WORKTIME_TYPES.TIME_SETTING && (
-                <div className="timeSelection">
-                  <CustomInput
-                    id="startTime"
-                    value="09:00"
-                    eventHandlers={{}}
-                    width="47%"
-                  >
-                    <label htmlFor="startTime">시작</label>
-                  </CustomInput>
-                  <div className="waveSymbol">~</div>
-                  <CustomInput
-                    id="endTime"
-                    value="18:00"
-                    eventHandlers={{}}
-                    width="47%"
-                  >
-                    <label htmlFor="endTime">종료</label>
-                  </CustomInput>
-                </div>
-              )}
-            </WorkTimeSection>
+            <TimeSection />
           </FormField>
 
           <FormField id="pay" title="급여" warning="">
