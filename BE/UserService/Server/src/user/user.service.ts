@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { SignupDto } from './dto/service/signup.dto';
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
+import { AuthCodeService } from 'src/user/auth-code/auth-code.service';
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly authCodeService: AuthCodeService,
+  ) {}
 
   signup(signupDto: SignupDto): Promise<User> {
     const { id, password, nickname, phoneNumber } = signupDto;
@@ -24,13 +26,23 @@ export class UserService {
 
   async isUserIdAvailable(id: string): Promise<boolean> {
     const isExist = await this.userRepository.isUserIdExist(id);
-    if (isExist) return false;
-    return true;
+    return !isExist;
   }
 
   async isNicknameAvailable(nickname: string): Promise<boolean> {
     const isExist = await this.userRepository.isNicknameExist(nickname);
-	if (isExist) return false;
-    return true;
+    return !isExist;
+  }
+
+  async makeSignupPhoneAuthCode(
+    phoneNumber: string,
+    ipAddress: string,
+  ): Promise<{ remainingPhoneAuthenticationCount: number }> {
+    const isExist = await this.userRepository.isPhoneNumberExist(phoneNumber);
+    if (isExist) throw new Error('이미 가입된 휴대전화');
+
+    const { remainingPhoneAuthenticationCount } =
+      await this.authCodeService.handleAuthCodeProcess(phoneNumber, ipAddress);
+    return { remainingPhoneAuthenticationCount };
   }
 }

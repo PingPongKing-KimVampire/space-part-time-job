@@ -23,4 +23,9 @@ export class UserRepository {
     const count = await this.usersRepository.count({ where: { nickname } });
     return count > 0;
   }
+
+  async isPhoneNumberExist(phoneNumber: string): Promise<boolean> {
+    const count = await this.usersRepository.count({ where: { phoneNumber } });
+    return count > 0;
+  }
 }
