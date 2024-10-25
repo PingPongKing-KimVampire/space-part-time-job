@@ -37,3 +37,14 @@ export function requestSignup(
     .send(userDto)
     .expect(204);
 }
+
+export async function requestPhoneAuthCode(
+  app: INestApplication,
+  phoneNumber: string,
+) {
+  return request(app.getHttpServer())
+    .post('/api/users/phone-auth-code')
+    .set('Content-Type', 'application/json; charset=utf-8')
+    .send({ phoneNumber })
+    .expect(201);
+}
