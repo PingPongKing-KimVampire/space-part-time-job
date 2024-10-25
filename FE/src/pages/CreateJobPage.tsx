@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
-import { JOB_TYPES, TERM, DAYS, PAY_TYPES } from "../constants/constants.ts";
+import { JOB_TYPES, TERM, DAYS } from "../constants/constants.ts";
 import {
   Background,
   CancelButton,
   LoadButton,
   Container,
-  PaySection,
   DescriptionSection,
   CreateButton,
 } from "../styles/CreateJobPage.styles.ts";
@@ -16,6 +15,7 @@ import FormSection from "../components/CreateJobPage/FormSection.tsx";
 import FormField from "../components/CreateJobPage/FormField.tsx";
 import CustomCalendar from "../components/CreateJobPage/CustomCalendar.tsx";
 import TimeSection from "../components/CreateJobPage/TimeSection.tsx";
+import PaySection from "../components/CreateJobPage/PaySection.tsx";
 
 const CreateJobPage = () => {
   useBackgroundColor("#F9FBFC");
@@ -50,8 +50,6 @@ const CreateJobPage = () => {
     setSelectedPeriod(periodClicked);
   };
 
-  const isTERMelected = (period) => period === selectedPeriod;
-
   return (
     <Background>
       <CancelButton>취소</CancelButton>
@@ -85,7 +83,7 @@ const CreateJobPage = () => {
               id="period"
               options={Object.values(TERM)}
               onClick={onPeriodClick}
-              isSelected={isTERMelected}
+              isSelected={(period) => period === selectedPeriod}
             />
           </FormField>
 
@@ -113,10 +111,11 @@ const CreateJobPage = () => {
           </FormField>
 
           <FormField id="pay" title="급여" warning="">
-            <PaySection>
-              <Chips id="pay" options={PAY_TYPES} />
-              <CustomInput id="pay" value="" eventHandlers={{}} />
-            </PaySection>
+            <PaySection
+              selectedPeriod={selectedPeriod}
+              selectedWeekDays={selectedDAYS}
+              selectedTime={{ start: "09:00", end: "18:00" }}
+            />
           </FormField>
 
           <FormField id="place" title="일하는 장소" warning="">

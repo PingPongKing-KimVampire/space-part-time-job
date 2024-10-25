@@ -1,3 +1,5 @@
+import formatCurrency from "../utils/formatCurrency.ts";
+
 export const JOB_TYPES = [
   "서빙",
   "주방보조/설거지",
@@ -28,7 +30,16 @@ export const TERM = {
 
 export const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 
-export const PAY_TYPES = ["시급", "건당", "일급", "월급"];
+type PayTypes = {
+  HOURLY: string;
+  PER_UNIT: string;
+  MONTHLY: string;
+};
+export const PAY_TYPES: PayTypes = {
+  HOURLY: "시급",
+  PER_UNIT: "건당",
+  MONTHLY: "월급",
+};
 
 export const WORKTIME_TYPES = {
   NEGOTIABLE: "협의 가능",
@@ -87,3 +98,5 @@ export const TIMES = [
   "23:00",
   "23:30",
 ];
+
+export const MINIMUM_HOURLY_PAY = 9860;

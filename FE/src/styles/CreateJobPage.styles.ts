@@ -80,12 +80,6 @@ export const FormFieldContainer = styled("div", {
   },
 });
 
-export const PaySection = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px",
-});
-
 export const DescriptionSection = styled("div", {
   display: "flex",
   flexDirection: "column",
