@@ -48,7 +48,7 @@ describe('아이디 중복 체크 (e2e)', () => {
       .get(`/api/users/check-id/${duplicateId}`)
       .expect(409)
       .expect((response) => {
-        expect(response.body).toHaveProperty('error', '휴대폰 번호 중복');
+        expect(response.body).toHaveProperty('error', '아이디 중복');
       });
   });
 
