@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './user/user.module';
 import { APP_PIPE } from '@nestjs/core';
 import { User } from './user/entities/user.entity';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { User } from './user/entities/user.entity';
       }),
     }),
     UsersModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [
