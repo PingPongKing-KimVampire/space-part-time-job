@@ -42,7 +42,7 @@ export class UserService {
     if (isExist) throw new Error('이미 가입된 휴대전화');
 
     const { remainingPhoneAuthenticationCount } =
-      await this.authCodeService.handleAuthCodeProcess(phoneNumber, ipAddress);
+      await this.authCodeService.generateAndProduceAuthCode(phoneNumber, ipAddress);
     return { remainingPhoneAuthenticationCount };
   }
 }

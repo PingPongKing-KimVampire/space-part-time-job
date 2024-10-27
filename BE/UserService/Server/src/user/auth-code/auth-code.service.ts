@@ -14,7 +14,7 @@ export class AuthCodeService {
   private readonly maxAttempts = 5;
   private readonly expirationTime = 60 * 5;
 
-  async handleAuthCodeProcess(
+  async generateAndProduceAuthCode(
     phoneNumber: string,
     ipAddress: string,
   ): Promise<{ remainingPhoneAuthenticationCount: number }> {
