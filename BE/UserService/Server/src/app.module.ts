@@ -8,6 +8,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { User } from './user/entities/user.entity';
 import { UtilModule } from './util/util.module';
 import { RedisModule } from './redis/redis.module';
+import { ProducerModule } from './producer/producer.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { RedisModule } from './redis/redis.module';
     UsersModule,
     UtilModule,
     RedisModule,
+    ProducerModule,
   ],
   controllers: [AppController],
   providers: [
