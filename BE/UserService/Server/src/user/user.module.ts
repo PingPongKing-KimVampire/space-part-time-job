@@ -7,9 +7,10 @@ import { UserRepository } from './user.repository';
 import { UtilModule } from 'src/util/util.module';
 import { RedisModule } from 'src/redis/redis.module';
 import { AuthCodeService } from './auth-code/auth-code.service';
+import { ProducerModule } from 'src/producer/producer.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), UtilModule, RedisModule],
+  imports: [TypeOrmModule.forFeature([User]), UtilModule, RedisModule, ProducerModule],
   controllers: [UserController],
   providers: [UserService, UserRepository, AuthCodeService],
 })

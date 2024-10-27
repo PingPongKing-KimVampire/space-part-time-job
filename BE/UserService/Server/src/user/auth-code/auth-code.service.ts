@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { ProducerService } from 'src/producer/producer.service';
 import { RedisService } from 'src/redis/redis.service';
 import { UtilService } from 'src/util/util.service';
-// import { KafkaService } from 'src/kafka/kafka.service';
 
 @Injectable()
 export class AuthCodeService {
   constructor(
     private readonly redisService: RedisService,
     private readonly utilService: UtilService,
-    // private readonly kafkaService: KafkaService,
+    private readonly producerService: ProducerService,
   ) {}
 
   private readonly maxAttempts = 5;
@@ -41,8 +41,10 @@ export class AuthCodeService {
       secondUntilMidnight,
     );
 
-    // 카프카에 인증 코드 이벤트 로깅
-    // this.kafkaService.saveAuthEvent(phoneNumber, ipAddress, authCode);
+    await this.producerService.sendSignupPhoneAuthenticationMessage(
+      phoneNumber,
+      authCode,
+    );
 
     const [finalAttemptsByIp, finalAttemptsByPhoneNumber] = await Promise.all([
       this.getAuthAttemptByIp(ipAddress),
