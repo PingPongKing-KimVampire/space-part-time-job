@@ -45,7 +45,7 @@ export class SmsSenderService implements OnModuleInit {
     const message = `[우주알바] 인증번호 [${authCode}]\n*타인에게 절대 알리지 마세요.(계정 도용 위험)`;
     if (SMS_MODE === 'DEV') {
       console.log(
-        `${senderPhoneNumber} 번호로 ${phoneNumber}에게 인증문자가 발송되었습니다.`,
+        `${senderPhoneNumber}로 발송되고 ${phoneNumber}에게 인증문자가 발송되었습니다.`,
       );
       console.log(message);
     } else if (SMS_MODE === 'PRODUCTION') {
