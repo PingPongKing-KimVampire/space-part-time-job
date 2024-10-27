@@ -11,8 +11,9 @@ export class UserService {
     private readonly authCodeService: AuthCodeService,
   ) {}
 
-  signup(signupDto: SignupDto): Promise<User> {
-    const { id, password, nickname, phoneNumber } = signupDto;
+  async signup(signupDto: SignupDto): Promise<User> {
+    const { id, password, nickname, phoneNumber, smsCode } = signupDto;
+    await this.authCodeService.verifyAuthCode(phoneNumber, smsCode);
 
     const user = User.of({
       userId: id,
@@ -20,7 +21,6 @@ export class UserService {
       nickname,
       phoneNumber,
     });
-
     return this.userRepository.createUser(user);
   }
 
@@ -42,7 +42,10 @@ export class UserService {
     if (isExist) throw new Error('이미 가입된 휴대전화');
 
     const { remainingPhoneAuthenticationCount } =
-      await this.authCodeService.generateAndProduceAuthCode(phoneNumber, ipAddress);
+      await this.authCodeService.generateAndProduceAuthCode(
+        phoneNumber,
+        ipAddress,
+      );
     return { remainingPhoneAuthenticationCount };
   }
 }

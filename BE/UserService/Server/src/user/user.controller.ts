@@ -49,7 +49,11 @@ export class UserController {
           throw error;
         }
       }
+      if (error.message === '휴대폰 인증 실패') {
+        throw new HttpException({ error: '휴대폰 인증 실패' }, 401);
+      }
       throw error;
+      return;
     }
   }
 
@@ -87,7 +91,7 @@ export class UserController {
   ) {
     const ip = req.ip;
     const { phoneNumber } = phoneAuthCodeRequestDto;
-    let remainingPhoneAuthenticationCount: number; // 외부에 let 선언
+    let remainingPhoneAuthenticationCount: number;
 
     try {
       const result = await this.usersService.makeSignupPhoneAuthCode(
