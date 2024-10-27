@@ -1,28 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../../src/app.module';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../../../src/user/entities/user.entity';
-import { Repository } from 'typeorm';
-import { getUserDto1, getUserDto2, requestSignup } from './user.signup.utils';
+import {
+  getUserDto1,
+  getUserDto2,
+  getUserSignupDto,
+  requestPhoneAuthCode,
+  signup,
+} from './user.signup.utils';
+import {
+  app,
+  clearDatabase,
+  setupTestingApp,
+} from './user.signup.test-setup.util';
 
 describe('사용자 회원가입 (e2e)', () => {
-  let app: INestApplication;
-
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.setGlobalPrefix('api');
-    await app.init();
+    await setupTestingApp();
   });
 
   beforeEach(async () => {
-    const userRepository = app.get<Repository<User>>(getRepositoryToken(User));
-    await userRepository.clear();
+    await clearDatabase();
   });
 
   afterAll(async () => {
@@ -31,17 +27,18 @@ describe('사용자 회원가입 (e2e)', () => {
 
   it('성공', async () => {
     const userDto = getUserDto1();
-    await requestSignup(app, userDto);
+    await signup(app, userDto);
   });
 
   it('잘못된 형식(비밀번호 형식 오류)', async () => {
     const userDto1 = getUserDto1();
     userDto1.password = 'wrongPassword';
 
+    const userSignupDto = getUserSignupDto(userDto1);
     await request(app.getHttpServer())
       .post('/api/users')
       .set('Content-Type', 'application/json; charset=utf-8')
-      .send(userDto1)
+      .send(userSignupDto)
       .expect(400);
   });
 
@@ -50,15 +47,17 @@ describe('사용자 회원가입 (e2e)', () => {
     const userDto1 = getUserDto1();
     userDto1.id = duplicateId;
 
-    await requestSignup(app, userDto1);
+    await signup(app, userDto1);
 
     const userDto2 = getUserDto2();
     userDto2.id = duplicateId;
+    await requestPhoneAuthCode(app, userDto2.phoneNumber);
 
+    const userSignupDto = getUserSignupDto(userDto2);
     await request(app.getHttpServer())
       .post('/api/users')
       .set('Content-Type', 'application/json; charset=utf-8')
-      .send(userDto2)
+      .send(userSignupDto)
       .expect(409)
       .expect((response) => {
         expect(response.body).toHaveProperty('error', '아이디 중복');
@@ -69,39 +68,38 @@ describe('사용자 회원가입 (e2e)', () => {
     const duplicateNick = 'dupnick';
     const userDto1 = getUserDto1();
     userDto1.nickname = duplicateNick;
-
-    await requestSignup(app, userDto1);
+    await signup(app, userDto1);
 
     const userDto2 = getUserDto2();
     userDto2.nickname = duplicateNick;
+    await requestPhoneAuthCode(app, userDto2.phoneNumber);
 
+    const userSignupDto = getUserSignupDto(userDto2);
     await request(app.getHttpServer())
       .post('/api/users')
       .set('Content-Type', 'application/json; charset=utf-8')
-      .send(userDto2)
+      .send(userSignupDto)
       .expect(409)
       .expect((response) => {
         expect(response.body).toHaveProperty('error', '닉네임 중복');
       });
   });
 
-  it('휴대폰 번호 중복', async () => {
-    const duplicatePhoneNumber = '01012345678';
+  it('휴대폰 인증 실패', async () => {
     const userDto1 = getUserDto1();
-    userDto1.phoneNumber = duplicatePhoneNumber;
+    await requestPhoneAuthCode(app, userDto1.phoneNumber);
 
-    await requestSignup(app, userDto1);
-
-    const userDto2 = getUserDto2();
-    userDto2.phoneNumber = duplicatePhoneNumber;
+    const userSignupDto = getUserSignupDto(userDto1);
+    const invalidSmsCode = '109182';
+    userSignupDto.smsCode = invalidSmsCode;
 
     await request(app.getHttpServer())
       .post('/api/users')
       .set('Content-Type', 'application/json; charset=utf-8')
-      .send(userDto2)
-      .expect(409)
+      .send(userSignupDto)
+      .expect(401)
       .expect((response) => {
-        expect(response.body).toHaveProperty('error', '휴대폰 번호 중복');
+        expect(response.body).toHaveProperty('error', '휴대폰 인증 실패');
       });
   });
 });

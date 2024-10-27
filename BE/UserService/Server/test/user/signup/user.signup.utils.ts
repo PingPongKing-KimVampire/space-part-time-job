@@ -1,13 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
+export const validSmsCode = '999999';
+
 export function getUserDto1() {
   return {
     id: 'id123',
     password: 'Password123!',
     nickname: 'nick1',
     phoneNumber: '01012345678',
-    smsCode: '123456',
   };
 }
 
@@ -17,11 +18,36 @@ export function getUserDto2() {
     password: 'Password123!',
     nickname: 'nick2',
     phoneNumber: '01012345679',
-    smsCode: '123456',
   };
 }
 
-export function requestSignup(
+export async function signup(
+  app: INestApplication,
+  userDto: {
+    id: string;
+    password: string;
+    nickname: string;
+    phoneNumber: string;
+  },
+) {
+  await requestPhoneAuthCode(app, userDto.phoneNumber);
+  const userSignupDto = getUserSignupDto(userDto);
+  return requestSignup(app, userSignupDto);
+}
+
+export function getUserSignupDto(userDto: {
+  id: string;
+  password: string;
+  nickname: string;
+  phoneNumber: string;
+}) {
+  const userSignupDto: any = structuredClone(userDto);
+  const smsCode = validSmsCode;
+  userSignupDto.smsCode = smsCode;
+  return userSignupDto;
+}
+
+function requestSignup(
   app: INestApplication,
   userDto: {
     id: string;
