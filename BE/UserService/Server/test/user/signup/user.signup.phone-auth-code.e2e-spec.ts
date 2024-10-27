@@ -1,44 +1,28 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../../src/app.module';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../../../src/user/entities/user.entity';
-import { Repository } from 'typeorm';
-import { RedisService } from 'src/redis/redis.service';
+import { getUserDto1, requestPhoneAuthCode, signup } from './user.signup.utils';
 import {
-  getUserDto1,
-  requestPhoneAuthCode,
-  requestSignup,
-} from './user.signup.utils';
+  app,
+  clearDatabase,
+  setupTestingApp,
+} from './user.signup.test-setup.util';
 
 describe('휴대폰 인증 API (e2e)', () => {
-  let app: INestApplication;
-  let userRepository: Repository<User>;
-  let redisService: RedisService;
-
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.setGlobalPrefix('api');
-    await app.init();
-
-    userRepository = app.get<Repository<User>>(getRepositoryToken(User));
-    redisService = app.get<RedisService>(RedisService);
+    await setupTestingApp();
   });
 
   beforeEach(async () => {
-    await userRepository.clear();
-    await redisService.clearAll();
+    await clearDatabase();
   });
 
   afterAll(async () => {
     await app.close();
   });
 
+  it('성공', async () => {
+    const userDto = getUserDto1();
+    await signup(app, userDto);
+  });
   it('휴대폰 번호 인증 요청 성공', async () => {
     const validPhoneNumber = '01012341234';
 
@@ -83,7 +67,7 @@ describe('휴대폰 인증 API (e2e)', () => {
     const userDto = getUserDto1();
     userDto.phoneNumber = duplicatePhoneNumber;
 
-    await requestSignup(app, userDto);
+    await signup(app, userDto);
 
     await request(app.getHttpServer())
       .post('/api/users/phone-auth-code')

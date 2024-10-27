@@ -1,30 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../../src/app.module';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../../../src/user/entities/user.entity';
-import { Repository } from 'typeorm';
-import { getUserDto1, requestSignup } from './user.signup.utils';
+import { getUserDto1, signup } from './user.signup.utils';
+import {
+  app,
+  clearDatabase,
+  setupTestingApp,
+} from './user.signup.test-setup.util';
 
 describe('닉네임 중복 체크 (e2e)', () => {
-  let app: INestApplication;
-  let userRepository: Repository<User>;
-
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.setGlobalPrefix('api');
-    await app.init();
-
-    userRepository = app.get<Repository<User>>(getRepositoryToken(User));
+    await setupTestingApp();
   });
 
   beforeEach(async () => {
-    await userRepository.clear();
+    await clearDatabase();
   });
 
   afterAll(async () => {
@@ -41,7 +29,7 @@ describe('닉네임 중복 체크 (e2e)', () => {
 
   it('닉네임 중복', async () => {
     const userDto1 = getUserDto1();
-    await requestSignup(app, userDto1);
+    await signup(app, userDto1);
 
     const duplicateNickname = userDto1.nickname;
     await request(app.getHttpServer())
