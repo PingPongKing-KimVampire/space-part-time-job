@@ -1,10 +1,10 @@
 import * as request from 'supertest';
-import { getUserDto1, requestPhoneAuthCode, signup } from './user.signup.utils';
+import { getUserDto1, requestPhoneAuthCode, signup } from '../user.utils';
 import {
   app,
   clearDatabase,
   setupTestingApp,
-} from './user.signup.test-setup.util';
+} from '../user.test-setup.util';
 
 describe('휴대폰 인증 API (e2e)', () => {
   beforeAll(async () => {

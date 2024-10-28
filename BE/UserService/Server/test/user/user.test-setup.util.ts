@@ -1,12 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../../src/app.module';
+import { AppModule } from '../../src/app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../../../src/user/entities/user.entity';
+import { User } from '../../src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RedisService } from 'src/redis/redis.service';
 import { UtilService } from 'src/util/util.service';
-import { validSmsCode } from './user.signup.utils';
+import { validSmsCode } from './user.utils';
 
 export let userRepository: Repository<User>;
 export let redisService: RedisService;

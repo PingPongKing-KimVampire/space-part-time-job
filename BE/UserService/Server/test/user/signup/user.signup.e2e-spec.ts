@@ -5,12 +5,12 @@ import {
   getUserSignupDto,
   requestPhoneAuthCode,
   signup,
-} from './user.signup.utils';
+} from '../user.utils';
 import {
   app,
   clearDatabase,
   setupTestingApp,
-} from './user.signup.test-setup.util';
+} from '../user.test-setup.util';
 
 describe('사용자 회원가입 (e2e)', () => {
   beforeAll(async () => {

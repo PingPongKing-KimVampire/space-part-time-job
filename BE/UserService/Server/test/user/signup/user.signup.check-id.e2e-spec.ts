@@ -1,10 +1,10 @@
 import * as request from 'supertest';
-import { getUserDto1, signup } from './user.signup.utils';
+import { getUserDto1, signup } from '../user.utils';
 import {
   app,
   clearDatabase,
   setupTestingApp,
-} from './user.signup.test-setup.util';
+} from '../user.test-setup.util';
 
 describe('아이디 중복 체크 (e2e)', () => {
   beforeAll(async () => {
