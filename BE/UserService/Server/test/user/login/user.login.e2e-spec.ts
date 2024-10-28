@@ -29,6 +29,7 @@ describe('아이디/비밀번호 로그인 (e2e)', () => {
       .set('Content-Type', 'application/json; charset=utf-8')
       .send(loginRequest)
       .expect(201)
+      .expect('set-cookie', /access_token=.*;/)
       .expect((response) => {
         expect(response.body).toHaveProperty('id');
       });
