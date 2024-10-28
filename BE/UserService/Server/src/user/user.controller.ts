@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Req,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SignupRequestDto } from './dto/controller/signup.request.dto';
@@ -14,12 +15,16 @@ import { SignupDto } from './dto/service/signup.dto';
 import { SignupPhoneAuthCodeRequestDto } from './dto/controller/signup-phone-auth-code.request.dto';
 import { QueryFailedError } from 'typeorm';
 import { IdValidator, NicknameValidator } from './utils/CustomValidator';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { LoginRequestDto } from './dto/controller/login.request.dto';
+import { AuthTokenService } from 'src/auth-token/auth-token.service';
 
 @Controller('users')
 export class UserController {
-  constructor(private usersService: UserService) {}
+  constructor(
+    private usersService: UserService,
+    private readonly authTokenService: AuthTokenService,
+  ) {}
 
   @Post()
   @HttpCode(204)
@@ -113,10 +118,21 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() loginRequestDto: LoginRequestDto) {
+  async login(
+    @Body() loginRequestDto: LoginRequestDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const { id: userId, password } = loginRequestDto;
     try {
       const id = await this.usersService.getUserIdIfValid(userId, password);
+
+      const accessToken = this.authTokenService.generateAccessToken({ id });
+      res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        // secure: true, 추후 활성화
+        sameSite: 'none', //추후 strict로 변경
+      });
+
       return { id };
     } catch (e) {
       if (e.message === '존재하지 않는 회원') {

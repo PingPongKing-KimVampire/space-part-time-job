@@ -8,9 +8,10 @@ import { UtilModule } from 'src/util/util.module';
 import { RedisModule } from 'src/redis/redis.module';
 import { AuthCodeService } from './auth-code/auth-code.service';
 import { ProducerModule } from 'src/producer/producer.module';
+import { AuthTokenModule } from 'src/auth-token/auth-token.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), UtilModule, RedisModule, ProducerModule],
+  imports: [TypeOrmModule.forFeature([User]), UtilModule, RedisModule, ProducerModule, AuthTokenModule],
   controllers: [UserController],
   providers: [UserService, UserRepository, AuthCodeService],
 })
