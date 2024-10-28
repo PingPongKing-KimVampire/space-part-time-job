@@ -9,6 +9,7 @@ import { User } from './user/entities/user.entity';
 import { UtilModule } from './util/util.module';
 import { RedisModule } from './redis/redis.module';
 import { ProducerModule } from './producer/producer.module';
+import { AuthTokenModule } from './auth-token/auth-token.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ProducerModule } from './producer/producer.module';
     UtilModule,
     RedisModule,
     ProducerModule,
+    AuthTokenModule,
   ],
   controllers: [AppController],
   providers: [
