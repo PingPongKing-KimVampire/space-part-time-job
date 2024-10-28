@@ -28,4 +28,11 @@ export class UserRepository {
     const count = await this.usersRepository.count({ where: { phoneNumber } });
     return count > 0;
   }
+
+  async findByIdAndPassword(id: string, password: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { userId: id, password },
+    });
+    return user;
+  }
 }

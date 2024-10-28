@@ -48,4 +48,13 @@ export class UserService {
       );
     return { remainingPhoneAuthenticationCount };
   }
+
+  async getUserIdIfValid(userId: string, password: string): Promise<string> {
+    const user = await this.userRepository.findByIdAndPassword(
+      userId,
+      password,
+    );
+    if (!user) throw new Error('존재하지 않는 회원');
+    return user.id;
+  }
 }

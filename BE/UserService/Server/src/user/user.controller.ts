@@ -15,6 +15,7 @@ import { SignupPhoneAuthCodeRequestDto } from './dto/controller/signup-phone-aut
 import { QueryFailedError } from 'typeorm';
 import { IdValidator, NicknameValidator } from './utils/CustomValidator';
 import { Request } from 'express';
+import { LoginRequestDto } from './dto/controller/login.request.dto';
 
 @Controller('users')
 export class UserController {
@@ -109,5 +110,19 @@ export class UserController {
       throw new HttpException({ error: '알 수 없는 에러!' }, 500);
     }
     return { remainingPhoneAuthenticationCount };
+  }
+
+  @Post('login')
+  async login(@Body() loginRequestDto: LoginRequestDto) {
+    const { id: userId, password } = loginRequestDto;
+    try {
+      const id = await this.usersService.getUserIdIfValid(userId, password);
+      return { id };
+    } catch (e) {
+      if (e.message === '존재하지 않는 회원') {
+        throw new HttpException({ error: '아이디/패스워드 로그인 실패' }, 401);
+      }
+      throw new HttpException({ error: '알 수 없는 에러!' }, 500);
+    }
   }
 }
