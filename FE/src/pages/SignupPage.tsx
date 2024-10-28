@@ -10,6 +10,7 @@ import { Title } from "../styles/LoginPage.styles.ts";
 import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
+import { IP_ADDRESS } from "../constants/constants.ts";
 
 type InputValue = {
   id: string;
@@ -82,7 +83,7 @@ const SignupPage = () => {
 
   const checkDuplicated = async (fieldName: "id" | "nickname") => {
     const response = await fetch(
-      `http://localhost/api/users/check-${fieldName}/${inputValue[fieldName]}`
+      `http://${IP_ADDRESS}/api/users/check-${fieldName}/${inputValue[fieldName]}`
     );
     if (!response.ok) {
       if (response.status === 409) {
@@ -130,7 +131,7 @@ const SignupPage = () => {
   }, []);
 
   const signup = async () => {
-    const response = await fetch(`http://localhost/api/users`, {
+    const response = await fetch(`http://${IP_ADDRESS}/api/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",

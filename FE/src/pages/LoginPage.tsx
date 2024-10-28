@@ -19,7 +19,10 @@ import {
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import checkRulePass from "../utils/checkRulePass.ts";
 import useCountdownTimer from "../utils/useCountdownTimer.ts";
-import { SEND_AUTHNUMBER_COUNTDOWN_SEC } from "../constants/constants.ts";
+import {
+  SEND_AUTHNUMBER_COUNTDOWN_SEC,
+  IP_ADDRESS,
+} from "../constants/constants.ts";
 
 const ID_PW = "ID_PW";
 const PHONE_NUMBER = "PHONE_NUMBER";
@@ -57,7 +60,7 @@ const LoginPage = () => {
 
   const sendAuthNumber = async () => {
     // const response = await fetch(
-    //   `http://localhost/api/users/login/phone-auth-code`,
+    //   `http://${IP_ADDRESS}/api/users/login/phone-auth-code`,
     //   {
     //     method: "POST",
     //     headers: {
@@ -132,41 +135,41 @@ const LoginPage = () => {
   };
 
   const login = async () => {
-    // const body: loginRequestBody = {};
-    // if (selectedTab === ID_PW) {
-    //   body.id = inputValue.id;
-    //   body.password = inputValue.password;
-    // } else if (selectedTab === PHONE_NUMBER) {
-    //   body.phoneNumber = inputValue.phoneNumber.replaceAll("-", "");
-    //   body.smsCode = inputValue.authNumber;
-    // }
-    // const response = await fetch(`http://???/api/users/login`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json; charset=utf-8",
-    //   },
-    //   body: JSON.stringify(body),
-    // });
-    // if (!response.ok) {
-    //   if (response.status === 401) {
-    //     if (selectedTab === ID_PW) {
-    //       return {
-    //         hasError: true,
-    //         errorMessage: "아이디 또는 전화번호가 유효하지 않습니다.",
-    //       };
-    //     } else if (selectedTab === ID_PW) {
-    //       return {
-    //         hasError: true,
-    //         errorMessage: "인증번호가 유효하지 않습니다.",
-    //       };
-    //     }
-    //   }
-    //   // 400, 500
-    //   return {
-    //     hasError: true,
-    //     errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
-    //   };
-    // }
+    const body: loginRequestBody = {};
+    if (selectedTab === ID_PW) {
+      body.id = inputValue.id;
+      body.password = inputValue.password;
+    } else if (selectedTab === PHONE_NUMBER) {
+      body.phoneNumber = inputValue.phoneNumber.replaceAll("-", "");
+      body.smsCode = inputValue.authNumber;
+    }
+    const response = await fetch(`http://${IP_ADDRESS}/api/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      if (response.status === 401) {
+        if (selectedTab === ID_PW) {
+          return {
+            hasError: true,
+            errorMessage: "아이디 또는 비밀번호가 유효하지 않습니다.",
+          };
+        } else if (selectedTab === ID_PW) {
+          return {
+            hasError: true,
+            errorMessage: "인증번호가 유효하지 않습니다.",
+          };
+        }
+      }
+      // 400, 500
+      return {
+        hasError: true,
+        errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
+      };
+    }
     return { hasError: false, errorMessage: "" };
   };
 

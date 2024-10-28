@@ -25,10 +25,18 @@ const useCountdownTimer = (initialSeconds) => {
     }, 1000);
   };
 
+  const stop = () => {
+    setIsActive(false);
+    if (intervalID.current) {
+      clearInterval(intervalID.current);
+    }
+  };
+
   return {
     timeLeft,
     isActive,
     start,
+    stop,
   };
 };
 

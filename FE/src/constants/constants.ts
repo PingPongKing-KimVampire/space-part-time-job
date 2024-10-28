@@ -1,5 +1,7 @@
 import formatCurrency from "../utils/formatCurrency.ts";
 
+export const IP_ADDRESS = "localhost";
+
 export const JOB_TYPES = [
   "서빙",
   "주방보조/설거지",
