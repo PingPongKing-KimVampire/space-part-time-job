@@ -12,6 +12,7 @@ services:
       - userservice
     networks:
       - be-network
+    restart: on-failure
 
   userservice:
     build:
@@ -35,6 +36,7 @@ services:
       - kafka
     networks:
       - be-network
+    restart: on-failure
 
   mysqldb:
     image: mysql:8
@@ -48,6 +50,7 @@ services:
       - "3306:3306"
     networks:
       - be-network
+    restart: on-failure
 
   redis:
     image: redis:latest
@@ -56,6 +59,7 @@ services:
       - "6379:6379"
     networks:
       - be-network
+    restart: on-failure
 
   smsservice:
     build:
@@ -69,6 +73,7 @@ services:
       - kafka
     networks:
       - be-network
+    restart: on-failure
 
   kafka:
     image: bitnami/kafka:3.5.1-debian-11-r44
@@ -94,6 +99,7 @@ services:
       - kafka_data:/bitnami/kafka
     networks:
       - be-network
+    restart: on-failure
 
   kafkawebui:
     image: provectuslabs/kafka-ui:latest
@@ -108,6 +114,7 @@ services:
       - kafka
     networks:
       - be-network
+    restart: on-failure
 
 networks:
   be-network:
