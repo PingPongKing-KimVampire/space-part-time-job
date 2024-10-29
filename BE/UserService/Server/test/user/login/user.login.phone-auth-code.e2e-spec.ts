@@ -72,7 +72,7 @@ describe('로그인 휴대폰 인증번호 전송 요청 (e2e)', () => {
   });
 });
 
-function requestPhoneLoginAuthCode(app: INestApplication, phoneNumber: string) {
+export function requestPhoneLoginAuthCode(app: INestApplication, phoneNumber: string) {
   return request(app.getHttpServer())
     .post('/api/users/login/phone-auth-code')
     .send({ phoneNumber })
