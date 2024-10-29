@@ -24,7 +24,7 @@ describe('로그인 휴대폰 인증번호 전송 요청 (e2e)', () => {
 
     const phoneNumber = userDto.phoneNumber;
 
-    await requestPhoneLogin(app, phoneNumber);
+    await requestPhoneLoginAuthCode(app, phoneNumber);
   });
 
   it('잘못된 형식의 휴대폰 번호', async () => {
@@ -44,7 +44,7 @@ describe('로그인 휴대폰 인증번호 전송 요청 (e2e)', () => {
     let attempt = 1;
 
     for (; attempt < maxRequests; attempt++) {
-      await requestPhoneLogin(app, phoneNumber);
+      await requestPhoneLoginAuthCode(app, phoneNumber);
     }
 
     await request(app.getHttpServer())
@@ -72,7 +72,7 @@ describe('로그인 휴대폰 인증번호 전송 요청 (e2e)', () => {
   });
 });
 
-function requestPhoneLogin(app: INestApplication, phoneNumber: string) {
+function requestPhoneLoginAuthCode(app: INestApplication, phoneNumber: string) {
   return request(app.getHttpServer())
     .post('/api/users/login/phone-auth-code')
     .send({ phoneNumber })
