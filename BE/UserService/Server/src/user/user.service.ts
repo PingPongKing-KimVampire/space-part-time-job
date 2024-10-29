@@ -72,4 +72,15 @@ export class UserService {
     if (!user) throw new Error('존재하지 않는 회원');
     return user.id;
   }
+
+  async getUserIdIfPhoneLoginValid(
+    phoneNumber: string,
+    smsCode: string,
+  ): Promise<string> {
+    await this.authCodeService.verifyAuthCode(phoneNumber, smsCode);
+
+    const user = await this.userRepository.findByPhoneNumber(phoneNumber);
+    if (!user) throw new Error('존재하지 않는 회원');
+    return user.id;
+  }
 }

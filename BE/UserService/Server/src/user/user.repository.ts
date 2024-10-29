@@ -35,4 +35,11 @@ export class UserRepository {
     });
     return user;
   }
+
+  async findByPhoneNumber(phoneNumber: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { phoneNumber },
+    });
+    return user;
+  }
 }

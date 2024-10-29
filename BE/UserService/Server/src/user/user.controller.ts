@@ -19,6 +19,7 @@ import { Request, Response } from 'express';
 import { LoginRequestDto } from './dto/controller/login.request.dto';
 import { AuthTokenService } from 'src/auth-token/auth-token.service';
 import { LoginPhoneAuthCodeRequestDto } from './dto/controller/login-phone-auth-code.request.dto';
+import { PhoneLoginRequestDto } from './dto/controller/login-phone.request.dto';
 
 @Controller('users')
 export class UserController {
@@ -143,6 +144,34 @@ export class UserController {
     }
   }
 
+  @Post('login/phone')
+  async phoneLogin(
+    @Body() PhoneLoginRequestDto: PhoneLoginRequestDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { phoneNumber, smsCode } = PhoneLoginRequestDto;
+    try {
+      const id = await this.usersService.getUserIdIfPhoneLoginValid(
+        phoneNumber,
+        smsCode,
+      );
+
+      const accessToken = this.authTokenService.generateAccessToken({ id });
+      res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        // secure: true, 추후 활성화
+        sameSite: 'none', //추후 strict로 변경
+      });
+
+      return { id };
+    } catch (e) {
+      if (e.message === '휴대폰 인증 실패') {
+        throw new HttpException({ error: '휴대폰 인증 실패' }, 401);
+      }
+      throw new HttpException({ error: '알 수 없는 에러!' }, 500);
+    }
+  }
+
   @Post('login/phone-auth-code')
   async makeLoginPhoneAuthCode(
     @Body() loginPhoneAuthCodeRequestDto: LoginPhoneAuthCodeRequestDto,
@@ -165,7 +194,6 @@ export class UserController {
       } else if (e.message === '인증횟수 초과') {
         throw new HttpException({ error: '하루 최대요청 횟수 초과' }, 409);
       }
-      console.log(e);
       throw new HttpException({ error: '알 수 없는 에러!' }, 500);
     }
     return { remainingPhoneAuthenticationCount };
