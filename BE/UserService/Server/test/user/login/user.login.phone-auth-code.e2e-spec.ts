@@ -2,8 +2,7 @@ import * as request from 'supertest';
 import { app, clearDatabase, setupTestingApp } from '../user.test-setup.util';
 import { getUserDto1, signup } from '../user.utils';
 import { INestApplication } from '@nestjs/common';
-
-const maxRequests = 5;
+import { maxRequests } from './user.login.utils';
 
 describe('로그인 휴대폰 인증번호 전송 요청 (e2e)', () => {
   beforeAll(async () => {
@@ -72,7 +71,10 @@ describe('로그인 휴대폰 인증번호 전송 요청 (e2e)', () => {
   });
 });
 
-export function requestPhoneLoginAuthCode(app: INestApplication, phoneNumber: string) {
+export function requestPhoneLoginAuthCode(
+  app: INestApplication,
+  phoneNumber: string,
+) {
   return request(app.getHttpServer())
     .post('/api/users/login/phone-auth-code')
     .send({ phoneNumber })
