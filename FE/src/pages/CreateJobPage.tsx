@@ -115,7 +115,7 @@ const CreateJobPage = () => {
             <PaySection
               selectedPeriod={selectedPeriod}
               selectedWeekDays={selectedDAYS}
-              selectedTime={{ start: "09:00", end: "18:00" }}
+              selectedTime={{ start: "09:00", end: "16:00" }}
             />
           </FormField>
 

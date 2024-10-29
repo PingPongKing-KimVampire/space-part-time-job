@@ -78,6 +78,7 @@ const ImageDisplay = styled("div", {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    cursor: "pointer",
     "& svg": {
       color: "#7C7C7C",
       strokeWidth: "3",
@@ -97,20 +98,16 @@ const ImageSection = () => {
     if (!e.target.files) return;
 
     const selectedImages = Array.from(e.target.files);
-    // 이미지 크기 유효성 검사
+    // 이미지 크기, 개수 유효성 검사
     const validSizeImages = selectedImages.filter(
       (image) => image.size <= VALID_IMAGE_BYES
     );
-    setIsValid((prev) => ({
-      ...prev,
-      size: selectedImages.length === validSizeImages.length,
-    }));
-    // 이미지 개수 유효성 검사
     const validCountImages = validSizeImages.slice(0, 10 - images.length);
-    setIsValid((prev) => ({
-      ...prev,
-      size: validSizeImages.length !== validCountImages.length,
-    }));
+
+    setIsValid({
+      size: selectedImages.length === validSizeImages.length,
+      count: validSizeImages.length === validCountImages.length,
+    });
 
     const validImageURLs = Array.from(validCountImages).map((image) =>
       URL.createObjectURL(image)
@@ -141,7 +138,10 @@ const ImageSection = () => {
         accept="image/*"
         multiple
         ref={hiddenFileInputRef}
-        onChange={onImageChange}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          onImageChange(e);
+          e.target.value = "";
+        }}
         style={{ display: "none" }}
       />
       {/* 파일 선택 커스텀 버튼 */}
@@ -156,7 +156,7 @@ const ImageSection = () => {
       <ImagesContainer>
         {images &&
           images.map((imagePath, index) => (
-            <ImageDisplay>
+            <ImageDisplay key={imagePath}>
               <img src={imagePath} alt={`uploaded ${index}`} />
               <button onClick={onXmarkClick} data-path={imagePath}>
                 <XmarkIcon />

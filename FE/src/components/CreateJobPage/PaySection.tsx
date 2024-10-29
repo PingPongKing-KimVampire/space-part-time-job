@@ -39,29 +39,32 @@ const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
   };
 
   const getMinimumMonthlyPay = (selectedWeekDays, selectedTime) => {
-    const weekDaysCount = selectedWeekDays.length;
+    const weekDayCount = selectedWeekDays.length; // 주간 근무 일수
     const [startH, startM] = selectedTime.start.split(":").map(Number);
     const [endH, endM] = selectedTime.end.split(":").map(Number);
-    const dailyHours = (endM + endH * 60 - (startM + startH * 60)) / 60;
-    const weeklyHours = dailyHours * weekDaysCount;
-    const holidayPay = weeklyHours >= 15 ? MINIMUM_HOURLY_PAY : 0; // 주휴수당
-    const weeksInMonth = 4.3;
-    const monthlyHours = weeklyHours * weeksInMonth;
-    const monthlyPay = formatCurrency(
-      Math.floor(
-        monthlyHours * MINIMUM_HOURLY_PAY + holidayPay * weeksInMonth
-      ).toString()
-    );
-    return { monthlyPay, weekDaysCount, dailyHours };
+    const dailyHours = (endM + endH * 60 - (startM + startH * 60)) / 60; // 1일 근로 시간
+    const weeklyHours = dailyHours * weekDayCount; // 주간 근로 시간
+    const monthlyHours = weeklyHours * 4; // 월간 근로 시간
+    let monthlyPay = monthlyHours * MINIMUM_HOURLY_PAY; // 주휴수당 제외 월급
+    if (weeklyHours >= 15) {
+      // 아르바이트는 주간 근로 시간이 15시간 이상인 경우에 주휴수당 지급
+      if (weeklyHours >= 40) {
+        // 주 40시간 이상 근무 : 1일 근로시간 X 시급
+        monthlyPay += dailyHours * MINIMUM_HOURLY_PAY * 4;
+      } else {
+        // 주 40시간 미만 근무 : 일주일 근로시간 X 8 / 40 X 시급
+        monthlyPay += ((weeklyHours * 8) / 40) * MINIMUM_HOURLY_PAY * 4;
+      }
+    }
+    monthlyPay = formatCurrency(monthlyPay);
+    return { monthlyPay, weekDayCount, dailyHours };
   };
 
   const mininumMessage = useMemo(() => {
+    // [건당]인 경우 -> 출력 x
     if (payType === PAY_TYPES.PER_UNIT) return "";
-    // [시급] / [월급]이면서 일하는 날짜가 오늘, 내일, 단기인 경우 -> 최저시급을 알려준다.
-    if (
-      payType === PAY_TYPES.HOURLY ||
-      (payType === PAY_TYPES.HOURLY && selectedPeriod !== TERM.LONG_TERM)
-    ) {
+    // [시급]인 경우 -> 최저시급을 알려준다.
+    if (payType === PAY_TYPES.HOURLY) {
       return (
         <>
           * 2024년 최저시급은{" "}
@@ -69,27 +72,27 @@ const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
         </>
       );
     }
-    // [월급]이면서 시간을 설정된 경우 -> 설정된 요일, 시간 기준 최소 월급을 알려준다.
-    const { monthlyPay, weekDaysCount, dailyHours } = getMinimumMonthlyPay(
+    // [월급]인 경우 -> 설정된 요일, 시간 기준 최소 월급을 알려준다.
+    const { monthlyPay, weekDayCount, dailyHours } = getMinimumMonthlyPay(
       selectedWeekDays,
       selectedTime
     );
     return (
       <>
         * 2024년 최저시급은 <span>{formatCurrency(MINIMUM_HOURLY_PAY)}원</span>
-        이며, 하루 {dailyHours}시간씩 주 {weekDaysCount}일 근무할 경우
-        주휴수당을 포함한 예상 월급은{" "}
-        <span>최소 {formatCurrency(monthlyPay)}원</span> 이상이에요.
+        이며, 하루 {dailyHours}시간씩 주 {weekDayCount}일 근무할 경우 주휴수당을
+        포함한 예상 월급은 <span>최소 {formatCurrency(monthlyPay)}원</span>{" "}
+        이상이에요.
       </>
     );
-  }, [payType, selectedPeriod, selectedTime, selectedWeekDays]);
+  }, [payType, selectedTime, selectedWeekDays]);
 
   const onPayAmountBlur = () => {
     if (payAmount === "") {
       setPayAmount("");
       return;
     }
-    const pureValue = parseInt(payAmount.replace(",", "")).toString();
+    const pureValue = parseInt(payAmount.replaceAll(",", "")).toString();
     // 천 단위 구분법으로 가공하기
     const parts: string[] = [];
     for (let i = pureValue.length; i > 0; i -= 3) {
@@ -98,8 +101,6 @@ const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
     }
     setPayAmount(parts.join(","));
   };
-
-  //123456789
 
   return (
     <Container>

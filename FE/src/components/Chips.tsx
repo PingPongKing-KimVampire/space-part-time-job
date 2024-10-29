@@ -17,6 +17,7 @@ const Option = styled("button", {
   fontSize: "16px",
   display: "flex",
   border: `1px solid ${MainColor}`,
+  cursor: "pointer",
   transitionProperty: "background boxShadow",
   transitionDuration: "0.2s",
   "&:not(.selected)": {
