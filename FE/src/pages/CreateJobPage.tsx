@@ -16,7 +16,7 @@ import FormField from "../components/CreateJobPage/FormField.tsx";
 import CustomCalendar from "../components/CreateJobPage/CustomCalendar.tsx";
 import TimeSection from "../components/CreateJobPage/TimeSection.tsx";
 import PaySection from "../components/CreateJobPage/PaySection.tsx";
-import PictureSection from "../components/CreateJobPage/PictureSection.tsx";
+import ImageSection from "../components/CreateJobPage/ImageSection.tsx";
 
 const CreateJobPage = () => {
   useBackgroundColor("#F9FBFC");
@@ -127,7 +127,7 @@ const CreateJobPage = () => {
         {/* ===== 부가 정보 ===== */}
         <FormSection title="부가 정보" id="subInfo">
           <FormField id="pictures" title="사진" subInfo="(선택)" warning="">
-            <PictureSection />
+            <ImageSection />
           </FormField>
 
           <FormField
