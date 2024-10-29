@@ -49,6 +49,21 @@ export class UserService {
     return { remainingPhoneAuthenticationCount };
   }
 
+  async makeLoginPhoneAuthCode(
+    phoneNumber: string,
+    ipAddress: string,
+  ): Promise<{ remainingPhoneAuthenticationCount: number }> {
+    const isExist = await this.userRepository.isPhoneNumberExist(phoneNumber);
+    if (!isExist) throw new Error('가입되지 않은 전화번호');
+
+    const { remainingPhoneAuthenticationCount } =
+      await this.authCodeService.generateAndProduceAuthCode(
+        phoneNumber,
+        ipAddress,
+      );
+    return { remainingPhoneAuthenticationCount };
+  }
+
   async getUserIdIfValid(userId: string, password: string): Promise<string> {
     const user = await this.userRepository.findByIdAndPassword(
       userId,

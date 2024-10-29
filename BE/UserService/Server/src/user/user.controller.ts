@@ -18,6 +18,7 @@ import { IdValidator, NicknameValidator } from './utils/CustomValidator';
 import { Request, Response } from 'express';
 import { LoginRequestDto } from './dto/controller/login.request.dto';
 import { AuthTokenService } from 'src/auth-token/auth-token.service';
+import { LoginPhoneAuthCodeRequestDto } from './dto/controller/login-phone-auth-code.request.dto';
 
 @Controller('users')
 export class UserController {
@@ -140,5 +141,33 @@ export class UserController {
       }
       throw new HttpException({ error: '알 수 없는 에러!' }, 500);
     }
+  }
+
+  @Post('login/phone-auth-code')
+  async makeLoginPhoneAuthCode(
+    @Body() loginPhoneAuthCodeRequestDto: LoginPhoneAuthCodeRequestDto,
+    @Req() req: Request,
+  ) {
+    const ip = req.ip;
+    const { phoneNumber } = loginPhoneAuthCodeRequestDto;
+    let remainingPhoneAuthenticationCount: number;
+
+    try {
+      const result = await this.usersService.makeLoginPhoneAuthCode(
+        phoneNumber,
+        ip,
+      );
+      remainingPhoneAuthenticationCount =
+        result.remainingPhoneAuthenticationCount;
+    } catch (e) {
+      if (e.message === '가입되지 않은 전화번호') {
+        throw new HttpException({ error: '존재하지 않는 사용자' }, 409);
+      } else if (e.message === '인증횟수 초과') {
+        throw new HttpException({ error: '하루 최대요청 횟수 초과' }, 409);
+      }
+      console.log(e);
+      throw new HttpException({ error: '알 수 없는 에러!' }, 500);
+    }
+    return { remainingPhoneAuthenticationCount };
   }
 }
