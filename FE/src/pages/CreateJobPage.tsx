@@ -25,6 +25,10 @@ const CreateJobPage = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>(TERM.TODAY);
   const [description, setDescription] = useState<string>("");
 
+  const [warnings, setWarnings] = useState({
+    image: "",
+  });
+
   const onDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const dayClicked = e.currentTarget.textContent || "";
     if (selectedDAYS.includes(dayClicked)) {
@@ -126,8 +130,13 @@ const CreateJobPage = () => {
 
         {/* ===== 부가 정보 ===== */}
         <FormSection title="부가 정보" id="subInfo">
-          <FormField id="pictures" title="사진" subInfo="(선택)" warning="">
-            <ImageSection />
+          <FormField
+            id="pictures"
+            title="사진"
+            subInfo="(선택)"
+            warning={warnings.image}
+          >
+            <ImageSection setWarnings={setWarnings} />
           </FormField>
 
           <FormField

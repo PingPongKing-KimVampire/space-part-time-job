@@ -76,7 +76,7 @@ const Calendar = styled("div", {
       },
     },
     "&:not(.selectable)": {
-      color: "#6E6E6E",
+      color: "#9A9A9A",
       cursor: "not-allowed",
     },
   },
@@ -152,6 +152,7 @@ const CustomCalendar = () => {
           visibleDays.map((dayInfo, index) => {
             const classNames = ["date"];
             if (dayInfo.isSelectable) classNames.push("selectable");
+            if (dayInfo.isSunday) classNames.push("sunday");
             if (isSelecteds[index]) classNames.push("selected");
             if (index !== 0 && isSelecteds[index - 1])
               classNames.push("leftSelected");

@@ -30,7 +30,7 @@ export const TERM = {
   LONG_TERM: "1개월 이상",
 };
 
-export const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
+export const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 type PayTypes = {
   HOURLY: string;

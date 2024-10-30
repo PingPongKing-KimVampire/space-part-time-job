@@ -165,7 +165,10 @@ const SignupPage = () => {
   const SignupButtonClicked = async () => {
     const result = await signup();
     setSignupInfo((state) => ({ ...state, ...result }));
-    if (!result.hasError) navigate("/create-job"); // 다음 페이지로 넘어가기
+    if (!result.hasError) {
+      alert("회원가입 성공!");
+      navigate("/create-job"); // 다음 페이지로 넘어가기
+    }
   };
 
   return (

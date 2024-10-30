@@ -1,97 +1,23 @@
 import React, { useRef, useState, useEffect } from "react";
-import { createStitches } from "@stitches/react";
 import { ReactComponent as CameraIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as XmarkIcon } from "../../assets/icons/x-mark.svg";
-
-const { styled } = createStitches();
-
-const Container = styled("div", {
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "flex-end",
-  gap: "10px",
-  width: "100%",
-  height: "120px",
-  marginTop: "-14px",
-});
-
-const UploadButton = styled("button", {
-  height: "90%",
-  aspectRatio: "1/1",
-  borderRadius: "5px",
-  background: "#EDEDED",
-  border: "1px solid #B2B2B2",
-  color: "#7C7C7C",
-  cursor: "pointer",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "2.5px",
-  fontSize: "16px",
-  fontWeight: "bold",
-  transition: " background 0.2s",
-  "& svg": {
-    width: "40%",
-  },
-  "&:hover": {
-    background: "#DCE2FF",
-    borderColor: "#DCE2FF",
-    color: "black",
-  },
-});
-
-const ImagesContainer = styled("div", {
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "flex-end",
-  gap: "10px",
-  overflowX: "scroll",
-  overflowY: "hidden",
-  height: "100%",
-  width: "100%",
-});
-
-const ImageDisplay = styled("div", {
-  height: "90%",
-  aspectRatio: "1/1",
-  boxSizing: "border-box",
-  // border: "1px solid #B2B2B2",
-  // borderRadius: "5px",
-  position: "relative",
-  "& img": {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    borderRadius: "5px",
-  },
-  "& button": {
-    height: "24%",
-    aspectRatio: "1/1",
-    border: "none",
-    position: "absolute",
-    bottom: "100%",
-    left: "100%",
-    transform: "translateY(+65%) translateX(-65%)",
-    borderRadius: "100px",
-    background: "#EDEDED",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    cursor: "pointer",
-    "& svg": {
-      color: "#7C7C7C",
-      strokeWidth: "3",
-      height: "70%",
-    },
-  },
-});
+import {
+  Container,
+  UploadButton,
+  ImagesContainer,
+  ImageDisplay,
+} from "../../styles/CreateJobPage/ImageSection.styles.ts";
 
 const VALID_IMAGE_BYES = 10 * 1024 * 1024;
 
-const ImageSection = () => {
+type ImageData = {
+  url: string;
+  file: File;
+};
+
+const ImageSection = ({ setWarnings }) => {
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageData[]>([]);
   const [isValid, setIsValid] = useState({ size: true, count: true });
 
   const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,26 +35,31 @@ const ImageSection = () => {
       count: validSizeImages.length === validCountImages.length,
     });
 
-    const validImageURLs = Array.from(validCountImages).map((image) =>
-      URL.createObjectURL(image)
-    );
-    setImages((prev) => prev.concat(validImageURLs));
+    const validImages = validCountImages.map((image) => ({
+      url: URL.createObjectURL(image),
+      file: image,
+    }));
+    setImages((prev) => prev.concat(validImages));
   };
 
   const onXmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const imagePath = e.currentTarget.getAttribute("data-path");
-    setImages((prev) => prev.filter((path) => path !== imagePath));
+    const imageUrl = e.currentTarget.getAttribute("data-url");
+    setImages((prev) => prev.filter((image) => image.url !== imageUrl));
   };
 
   useEffect(() => {
-    if (!isValid.size && !isValid.count) {
-      console.log("10MB 이하의 사진 10장까지 업로드 가능합니다.");
-    } else if (!isValid.size) {
-      console.log("10MB 이하의 사진만 가능합니다.");
-    } else if (!isValid.count) {
-      console.log("사진은 10장까지만 가능합니다.");
-    }
-  }, [isValid]);
+    const getWarning = () => {
+      if (!isValid.size && !isValid.count) {
+        return "* 10MB 이하의 사진 10장까지 업로드 가능합니다.";
+      } else if (!isValid.size) {
+        return "* 10MB 이하의 사진만 가능합니다.";
+      } else if (!isValid.count) {
+        return "* 사진은 10장까지만 가능합니다";
+      }
+      return "";
+    };
+    setWarnings((state) => ({ ...state, image: getWarning() }));
+  }, [isValid, setWarnings]);
 
   return (
     <Container>
@@ -147,18 +78,19 @@ const ImageSection = () => {
       {/* 파일 선택 커스텀 버튼 */}
       <UploadButton
         onClick={() => {
+          setIsValid({ size: true, count: true }); // 경고 메시지 제거 목적
           hiddenFileInputRef.current?.click();
         }}
       >
         <CameraIcon />
-        7/10
+        {images.length}/10
       </UploadButton>
       <ImagesContainer>
         {images &&
-          images.map((imagePath, index) => (
-            <ImageDisplay key={imagePath}>
-              <img src={imagePath} alt={`uploaded ${index}`} />
-              <button onClick={onXmarkClick} data-path={imagePath}>
+          images.map((image, index) => (
+            <ImageDisplay key={image.url}>
+              <img src={image.url} alt={`uploaded ${index}`} />
+              <button onClick={onXmarkClick} data-url={image.url}>
                 <XmarkIcon />
               </button>
             </ImageDisplay>
