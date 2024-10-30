@@ -29,9 +29,9 @@ export class UserRepository {
     return count > 0;
   }
 
-  async findByIdAndPassword(id: string, password: string): Promise<User> {
+  async findByUserId(userId: string): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { userId: id, password },
+      where: { userId },
     });
     return user;
   }

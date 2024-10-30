@@ -3,6 +3,7 @@ import { SignupDto } from './dto/service/signup.dto';
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import { AuthCodeService } from 'src/user/auth-code/auth-code.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,13 +16,21 @@ export class UserService {
     const { id, password, nickname, phoneNumber, smsCode } = signupDto;
     await this.authCodeService.verifyAuthCode(phoneNumber, smsCode);
 
+    const hashedPassword = await this.saltAndHashPassword(password);
+
     const user = User.of({
       userId: id,
-      password,
+      password: hashedPassword,
       nickname,
       phoneNumber,
     });
     return this.userRepository.createUser(user);
+  }
+
+  private async saltAndHashPassword(password: string): Promise<string> {
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    return bcrypt.hash(password, salt);
   }
 
   async isUserIdAvailable(id: string): Promise<boolean> {
@@ -65,12 +74,18 @@ export class UserService {
   }
 
   async getUserIdIfValid(userId: string, password: string): Promise<string> {
-    const user = await this.userRepository.findByIdAndPassword(
-      userId,
-      password,
-    );
-    if (!user) throw new Error('존재하지 않는 회원');
+    const user = await this.userRepository.findByUserId(userId);
+    if (!user || !(await this.verifyPassword(password, user.password))) {
+      throw new Error('존재하지 않는 회원');
+    }
     return user.id;
+  }
+
+  private async verifyPassword(
+    password: string,
+    savedPassword: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(password, savedPassword);
   }
 
   async getUserIdIfPhoneLoginValid(
