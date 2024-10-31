@@ -14,6 +14,11 @@ import {
   IP_ADDRESS,
 } from "../../constants/constants.ts";
 
+type SendAuthNumberResponseData = {
+  error?: string;
+  remainingPhoneAuthenticationCount?: number;
+};
+
 const PhoneNumberSection = (props) => {
   const {
     inputValue,
@@ -21,33 +26,26 @@ const PhoneNumberSection = (props) => {
     isValid,
     getIsValid,
     checkValidation,
-    signupInfo,
+    signupWarning,
   } = props;
 
-  const [isSendButtonClicked, setIsSendButtonClicked] = useState(false); // 인증번호 전송 버튼이 클릭된 적 있나?
+  const [isSent, setIsSent] = useState(false); // 인증번호를 전송한 적 있는가?
   const [isNotiVisible, setIsNotiVisible] = useState(false); // 남은 인증번호 전송 가능 횟수를 표시하는 노티 표시 여부
   const countdownTimer = useCountdownTimer(SEND_AUTHNUMBER_COUNTDOWN_SEC); // 5분 카운트다운 타이머
-  const [sendNumberInfo, setSendNumberInfo] = useState({
-    // 휴대폰 번호 인증 API 관련 정보
-    hasError: false,
-    errorMessage: "",
-    remainingCount: 5,
-  });
+  const [remainingCount, setRemainingCount] = useState<number>(0); // 일일 인증번호 전송 가능 남은 횟수
   const [warning, setWarning] = useState("");
   const [recentPhoneNumber, setRecentPhoneNumber] = useState(""); // 가장 최근에 인증번호 전송을 누른 시점에 입력되어 있던 전화번호
 
   useEffect(() => {
     const getWarning = () => {
-      if (signupInfo.hasError && signupInfo.status !== "409")
-        return `* ${signupInfo.errorMessage}`;
+      if (signupWarning.phoneNumber) return signupWarning.phoneNumber;
       if (inputValue.phoneNumber === "") return "";
       if (!isValid.phoneNumber.isRulePassed)
         return "* 전화번호가 유효하지 않습니다.";
-      if (sendNumberInfo.hasError) return `* ${sendNumberInfo.errorMessage}`;
       return "";
     };
     setWarning(getWarning());
-  }, [isValid, signupInfo, sendNumberInfo]);
+  }, [isValid, signupWarning]);
 
   useEffect(() => {
     if (!countdownTimer.isActive) {
@@ -59,19 +57,21 @@ const PhoneNumberSection = (props) => {
   // 인증번호 전송 버튼 클릭
   const sendNumberButtonClicked = async () => {
     // 인증번호 전송
-    const result = await sendAuthNumber();
-    setSendNumberInfo((state) => ({ ...state, ...result }));
-    if (result.hasError) return;
+    try {
+      const remainingCount: number = await sendAuthNumber();
+      setRemainingCount(remainingCount);
+    } catch (e) {
+      setWarning(e.message);
+      return;
+    }
     setRecentPhoneNumber(inputValue.phoneNumber);
-    // 인증번호 입력란 표시
-    setIsSendButtonClicked(true);
+    setIsSent(true);
     // 남은 인증번호 전송 가능 횟수를 표시하는 노티를 표시했다가 3초 후 다시 제거
     setIsNotiVisible(true);
     setTimeout(() => {
       setIsNotiVisible(false);
     }, 2000);
-    // 5분 카운트다운 시작
-    countdownTimer.start();
+    countdownTimer.start(); // 5분 카운트다운 시작
   };
 
   const getIsSendingPossible = () => {
@@ -85,44 +85,34 @@ const PhoneNumberSection = (props) => {
     return true;
   };
 
-  const sendAuthNumber = async () => {
-    const response = await fetch(
-      `http://${IP_ADDRESS}/api/users/phone-auth-code`,
-      {
+  const sendAuthNumber = async (): Promise<number> => {
+    let response: Response;
+    let data: SendAuthNumberResponseData;
+    const requestUrl: string = `http://${IP_ADDRESS}/api/users/phone-auth-code`;
+    try {
+      response = await fetch(requestUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
+        headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({
           phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
         }),
-      }
-    );
-    const data = await response.json();
-    if (!response.ok) {
-      if (response.status === 409) {
-        if (data.error === "하루 최대요청 횟수 초과") {
-          return {
-            hasError: true,
-            errorMessage: "하루 최대 요청 횟수를 초과하셨습니다.",
-          };
-        } else if (data.error === "전화번호 중복") {
-          return {
-            hasError: true,
-            errorMessage: "이미 가입된 휴대폰 번호입니다.",
-          };
-        }
-      }
-      // 400, 500
-      return {
-        hasError: true,
-        errorMessage: "서버가 불안정합니다. 나중에 시도해주세요.",
-      };
+      });
+    } catch {
+      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
     }
-    return {
-      remainingCount: data.remainingPhoneAuthenticationCount,
-      hasError: false,
-    };
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+    }
+    if (!response.ok) {
+      if (data.error === "하루 최대요청 횟수 초과")
+        throw new Error("* 하루 최대요청 횟수를 초과하셨습니다."); // 409
+      if (data.error === "전화번호 중복")
+        throw new Error("* 이미 가입된 휴대폰 번호입니다."); // 409
+      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요."); // 400, 500
+    }
+    return data.remainingPhoneAuthenticationCount || 0;
   };
 
   const onPhoneNumberInputBlurStart = () => {
@@ -151,7 +141,7 @@ const PhoneNumberSection = (props) => {
           className={!getIsSendingPossible() ? "inactivated" : ""}
           disabled={!getIsSendingPossible()}
         >
-          인증번호 {isSendButtonClicked ? "재" : ""}전송
+          인증번호 {isSent ? "재" : ""}전송
           {countdownTimer.isActive && (
             <TimeCounter>
               {countdownTimer.timeLeft > 60
@@ -180,7 +170,7 @@ const PhoneNumberSection = (props) => {
       <WarningText>{warning}</WarningText>
       {isNotiVisible && (
         <NotificationBox>
-          {`일일 인증번호 전송 가능 횟수가 ${sendNumberInfo.remainingCount}회 남았습니다.`}
+          {`일일 인증번호 전송 가능 횟수가 ${remainingCount}회 남았습니다.`}
         </NotificationBox>
       )}
     </>

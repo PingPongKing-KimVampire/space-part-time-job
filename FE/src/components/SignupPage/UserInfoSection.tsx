@@ -10,17 +10,16 @@ const UserInfoSection = (props) => {
     isValid,
     getIsValid,
     checkValidation,
-    signupInfo,
+    signupWarning,
   } = props;
   const [warning, setWarning] = useState(" ");
 
   useEffect(() => {
     const getWarning = () => {
-      if (signupInfo.hasError && signupInfo.status === "409")
-        return `* ${signupInfo.errorMessage}`;
+      if (signupWarning.userInfo) return signupWarning.userInfo;
       if (inputValue.id !== "" && !isValid.id.isRulePassed)
         return "* 아이디는 5~20자의 영문 소문자, 숫자를 사용해 주세요.";
-      if (isValid.id.hasError) return `* ${isValid.id.errorMessage}`;
+      if (isValid.id.hasError) return isValid.id.errorMessage;
       if (isValid.id.isDuplicated) return "* 중복되는 아이디입니다.";
       // 비밀번호 유효성
       if (inputValue.password !== "" && !isValid.password.isRulePassed)
@@ -28,13 +27,12 @@ const UserInfoSection = (props) => {
       // 닉네임 유효성
       if (inputValue.nickname !== "" && !isValid.nickname.isRulePassed)
         return "* 닉네임은 1~10자의 한글, 영문, 숫자를 사용해 주세요.";
-      if (isValid.nickname.hasError)
-        return `* ${isValid.nickname.errorMessage}`;
+      if (isValid.nickname.hasError) return isValid.nickname.errorMessage;
       if (isValid.nickname.isDuplicated) return "* 중복되는 닉네임입니다.";
       return "";
     };
     setWarning(getWarning());
-  }, [isValid]);
+  }, [isValid, signupWarning]);
 
   return (
     <>

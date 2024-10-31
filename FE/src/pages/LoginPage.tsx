@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import CustomInput from "../components/CustomInput.tsx";
 import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import PasswordInput from "../components/PasswordInput.tsx";
@@ -27,11 +27,20 @@ import {
 const ID_PW = "ID_PW";
 const PHONE_NUMBER = "PHONE_NUMBER";
 
-type loginRequestBody = {
+type LoginRequestBody = {
   id?: string;
   password?: string;
   phoneNumber?: string;
   smsCode?: string;
+};
+
+type SendAuthNumberResponseData = {
+  error?: string;
+  remainingPhoneAuthenticationCount?: number;
+};
+
+type LoginResponseData = {
+  error?: string;
 };
 
 const LoginPage = () => {
@@ -50,47 +59,38 @@ const LoginPage = () => {
   });
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [warning, setWarning] = useState("");
-  const [sendNumberInfo, setSendNumberInfo] = useState({
-    // 휴대폰 번호 인증 API 관련 정보
-    hasError: false,
-    errorMessage: "",
-    remainingCount: 5,
-  });
+  const [remainingCount, setRemainingCount] = useState<number>(0); // 일일 인증번호 전송 가능 남은 횟수
   const [isSent, setIsSent] = useState(false); // 인증번호를 전송한 적이 있나?
+  const [recentPhoneNumber, setRecentPhoneNumber] = useState(""); // 가장 최근에 인증번호 전송을 누른 시점에 입력되어 있던 전화번호
 
-  const sendAuthNumber = async () => {
-    // const response = await fetch(
-    //   `http://${IP_ADDRESS}/api/users/login/phone-auth-code`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=utf-8",
-    //     },
-    //     body: JSON.stringify({
-    //       phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
-    //     }),
-    //   }
-    // );
-    // const data = await response.json();
-    // if (!response.ok) {
-    //   if (response.status === 409) {
-    //     return { hasError: true, errorMessage: data.error };
-    //   }
-    //   // 400, 500
-    //   return {
-    //     hasError: true,
-    //     errorMessage: "서버가 불안정합니다. 나중에 시도해주세요.",
-    //   };
-    // }
-    const data = {
-      // 임시
-      remainingPhoneAuthenticationCount: sendNumberInfo.remainingCount - 1,
-    };
-    return {
-      remainingCount: data.remainingPhoneAuthenticationCount,
-      hasError: false,
-      errorMessage: "",
-    };
+  const sendAuthNumber = async (): Promise<number> => {
+    let response: Response;
+    let data: SendAuthNumberResponseData;
+    const requestUrl = `http://${IP_ADDRESS}/api/users/login/phone-auth-code`;
+    try {
+      response = await fetch(requestUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
+        }),
+      });
+    } catch {
+      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+    }
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+    }
+    if (!response.ok) {
+      if (data.error === "하루 최대요청 횟수 초과")
+        throw new Error("* 하루 최대요청 횟수를 초과하셨습니다."); // 409
+      if (data.error === "존재하지 않는 사용자")
+        throw new Error("* 가입되지 않은 번호입니다."); // 409
+      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요."); // 400, 500
+    }
+    return data.remainingPhoneAuthenticationCount || 0;
   };
 
   // TODO : SignupPage와 중복되는 로직
@@ -107,21 +107,22 @@ const LoginPage = () => {
       return;
     }
     // TODO : PhoneNumberSection 이랑 같은 로직..!
-    const result = await sendAuthNumber();
-    setSendNumberInfo((state) => ({ ...state, ...result }));
-    if (result.hasError) {
-      setWarning(result.errorMessage);
-    } else {
-      setWarning("");
-      setIsSent(true);
-      // 남은 인증번호 전송 가능 횟수를 표시하는 노티를 표시했다가 3초 후 다시 제거
-      setNotiVisible(true);
-      setTimeout(() => {
-        setNotiVisible(false);
-      }, 2000);
-      // 5분 카운트다운 시작
-      countdownTimer.start();
+    try {
+      const remainingCount: number = await sendAuthNumber();
+      setRemainingCount(remainingCount);
+    } catch (e) {
+      setWarning(e.message);
+      return;
     }
+    setRecentPhoneNumber(inputValue.phoneNumber);
+    setWarning("");
+    setIsSent(true);
+    // 남은 인증번호 전송 가능 횟수를 표시하는 노티를 표시했다가 3초 후 다시 제거
+    setNotiVisible(true);
+    setTimeout(() => {
+      setNotiVisible(false);
+    }, 2000);
+    countdownTimer.start(); // 5분 카운트다운 시작
   };
 
   const getIsSendingPossible = () => {
@@ -135,42 +136,42 @@ const LoginPage = () => {
   };
 
   const login = async () => {
-    const body: loginRequestBody = {};
+    const body: LoginRequestBody = {};
+    let requestUrl: string = "";
     if (selectedTab === ID_PW) {
       body.id = inputValue.id;
       body.password = inputValue.password;
+      requestUrl = `http://${IP_ADDRESS}/api/users/login`;
     } else if (selectedTab === PHONE_NUMBER) {
       body.phoneNumber = inputValue.phoneNumber.replaceAll("-", "");
       body.smsCode = inputValue.authNumber;
+      requestUrl = `http://${IP_ADDRESS}/api/users/login/phone`;
     }
-    const response = await fetch(`http://${IP_ADDRESS}/api/users/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify(body),
-    });
+
+    let response: Response;
+    let data: LoginResponseData;
+    try {
+      response = await fetch(requestUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify(body),
+      });
+    } catch {
+      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+    }
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+    }
+
     if (!response.ok) {
-      if (response.status === 401) {
-        if (selectedTab === ID_PW) {
-          return {
-            hasError: true,
-            errorMessage: "아이디 또는 비밀번호가 유효하지 않습니다.",
-          };
-        } else if (selectedTab === ID_PW) {
-          return {
-            hasError: true,
-            errorMessage: "인증번호가 유효하지 않습니다.",
-          };
-        }
-      }
-      // 400, 500
-      return {
-        hasError: true,
-        errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
-      };
+      if (data.error === "아이디/패스워드 로그인 실패")
+        throw new Error("* 아이디 또는 비밀번호가 유효하지 않습니다."); // 401
+      if (data.error === "휴대폰 인증 실패")
+        throw new Error("* 인증번호가 유효하지 않습니다."); // 401
+      throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요."); // 400, 500
     }
-    return { hasError: false, errorMessage: "" };
   };
 
   const LoginButtonClicked = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -194,12 +195,11 @@ const LoginPage = () => {
       return;
     }
     // 기본 유효성 검사를 통과한 경우 로그인 API 요청
-    const result = await login();
-    if (!result.hasError) {
-      // TODO : 다음 페이지로 이동
-      console.log("로그인 성공!");
-    } else {
-      setWarning(`* ${result.errorMessage}`);
+    try {
+      await login();
+      navigate("/create-job");
+    } catch (e) {
+      setWarning(e.message);
     }
   };
 
@@ -207,6 +207,27 @@ const LoginPage = () => {
     setInputValue({ id: "", password: "", phoneNumber: "", authNumber: "" });
     setWarning("");
   }, [selectedTab]);
+
+  const getCountdownTimerString = () => {
+    let minutes: string = Math.floor(countdownTimer.timeLeft / 60).toString();
+    let seconds: string = (countdownTimer.timeLeft % 60).toString();
+    if (minutes.length === 1) minutes = `0${minutes}`;
+    if (seconds.length === 1) seconds = `0${seconds}`;
+    return `${minutes}:${seconds}`;
+  };
+
+  // TODO : SignupPage의 PhoneNumberSection과 겹치는 로직
+  const onPhoneNumberInputBlurStart = () => {
+    const isRulePassed = checkRulePass["phoneNumber"](inputValue.phoneNumber);
+    setIsValidPhoneNumber(isRulePassed);
+    if (
+      countdownTimer.isActive &&
+      recentPhoneNumber !== inputValue.phoneNumber
+    ) {
+      // 인증번호 대기 중이면서 휴대폰 번호가 바뀌었다면
+      countdownTimer.stop();
+    }
+  };
 
   return (
     <Background>
@@ -282,19 +303,14 @@ const LoginPage = () => {
                       phoneNumber: value,
                     }));
                   }}
-                  onBlurStart={() => {
-                    const isRulePassed = checkRulePass["phoneNumber"](
-                      inputValue.phoneNumber
-                    );
-                    setIsValidPhoneNumber(isRulePassed);
-                  }}
+                  onBlurStart={onPhoneNumberInputBlurStart}
                 >
                   <PhoneNumberInputChild>
                     <button
                       type="button"
                       onClick={sendNumberButtonClicked}
                       className={`sendNumberButton ${
-                        !getIsSendingPossible() ? "inactivatede" : " "
+                        !getIsSendingPossible() ? "inactivated" : " "
                       }`}
                       disabled={!getIsSendingPossible()}
                     >
@@ -302,9 +318,7 @@ const LoginPage = () => {
                     </button>
                     {countdownTimer.isActive && (
                       <div className="timeCounter">
-                        {`${Math.floor(countdownTimer.timeLeft / 60)}:${
-                          countdownTimer.timeLeft % 60
-                        }`}
+                        {getCountdownTimerString()}
                       </div>
                     )}
                   </PhoneNumberInputChild>
@@ -342,7 +356,7 @@ const LoginPage = () => {
       </Container>
       {notiVisible && (
         <NotificationBox>
-          {`일일 인증번호 전송 가능 횟수가 ${sendNumberInfo.remainingCount}회 남았습니다.`}
+          {`일일 인증번호 전송 가능 횟수가 ${remainingCount}회 남았습니다.`}
         </NotificationBox>
       )}
     </Background>

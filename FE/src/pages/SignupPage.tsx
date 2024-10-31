@@ -38,6 +38,14 @@ type IsValid = {
   authNumber: { isRulePassed: boolean };
 };
 
+type CheckDuplicatedResponseData = {
+  error: string;
+};
+
+type SignupResponseData = {
+  error: string;
+};
+
 const SignupPage = () => {
   useBackgroundColor("#F9FBFC");
   const [inputValue, setInputValue] = useState<InputValue>({
@@ -64,10 +72,9 @@ const SignupPage = () => {
     phoneNumber: { isRulePassed: false },
     authNumber: { isRulePassed: false },
   });
-  const [signupInfo, setSignupInfo] = useState({
-    hasError: false,
-    status: 0,
-    errorMessage: "",
+  const [signupWarning, setSignupWarning] = useState({
+    userInfo: "",
+    phoneNumber: "",
   });
 
   const navigate = useNavigate();
@@ -82,21 +89,27 @@ const SignupPage = () => {
   };
 
   const checkDuplicated = async (fieldName: "id" | "nickname") => {
-    const response = await fetch(
-      `http://${IP_ADDRESS}/api/users/check-${fieldName}/${inputValue[fieldName]}`
-    );
-    if (!response.ok) {
-      if (response.status === 409) {
-        return { isDuplicated: true, hasError: false };
-      }
-      // 400, 500
-      return {
-        isDuplicated: false,
-        hasError: true,
-        errorMessage: "서버가 불안정합니다. 나중에 시도해주세요.",
-      };
+    let response: Response;
+    const requestUrl: string = `http://${IP_ADDRESS}/api/users/check-${fieldName}/${inputValue[fieldName]}`;
+    try {
+      response = await fetch(requestUrl);
+    } catch (e) {
+      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
     }
-    return { isDuplicated: false, hasError: false };
+
+    if (!response.ok) {
+      let data: CheckDuplicatedResponseData;
+      try {
+        data = await response.json();
+      } catch (e) {
+        throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+      }
+      if (data.error === "아이디 중복")
+        throw new Error("* 중복되는 아이디입니다."); // 409
+      if (data.error === "닉네임 중복")
+        throw new Error("* 중복되는 닉네임입니다."); // 409
+      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+    }
   };
 
   const checkValidation = async (fieldName: string, value?: string) => {
@@ -108,11 +121,18 @@ const SignupPage = () => {
       return;
     }
     // 중복 검사
-    const result = await checkDuplicated(fieldName);
-    setIsValid((state) => ({
-      ...state,
-      [fieldName]: { isRulePassed, ...result },
-    }));
+    try {
+      await checkDuplicated(fieldName);
+      setIsValid((state) => ({
+        ...state,
+        [fieldName]: { isRulePassed, hasError: false },
+      }));
+    } catch (e) {
+      setIsValid((state) => ({
+        ...state,
+        [fieldName]: { isRulePassed, hasError: true, errorMessage: e.message },
+      }));
+    }
   };
 
   const isAllValid = useMemo(() => {
@@ -131,44 +151,57 @@ const SignupPage = () => {
   }, []);
 
   const signup = async () => {
-    const response = await fetch(`http://${IP_ADDRESS}/api/users`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({
-        id: inputValue.id,
-        password: inputValue.password,
-        nickname: inputValue.nickname,
-        phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
-        smsCode: inputValue.authNumber,
-      }),
-    });
-    if (!response.ok) {
-      const data = await response.json();
-      if (response.status === 409)
-        return { hasError: true, status: 409, errorMessage: data.error };
-      if (response.status === 401)
-        return { hasError: true, status: 401, errorMessage: data.error };
-      // 400, 500
+    let response: Response;
+    try {
+      response = await fetch(`http://${IP_ADDRESS}/api/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({
+          id: inputValue.id,
+          password: inputValue.password,
+          nickname: inputValue.nickname,
+          phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
+          smsCode: inputValue.authNumber,
+        }),
+      });
+    } catch {
       return {
-        hasError: true,
-        status: response.status,
-        errorMessage: "서버가 불안정합니다. 나중에 다시 시도해주세요.",
+        phoneNumber: "* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.",
       };
     }
-    return {
-      hasError: false,
-    };
+
+    if (!response.ok) {
+      let data: SignupResponseData;
+      try {
+        data = await response.json();
+      } catch {
+        return {
+          phoneNumber: "* 서버가 불안정합니다. 나중에 다시 시도해주세요.",
+        };
+      }
+      if (data.error === "닉네임 중복")
+        return { userInfo: "* 중복되는 닉네임입니다." }; // 409
+      if (data.error === "아이디 중복")
+        return { userInfo: "* 중복되는 닉네임입니다." }; // 409
+      if (data.error === "휴대폰 번호 중복")
+        return { phoneNumber: "* 중복되는 닉네임입니다." }; // 409
+      if (data.error === "휴대폰 인증 실패")
+        return { phoneNumber: "* 유효하지 않은 인증번호입니다." }; // 401
+      return {
+        phoneNumber: "* 서버가 불안정합니다. 나중에 다시 시도해주세요.",
+      }; // 400, 500
+    }
   };
 
   const SignupButtonClicked = async () => {
-    const result = await signup();
-    setSignupInfo((state) => ({ ...state, ...result }));
-    if (!result.hasError) {
-      alert("회원가입 성공!");
-      navigate("/create-job"); // 다음 페이지로 넘어가기
+    const error = await signup();
+    if (error) {
+      setSignupWarning({ userInfo: "", phoneNumber: "", ...error });
+      return;
     }
+    navigate("/login");
   };
 
   return (
@@ -186,7 +219,7 @@ const SignupPage = () => {
           isValid={isValid}
           getIsValid={getIsValid}
           checkValidation={checkValidation}
-          signupInfo={signupInfo}
+          signupWarning={signupWarning}
         />
         <PhoneNumberSection
           inputValue={inputValue}
@@ -194,7 +227,7 @@ const SignupPage = () => {
           isValid={isValid}
           getIsValid={getIsValid}
           checkValidation={checkValidation}
-          signupInfo={signupInfo}
+          signupWarning={signupWarning}
         />
       </Container>
       <SignupButton
