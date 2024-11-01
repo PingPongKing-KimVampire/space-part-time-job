@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   addMonths,
   subDays,
@@ -10,80 +10,14 @@ import {
   compareAsc,
   isSunday,
 } from "date-fns";
-import { createStitches } from "@stitches/react";
 import { DAYS } from "../../constants/constants.ts";
-import { MainColor } from "../../styles/global.ts";
+import {
+  Container,
+  Calendar,
+  DateItem,
+} from "../../styles/CreateJobPage/CustomCalendar.styles.ts";
 
-const { styled } = createStitches();
-
-const Container = styled("div", {
-  width: "50%",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "10px",
-  marginTop: "-30px",
-  "& .title": {
-    fontSize: "20px",
-    fontWeight: "bold",
-    padding: "15px",
-  },
-});
-
-const Calendar = styled("div", {
-  width: "100%",
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  "& > *": {
-    width: "calc(100% / 7)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    boxSizing: "border-box",
-  },
-  "& .weekDay": {
-    padding: "4px",
-    fontSize: "15px",
-    color: "#9A9A9A",
-  },
-  "& .date": {
-    borderRadius: "100px",
-    padding: "12px",
-    fontSize: "18px",
-    border: "none",
-    background: "none",
-    transitionProperty: "background border-radius",
-    transitionDuration: "0.2s",
-    "&.selectable": {
-      cursor: "pointer",
-      "&.sunday": {
-        color: "#BD2A2E",
-      },
-      "&:hover": {
-        background: "#DCE2FF",
-      },
-      "&.selected": {
-        background: MainColor,
-        color: "white",
-        "&.rightSelected": {
-          borderTopRightRadius: "0",
-          borderBottomRightRadius: "0",
-        },
-        "&.leftSelected": {
-          borderTopLeftRadius: "0",
-          borderBottomLeftRadius: "0",
-        },
-      },
-    },
-    "&:not(.selectable)": {
-      color: "#9A9A9A",
-      cursor: "not-allowed",
-    },
-  },
-});
-
-const CustomCalendar = ({ isSelectedDays, setIsSelectedDays }) => {
+const CustomCalendar = ({ dates, setDates }) => {
   const today = useMemo(() => new Date().setHours(0, 0, 0, 0), []);
   const selectableStart = useMemo(() => today, [today]); // 선택 가능한 시작 날짜 (오늘)
   const selectableEnd = useMemo(() => subDays(addMonths(today, 1), 1), [today]); // 선택 가능한 끝 날짜 (한 달 후)
@@ -92,27 +26,39 @@ const CustomCalendar = ({ isSelectedDays, setIsSelectedDays }) => {
     [selectableStart]
   ); // 볼 수 있는 시작 날짜 (오늘이 있는 주의 첫 날)
   const visibleEnd = useMemo(() => endOfWeek(selectableEnd), [selectableEnd]); // 볼 수 있는 끝 날짜 (한 달 후가 있는 주의 마지막 날)
-  const visibleDays = useMemo(() => {
-    const days = eachDayOfInterval({
+  const visibleDates = useMemo(() => {
+    const dates = eachDayOfInterval({
       start: visibleStart,
       end: visibleEnd,
-    }).map((day) => ({
-      day,
+    }).map((date) => ({
+      date,
+      dateString: format(date, "yyyy-MM-dd"),
       isSelectable:
-        compareAsc(selectableStart, day) <= 0 &&
-        compareAsc(day, selectableEnd) <= 0,
-      isSunday: isSunday(day),
-      isToday: isSameDay(today, day),
+        compareAsc(selectableStart, date) <= 0 &&
+        compareAsc(date, selectableEnd) <= 0,
+      isSunday: isSunday(date),
+      isToday: isSameDay(today, date),
     }));
-    return days;
+    return dates;
   }, [visibleStart, visibleEnd, selectableStart, selectableEnd, today]);
+  const title = useMemo(() => {
+    return `${format(selectableStart, "yyyy.MM.dd")}~${format(
+      selectableEnd,
+      "yyyy.MM.dd"
+    )}`;
+  }, [selectableStart, selectableEnd]);
 
   const onDateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const index = parseInt(e.currentTarget.getAttribute("data-index") || "");
-    if (isNaN(index)) return;
-    setIsSelectedDays((prev) =>
-      prev.map((selected, i) => (i === index ? !selected : selected))
-    );
+    const date: string = e.currentTarget.getAttribute("data-date") || "";
+    if (dates.has(date)) {
+      setDates((state) => {
+        const newDates = new Set(state);
+        newDates.delete(date);
+        return newDates;
+      });
+    } else {
+      setDates((state) => new Set(state).add(date));
+    }
   };
 
   const [isDragging, setIsDragging] = useState(false);
@@ -120,19 +66,14 @@ const CustomCalendar = ({ isSelectedDays, setIsSelectedDays }) => {
   const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!isDragging) return;
     const element = document.elementFromPoint(e.clientX, e.clientY);
-    const index = parseInt(element?.getAttribute("data-index") || "");
-    if (isNaN(index)) return;
-    setIsSelectedDays((prev) =>
-      prev.map((selected, i) => (i === index ? true : selected))
-    );
+    const date: string = element?.getAttribute("data-date") || "";
+    if (date === "") return;
+    setDates((state) => new Set(state).add(date));
   };
 
   return (
     <Container>
-      <div className="title">
-        {format(selectableStart, "yyyy.MM.dd")}~
-        {format(selectableEnd, "yyyy.MM.dd")}
-      </div>
+      <div className="title">{title}</div>
       <Calendar
         onMouseDown={() => {
           setIsDragging(true);
@@ -145,26 +86,34 @@ const CustomCalendar = ({ isSelectedDays, setIsSelectedDays }) => {
         {DAYS.map((day) => (
           <div className="weekDay">{day}</div>
         ))}
-        {visibleDays &&
-          visibleDays.map((dayInfo, index) => {
+        {visibleDates &&
+          visibleDates.map((dateInfo, index) => {
             const classNames = ["date"];
-            if (dayInfo.isSelectable) classNames.push("selectable");
-            if (dayInfo.isSunday) classNames.push("sunday");
-            if (isSelectedDays[index]) classNames.push("selected");
-            if (index !== 0 && isSelectedDays[index - 1])
+            if (dateInfo.isSelectable) classNames.push("selectable");
+            if (dateInfo.isSunday) classNames.push("sunday");
+
+            if (dates.has(dateInfo.dateString)) classNames.push("selected");
+            if (index !== 0 && dates.has(visibleDates[index - 1].dateString)) {
               classNames.push("leftSelected");
-            if (index !== visibleDays.length && isSelectedDays[index + 1])
+            }
+            console.log(index, visibleDates.length, visibleDates[index + 1]);
+            if (
+              index !== visibleDates.length - 1 &&
+              dates.has(visibleDates[index + 1].dateString)
+            ) {
               classNames.push("rightSelected");
+            }
+
             return (
-              <button
+              <DateItem
                 className={classNames.join(" ")}
-                disabled={!dayInfo.isSelectable}
-                key={format(dayInfo.day, "MM.dd")}
-                data-index={index}
+                disabled={!dateInfo.isSelectable}
+                key={dateInfo.dateString}
+                data-date={dateInfo.dateString}
                 onClick={onDateClick}
               >
-                {dayInfo.isToday ? "오늘" : format(dayInfo.day, "d")}
-              </button>
+                {dateInfo.isToday ? "오늘" : format(dateInfo.date, "d")}
+              </DateItem>
             );
           })}
       </Calendar>

@@ -121,7 +121,7 @@ export const DescriptionSection = styled("div", {
   },
 });
 
-export const CreateButton = styled("button", {
+export const PostButton = styled("button", {
   ...MainButtonStyle,
   width: "1000px",
   bottom: "20px",

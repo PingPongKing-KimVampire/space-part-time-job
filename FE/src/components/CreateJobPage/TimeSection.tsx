@@ -54,17 +54,15 @@ const TimeSelection = (props) => {
   );
 };
 
-const TimeSection = () => {
-  const [timeType, setTimeType] = useState(WORKTIME_TYPES.NEGOTIABLE);
-  const [time, setTime] = useState({ start: "09:00", end: "18:00" });
+const TimeSection = ({ time, setTime }) => {
   const [isTimeInputSelected, setIsTimeInputSelected] = useState({
     start: false,
     end: false,
   });
 
   const onTimeTypeSelected = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const type = e.currentTarget.textContent || WORKTIME_TYPES.NEGOTIABLE;
-    setTimeType(type);
+    const type = e.currentTarget.textContent || WORKTIME_TYPES.FLEXIBLE;
+    setTime((state) => ({ ...state, type }));
   };
 
   return (
@@ -73,9 +71,9 @@ const TimeSection = () => {
         id="timeType"
         options={Object.values(WORKTIME_TYPES)}
         onClick={onTimeTypeSelected}
-        isSelected={(type) => type === timeType}
+        isSelected={(type) => type === time.type}
       />
-      {timeType === WORKTIME_TYPES.TIME_SETTING && (
+      {time.type === WORKTIME_TYPES.FIXED && (
         <TimeSelectionsContainer
           hasMarginBottom={isTimeInputSelected.start || isTimeInputSelected.end}
         >

@@ -70,7 +70,7 @@ const PaySection = ({
 
   const mininumMessage = useMemo(() => {
     // [건당]인 경우 -> 출력 x
-    if (pay.type === PAY_TYPES.PER_UNIT) return "";
+    if (pay.type === PAY_TYPES.PER_TASK) return "";
     // [시급]인 경우 -> 최저시급을 알려준다.
     if (pay.type === PAY_TYPES.HOURLY) {
       return (

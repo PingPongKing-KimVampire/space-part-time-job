@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useMemo } from "react";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
-import { JOB_TYPES, TERM, DAYS, PAY_TYPES } from "../constants/constants.ts";
+import {
+  JOB_TYPES,
+  TERM,
+  DAYS,
+  PAY_TYPES,
+  WORKTIME_TYPES,
+} from "../constants/constants.ts";
 import {
   Background,
   CancelButton,
   LoadButton,
   Container,
   DescriptionSection,
-  CreateButton,
+  PostButton,
 } from "../styles/CreateJobPage.styles.ts";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import FormSection from "../components/CreateJobPage/FormSection.tsx";
@@ -19,6 +25,7 @@ import PaySection from "../components/CreateJobPage/PaySection.tsx";
 import ImageSection from "../components/CreateJobPage/ImageSection.tsx";
 import { checkRulePassInCreateJob } from "../utils/checkRulePass.ts";
 import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
+import { WarningText } from "../styles/global.ts";
 
 type Warnings = {
   title?: string;
@@ -58,9 +65,7 @@ const CreateJobPage = () => {
     images: { size: true, count: true },
   });
   const [jobTypes, setJobTypes] = useState<string[]>([]);
-  const [isSelectedDays, setIsSelectedDays] = useState<boolean[]>(
-    new Array(42).fill(false)
-  ); // 42는 보이는 최대 날짜 개수
+  const [dates, setDates] = useState<Set<string>>(new Set());
   const [weekDays, setWeekDays] = useState<string[]>([
     "월",
     "화",
@@ -69,12 +74,18 @@ const CreateJobPage = () => {
     "금",
   ]);
   const [term, setTerm] = useState<string>(TERM.TODAY);
+  const [time, setTime] = useState({
+    type: WORKTIME_TYPES.FLEXIBLE,
+    start: "09:00",
+    end: "18:00",
+  });
   const [pay, setPay] = useState({ type: PAY_TYPES.HOURLY, amount: "" });
   const [images, setImages] = useState<{ url: string; file: File }[]>([]);
   const [description, setDescription] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   const [warnings, setWarnings] = useState<Warnings>({});
+  const [postWarning, setPostWarning] = useState<string>("");
 
   useEffect(() => {
     const newWarnings: Warnings = {};
@@ -163,16 +174,9 @@ const CreateJobPage = () => {
     }));
   };
 
-  const selectedDayCount = useMemo(() => {
-    return isSelectedDays.reduce(
-      (count, current) => (current ? count + 1 : count),
-      0
-    );
-  }, [isSelectedDays]);
-
   useEffect(() => {
     if (
-      (term === TERM.SHORT_TERM && selectedDayCount === 0) ||
+      (term === TERM.SHORT_TERM && dates.size === 0) ||
       (term === TERM.LONG_TERM && weekDays.length === 0)
     ) {
       console.log("여기 안 걸림?");
@@ -180,7 +184,7 @@ const CreateJobPage = () => {
     } else {
       setIsValid((state) => ({ ...state, selectedDays: true }));
     }
-  }, [term, setIsValid, selectedDayCount, weekDays.length]);
+  }, [term, setIsValid, dates.size, weekDays.length]);
 
   const isAllValid = useMemo(() => {
     const {
@@ -198,6 +202,69 @@ const CreateJobPage = () => {
     if (term === TERM.SHORT_TERM && !selectedDays) return false;
     return true;
   }, [isValid, term]);
+
+  const postJob = async () => {
+    const requestUrl = "";
+    const workTime = `
+      startTime: ${time.start}
+      endTime: ${time.end}
+    `;
+
+    const query: string = `
+      mutation {
+        createJobPost(input: {
+          title: ${title}
+          jobDescription: ${jobTypes}
+          workPeriod: {
+            type: ${term}
+            ${
+              term === TERM.SHORT_TERM ? `dates: ${dates}` : `days: ${weekDays}`
+            }
+          }
+          workTime: {
+            type: ${time.type}
+            ${time.type === WORKTIME_TYPES.FIXED ? `${workTime}` : ``}
+          }
+          salary: {
+            salaryType: ${pay.type}
+            salaryAmount: ${pay.amount.replaceAll(",", "")}
+          }
+          photos: ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"]
+          detailedDescription: ${description}
+        }) {
+          id
+          title
+          jobDescription
+          salaryType
+          salaryAmount
+        }
+      }`;
+
+    let response: Response;
+    try {
+      console.log("before fetch");
+      response = await fetch(requestUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      console.log("after fetch");
+    } catch {
+      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+    }
+
+    if (!response.ok)
+      throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요.");
+  };
+
+  const onPostButtonClick = async () => {
+    try {
+      await postJob();
+      alert("공고 등록 성공!");
+    } catch (e) {
+      setPostWarning(e.message);
+    }
+  };
 
   return (
     <Background>
@@ -258,10 +325,7 @@ const CreateJobPage = () => {
               subInfo=""
               warning={warnings.selectedDays}
             >
-              <CustomCalendar
-                isSelectedDays={isSelectedDays}
-                setIsSelectedDays={setIsSelectedDays}
-              />
+              <CustomCalendar dates={dates} setDates={setDates} />
             </FormField>
           )}
           {term === TERM.LONG_TERM && (
@@ -281,7 +345,7 @@ const CreateJobPage = () => {
           )}
 
           <FormField id="time" title="일하는 시간" warning="">
-            <TimeSection />
+            <TimeSection time={time} setTime={setTime} />
           </FormField>
 
           <FormField id="pay" title="급여" warning={warnings.pay}>
@@ -363,9 +427,14 @@ const CreateJobPage = () => {
             />
           </FormField>
         </FormSection>
-        <CreateButton className={isAllValid ? "" : "inactivated"}>
+        <WarningText>{postWarning}</WarningText>
+        <PostButton
+          className={isAllValid ? "" : "inactivated"}
+          onClick={onPostButtonClick}
+          disabled={!isAllValid}
+        >
           게시하기
-        </CreateButton>
+        </PostButton>
       </Container>
     </Background>
   );

@@ -34,18 +34,18 @@ export const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 type PayTypes = {
   HOURLY: string;
-  PER_UNIT: string;
+  PER_TASK: string;
   MONTHLY: string;
 };
 export const PAY_TYPES: PayTypes = {
   HOURLY: "시급",
-  PER_UNIT: "건당",
+  PER_TASK: "건당",
   MONTHLY: "월급",
 };
 
 export const WORKTIME_TYPES = {
-  NEGOTIABLE: "협의 가능",
-  TIME_SETTING: "시간 설정",
+  FLEXIBLE: "협의 가능",
+  FIXED: "시간 설정",
 };
 
 export const SEND_AUTHNUMBER_COUNTDOWN_SEC = 300;
