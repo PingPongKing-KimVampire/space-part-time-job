@@ -116,6 +116,32 @@ services:
       - be-network
     restart: on-failure
 
+  imageuploadservice:
+    build:
+      context: ./ImageUploadService/Server
+      dockerfile: Dockerfile
+    container_name: imageuploadservice
+    environment:
+      - MONGO_HOST=imageuploadmongodb
+      - MONGO_PORT=27017
+    depends_on:
+      - imageuploadmongodb
+      - userservice
+    networks:
+      - be-network
+    restart: on-failure
+
+  imageuploadmongodb:
+    image: mongo:latest
+    container_name: imageuploadmongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - imageuploadmongodb_data:/data/db
+    networks:
+      - be-network
+    restart: on-failure
+
 networks:
   be-network:
     driver: bridge
@@ -124,4 +150,6 @@ volumes:
   mysql_data:
     name: custom_mysql_data
   kafka_data:
+    driver: local
+  imageuploadmongodb_data:
     driver: local
