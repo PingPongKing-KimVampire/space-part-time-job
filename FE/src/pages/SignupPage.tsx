@@ -5,7 +5,7 @@ import {
   Container,
   SignupButton,
 } from "../styles/SignupPage.styles.ts";
-import checkRulePass from "../utils/checkRulePass.ts";
+import { checkRulePassInAuth } from "../utils/checkRulePass.ts";
 import { Title } from "../styles/LoginPage.styles.ts";
 import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
@@ -113,9 +113,9 @@ const SignupPage = () => {
   };
 
   const checkValidation = async (fieldName: string, value?: string) => {
-    value = value || inputValue[fieldName];
+    value = value !== undefined ? value : inputValue[fieldName];
     // 규칙 통과 검사
-    const isRulePassed = checkRulePass[fieldName](value);
+    const isRulePassed = checkRulePassInAuth[fieldName](value);
     if ((fieldName !== "id" && fieldName !== "nickname") || !isRulePassed) {
       setIsValid((state) => ({ ...state, [fieldName]: { isRulePassed } }));
       return;

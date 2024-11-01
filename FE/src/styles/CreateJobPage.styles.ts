@@ -85,6 +85,7 @@ export const DescriptionSection = styled("div", {
   flexDirection: "column",
   alignItems: "flex-end",
   gap: "6px",
+  position: "relative",
   "& textarea": {
     width: "100%",
     background: "white",
@@ -110,6 +111,9 @@ export const DescriptionSection = styled("div", {
   "& #charCountInfo": {
     color: "#9A9A9A",
     fontWeight: "300",
+    position: "absolute",
+    bottom: "-27px",
+    right: "0px",
     "& span": {
       color: "black",
       fontWeight: "400",

@@ -2,26 +2,26 @@ import formatCurrency from "../utils/formatCurrency.ts";
 
 export const IP_ADDRESS = "localhost";
 
-export const JOB_TYPES = [
-  "서빙",
-  "주방보조/설거지",
-  "주방장/조리사",
-  "매장관리/판매",
-  "음료 제조",
-  "베이킹",
-  "업체 청소",
-  "심부름/소일거리",
-  "전단지 배포",
-  "과외/학원",
-  "등하원도우미",
-  "아이돌봄",
-  "어르신 돌봄",
-  "가사/집정리",
-  "짐 옮기기",
-  "반려동물 돌봄",
-  "편의점",
-  "기타",
-];
+export const JOB_TYPES = {
+  SERVING: "서빙",
+  KITCHEN_ASSISTANT: "주방보조/설거지",
+  COOK: "주방장/조리사",
+  STORE_MANAGEMENT: "매장관리/판매",
+  BEVERAGE_MAKING: "음료 제조",
+  BAKING: "베이킹",
+  CLEANING: "업체 청소",
+  ERRAND: "심부름/소일거리",
+  FLYER_DISTRIBUTION: "전단지 배포",
+  TUTORING: "과외/학원",
+  SCHOOL_PICKUP: "등하원도우미",
+  CHILDCARE: "아이돌봄",
+  SENIOR_CARE: "어르신 돌봄",
+  HOUSEKEEPING: "가사/집정리",
+  MOVING: "짐 옮기기",
+  PET_CARE: "반려동물 돌봄",
+  CONVENIENCE_STORE: "편의점",
+  OTHERS: "기타",
+};
 
 export const TERM = {
   TODAY: "오늘",

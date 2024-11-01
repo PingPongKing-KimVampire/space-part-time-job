@@ -22,6 +22,7 @@ const Container = styled("div", {
   flexDirection: "column",
   alignItems: "center",
   gap: "10px",
+  marginTop: "-30px",
   "& .title": {
     fontSize: "20px",
     fontWeight: "bold",
@@ -82,7 +83,7 @@ const Calendar = styled("div", {
   },
 });
 
-const CustomCalendar = () => {
+const CustomCalendar = ({ isSelectedDays, setIsSelectedDays }) => {
   const today = useMemo(() => new Date().setHours(0, 0, 0, 0), []);
   const selectableStart = useMemo(() => today, [today]); // 선택 가능한 시작 날짜 (오늘)
   const selectableEnd = useMemo(() => subDays(addMonths(today, 1), 1), [today]); // 선택 가능한 끝 날짜 (한 달 후)
@@ -106,14 +107,10 @@ const CustomCalendar = () => {
     return days;
   }, [visibleStart, visibleEnd, selectableStart, selectableEnd, today]);
 
-  const [isSelecteds, setIsSelecteds] = useState<Boolean[]>(
-    new Array(visibleDays.length).fill(false)
-  );
-
   const onDateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const index = parseInt(e.currentTarget.getAttribute("data-index") || "");
     if (isNaN(index)) return;
-    setIsSelecteds((prev) =>
+    setIsSelectedDays((prev) =>
       prev.map((selected, i) => (i === index ? !selected : selected))
     );
   };
@@ -125,7 +122,7 @@ const CustomCalendar = () => {
     const element = document.elementFromPoint(e.clientX, e.clientY);
     const index = parseInt(element?.getAttribute("data-index") || "");
     if (isNaN(index)) return;
-    setIsSelecteds((prev) =>
+    setIsSelectedDays((prev) =>
       prev.map((selected, i) => (i === index ? true : selected))
     );
   };
@@ -153,10 +150,10 @@ const CustomCalendar = () => {
             const classNames = ["date"];
             if (dayInfo.isSelectable) classNames.push("selectable");
             if (dayInfo.isSunday) classNames.push("sunday");
-            if (isSelecteds[index]) classNames.push("selected");
-            if (index !== 0 && isSelecteds[index - 1])
+            if (isSelectedDays[index]) classNames.push("selected");
+            if (index !== 0 && isSelectedDays[index - 1])
               classNames.push("leftSelected");
-            if (index !== visibleDays.length && isSelecteds[index + 1])
+            if (index !== visibleDays.length && isSelectedDays[index + 1])
               classNames.push("rightSelected");
             return (
               <button

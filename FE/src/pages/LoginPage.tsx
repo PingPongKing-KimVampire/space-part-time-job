@@ -17,7 +17,7 @@ import {
   PhoneNumberInputChild,
 } from "../styles/LoginPage.styles.ts";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import checkRulePass from "../utils/checkRulePass.ts";
+import { checkRulePassInAuth } from "../utils/checkRulePass.ts";
 import useCountdownTimer from "../utils/useCountdownTimer.ts";
 import {
   SEND_AUTHNUMBER_COUNTDOWN_SEC,
@@ -218,7 +218,9 @@ const LoginPage = () => {
 
   // TODO : SignupPage의 PhoneNumberSection과 겹치는 로직
   const onPhoneNumberInputBlurStart = () => {
-    const isRulePassed = checkRulePass["phoneNumber"](inputValue.phoneNumber);
+    const isRulePassed = checkRulePassInAuth["phoneNumber"](
+      inputValue.phoneNumber
+    );
     setIsValidPhoneNumber(isRulePassed);
     if (
       countdownTimer.isActive &&

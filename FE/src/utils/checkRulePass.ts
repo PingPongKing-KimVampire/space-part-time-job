@@ -1,4 +1,15 @@
-const checkRulePass = {
+import { PAY_TYPES, MINIMUM_HOURLY_PAY } from "../constants/constants.ts";
+
+const checkRulePassCommon = {
+  phoneNumber: (phoneNumber: string): boolean => {
+    phoneNumber = phoneNumber.replaceAll("-", "");
+    if (phoneNumber.length < 11) return false;
+    if (phoneNumber.slice(0, 3) !== "010") return false;
+    return /^[0-9]+$/.test(phoneNumber);
+  },
+};
+
+export const checkRulePassInAuth = {
   id: (id: string): boolean => {
     if (id.length < 5 || 20 < id.length) return false;
     return /^[a-z0-9]+$/.test(id); // 영소문자/숫자만 포함되는가
@@ -29,15 +40,28 @@ const checkRulePass = {
     if (nickname.length < 1 || 10 < nickname.length) return false;
     return /^[가-힣a-zA-Z0-9]+$/.test(nickname);
   },
-  phoneNumber: (phoneNumber: string): boolean => {
-    phoneNumber = phoneNumber.replaceAll("-", "");
-    if (phoneNumber.length < 11) return false;
-    if (phoneNumber.slice(0, 3) !== "010") return false;
-    return /^[0-9]+$/.test(phoneNumber);
-  },
   authNumber: (authNumber: string): boolean => {
     return authNumber.length > 0;
   },
+  ...checkRulePassCommon,
 };
 
-export default checkRulePass;
+export const checkRulePassInCreateJob = {
+  title: (title: string): boolean => {
+    return 6 <= title.length && title.length <= 30;
+  },
+  jobTypes: (jobTypes: string[]): boolean => {
+    return 1 <= jobTypes.length && jobTypes.length <= 3;
+  },
+  weekDays: (weekDays: string[]): boolean => {
+    return 1 <= weekDays.length;
+  },
+  pay: (type: string, amount: string): boolean => {
+    if (type !== PAY_TYPES.HOURLY) return true;
+    return MINIMUM_HOURLY_PAY <= parseInt(amount.replaceAll(",", ""));
+  },
+  description: (description: string): boolean => {
+    return 15 <= description.length && description.length <= 2000;
+  },
+  ...checkRulePassCommon,
+};

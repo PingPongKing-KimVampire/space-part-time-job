@@ -13,35 +13,43 @@ import {
   MinimumMessage,
 } from "../../styles/CreateJobPage/PaySection.styles.ts";
 
-const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
-  const [payType, setPayType] = useState(PAY_TYPES.HOURLY);
-  const [payAmount, setPayAmount] = useState("");
-
+const PaySection = ({
+  pay,
+  setPay,
+  term,
+  weekDays,
+  time,
+  onBlurStart,
+  isPayValid,
+}) => {
   const VISIBLE_PAY_TYPES = useMemo(() => {
-    if (selectedPeriod !== TERM.LONG_TERM) {
+    if (term !== TERM.LONG_TERM) {
       const payTypes = Object.values(PAY_TYPES);
       return payTypes.filter((type) => type !== PAY_TYPES.MONTHLY);
     }
     return Object.values(PAY_TYPES);
-  }, [selectedPeriod]);
+  }, [term]);
 
   useEffect(() => {
     // 일하는 기간이 '1개월 이상' 외의 항목으로 변경된 경우 && 현재 선택된 급여 타입이 '월급'인 경우
-    if (selectedPeriod !== TERM.LONG_TERM && payType === PAY_TYPES.MONTHLY) {
-      setPayType(PAY_TYPES.HOURLY);
+    if (term !== TERM.LONG_TERM && pay.type === PAY_TYPES.MONTHLY) {
+      setPay((state) => ({ ...state, type: PAY_TYPES.HOURLY }));
     }
-  }, [selectedPeriod, payType]);
+  }, [term, pay, setPay]);
 
   const onPayTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const payTypeClicked = e.currentTarget.textContent || "";
     if (!payTypeClicked) return;
-    setPayType(payTypeClicked);
+    setPay((state) => ({ ...state, type: payTypeClicked }));
   };
 
-  const getMinimumMonthlyPay = (selectedWeekDays, selectedTime) => {
-    const weekDayCount = selectedWeekDays.length; // 주간 근무 일수
-    const [startH, startM] = selectedTime.start.split(":").map(Number);
-    const [endH, endM] = selectedTime.end.split(":").map(Number);
+  const getMinimumMonthlyPay = (
+    weekDays: string[],
+    time: { start: string; end: string }
+  ) => {
+    const weekDayCount = weekDays.length; // 주간 근무 일수
+    const [startH, startM] = time.start.split(":").map(Number);
+    const [endH, endM] = time.end.split(":").map(Number);
     const dailyHours = (endM + endH * 60 - (startM + startH * 60)) / 60; // 1일 근로 시간
     const weeklyHours = dailyHours * weekDayCount; // 주간 근로 시간
     const monthlyHours = weeklyHours * 4; // 월간 근로 시간
@@ -62,9 +70,9 @@ const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
 
   const mininumMessage = useMemo(() => {
     // [건당]인 경우 -> 출력 x
-    if (payType === PAY_TYPES.PER_UNIT) return "";
+    if (pay.type === PAY_TYPES.PER_UNIT) return "";
     // [시급]인 경우 -> 최저시급을 알려준다.
-    if (payType === PAY_TYPES.HOURLY) {
+    if (pay.type === PAY_TYPES.HOURLY) {
       return (
         <>
           * 2024년 최저시급은{" "}
@@ -74,8 +82,8 @@ const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
     }
     // [월급]인 경우 -> 설정된 요일, 시간 기준 최소 월급을 알려준다.
     const { monthlyPay, weekDayCount, dailyHours } = getMinimumMonthlyPay(
-      selectedWeekDays,
-      selectedTime
+      weekDays,
+      time
     );
     return (
       <>
@@ -85,21 +93,22 @@ const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
         이상이에요.
       </>
     );
-  }, [payType, selectedTime, selectedWeekDays]);
+  }, [pay, time, weekDays, isPayValid]);
 
   const onPayAmountBlur = () => {
-    if (payAmount === "") {
-      setPayAmount("");
+    if (onBlurStart) onBlurStart();
+    if (pay.amount === "") {
+      setPay((state) => ({ ...state, amount: "" }));
       return;
     }
-    const pureValue = parseInt(payAmount.replaceAll(",", "")).toString();
+    const pureValue = parseInt(pay.amount.replaceAll(",", "")).toString();
     // 천 단위 구분법으로 가공하기
     const parts: string[] = [];
     for (let i = pureValue.length; i > 0; i -= 3) {
       const part: string = pureValue.slice(Math.max(i - 3, 0), i);
       parts.unshift(part);
     }
-    setPayAmount(parts.join(","));
+    setPay((state) => ({ ...state, amount: parts.join(",") }));
   };
 
   return (
@@ -107,21 +116,24 @@ const PaySection = ({ selectedPeriod, selectedWeekDays, selectedTime }) => {
       <Chips
         id="pay"
         options={Object.values(VISIBLE_PAY_TYPES)}
-        isSelected={(type) => type === payType}
+        isSelected={(type) => type === pay.type}
         onClick={onPayTypeClick}
       />
       <CustomInput
         id="pay"
-        value={payAmount}
+        value={pay.amount}
         eventHandlers={{
           onChange: (e) => {
-            setPayAmount(e.target.value.replace(/[^0-9,]/g, ""));
+            setPay((state) => ({
+              ...state,
+              amount: e.target.value.replace(/[^0-9,]/g, ""),
+            }));
           },
           onBlur: onPayAmountBlur,
         }}
         maxLength={9}
       >
-        <Unit>{payType === PAY_TYPES.MONTHLY ? "만원" : "원"}</Unit>
+        <Unit>{pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}</Unit>
       </CustomInput>
       <MinimumMessage>{mininumMessage}</MinimumMessage>
     </Container>
