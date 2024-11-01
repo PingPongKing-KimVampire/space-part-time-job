@@ -47,7 +47,7 @@ type IsValid = {
   pay: boolean;
   description: boolean;
   phoneNumber: boolean;
-  images: { size: boolean; count: boolean };
+  images: { size: boolean; count: boolean; response: boolean };
 };
 
 const CreateJobPage = () => {
@@ -62,7 +62,7 @@ const CreateJobPage = () => {
     pay: false,
     description: false,
     phoneNumber: false,
-    images: { size: true, count: true },
+    images: { size: true, count: true, response: true },
   });
   const [jobTypes, setJobTypes] = useState<string[]>([]);
   const [dates, setDates] = useState<Set<string>>(new Set());
@@ -80,7 +80,7 @@ const CreateJobPage = () => {
     end: "18:00",
   });
   const [pay, setPay] = useState({ type: PAY_TYPES.HOURLY, amount: "" });
-  const [images, setImages] = useState<{ url: string; file: File }[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
 
@@ -106,7 +106,10 @@ const CreateJobPage = () => {
         "* 최소 15자에서 최대 2000자까지 입력할 수 있어요.";
     if (phoneNumber !== "" && !isValid.phoneNumber)
       newWarnings.phoneNumber = "* 전화번호가 유효하지 않습니다.";
-    if (!isValid.images.size && !isValid.images.count) {
+    console.log("isValid.images.response", isValid.images.response);
+    if (!isValid.images.response) {
+      newWarnings.images = "* 서버가 불안정합니다. 나중에 다시 시도해주세요.";
+    } else if (!isValid.images.size && !isValid.images.count) {
       newWarnings.images = "* 10MB 이하의 사진 10장까지 업로드 가능합니다.";
     } else if (!isValid.images.size) {
       newWarnings.images = "* 10MB 이하의 사진만 가능합니다.";
@@ -229,7 +232,7 @@ const CreateJobPage = () => {
             salaryType: ${pay.type}
             salaryAmount: ${pay.amount.replaceAll(",", "")}
           }
-          photos: ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"]
+          photos: ${images}
           detailedDescription: ${description}
         }) {
           id

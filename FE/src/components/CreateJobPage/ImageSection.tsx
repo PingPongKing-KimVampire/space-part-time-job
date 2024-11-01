@@ -7,13 +7,49 @@ import {
   ImagesContainer,
   ImageDisplay,
 } from "../../styles/CreateJobPage/ImageSection.styles.ts";
+import { IP_ADDRESS } from "../../constants/constants.ts";
+
+type UploadImagesResponseData = {
+  error?: string;
+  imageUrlList?: string[];
+};
 
 const VALID_IMAGE_BYES = 10 * 1024 * 1024;
 
 const ImageSection = ({ images, setImages, setIsValid }) => {
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadImages = async (imageFiles: File[]): Promise<string[]> => {
+    // const requestUrl = `http://${IP_ADDRESS}/api/image-upload`;
+    // const formData = new FormData();
+    // imageFiles.forEach((file) => {
+    //   formData.append("imageFiles", file);
+    // });
+    // let response: Response;
+    // try {
+    //   response = await fetch(requestUrl, {
+    //     method: "POST",
+    //     // TODO : access_token??
+    //     headers: { "Content-Type": "multipart/form-data" },
+    //     body: formData,
+    //     credentials: "include",
+    //   });
+    // } catch {
+    //   throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+    // }
+    // let data: UploadImagesResponseData;
+    // try {
+    //   data = await response.json();
+    // } catch {
+    //   throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요.");
+    // }
+    // if (!response.ok)
+    //   throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요.");
+    // return data.imageUrlList || [];
+    return [];
+  };
+
+  const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const selectedImages = Array.from(e.target.files);
 
@@ -23,19 +59,22 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
     );
     const validCountImages = validSizeImages.slice(0, 10 - images.length);
 
+    let isResponseValid: boolean = true;
+    try {
+      const imageUrls: string[] = await uploadImages(validCountImages);
+      setImages((state) => state.concat(imageUrls));
+    } catch {
+      isResponseValid = false;
+    }
+
     setIsValid((state) => ({
       ...state,
       images: {
         size: selectedImages.length === validSizeImages.length,
         count: validSizeImages.length === validCountImages.length,
+        response: isResponseValid,
       },
     }));
-
-    const validImages = validCountImages.map((image) => ({
-      url: URL.createObjectURL(image),
-      file: image,
-    }));
-    setImages((prev) => prev.concat(validImages));
   };
 
   const onXmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,7 +101,7 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
         onClick={() => {
           setIsValid((state) => ({
             ...state,
-            images: { size: true, count: true },
+            images: { size: true, count: true, response: true },
           })); // 경고 메시지 제거 목적
           hiddenFileInputRef.current?.click();
         }}
