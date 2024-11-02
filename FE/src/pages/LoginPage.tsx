@@ -43,7 +43,7 @@ type LoginResponseData = {
   error?: string;
 };
 
-const LoginPage = () => {
+const LoginPage = (): React.JSX.Element => {
   useBackgroundColor("#F9FBFC");
   const navigate = useNavigate();
   const countdownTimer = useCountdownTimer(SEND_AUTHNUMBER_COUNTDOWN_SEC);
@@ -270,7 +270,7 @@ const LoginPage = () => {
                   borderType="multi-top"
                   value={inputValue.id}
                   eventHandlers={{
-                    onChange: (e) => {
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                       setInputValue((state) => ({
                         ...state,
                         id: e.target.value,

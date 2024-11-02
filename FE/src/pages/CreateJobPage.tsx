@@ -357,7 +357,7 @@ const CreateJobPage = () => {
               setPay={setPay}
               term={term}
               weekDays={weekDays}
-              time={{ start: "09:00", end: "16:00" }}
+              time={{ start: time.start, end: time.end }}
               onBlurStart={() => {
                 setIsValid((state) => ({
                   ...state,

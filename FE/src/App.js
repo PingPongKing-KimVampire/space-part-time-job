@@ -3,6 +3,7 @@ import { createStitches } from "@stitches/react";
 import SignupPage from "./pages/SignupPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import CreateJobPage from "./pages/CreateJobPage.tsx";
+import LocationSearchPage from "./pages/LocationSearchPage.tsx";
 
 const { styled } = createStitches();
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/create-job" element={<CreateJobPage />} />
+          <Route path="/location-search" element={<LocationSearchPage />} />
         </Routes>
       </Background>
     </BrowserRouter>
