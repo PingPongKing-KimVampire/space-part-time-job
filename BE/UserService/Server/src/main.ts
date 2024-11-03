@@ -1,7 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 async function bootstrap() {
+  const grpcApp = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: 'auth',
+        protoPath: join(__dirname, 'proto/auth.proto'),
+        url: '0.0.0.0:2500',
+      },
+    },
+  );
+  await grpcApp.listen();
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors({

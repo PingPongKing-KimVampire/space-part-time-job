@@ -20,6 +20,7 @@ import { LoginRequestDto } from './dto/controller/login.request.dto';
 import { AuthTokenService } from 'src/auth-token/auth-token.service';
 import { LoginPhoneAuthCodeRequestDto } from './dto/controller/login-phone-auth-code.request.dto';
 import { PhoneLoginRequestDto } from './dto/controller/login-phone.request.dto';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 
 @Controller('users')
 export class UserController {
@@ -197,5 +198,15 @@ export class UserController {
       throw new HttpException({ error: '알 수 없는 에러!' }, 500);
     }
     return { remainingPhoneAuthenticationCount };
+  }
+
+  @GrpcMethod('AuthService', 'AuthenticateUser')
+  authenticateUserByToken(data: { token: string }): { id: string } {
+    try {
+      const { id } = this.authTokenService.verifyAccessToken(data.token);
+      return { id };
+    } catch (e) {
+      throw new RpcException('유저 인증 실패');
+    }
   }
 }
