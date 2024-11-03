@@ -1,9 +1,5 @@
 import { createStitches } from "@stitches/react";
-import {
-  MainButtonStyle,
-  MainColor,
-  MainHoverColor,
-} from "../styles/global.ts";
+import { MainButtonStyle, MainColor, MainHoverColor } from "./global.ts";
 
 const { styled } = createStitches();
 
@@ -44,23 +40,33 @@ export const SearchResultBox = styled("div", {
   "& .searchItem": {
     padding: "17px",
     borderRadius: "16px",
-    border: `0.9px solid ${MainColor}`,
-    background: "white",
-    cursor: "pointer",
     fontSize: "16px",
     textAlign: "left",
     transition: "background 0.2s",
-    "&:hover": {
-      background: "#DCE2FF",
-      borderColor: "#DCE2FF",
-    },
     "&.selected": {
       background: MainColor,
-      borderColor: MainColor,
+      border: `0.9px solid ${MainColor}`,
       color: "white",
       "&:hover": {
         background: MainHoverColor,
         borderColor: MainHoverColor,
+      },
+    },
+    "&:not(.selected)": {
+      "&:not(.inactivated)": {
+        border: `0.9px solid ${MainColor}`,
+        background: "white",
+        cursor: "pointer",
+        "&:hover": {
+          background: "#DCE2FF",
+          borderColor: "#DCE2FF",
+        },
+      },
+      "&.inactivated": {
+        background: "#EDEDED",
+        color: "#B0B0B0",
+        cursor: "not-allowed",
+        border: `0.9px solid #EDEDED`,
       },
     },
   },
@@ -70,4 +76,12 @@ export const NextButton = styled("button", {
   width: "100%",
   marginTop: "10px",
   ...MainButtonStyle,
+  "& .selectedCount": {
+    fontSize: "18px",
+    fontWeight: "400",
+    position: "absolute",
+    top: "50%",
+    transform: "translateY(-50%)",
+    right: "20px",
+  },
 });

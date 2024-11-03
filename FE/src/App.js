@@ -3,7 +3,8 @@ import { createStitches } from "@stitches/react";
 import SignupPage from "./pages/SignupPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import CreateJobPage from "./pages/CreateJobPage.tsx";
-import LocationSearchPage from "./pages/LocationSearchPage.tsx";
+import SearchLocationPage from "./pages/SearchLocationPage.tsx";
+import SetLocationScopePage from "./pages/SetLocationScopePage.tsx";
 
 const { styled } = createStitches();
 
@@ -20,7 +21,11 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/create-job" element={<CreateJobPage />} />
-          <Route path="/location-search" element={<LocationSearchPage />} />
+          <Route path="/search-location" element={<SearchLocationPage />} />
+          <Route
+            path="/set-location-scope"
+            element={<SetLocationScopePage />}
+          />
         </Routes>
       </Background>
     </BrowserRouter>

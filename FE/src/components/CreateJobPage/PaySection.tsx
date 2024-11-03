@@ -116,6 +116,7 @@ const PaySection = ({
     setIsMinimumMessageVisible(warning === "");
   };
 
+  // TODO : minimumMessage와 paySection 경고가 따로 관리되니까 코드가 너무 복잡함!!
   useEffect(() => {
     const warning = checkRulePassInCreateJob.pay(pay.type, pay.amount);
     setIsMinimumMessageVisible(warning === "");
