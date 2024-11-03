@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
@@ -49,5 +53,13 @@ export class ImageUploadService {
     });
     await this.s3Client.send(command);
     return `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/${fileName}`;
+  }
+
+  async imageDeleteToRemoteRepository(fileName: string) {
+    const command = new DeleteObjectCommand({
+      Bucket: this.configService.get('AWS_S3_BUCKET_NAME'),
+      Key: fileName,
+    });
+    await this.s3Client.send(command);
   }
 }
