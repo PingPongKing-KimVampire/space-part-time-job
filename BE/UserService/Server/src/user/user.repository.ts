@@ -42,4 +42,11 @@ export class UserRepository {
     });
     return user;
   }
+
+  async findById(id: string): Promise<User | null> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+    });
+    return user;
+  }
 }
