@@ -1,54 +1,53 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import {
-  ClientGrpc,
-  ClientOptions,
-  ClientProxyFactory,
-  Transport,
-} from '@nestjs/microservices';
-import { join } from 'path';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Observable } from 'rxjs';
-
-interface AuthService {
-  authenticateUser(data: { token: string }): Observable<{ id: number }>;
-}
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
-export class ImageUploadService implements OnModuleInit {
-  private authService: AuthService;
-  private client: ClientGrpc;
+export class ImageUploadService {
+  s3Client: S3Client;
 
-  constructor(private readonly configService: ConfigService) {}
-
-  onModuleInit() {
-    const grpcUrl = this.configService.get<string>('GRPC_URL');
-    const clientOptions: ClientOptions = {
-      transport: Transport.GRPC,
-      options: {
-        package: 'auth',
-        protoPath: join(__dirname, '../proto/auth.proto'),
-        url: grpcUrl,
+  constructor(private configService: ConfigService) {
+    this.s3Client = new S3Client({
+      region: this.configService.get('AWS_REGION'),
+      credentials: {
+        accessKeyId: this.configService.get('AWS_S3_ACCESS_KEY'),
+        secretAccessKey: this.configService.get('AWS_S3_SECRET_ACCESS_KEY'),
       },
-    };
-    this.client = ClientProxyFactory.create(
-      clientOptions,
-    ) as unknown as ClientGrpc;
-    this.authService = this.client.getService<AuthService>('AuthService');
+    });
   }
 
-  async authenticateUser(token: string) {
+  async uploadImages(files: Array<Express.Multer.File>) {
     try {
-      const response = await this.authService
-        .authenticateUser({ token })
-        .toPromise();
-      return {
-        id: response.id,
-      };
+      const uploadPromises = files.map((file) => {
+        const fileName = uuidv4();
+        return this.imageUploadToRemoteRepository(
+          fileName,
+          file,
+          file.mimetype,
+        );
+      });
+
+      const uploadResults = await Promise.all(uploadPromises);
+      return uploadResults;
     } catch (e) {
-      if (e.details === '유저 인증 실패') {
-        throw new Error('유저 인증 실패');
-      }
-      throw e;
+      console.log(e); //logging
+      throw new Error('원격 서버 이미지 업로드 에러');
     }
+  }
+
+  async imageUploadToRemoteRepository(
+    fileName: string,
+    file: Express.Multer.File,
+    mimeType: string,
+  ) {
+    const command = new PutObjectCommand({
+      Bucket: this.configService.get('AWS_S3_BUCKET_NAME'),
+      Key: fileName,
+      Body: file.buffer,
+      ContentType: mimeType,
+    });
+    await this.s3Client.send(command);
+    return `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/${fileName}`;
   }
 }
