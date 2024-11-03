@@ -17,7 +17,15 @@ import {
   DateItem,
 } from "../../styles/CreateJobPage/CustomCalendar.styles.ts";
 
-const CustomCalendar = ({ dates, setDates }) => {
+type CustomCalendarProps = {
+  dates: Set<string>;
+  setDates: React.Dispatch<React.SetStateAction<Set<string>>>;
+  onClickStart?: () => void;
+};
+
+const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
+  const { dates, setDates, onClickStart } = props;
+
   const today = useMemo(() => new Date().setHours(0, 0, 0, 0), []);
   const selectableStart = useMemo(() => today, [today]); // 선택 가능한 시작 날짜 (오늘)
   const selectableEnd = useMemo(() => subDays(addMonths(today, 1), 1), [today]); // 선택 가능한 끝 날짜 (한 달 후)
@@ -49,6 +57,7 @@ const CustomCalendar = ({ dates, setDates }) => {
   }, [selectableStart, selectableEnd]);
 
   const onDateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClickStart) onClickStart();
     const date: string = e.currentTarget.getAttribute("data-date") || "";
     if (dates.has(date)) {
       setDates((state) => {
@@ -84,7 +93,9 @@ const CustomCalendar = ({ dates, setDates }) => {
         onMouseMove={onMouseMove}
       >
         {DAYS.map((day) => (
-          <div className="weekDay">{day}</div>
+          <div className="weekDay" key={day}>
+            {day}
+          </div>
         ))}
         {visibleDates &&
           visibleDates.map((dateInfo, index) => {
@@ -96,7 +107,6 @@ const CustomCalendar = ({ dates, setDates }) => {
             if (index !== 0 && dates.has(visibleDates[index - 1].dateString)) {
               classNames.push("leftSelected");
             }
-            console.log(index, visibleDates.length, visibleDates[index + 1]);
             if (
               index !== visibleDates.length - 1 &&
               dates.has(visibleDates[index + 1].dateString)

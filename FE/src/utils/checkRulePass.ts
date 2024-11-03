@@ -1,4 +1,8 @@
-import { PAY_TYPES, MINIMUM_HOURLY_PAY } from "../constants/constants.ts";
+import {
+  PAY_TYPES,
+  MINIMUM_HOURLY_PAY,
+  ERROR,
+} from "../constants/constants.ts";
 
 const checkRulePassCommon = {
   phoneNumber: (phoneNumber: string): boolean => {
@@ -56,9 +60,15 @@ export const checkRulePassInCreateJob = {
   weekDays: (weekDays: string[]): boolean => {
     return 1 <= weekDays.length;
   },
-  pay: (type: string, amount: string): boolean => {
-    if (type !== PAY_TYPES.HOURLY) return true;
-    return MINIMUM_HOURLY_PAY <= parseInt(amount.replaceAll(",", ""));
+  // TODO : pay만 string 반환하는 거 일관성 무슨 일..?
+  pay: (type: string, amount: string): string => {
+    if (amount.length === 0) return ERROR.CREATE_JOB.FOLLOW_PAY_RULE;
+    if (
+      type === PAY_TYPES.HOURLY &&
+      parseInt(amount.replaceAll(",", "")) < MINIMUM_HOURLY_PAY
+    )
+      return ERROR.CREATE_JOB.FOLLOW_PAY_HOURLY_RULE;
+    return "";
   },
   description: (description: string): boolean => {
     return 15 <= description.length && description.length <= 2000;

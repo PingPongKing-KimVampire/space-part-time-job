@@ -12,6 +12,7 @@ import {
   Unit,
   MinimumMessage,
 } from "../../styles/CreateJobPage/PaySection.styles.ts";
+import { checkRulePassInCreateJob } from "../../utils/checkRulePass.ts";
 
 const PaySection = ({
   pay,
@@ -19,9 +20,14 @@ const PaySection = ({
   term,
   weekDays,
   time,
+  onFocus,
   onBlurStart,
   isPayValid,
+  isPayFocused,
 }) => {
+  const [isMinimumMessageVisible, setIsMinimumMessageVisible] =
+    useState<boolean>(true);
+
   const VISIBLE_PAY_TYPES = useMemo(() => {
     if (term !== TERM.LONG_TERM) {
       const payTypes = Object.values(PAY_TYPES);
@@ -69,7 +75,7 @@ const PaySection = ({
     return { monthlyPay, weekDayCount, dailyHours };
   };
 
-  const mininumMessage = useMemo(() => {
+  const minimumMessage = useMemo(() => {
     // [건당]인 경우 -> 출력 x
     if (pay.type === PAY_TYPES.PER_TASK) return "";
     // [시급]인 경우 -> 최저시급을 알려준다.
@@ -94,23 +100,26 @@ const PaySection = ({
         이상이에요.
       </>
     );
-  }, [pay, time, weekDays, isPayValid]);
+  }, [pay, time, weekDays]);
 
   const onPayAmountBlur = () => {
     if (onBlurStart) onBlurStart();
     if (pay.amount === "") {
       setPay((state) => ({ ...state, amount: "" }));
+      setIsMinimumMessageVisible(false);
       return;
     }
-    const pureValue = parseInt(pay.amount.replaceAll(",", "")).toString();
-    // 천 단위 구분법으로 가공하기
-    const parts: string[] = [];
-    for (let i = pureValue.length; i > 0; i -= 3) {
-      const part: string = pureValue.slice(Math.max(i - 3, 0), i);
-      parts.unshift(part);
-    }
-    setPay((state) => ({ ...state, amount: parts.join(",") }));
+    const pureValue = parseInt(pay.amount.replaceAll(",", ""));
+    setPay((state) => ({ ...state, amount: formatCurrency(pureValue) }));
+
+    const warning = checkRulePassInCreateJob.pay(pay.type, pay.amount);
+    setIsMinimumMessageVisible(warning === "");
   };
+
+  useEffect(() => {
+    const warning = checkRulePassInCreateJob.pay(pay.type, pay.amount);
+    setIsMinimumMessageVisible(warning === "");
+  }, [pay.type]);
 
   return (
     <Container>
@@ -122,6 +131,11 @@ const PaySection = ({
       />
       <CustomInput
         id="pay"
+        placeholder={
+          pay.type === PAY_TYPES.HOURLY
+            ? formatCurrency(MINIMUM_HOURLY_PAY)
+            : "0"
+        }
         value={pay.amount}
         eventHandlers={{
           onChange: (e) => {
@@ -131,12 +145,15 @@ const PaySection = ({
             }));
           },
           onBlur: onPayAmountBlur,
+          onFocus,
         }}
         maxLength={9}
       >
         <Unit>{pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}</Unit>
       </CustomInput>
-      <MinimumMessage>{mininumMessage}</MinimumMessage>
+      {isMinimumMessageVisible && (
+        <MinimumMessage>{minimumMessage}</MinimumMessage>
+      )}
     </Container>
   );
 };

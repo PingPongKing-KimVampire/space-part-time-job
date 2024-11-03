@@ -44,7 +44,11 @@ const TimeSelection = (props) => {
         <SelectBox>
           {TIMES &&
             TIMES.map((time) => (
-              <button className="optionButton" onClick={onOptionClick}>
+              <button
+                className="optionButton"
+                key={time}
+                onClick={onOptionClick}
+              >
                 {time}
               </button>
             ))}

@@ -36,7 +36,6 @@ type Warnings = {
   dates?: string;
   pay?: string;
   description?: string;
-  phoneNumber?: string;
   images?: string;
 };
 
@@ -45,26 +44,24 @@ type IsValid = {
   jobTypes: boolean;
   weekDays: boolean;
   dates: boolean;
+  pay: string;
+  description: boolean;
+  images: { size: boolean; count: boolean; response: boolean };
+};
+
+type IsFocused = {
+  title: boolean;
+  jobTypes: boolean;
+  weekDays: boolean;
+  dates: boolean;
   pay: boolean;
   description: boolean;
-  phoneNumber: boolean;
-  images: { size: boolean; count: boolean; response: boolean };
 };
 
 const CreateJobPage = () => {
   useBackgroundColor("#F9FBFC");
 
   const [title, setTitle] = useState<string>("");
-  const [isValid, setIsValid] = useState<IsValid>({
-    title: false,
-    jobTypes: false,
-    weekDays: true,
-    dates: false,
-    pay: false,
-    description: false,
-    phoneNumber: false,
-    images: { size: true, count: true, response: true },
-  });
   const [jobTypes, setJobTypes] = useState<string[]>([]);
   const [dates, setDates] = useState<Set<string>>(new Set());
   const [weekDays, setWeekDays] = useState<string[]>([
@@ -83,27 +80,49 @@ const CreateJobPage = () => {
   const [pay, setPay] = useState({ type: PAY_TYPES.HOURLY, amount: "" });
   const [images, setImages] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   const [warnings, setWarnings] = useState<Warnings>({});
   const [postWarning, setPostWarning] = useState<string>("");
 
+  const [isValid, setIsValid] = useState<IsValid>({
+    title: false,
+    jobTypes: false,
+    weekDays: true,
+    dates: false,
+    pay: "", // 오류 상황이 두 가지라서..(빔, 최저시급 불충족)
+    description: false,
+    images: { size: true, count: true, response: true },
+  });
+  const [isFocused, setIsFocused] = useState<IsFocused>({
+    // 포커스 또는 선택된 적 있는가?
+    title: false,
+    jobTypes: false,
+    weekDays: false,
+    dates: false,
+    pay: false,
+    description: false,
+  });
+
   useEffect(() => {
     const newWarnings: Warnings = {};
-    if (title !== "" && !isValid.title)
+    if (isFocused.title && !isValid.title)
       newWarnings.title = ERROR.CREATE_JOB.FOLLOW_TITLE_RULE;
-    if (jobTypes.length !== 0 && !isValid.jobTypes)
+
+    if (isFocused.jobTypes && !isValid.jobTypes)
       newWarnings.jobTypes = ERROR.CREATE_JOB.FOLLOW_JOB_TYPES_RULE;
+
     if (!isValid.weekDays)
       newWarnings.weekDays = ERROR.CREATE_JOB.FOLLOW_WEEKDAYS_RULE;
-    if (!isValid.dates) newWarnings.dates = ERROR.CREATE_JOB.FOLLOW_DATES_RULE;
-    if (pay.amount !== "" && !isValid.pay)
-      newWarnings.pay = ERROR.CREATE_JOB.FOLLOW_PAY_RULE;
-    if (description !== "" && !isValid.description)
+
+    if (isFocused.dates && !isValid.dates)
+      newWarnings.dates = ERROR.CREATE_JOB.FOLLOW_DATES_RULE;
+
+    // pay는 최저시급 불충족 이슈랑, 아무것도 작성하지 않은 이슈 두 가지로 나눠야 할 듯
+    if (isFocused.pay) newWarnings.pay = isValid.pay;
+
+    if (isFocused.description && !isValid.description)
       newWarnings.description = ERROR.CREATE_JOB.FOLLOW_DESCRIPTION_RULE;
-    if (phoneNumber !== "" && !isValid.phoneNumber)
-      newWarnings.phoneNumber = ERROR.INVALID_PHONE_NUMBER;
-    console.log("isValid.images.response", isValid.images.response);
+
     if (!isValid.images.response) {
       newWarnings.images = ERROR.SERVER;
     } else if (!isValid.images.size && !isValid.images.count) {
@@ -117,11 +136,10 @@ const CreateJobPage = () => {
   }, [isValid]);
 
   useEffect(() => {
-    if (pay.type !== PAY_TYPES.HOURLY) {
-      setIsValid((state) => ({ ...state, pay: true }));
-    } else {
-      setIsValid((state) => ({ ...state, pay: false }));
-    }
+    setIsValid((state) => ({
+      ...state,
+      pay: checkRulePassInCreateJob.pay(pay.type, pay.amount),
+    }));
   }, [pay.type]);
 
   const toggleSelected = (
@@ -145,6 +163,9 @@ const CreateJobPage = () => {
   };
 
   const onJobTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!isFocused.jobTypes)
+      setIsFocused((state) => ({ ...state, jobTypes: true }));
+
     const jobTypeClicked = e.currentTarget.textContent || JOB_TYPES.SERVING;
     const newJobTypes = toggleSelected(jobTypes, jobTypeClicked);
     setIsValid((state) => ({
@@ -158,6 +179,10 @@ const CreateJobPage = () => {
     const sortDays = (days: string[]) => {
       return days.sort((a, b) => DAYS.indexOf(a) - DAYS.indexOf(b));
     };
+
+    if (!isFocused.weekDays)
+      setIsFocused((state) => ({ ...state, weekDays: true }));
+
     const dayClicked = e.currentTarget.textContent || "";
     const newWeekDays = toggleSelected(weekDays, dayClicked, sortDays);
     setIsValid((state) => ({
@@ -165,13 +190,6 @@ const CreateJobPage = () => {
       weekDays: checkRulePassInCreateJob.weekDays(newWeekDays),
     }));
     setWeekDays(newWeekDays);
-  };
-
-  const onPhoneNumberInputBlurStart = () => {
-    setIsValid((state) => ({
-      ...state,
-      phoneNumber: checkRulePassInCreateJob.phoneNumber(phoneNumber),
-    }));
   };
 
   useEffect(() => {
@@ -186,10 +204,8 @@ const CreateJobPage = () => {
   }, [term, setIsValid, dates.size, weekDays.length]);
 
   const isAllValid = useMemo(() => {
-    const { title, jobTypes, weekDays, dates, pay, description, phoneNumber } =
-      isValid;
-    if (!title || !jobTypes || !pay || !description || !phoneNumber)
-      return false;
+    const { title, jobTypes, weekDays, dates, pay, description } = isValid;
+    if (!title || !jobTypes || pay !== "" || !description) return false;
     if (term === TERM.LONG_TERM && !weekDays) return false;
     if (term === TERM.SHORT_TERM && !dates) return false;
     return true;
@@ -234,13 +250,11 @@ const CreateJobPage = () => {
 
     let response: Response;
     try {
-      console.log("before fetch");
       response = await fetch(requestUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
       });
-      console.log("after fetch");
     } catch {
       throw new Error(ERROR.NETWORK);
     }
@@ -272,6 +286,10 @@ const CreateJobPage = () => {
               eventHandlers={{
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                   setTitle(e.target.value);
+                },
+                onFocus: () => {
+                  if (!isFocused.title)
+                    setIsFocused((state) => ({ ...state, title: true }));
                 },
                 onBlur: () => {
                   setIsValid((state) => ({
@@ -316,7 +334,14 @@ const CreateJobPage = () => {
               subInfo=""
               warning={warnings.dates}
             >
-              <CustomCalendar dates={dates} setDates={setDates} />
+              <CustomCalendar
+                dates={dates}
+                setDates={setDates}
+                onClickStart={() => {
+                  if (!isFocused.dates)
+                    setIsFocused((state) => ({ ...state, dates: true }));
+                }}
+              />
             </FormField>
           )}
           {term === TERM.LONG_TERM && (
@@ -352,13 +377,16 @@ const CreateJobPage = () => {
                   pay: checkRulePassInCreateJob.pay(pay.type, pay.amount),
                 }));
               }}
+              onFocus={() => {
+                if (!isFocused.pay)
+                  setIsFocused((state) => ({ ...state, pay: true }));
+              }}
               isPayValid={isValid.pay}
+              isPayFocused={isFocused.pay}
             />
           </FormField>
 
-          <FormField id="place" title="일하는 장소" warning="">
-            <CustomInput id="place" value="" eventHandlers={{}} />
-          </FormField>
+          {/* TODO: 일하는 장소 FormField 추가해야함 */}
         </FormSection>
 
         {/* ===== 부가 정보 ===== */}
@@ -379,7 +407,6 @@ const CreateJobPage = () => {
           <FormField
             id="description"
             title="자세한 설명"
-            subInfo="(선택)"
             warning={warnings.description}
           >
             <DescriptionSection>
@@ -387,6 +414,10 @@ const CreateJobPage = () => {
                 placeholder="구체적인 업무 내용, 근무 요건, 지원자가 갖추어야 할 능력 등 우대 사항에 대해 알려주세요."
                 rows={5}
                 value={description}
+                onFocus={() => {
+                  if (!isFocused.description)
+                    setIsFocused((state) => ({ ...state, description: true }));
+                }}
                 onChange={onDescriptionChange}
                 onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => {
                   setIsValid((state) => ({
@@ -402,20 +433,6 @@ const CreateJobPage = () => {
                 <span>{description.length}</span>/2000
               </div>
             </DescriptionSection>
-          </FormField>
-
-          <FormField
-            id="contact"
-            title="연락처"
-            description="연락처는 안심번호로 표시돼요."
-            warning={warnings.phoneNumber}
-          >
-            <PhoneNumberInput
-              invalid={phoneNumber !== "" && !isValid.phoneNumber}
-              value={phoneNumber}
-              setValue={setPhoneNumber}
-              onBlurStart={onPhoneNumberInputBlurStart}
-            />
           </FormField>
         </FormSection>
         <WarningText>{postWarning}</WarningText>
