@@ -30,6 +30,8 @@ services:
       - KAFKA_BROKER=kafka:9092
       - KAFKAJS_NO_PARTITIONER_WARNING=1
       - JWT_SECRET=JWT_SECRET
+      - GRPC_PORT=4000
+      - PORT=3000
     depends_on:
       - mysqldb
       - redis
@@ -124,6 +126,9 @@ services:
     environment:
       - MONGO_HOST=imageuploadmongodb
       - MONGO_PORT=27017
+      - MONGO_DB=imageDB
+      - GRPC_URL=userservice:2500
+      - PORT=4000
     depends_on:
       - imageuploadmongodb
       - userservice

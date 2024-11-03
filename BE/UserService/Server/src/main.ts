@@ -4,6 +4,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 
 async function bootstrap() {
+  const gRPCPort = process.env.GRPC_PORT ?? 2500;
   const grpcApp = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
@@ -11,7 +12,7 @@ async function bootstrap() {
       options: {
         package: 'auth',
         protoPath: join(__dirname, 'proto/auth.proto'),
-        url: '0.0.0.0:2500',
+        url: `0.0.0.0:${gRPCPort}`,
       },
     },
   );
