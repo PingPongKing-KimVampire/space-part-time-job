@@ -2,6 +2,47 @@ import formatCurrency from "../utils/formatCurrency.ts";
 
 export const IP_ADDRESS = "localhost";
 
+export const ERROR = {
+  SERVER: "* 서버가 불안정합니다. 나중에 다시 시도해주세요.",
+  NETWORK: "* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.",
+  AUTH_NUMBER_SEND_COUNT_EXCEED:
+    "* 하루 최대 인증번호 전송 횟수를 초과하셨습니다.",
+  INVALID_AUTH_NUMBER: "* 인증번호가 유효하지 않습니다.",
+  INVALID_PHONE_NUMBER: "* 휴대폰 번호가 유효하지 않습니다.",
+  LOGIN: {
+    INVALID_ID_PW: "* 아이디 또는 비밀번호가 유효하지 않습니다.",
+    PHONE_NUMBER_NOT_EXIST: "* 가입되지 않은 휴대폰 번호입니다.",
+    ENTER_PHONE_NUMBER: "* 휴대폰 번호를 입력해주세요.",
+    ENTER_ID: "* 휴대폰 번호를 입력해주세요.",
+    ENTER_PW: "* 비밀번호를 입력해주세요.",
+    ENTER_AUTH_NUMBER: "* 인증번호를 입력해 주세요.",
+  },
+  SIGNUP: {
+    DUPLICATED_PHONE_NUMBER: "* 이미 가입된 휴대폰 번호입니다.",
+    DUPLICATED_ID: "* 중복되는 아이디입니다.",
+    DUPLICATED_NICKNAME: "* 중복되는 닉네임입니다.",
+    FOLLOW_ID_RULE: "* 아이디는 5~20자의 영문 소문자, 숫자를 사용해 주세요.",
+    FOLLOW_PW_RULE:
+      "* 비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.",
+    FOLLOW_NICKNAME_RULE:
+      "* 닉네임은 1~10자의 한글, 영문, 숫자를 사용해 주세요.",
+  },
+  CREATE_JOB: {
+    FOLLOW_TITLE_RULE: "* 최소 6자에서 최대 30자까지 입력할 수 있어요.",
+    FOLLOW_JOB_TYPES_RULE: "* 하는 일은 1개 이상, 3개 이하로 선택할 수 있어요.",
+    FOLLOW_WEEKDAYS_RULE: "* 요일을 1개 이상 선택해 주세요.",
+    FOLLOW_DATES_RULE: "* 날짜를 1일 이상 선택해 주세요.",
+    FOLLOW_PAY_RULE:
+      "* 최저임금을 준수해주세요. 2024년 최저시급은 9,860원입니다.",
+    FOLLOW_DESCRIPTION_RULE:
+      "* 최소 15자에서 최대 2000자까지 입력할 수 있어요.",
+    FOLLOW_IMAGE_SIZE_COUNT_RULE:
+      "* 10MB 이하의 사진 10장까지 업로드 가능합니다.",
+    FOLLOW_IMAGE_SIZE_RULE: "* 10MB 이하의 사진만 가능합니다.",
+    FOLLOW_IMAGE_COUNT_RULE: "* 사진은 10장까지만 가능합니다",
+  },
+};
+
 export const JOB_TYPES = {
   SERVING: "서빙",
   KITCHEN_ASSISTANT: "주방보조/설거지",

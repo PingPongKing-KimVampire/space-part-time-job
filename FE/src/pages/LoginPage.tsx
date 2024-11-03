@@ -22,6 +22,7 @@ import useCountdownTimer from "../utils/useCountdownTimer.ts";
 import {
   SEND_AUTHNUMBER_COUNTDOWN_SEC,
   IP_ADDRESS,
+  ERROR,
 } from "../constants/constants.ts";
 
 const ID_PW = "ID_PW";
@@ -76,19 +77,19 @@ const LoginPage = (): React.JSX.Element => {
         }),
       });
     } catch {
-      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.NETWORK);
     }
     try {
       data = await response.json();
     } catch {
-      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.SERVER);
     }
     if (!response.ok) {
       if (data.error === "하루 최대요청 횟수 초과")
-        throw new Error("* 하루 최대요청 횟수를 초과하셨습니다."); // 409
+        throw new Error(ERROR.AUTH_NUMBER_SEND_COUNT_EXCEED); // 409
       if (data.error === "존재하지 않는 사용자")
-        throw new Error("* 가입되지 않은 번호입니다."); // 409
-      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요."); // 400, 500
+        throw new Error(ERROR.LOGIN.PHONE_NUMBER_NOT_EXIST); // 409
+      throw new Error(ERROR.SERVER); // 400, 500
     }
     return data.remainingPhoneAuthenticationCount || 0;
   };
@@ -99,11 +100,11 @@ const LoginPage = (): React.JSX.Element => {
     // 인증번호 전송 버튼 클릭
     // 전화번호 유효성 검증 및 오류 표시
     if (inputValue.phoneNumber === "") {
-      setWarning("* 휴대폰 번호를 입력해주세요.");
+      setWarning(ERROR.LOGIN.ENTER_PHONE_NUMBER);
       return;
     }
     if (!isValidPhoneNumber) {
-      setWarning("* 휴대폰 번호가 유효하지 않습니다.");
+      setWarning(ERROR.INVALID_PHONE_NUMBER);
       return;
     }
     // TODO : PhoneNumberSection 이랑 같은 로직..!
@@ -157,20 +158,20 @@ const LoginPage = (): React.JSX.Element => {
         body: JSON.stringify(body),
       });
     } catch {
-      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.NETWORK);
     }
     try {
       data = await response.json();
     } catch {
-      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.SERVER);
     }
 
     if (!response.ok) {
       if (data.error === "아이디/패스워드 로그인 실패")
-        throw new Error("* 아이디 또는 비밀번호가 유효하지 않습니다."); // 401
+        throw new Error(ERROR.LOGIN.INVALID_ID_PW); // 401
       if (data.error === "휴대폰 인증 실패")
-        throw new Error("* 인증번호가 유효하지 않습니다."); // 401
-      throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요."); // 400, 500
+        throw new Error(ERROR.INVALID_AUTH_NUMBER); // 401
+      throw new Error(ERROR.SERVER); // 400, 500
     }
   };
 
@@ -179,16 +180,14 @@ const LoginPage = (): React.JSX.Element => {
     // 기본 유효성 검사
     try {
       if (selectedTab === ID_PW) {
-        if (inputValue.id === "") throw new Error("* 아이디를 입력해주세요.");
-        if (inputValue.password === "")
-          throw new Error("* 비밀번호를 입력해주세요.");
+        if (inputValue.id === "") throw new Error(ERROR.LOGIN.ENTER_ID);
+        if (inputValue.password === "") throw new Error(ERROR.LOGIN.ENTER_PW);
       } else if (selectedTab === PHONE_NUMBER) {
         if (inputValue.phoneNumber === "")
-          throw new Error("* 휴대폰 번호를 입력해주세요.");
-        if (!isValidPhoneNumber)
-          throw new Error("* 휴대폰 번호가 유효하지 않습니다.");
+          throw new Error(ERROR.LOGIN.ENTER_PHONE_NUMBER);
+        if (!isValidPhoneNumber) throw new Error(ERROR.INVALID_PHONE_NUMBER);
         if (inputValue.authNumber === "")
-          throw new Error("* 인증번호를 입력해 주세요.");
+          throw new Error(ERROR.LOGIN.ENTER_AUTH_NUMBER);
       }
     } catch (e) {
       setWarning(e.message);

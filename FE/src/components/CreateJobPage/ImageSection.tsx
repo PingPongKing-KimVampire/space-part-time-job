@@ -7,7 +7,7 @@ import {
   ImagesContainer,
   ImageDisplay,
 } from "../../styles/CreateJobPage/ImageSection.styles.ts";
-import { IP_ADDRESS } from "../../constants/constants.ts";
+import { IP_ADDRESS, ERROR } from "../../constants/constants.ts";
 
 type UploadImagesResponseData = {
   error?: string;
@@ -35,16 +35,16 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
     //     credentials: "include",
     //   });
     // } catch {
-    //   throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+    //   throw new Error(ERROR.NETWORK);
     // }
     // let data: UploadImagesResponseData;
     // try {
     //   data = await response.json();
     // } catch {
-    //   throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요.");
+    //   throw new Error(ERROR.SERVER);
     // }
     // if (!response.ok)
-    //   throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요.");
+    //   throw new Error(ERROR.SERVER);
     // return data.imageUrlList || [];
     return [];
   };

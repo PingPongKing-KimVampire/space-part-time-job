@@ -12,6 +12,7 @@ import { WarningText } from "../../styles/global.ts";
 import {
   SEND_AUTHNUMBER_COUNTDOWN_SEC,
   IP_ADDRESS,
+  ERROR,
 } from "../../constants/constants.ts";
 
 type SendAuthNumberResponseData = {
@@ -40,8 +41,7 @@ const PhoneNumberSection = (props) => {
     const getWarning = () => {
       if (signupWarning.phoneNumber) return signupWarning.phoneNumber;
       if (inputValue.phoneNumber === "") return "";
-      if (!isValid.phoneNumber.isRulePassed)
-        return "* 전화번호가 유효하지 않습니다.";
+      if (!isValid.phoneNumber.isRulePassed) return ERROR.INVALID_PHONE_NUMBER;
       return "";
     };
     setWarning(getWarning());
@@ -98,19 +98,19 @@ const PhoneNumberSection = (props) => {
         }),
       });
     } catch {
-      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.NETWORK);
     }
     try {
       data = await response.json();
     } catch {
-      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.SERVER);
     }
     if (!response.ok) {
       if (data.error === "하루 최대요청 횟수 초과")
-        throw new Error("* 하루 최대요청 횟수를 초과하셨습니다."); // 409
+        throw new Error(ERROR.AUTH_NUMBER_SEND_COUNT_EXCEED); // 409
       if (data.error === "전화번호 중복")
-        throw new Error("* 이미 가입된 휴대폰 번호입니다."); // 409
-      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요."); // 400, 500
+        throw new Error(ERROR.SIGNUP.DUPLICATED_PHONE_NUMBER); // 409
+      throw new Error(ERROR.SERVER); // 400, 500
     }
     return data.remainingPhoneAuthenticationCount || 0;
   };

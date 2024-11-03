@@ -7,6 +7,7 @@ import {
   DAYS,
   PAY_TYPES,
   WORKTIME_TYPES,
+  ERROR,
 } from "../constants/constants.ts";
 import {
   Background,
@@ -32,7 +33,7 @@ type Warnings = {
   image?: string;
   jobTypes?: string;
   weekDays?: string;
-  selectedDays?: string;
+  dates?: string;
   pay?: string;
   description?: string;
   phoneNumber?: string;
@@ -43,7 +44,7 @@ type IsValid = {
   title: boolean;
   jobTypes: boolean;
   weekDays: boolean;
-  selectedDays: boolean;
+  dates: boolean;
   pay: boolean;
   description: boolean;
   phoneNumber: boolean;
@@ -58,7 +59,7 @@ const CreateJobPage = () => {
     title: false,
     jobTypes: false,
     weekDays: true,
-    selectedDays: false,
+    dates: false,
     pay: false,
     description: false,
     phoneNumber: false,
@@ -90,31 +91,27 @@ const CreateJobPage = () => {
   useEffect(() => {
     const newWarnings: Warnings = {};
     if (title !== "" && !isValid.title)
-      newWarnings.title = "* 최소 6자에서 최대 30자까지 입력할 수 있어요.";
+      newWarnings.title = ERROR.CREATE_JOB.FOLLOW_TITLE_RULE;
     if (jobTypes.length !== 0 && !isValid.jobTypes)
-      newWarnings.jobTypes =
-        "* 하는 일은 1개 이상, 3개 이하로 선택할 수 있어요.";
+      newWarnings.jobTypes = ERROR.CREATE_JOB.FOLLOW_JOB_TYPES_RULE;
     if (!isValid.weekDays)
-      newWarnings.weekDays = "* 요일을 1개 이상 선택해 주세요.";
-    if (!isValid.selectedDays)
-      newWarnings.selectedDays = "* 날짜를 1일 이상 선택해 주세요.";
+      newWarnings.weekDays = ERROR.CREATE_JOB.FOLLOW_WEEKDAYS_RULE;
+    if (!isValid.dates) newWarnings.dates = ERROR.CREATE_JOB.FOLLOW_DATES_RULE;
     if (pay.amount !== "" && !isValid.pay)
-      newWarnings.pay =
-        "* 최저임금을 준수해주세요. 2024년 최저시급은 9,860원입니다.";
+      newWarnings.pay = ERROR.CREATE_JOB.FOLLOW_PAY_RULE;
     if (description !== "" && !isValid.description)
-      newWarnings.description =
-        "* 최소 15자에서 최대 2000자까지 입력할 수 있어요.";
+      newWarnings.description = ERROR.CREATE_JOB.FOLLOW_DESCRIPTION_RULE;
     if (phoneNumber !== "" && !isValid.phoneNumber)
-      newWarnings.phoneNumber = "* 전화번호가 유효하지 않습니다.";
+      newWarnings.phoneNumber = ERROR.INVALID_PHONE_NUMBER;
     console.log("isValid.images.response", isValid.images.response);
     if (!isValid.images.response) {
-      newWarnings.images = "* 서버가 불안정합니다. 나중에 다시 시도해주세요.";
+      newWarnings.images = ERROR.SERVER;
     } else if (!isValid.images.size && !isValid.images.count) {
-      newWarnings.images = "* 10MB 이하의 사진 10장까지 업로드 가능합니다.";
+      newWarnings.images = ERROR.CREATE_JOB.FOLLOW_IMAGE_SIZE_COUNT_RULE;
     } else if (!isValid.images.size) {
-      newWarnings.images = "* 10MB 이하의 사진만 가능합니다.";
+      newWarnings.images = ERROR.CREATE_JOB.FOLLOW_IMAGE_SIZE_RULE;
     } else if (!isValid.images.count) {
-      newWarnings.images = "* 사진은 10장까지만 가능합니다";
+      newWarnings.images = ERROR.CREATE_JOB.FOLLOW_IMAGE_COUNT_RULE;
     }
     setWarnings(newWarnings);
   }, [isValid]);
@@ -182,27 +179,19 @@ const CreateJobPage = () => {
       (term === TERM.SHORT_TERM && dates.size === 0) ||
       (term === TERM.LONG_TERM && weekDays.length === 0)
     ) {
-      console.log("여기 안 걸림?");
-      setIsValid((state) => ({ ...state, selectedDays: false }));
+      setIsValid((state) => ({ ...state, dates: false }));
     } else {
-      setIsValid((state) => ({ ...state, selectedDays: true }));
+      setIsValid((state) => ({ ...state, dates: true }));
     }
   }, [term, setIsValid, dates.size, weekDays.length]);
 
   const isAllValid = useMemo(() => {
-    const {
-      title,
-      jobTypes,
-      weekDays,
-      selectedDays,
-      pay,
-      description,
-      phoneNumber,
-    } = isValid;
+    const { title, jobTypes, weekDays, dates, pay, description, phoneNumber } =
+      isValid;
     if (!title || !jobTypes || !pay || !description || !phoneNumber)
       return false;
     if (term === TERM.LONG_TERM && !weekDays) return false;
-    if (term === TERM.SHORT_TERM && !selectedDays) return false;
+    if (term === TERM.SHORT_TERM && !dates) return false;
     return true;
   }, [isValid, term]);
 
@@ -253,11 +242,10 @@ const CreateJobPage = () => {
       });
       console.log("after fetch");
     } catch {
-      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.NETWORK);
     }
 
-    if (!response.ok)
-      throw new Error("* 서버가 불안정합니다. 나중에 다시 시도해주세요.");
+    if (!response.ok) throw new Error(ERROR.SERVER);
   };
 
   const onPostButtonClick = async () => {
@@ -326,7 +314,7 @@ const CreateJobPage = () => {
               id="calendar"
               title=""
               subInfo=""
-              warning={warnings.selectedDays}
+              warning={warnings.dates}
             >
               <CustomCalendar dates={dates} setDates={setDates} />
             </FormField>

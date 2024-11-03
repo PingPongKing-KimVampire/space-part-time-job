@@ -10,7 +10,7 @@ import { Title } from "../styles/LoginPage.styles.ts";
 import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import { IP_ADDRESS } from "../constants/constants.ts";
+import { IP_ADDRESS, ERROR } from "../constants/constants.ts";
 
 type InputValue = {
   id: string;
@@ -94,7 +94,7 @@ const SignupPage = () => {
     try {
       response = await fetch(requestUrl);
     } catch (e) {
-      throw new Error("* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.");
+      throw new Error(ERROR.NETWORK);
     }
 
     if (!response.ok) {
@@ -102,13 +102,13 @@ const SignupPage = () => {
       try {
         data = await response.json();
       } catch (e) {
-        throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+        throw new Error(ERROR.SERVER);
       }
       if (data.error === "아이디 중복")
-        throw new Error("* 중복되는 아이디입니다."); // 409
+        throw new Error(ERROR.SIGNUP.DUPLICATED_ID); // 409
       if (data.error === "닉네임 중복")
-        throw new Error("* 중복되는 닉네임입니다."); // 409
-      throw new Error("* 서버가 불안정합니다. 나중에 시도해주세요.");
+        throw new Error(ERROR.SIGNUP.DUPLICATED_NICKNAME); // 409
+      throw new Error(ERROR.SERVER);
     }
   };
 
@@ -168,7 +168,7 @@ const SignupPage = () => {
       });
     } catch {
       return {
-        phoneNumber: "* 네트워크 오류가 발생했습니다. 나중에 시도해주세요.",
+        phoneNumber: ERROR.NETWORK,
       };
     }
 
@@ -178,19 +178,19 @@ const SignupPage = () => {
         data = await response.json();
       } catch {
         return {
-          phoneNumber: "* 서버가 불안정합니다. 나중에 다시 시도해주세요.",
+          phoneNumber: ERROR.SERVER,
         };
       }
       if (data.error === "닉네임 중복")
-        return { userInfo: "* 중복되는 닉네임입니다." }; // 409
+        return { userInfo: ERROR.SIGNUP.DUPLICATED_NICKNAME }; // 409
       if (data.error === "아이디 중복")
-        return { userInfo: "* 중복되는 닉네임입니다." }; // 409
+        return { userInfo: ERROR.SIGNUP.DUPLICATED_ID }; // 409
       if (data.error === "휴대폰 번호 중복")
-        return { phoneNumber: "* 중복되는 닉네임입니다." }; // 409
+        return { phoneNumber: ERROR.SIGNUP.DUPLICATED_PHONE_NUMBER }; // 409
       if (data.error === "휴대폰 인증 실패")
-        return { phoneNumber: "* 유효하지 않은 인증번호입니다." }; // 401
+        return { phoneNumber: ERROR.INVALID_AUTH_NUMBER }; // 401
       return {
-        phoneNumber: "* 서버가 불안정합니다. 나중에 다시 시도해주세요.",
+        phoneNumber: ERROR.SERVER,
       }; // 400, 500
     }
   };
