@@ -57,10 +57,8 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
     );
     const validCountImages = validSizeImages.slice(0, 10 - images.length);
 
-    const isSizeValid = selectedImages.length === validSizeImages.length;
-    const isCountValid = validSizeImages.length === validCountImages.length;
     let isResponseValid: boolean = true;
-    if (isSizeValid && isCountValid) {
+    if (validCountImages.length) {
       try {
         const imageUrls: string[] = await uploadImages(validCountImages);
         setImages((state) => state.concat(imageUrls));
@@ -69,6 +67,8 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
       }
     }
 
+    const isSizeValid = selectedImages.length === validSizeImages.length;
+    const isCountValid = validSizeImages.length === validCountImages.length;
     setIsValid((state) => ({
       ...state,
       images: { size: isSizeValid, count: isCountValid, response: isResponseValid },

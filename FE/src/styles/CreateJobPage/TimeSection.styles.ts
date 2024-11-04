@@ -90,7 +90,7 @@ export const SelectBox = styled("div", {
   left: "0",
   width: "100%",
   height: "200px",
-  overflow: "scroll",
+  overflow: "auto",
   borderRadius: "14px",
   padding: "6px",
   border: "1px solid #B2B2B2",
@@ -110,5 +110,8 @@ export const SelectBox = styled("div", {
       background: "#DCE2FF",
       color: "black",
     },
+  },
+  "&::-webkit-scrollbar": {
+    display: "none",
   },
 });

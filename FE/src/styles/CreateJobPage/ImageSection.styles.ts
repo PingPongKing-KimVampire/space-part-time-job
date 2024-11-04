@@ -43,7 +43,7 @@ export const ImagesContainer = styled("div", {
   flexDirection: "row",
   alignItems: "flex-end",
   gap: "10px",
-  overflowX: "scroll",
+  overflowX: "auto",
   overflowY: "hidden",
   height: "100%",
   width: "100%",
