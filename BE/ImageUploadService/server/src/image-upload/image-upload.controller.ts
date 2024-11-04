@@ -36,7 +36,7 @@ export class ImageUploadController {
     if (!files) throw new HttpException('파일이 없습니다.', 400);
     if (files.length > 10)
       throw new HttpException(`최대 파일개수 초과`, HttpStatus.BAD_REQUEST);
-    const maxSize = 1000 * 1000 * 10;
+    const maxSize = 1024 * 1024 * 10;
     for (const file of files) {
       if (file.size > maxSize) {
         throw new HttpException(
