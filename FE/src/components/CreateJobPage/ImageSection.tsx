@@ -14,39 +14,37 @@ type UploadImagesResponseData = {
   imageUrlList?: string[];
 };
 
-const VALID_IMAGE_BYES = 10 * 1024 * 1024;
+const VALID_IMAGE_BYTE = 10 * 1024 * 1024;
 
 const ImageSection = ({ images, setImages, setIsValid }) => {
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const uploadImages = async (imageFiles: File[]): Promise<string[]> => {
-    // const requestUrl = `http://${IP_ADDRESS}/api/image-upload`;
-    // const formData = new FormData();
-    // imageFiles.forEach((file) => {
-    //   formData.append("imageFiles", file);
-    // });
-    // let response: Response;
-    // try {
-    //   response = await fetch(requestUrl, {
-    //     method: "POST",
-    //     // TODO : access_token??
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //     body: formData,
-    //     credentials: "include",
-    //   });
-    // } catch {
-    //   throw new Error(ERROR.NETWORK);
-    // }
-    // let data: UploadImagesResponseData;
-    // try {
-    //   data = await response.json();
-    // } catch {
-    //   throw new Error(ERROR.SERVER);
-    // }
-    // if (!response.ok)
-    //   throw new Error(ERROR.SERVER);
-    // return data.imageUrlList || [];
-    return [];
+    const requestUrl = `http://${IP_ADDRESS}/api/image-upload`;
+    const formData = new FormData();
+    imageFiles.forEach((file) => {
+      formData.append("imageFiles", file);
+    });
+    let response: Response;
+    try {
+      response = await fetch(requestUrl, {
+        method: "POST",
+        // headers: { "Content-Type": "multipart/form-data" },
+        body: formData,
+        credentials: "include",
+      });
+    } catch {
+      throw new Error(ERROR.NETWORK);
+    }
+    let data: UploadImagesResponseData;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error(ERROR.SERVER);
+    }
+    if (!response.ok)
+      throw new Error(ERROR.SERVER);
+    return data.imageUrlList || [];
   };
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,31 +53,31 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
 
     // 이미지 크기, 개수 유효성 검사
     const validSizeImages = selectedImages.filter(
-      (image) => image.size <= VALID_IMAGE_BYES
+      (image) => image.size <= VALID_IMAGE_BYTE
     );
     const validCountImages = validSizeImages.slice(0, 10 - images.length);
 
+    const isSizeValid = selectedImages.length === validSizeImages.length;
+    const isCountValid = validSizeImages.length === validCountImages.length;
     let isResponseValid: boolean = true;
-    try {
-      const imageUrls: string[] = await uploadImages(validCountImages);
-      setImages((state) => state.concat(imageUrls));
-    } catch {
-      isResponseValid = false;
+    if (isSizeValid && isCountValid) {
+      try {
+        const imageUrls: string[] = await uploadImages(validCountImages);
+        setImages((state) => state.concat(imageUrls));
+      } catch {
+        isResponseValid = false;
+      }
     }
 
     setIsValid((state) => ({
       ...state,
-      images: {
-        size: selectedImages.length === validSizeImages.length,
-        count: validSizeImages.length === validCountImages.length,
-        response: isResponseValid,
-      },
+      images: { size: isSizeValid, count: isCountValid, response: isResponseValid },
     }));
   };
 
   const onXmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const imageUrl = e.currentTarget.getAttribute("data-url");
-    setImages((prev) => prev.filter((image) => image.url !== imageUrl));
+    setImages((prev) => prev.filter((url) => url !== imageUrl));
   };
 
   return (
@@ -111,10 +109,10 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
       </UploadButton>
       <ImagesContainer>
         {images &&
-          images.map((image, index) => (
-            <ImageDisplay key={image.url}>
-              <img src={image.url} alt={`uploaded ${index}`} />
-              <button onClick={onXmarkClick} data-url={image.url}>
+          images.map((imageUrl, index) => (
+            <ImageDisplay key={imageUrl}>
+              <img src={imageUrl} alt={`uploaded ${index}`} />
+              <button onClick={onXmarkClick} data-url={imageUrl}>
                 <XmarkIcon />
               </button>
             </ImageDisplay>
