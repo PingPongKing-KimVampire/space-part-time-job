@@ -149,6 +149,35 @@ services:
       - be-network
     restart: on-failure
 
+  parttimejobservice:
+    build:
+      context: ./PartTimeJobService/server
+      dockerfile: Dockerfile
+    container_name: parttimejobservice
+    environment:
+      - MONGO_HOST=parttimejobmongodb
+      - MONGO_PORT=27017
+      - MONGO_DB=imageDB
+      - GRPC_URL=userservice:2500
+      - PORT=3000
+    depends_on:
+      - parttimejobmongodb
+      - userservice
+    networks:
+      - be-network
+    restart: on-failure
+
+  parttimejobmongodb:
+    image: mongo:latest
+    container_name: parttimejobmongodb
+    ports:
+      - "27777:27017"
+    volumes:
+      - parttimejobmongodb_data:/data/db
+    networks:
+      - be-network
+    restart: on-failure
+
 networks:
   be-network:
     driver: bridge
@@ -159,4 +188,6 @@ volumes:
   kafka_data:
     driver: local
   imageuploadmongodb_data:
+    driver: local
+  parttimejobmongodb_data:
     driver: local
