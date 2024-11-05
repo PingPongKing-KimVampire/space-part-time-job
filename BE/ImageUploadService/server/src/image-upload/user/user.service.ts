@@ -48,6 +48,8 @@ export class UserService implements OnModuleInit {
       if (e.details === '유저 인증 실패') {
         throw new Error('유저 인증 실패');
       }
+      //logging
+      console.log(e);
       throw e;
     }
   }
