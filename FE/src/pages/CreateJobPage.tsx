@@ -116,6 +116,8 @@ const CreateJobPage = () => {
     description: false,
   });
 
+  const [isPayMessageVisible, setIsPayMessageVisible] = useState<boolean>(true);
+
   useEffect(() => {
     const newWarnings: Warnings = {};
     if (isFocused.title && !isValid.title)
@@ -130,8 +132,8 @@ const CreateJobPage = () => {
     if (isFocused.dates && !isValid.dates)
       newWarnings.dates = ERROR.CREATE_JOB.FOLLOW_DATES_RULE;
 
-    // pay는 최저시급 불충족 이슈랑, 아무것도 작성하지 않은 이슈 두 가지로 나눠야 할 듯
     if (isFocused.pay) newWarnings.pay = isValid.pay;
+    setIsPayMessageVisible(!newWarnings.pay);
 
     if (isFocused.description && !isValid.description)
       newWarnings.description = ERROR.CREATE_JOB.FOLLOW_DESCRIPTION_RULE;
@@ -376,8 +378,7 @@ const CreateJobPage = () => {
                 if (!isFocused.pay)
                   setIsFocused((state) => ({ ...state, pay: true }));
               }}
-              isPayValid={isValid.pay}
-              isPayFocused={isFocused.pay}
+              isPayMessageVisible={isPayMessageVisible}
             />
           </FormField>
 

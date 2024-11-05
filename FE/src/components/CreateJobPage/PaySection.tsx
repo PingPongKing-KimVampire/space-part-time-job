@@ -22,12 +22,8 @@ const PaySection = ({
   time,
   onFocus,
   onBlurStart,
-  isPayValid,
-  isPayFocused,
+  isPayMessageVisible,
 }) => {
-  const [isMinimumMessageVisible, setIsMinimumMessageVisible] =
-    useState<boolean>(true);
-
   const VISIBLE_PAY_TYPES = useMemo(() => {
     if (term !== TERM.LONG_TERM) {
       const payTypes = Object.values(PAY_TYPES);
@@ -106,56 +102,50 @@ const PaySection = ({
     if (onBlurStart) onBlurStart();
     if (pay.amount === "") {
       setPay((state) => ({ ...state, amount: "" }));
-      setIsMinimumMessageVisible(false);
       return;
     }
     const pureValue = parseInt(pay.amount.replaceAll(",", ""));
     setPay((state) => ({ ...state, amount: formatCurrency(pureValue) }));
-
-    const warning = checkRulePassInCreateJob.pay(pay.type, pay.amount);
-    setIsMinimumMessageVisible(warning === "");
   };
 
-  // TODO : minimumMessage와 paySection 경고가 따로 관리되니까 코드가 너무 복잡함!!
   useEffect(() => {
-    const warning = checkRulePassInCreateJob.pay(pay.type, pay.amount);
-    setIsMinimumMessageVisible(warning === "");
-  }, [pay.type]);
+    console.log("isPayMessageVisible", isPayMessageVisible);
+  });
 
   return (
-    <Container>
-      <Chips
-        id="pay"
-        options={Object.values(VISIBLE_PAY_TYPES)}
-        isSelected={(type) => type === pay.type}
-        onClick={onPayTypeClick}
-      />
-      <CustomInput
-        id="pay"
-        placeholder={
-          pay.type === PAY_TYPES.HOURLY
-            ? formatCurrency(MINIMUM_HOURLY_PAY)
-            : "0"
-        }
-        value={pay.amount}
-        eventHandlers={{
-          onChange: (e) => {
-            setPay((state) => ({
-              ...state,
-              amount: e.target.value.replace(/[^0-9,]/g, ""),
-            }));
-          },
-          onBlur: onPayAmountBlur,
-          onFocus,
-        }}
-        maxLength={9}
-      >
-        <Unit>{pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}</Unit>
-      </CustomInput>
-      {isMinimumMessageVisible && (
-        <MinimumMessage>{minimumMessage}</MinimumMessage>
-      )}
-    </Container>
+    <>
+      <Container>
+        <Chips
+          id="pay"
+          options={Object.values(VISIBLE_PAY_TYPES)}
+          isSelected={(type) => type === pay.type}
+          onClick={onPayTypeClick}
+        />
+        <CustomInput
+          id="pay"
+          placeholder={
+            pay.type === PAY_TYPES.HOURLY
+              ? formatCurrency(MINIMUM_HOURLY_PAY)
+              : "0"
+          }
+          value={pay.amount}
+          eventHandlers={{
+            onChange: (e) => {
+              setPay((state) => ({
+                ...state,
+                amount: e.target.value.replace(/[^0-9,]/g, ""),
+              }));
+            },
+            onBlur: onPayAmountBlur,
+            onFocus,
+          }}
+          maxLength={9}
+        >
+          <Unit>{pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}</Unit>
+        </CustomInput>
+      </Container>
+      {isPayMessageVisible && <MinimumMessage>{minimumMessage}</MinimumMessage>}
+    </>
   );
 };
 

@@ -18,6 +18,7 @@ export const Unit = styled("div", {
 
 export const MinimumMessage = styled("div", {
   fontSize: "14px",
+  marginTop: "10px",
   "& span": {
     fontWeight: "bold",
   },

@@ -11,7 +11,7 @@ const FormField = (props) => {
         <span> {subInfo}</span>
       </label>
       {children}
-      <WarningText>{warning}</WarningText>
+      {warning && <WarningText>{warning}</WarningText>}
     </FormFieldContainer>
   );
 };

@@ -49,11 +49,11 @@ export const FormSectionContainer = styled("div", {
     background: "white",
     border: "1px solid #E3E9ED",
     borderRadius: "12px",
-    padding: "30px",
+    padding: "40px",
     boxShadow: "0 0 30px 10px rgba(0, 0, 0, 0.03)",
     display: "flex",
     flexDirection: "column",
-    gap: "30px",
+    gap: "40px",
     boxSizing: "border-box",
   },
 });
@@ -70,12 +70,6 @@ export const FormFieldContainer = styled("div", {
       color: "#9A9A9A",
       fontWeight: "normal",
       fontSize: "18px",
-    },
-    "& > .description": {
-      fontSize: "16px",
-      fontWeight: "400",
-      color: "#6E6E6E",
-      marginTop: "4px",
     },
   },
 });

@@ -42,8 +42,7 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
     } catch {
       throw new Error(ERROR.SERVER);
     }
-    if (!response.ok)
-      throw new Error(ERROR.SERVER);
+    if (!response.ok) throw new Error(ERROR.SERVER);
     return data.imageUrlList || [];
   };
 
@@ -56,14 +55,23 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
       (image) => image.size <= VALID_IMAGE_BYTE
     );
     const validCountImages = validSizeImages.slice(0, 10 - images.length);
+    const imageUrls = validCountImages.map((file) => URL.createObjectURL(file));
+    setImages((state) => state.concat(imageUrls));
 
     let isResponseValid: boolean = true;
     if (validCountImages.length) {
       try {
-        const imageUrls: string[] = await uploadImages(validCountImages);
-        setImages((state) => state.concat(imageUrls));
+        const fetchedImageUrls: string[] = await uploadImages(validCountImages);
+        const imageUrlsMap = {}; // 프론트엔드 url과 백엔드 url을 매핑
+        imageUrls.forEach((url, index) => {
+          imageUrlsMap[url] = fetchedImageUrls[index];
+        });
+        setImages((state) =>
+          state.map((url) => (imageUrlsMap[url] ? imageUrlsMap[url] : url))
+        );
       } catch {
         isResponseValid = false;
+        setImages((state) => state.filter((url) => !imageUrls.includes(url)));
       }
     }
 
@@ -71,7 +79,11 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
     const isCountValid = validSizeImages.length === validCountImages.length;
     setIsValid((state) => ({
       ...state,
-      images: { size: isSizeValid, count: isCountValid, response: isResponseValid },
+      images: {
+        size: isSizeValid,
+        count: isCountValid,
+        response: isResponseValid,
+      },
     }));
   };
 
