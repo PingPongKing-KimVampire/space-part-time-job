@@ -20,7 +20,7 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const uploadImages = async (imageFiles: File[]): Promise<string[]> => {
-    const requestUrl = `http://${IP_ADDRESS}/api/image-upload`;
+    const requestUrl = `https://${IP_ADDRESS}/api/image-upload`;
     const formData = new FormData();
     imageFiles.forEach((file) => {
       formData.append("imageFiles", file);

@@ -67,7 +67,7 @@ const LoginPage = (): React.JSX.Element => {
   const sendAuthNumber = async (): Promise<number> => {
     let response: Response;
     let data: SendAuthNumberResponseData;
-    const requestUrl = `http://${IP_ADDRESS}/api/users/login/phone-auth-code`;
+    const requestUrl = `https://${IP_ADDRESS}/api/users/login/phone-auth-code`;
     try {
       response = await fetch(requestUrl, {
         method: "POST",
@@ -142,11 +142,11 @@ const LoginPage = (): React.JSX.Element => {
     if (selectedTab === ID_PW) {
       body.id = inputValue.id;
       body.password = inputValue.password;
-      requestUrl = `http://${IP_ADDRESS}/api/users/login`;
+      requestUrl = `https://${IP_ADDRESS}/api/users/login`;
     } else if (selectedTab === PHONE_NUMBER) {
       body.phoneNumber = inputValue.phoneNumber.replaceAll("-", "");
       body.smsCode = inputValue.authNumber;
-      requestUrl = `http://${IP_ADDRESS}/api/users/login/phone`;
+      requestUrl = `https://${IP_ADDRESS}/api/users/login/phone`;
     }
 
     let response: Response;
@@ -156,6 +156,7 @@ const LoginPage = (): React.JSX.Element => {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify(body),
+        credentials: "include",
       });
     } catch {
       throw new Error(ERROR.NETWORK);

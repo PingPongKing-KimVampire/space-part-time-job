@@ -90,7 +90,7 @@ const SignupPage = () => {
 
   const checkDuplicated = async (fieldName: "id" | "nickname") => {
     let response: Response;
-    const requestUrl: string = `http://${IP_ADDRESS}/api/users/check-${fieldName}/${inputValue[fieldName]}`;
+    const requestUrl: string = `https://${IP_ADDRESS}/api/users/check-${fieldName}/${inputValue[fieldName]}`;
     try {
       response = await fetch(requestUrl);
     } catch (e) {
@@ -153,7 +153,7 @@ const SignupPage = () => {
   const signup = async () => {
     let response: Response;
     try {
-      response = await fetch(`http://${IP_ADDRESS}/api/users`, {
+      response = await fetch(`https://${IP_ADDRESS}/api/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",

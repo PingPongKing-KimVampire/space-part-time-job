@@ -88,7 +88,7 @@ const PhoneNumberSection = (props) => {
   const sendAuthNumber = async (): Promise<number> => {
     let response: Response;
     let data: SendAuthNumberResponseData;
-    const requestUrl: string = `http://${IP_ADDRESS}/api/users/phone-auth-code`;
+    const requestUrl: string = `https://${IP_ADDRESS}/api/users/phone-auth-code`;
     try {
       response = await fetch(requestUrl, {
         method: "POST",
