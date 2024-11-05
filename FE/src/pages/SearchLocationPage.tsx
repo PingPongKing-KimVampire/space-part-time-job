@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import CustomInput from "../components/CustomInput.tsx";
 import {
   Background,
   Container,
-  SearchResultBox,
   NextButton,
 } from "../styles/SearchLocationPage.styles.ts";
+import SearchBox from "../components/SearchBox.tsx";
 
 const SEARCH_RESULT = [
   // 임히 하드코딩 데이터
@@ -44,18 +43,44 @@ const SearchLocationPage = () => {
     setLocations(locationsParam ? locationsParam.split(",") : []);
   }, [location.search]);
 
-  const onLocationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const locationClicked = e.currentTarget.textContent || "";
-    if (locations.includes(locationClicked)) {
-      navigate(
-        `?locations=${locations
-          .filter((loc) => loc !== locationClicked)
-          .join(",")}`
+  const onLocationClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const locationClicked = e.currentTarget.textContent || "";
+      if (locations.includes(locationClicked)) {
+        navigate(
+          `?locations=${locations
+            .filter((loc) => loc !== locationClicked)
+            .join(",")}`
+        );
+      } else {
+        navigate(`?locations=${locations.concat(locationClicked).join(",")}`);
+      }
+    },
+    [locations, navigate]
+  );
+
+  const searchResultElements = useMemo(() => {
+    return SEARCH_RESULT.map((location) => {
+      const selected = locations.includes(location);
+      const inactivated = !selected && 3 <= locations.length;
+      return (
+        <button
+          className={`searchItem ${selected ? "selected" : ""} ${
+            inactivated ? "inactivated" : ""
+          }`}
+          key={location}
+          onClick={onLocationClick}
+          disabled={inactivated}
+        >
+          {location}
+        </button>
       );
-    } else {
-      navigate(`?locations=${locations.concat(locationClicked).join(",")}`);
-    }
-  };
+    });
+  }, [locations, onLocationClick]);
+
+  const isAllVaid = useMemo(() => {
+    return 1 <= locations.length && locations.length <= 3;
+  }, [locations]);
 
   return (
     <Background>
@@ -63,39 +88,17 @@ const SearchLocationPage = () => {
         <label className="title" htmlFor="neighborhood">
           상주하는 지역을 최대 3개 선택해주세요.
         </label>
-        <div className="searchContainer">
-          <CustomInput
-            id="neighborhood"
-            placeholder="상주하는 동을 입력하세요. ex) 개포동, 대치동"
-            value=""
-          />
-          <SearchResultBox>
-            {SEARCH_RESULT.map((location) => {
-              const selected = locations.includes(location);
-              const inactivated = !selected && 3 <= locations.length;
-              return (
-                <button
-                  className={`searchItem ${selected ? "selected" : ""} ${
-                    inactivated ? "inactivated" : ""
-                  }`}
-                  key={location}
-                  onClick={onLocationClick}
-                  disabled={inactivated}
-                >
-                  {location}
-                </button>
-              );
-            })}
-          </SearchResultBox>
-        </div>
+        <SearchBox
+          placeholder="상주하는 동을 입력하세요. ex) 개포동, 대치동"
+          searchResult={searchResultElements}
+          style={{ height: "420px" }}
+        />
         <NextButton
-          className={
-            locations.length < 1 || 3 < locations.length ? "inactivated" : ""
-          }
+          className={!isAllVaid ? "inactivated" : ""}
           onClick={() => {
             navigate(`/set-location-scope?locations=${locations.join(",")}`);
           }}
-          disabled={locations.length < 1 || 3 < locations.length}
+          disabled={!isAllVaid}
         >
           다음
           <div className="selectedCount">({locations.length}개 동 선택됨)</div>

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createStitches } from "@stitches/react";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
@@ -7,6 +6,7 @@ import LoginPage from "./pages/LoginPage.tsx";
 import CreateJobPage from "./pages/CreateJobPage.tsx";
 import SearchLocationPage from "./pages/SearchLocationPage.tsx";
 import SetLocationScopePage from "./pages/SetLocationScopePage.tsx";
+import SearchAddressPage from "./pages/SearchAddressPage.tsx";
 import { IP_ADDRESS } from "./constants/constants.ts";
 
 const { styled } = createStitches();
@@ -30,6 +30,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-job" element={<CreateJobPage />} />
+            <Route path="/search-address" element={<SearchAddressPage />} />
             <Route path="/search-location" element={<SearchLocationPage />} />
             <Route
               path="/set-location-scope"

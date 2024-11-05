@@ -54,6 +54,7 @@ export interface InputProps {
   width?: string;
   maxLength?: number;
   disabled?: boolean;
+  readOnly?: boolean;
 }
 
 export interface EventHandlers {
@@ -75,6 +76,7 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     width = "100%",
     maxLength = 50,
     disabled = false,
+    readOnly = false,
   } = props;
   const { onChange, onFocus, onBlur } = eventHandlers;
   return (
@@ -93,6 +95,7 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         onBlur={onBlur}
         maxLength={maxLength}
         disabled={disabled}
+        readOnly={readOnly}
       ></Input>
       {children}
     </div>

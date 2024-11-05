@@ -23,6 +23,7 @@ const SetLocationScopePage = () => {
   const [scopeLevel, setScopeLevel] = useState<Record<string, string>>({}); // 지역과 레벨 매핑
 
   useEffect(() => {
+    if (!mapContainerRef.current) return;
     const options = {
       center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심 좌표
       level: 3, //지도의 레벨(확대, 축소 정도)

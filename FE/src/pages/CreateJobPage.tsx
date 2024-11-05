@@ -25,8 +25,8 @@ import CustomCalendar from "../components/CreateJobPage/CustomCalendar.tsx";
 import TimeSection from "../components/CreateJobPage/TimeSection.tsx";
 import PaySection from "../components/CreateJobPage/PaySection.tsx";
 import ImageSection from "../components/CreateJobPage/ImageSection.tsx";
+import PlaceSection from "../components/CreateJobPage/PlaceSection.tsx";
 import { checkRulePassInCreateJob } from "../utils/checkRulePass.ts";
-import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import { WarningText } from "../styles/global.ts";
 
 type Warnings = {
@@ -91,6 +91,7 @@ const CreateJobPage = () => {
     end: "18:00",
   });
   const [pay, setPay] = useState({ type: PAY_TYPES.HOURLY, amount: "" });
+  const [place, setPlace] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
 
@@ -383,6 +384,9 @@ const CreateJobPage = () => {
           </FormField>
 
           {/* TODO: 일하는 장소 FormField 추가해야함 */}
+          <FormField id="place" title="일하는 장소" warning="">
+            <PlaceSection place={place} setPlace={setPlace} />
+          </FormField>
         </FormSection>
 
         {/* ===== 부가 정보 ===== */}

@@ -108,10 +108,6 @@ const PaySection = ({
     setPay((state) => ({ ...state, amount: formatCurrency(pureValue) }));
   };
 
-  useEffect(() => {
-    console.log("isPayMessageVisible", isPayMessageVisible);
-  });
-
   return (
     <>
       <Container>
