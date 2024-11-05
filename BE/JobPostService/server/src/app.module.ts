@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PartTimeJobModule } from './part-time-job/part-time-job.module';
+import { JobPostModule } from './job-post/job-post.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { PartTimeJobModule } from './part-time-job/part-time-job.module';
       }),
       inject: [ConfigService],
     }),
-    PartTimeJobModule,
+    JobPostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

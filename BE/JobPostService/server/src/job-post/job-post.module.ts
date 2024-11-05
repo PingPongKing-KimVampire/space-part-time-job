@@ -5,4 +5,4 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
   ],
 })
-export class PartTimeJobModule {}
+export class JobPostModule {}

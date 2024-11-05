@@ -149,31 +149,31 @@ services:
       - be-network
     restart: on-failure
 
-  parttimejobservice:
+  jobpostservice:
     build:
-      context: ./PartTimeJobService/server
+      context: ./JobPostService/server
       dockerfile: Dockerfile
-    container_name: parttimejobservice
+    container_name: jobpostservice
     environment:
-      - MONGO_HOST=parttimejobmongodb
+      - MONGO_HOST=jobpostmongodb
       - MONGO_PORT=27017
-      - MONGO_DB=partTimeJobDB
+      - MONGO_DB=jobpostDB
       - GRPC_URL=userservice:2500
       - PORT=3000
     depends_on:
-      - parttimejobmongodb
+      - jobpostmongodb
       - userservice
     networks:
       - be-network
     restart: on-failure
 
-  parttimejobmongodb:
+  jobpostmongodb:
     image: mongo:latest
-    container_name: parttimejobmongodb
+    container_name: jobpostmongodb
     ports:
       - "27777:27017"
     volumes:
-      - parttimejobmongodb_data:/data/db
+      - jobpostmongodb_data:/data/db
     networks:
       - be-network
     restart: on-failure
@@ -189,5 +189,5 @@ volumes:
     driver: local
   imageuploadmongodb_data:
     driver: local
-  parttimejobmongodb_data:
+  jobpostmongodb_data:
     driver: local
