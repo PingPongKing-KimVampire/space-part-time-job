@@ -32,7 +32,7 @@ services:
       - KAFKA_BROKER=kafka:9092
       - KAFKAJS_NO_PARTITIONER_WARNING=1
       - JWT_SECRET=JWT_SECRET
-      - GRPC_PORT=4000
+      - GRPC_PORT=2500
       - PORT=3000
     depends_on:
       - mysqldb

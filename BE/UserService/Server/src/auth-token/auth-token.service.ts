@@ -22,7 +22,7 @@ export class AuthTokenService {
   }
   verifyAccessToken(token: string): { id: string } {
     try {
-      return this.jwtService.verify(token);
+      return this.jwtService.verify(token, { secret: this.jwtSecret });
     } catch (error) {
       throw new Error('유효하지 않은 토큰입니다.');
     }
