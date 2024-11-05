@@ -15,7 +15,7 @@ import { SignupDto } from './dto/service/signup.dto';
 import { SignupPhoneAuthCodeRequestDto } from './dto/controller/signup-phone-auth-code.request.dto';
 import { QueryFailedError } from 'typeorm';
 import { IdValidator, NicknameValidator } from './utils/CustomValidator';
-import { Request, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import { LoginRequestDto } from './dto/controller/login.request.dto';
 import { AuthTokenService } from 'src/auth-token/auth-token.service';
 import { LoginPhoneAuthCodeRequestDto } from './dto/controller/login-phone-auth-code.request.dto';
@@ -130,11 +130,7 @@ export class UserController {
       const id = await this.usersService.getUserIdIfValid(userId, password);
 
       const accessToken = this.authTokenService.generateAccessToken({ id });
-      res.cookie('access_token', accessToken, {
-        httpOnly: true,
-        // secure: true, 추후 활성화
-        sameSite: 'none', //추후 strict로 변경
-      });
+      res.cookie('access_token', accessToken, this.getCookieOption());
 
       return { id };
     } catch (e) {
@@ -143,6 +139,16 @@ export class UserController {
       }
       throw new HttpException({ error: '알 수 없는 에러!' }, 500);
     }
+  }
+
+  private getCookieOption(): CookieOptions {
+    return {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none', //추후 strict로 변경
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: '/api',
+    };
   }
 
   @Post('login/phone')
@@ -158,11 +164,7 @@ export class UserController {
       );
 
       const accessToken = this.authTokenService.generateAccessToken({ id });
-      res.cookie('access_token', accessToken, {
-        httpOnly: true,
-        // secure: true, 추후 활성화
-        sameSite: 'none', //추후 strict로 변경
-      });
+      res.cookie('access_token', accessToken, this.getCookieOption());
 
       return { id };
     } catch (e) {
