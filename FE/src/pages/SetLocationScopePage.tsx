@@ -1,103 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { createStitches } from "@stitches/react";
-import {
-  MainButtonStyle,
-  MainColor,
-  OptionButtonStyle,
-} from "../styles/global.ts";
 import { ReactComponent as XmarkIcon } from "../assets/icons/x-mark.svg";
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
-
-const { styled } = createStitches();
-
-const Background = styled("div", {
-  background: "white",
-  height: "100%",
-  width: "100%",
-  position: "relative",
-});
-
-const Container = styled("div", {
-  width: "700px",
-  position: "absolute",
-  bottom: "40px",
-  left: "50%",
-  transform: "translateX(-50%)",
-});
-
-const ScopeSettingContainer = styled("div", {
-  width: "100%",
-  background: "white",
-  padding: "25px",
-  borderRadius: "16px",
-  border: "1px solid #E3E9ED",
-  boxShadow: "0 0 30px 10px rgba(0, 0, 0, 0.03)",
-  boxSizing: "border-box",
-  marginBottom: "20px",
-});
-
-const LocationsContainer = styled("div", {
-  width: "100%",
-  display: "flex",
-  flexDirection: "row",
-  gap: "7px",
-  height: "55px",
-  "& .locationButton": {
-    ...OptionButtonStyle,
-    textAlign: "left",
-    borderRadius: "9px",
-    width: "32%",
-    "& svg": {
-      position: "absolute",
-      height: "50%",
-      strokeWidth: "1",
-      top: "50%",
-      transform: "translateY(-50%)",
-      right: "10px",
-    },
-    "&:not(.selected)": {
-      "& svg": {
-        color: MainColor,
-      },
-    },
-  },
-});
-
-const PlusButton = styled("button", {
-  padding: "16px",
-  cursor: "pointer",
-  background: "#EDEDED",
-  color: "#B0B0B0",
-  borderRadius: "9px",
-  width: "32%",
-  border: `0.9px solid #EDEDED`,
-  position: "relative",
-  "& svg": {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translateY(-50%) translateX(-50%)",
-    height: "60%",
-    strokeWidth: "1.3",
-    color: "#7C7C7C",
-  },
-  transition: "background 0.2s",
-  "&:hover": {
-    background: "#E4E4E4",
-  },
-});
-
-const CompleteButton = styled("button", {
-  width: "100%",
-  ...MainButtonStyle,
-});
+import {
+  Background,
+  Container,
+  ScopeSettingContainer,
+  LocationsContainer,
+  PlusButton,
+  ScopeSlider,
+  SliderContainer,
+  CompleteButton,
+} from "../styles/SetLocationScopePage.styles.ts";
 
 const SetLocationScopePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const mapContainerRef = useRef(null);
+
   const [locations, setLocations] = useState<string[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<string>();
+  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [scopeLevel, setScopeLevel] = useState<Record<string, string>>({}); // 지역과 레벨 매핑
+
+  useEffect(() => {
+    const options = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심 좌표
+      level: 3, //지도의 레벨(확대, 축소 정도)
+    };
+    const map = new kakao.maps.Map(mapContainerRef.current, options);
+  }, []);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -105,6 +36,15 @@ const SetLocationScopePage = () => {
     setLocations(locationsParam ? locationsParam.split(",") : []);
     setSelectedLocation(locationsParam ? locationsParam.split(",")[0] : "");
   }, [location.search]);
+
+  useEffect(() => {
+    setScopeLevel((prev) => {
+      return locations.reduce((result, location) => {
+        result[location] = prev[location] || "1";
+        return result;
+      }, {});
+    });
+  }, [locations]);
 
   const onLocationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const locationClicked = e.currentTarget.textContent || "";
@@ -118,8 +58,31 @@ const SetLocationScopePage = () => {
     );
   };
 
+  const onSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setScopeLevel((state) => ({
+      ...state,
+      [selectedLocation]: e.target.value,
+    }));
+  };
+
+  const onSliderMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
+    const calculateLevel = (value) => {
+      if (value <= 50) return "0";
+      if (value <= 150) return "100";
+      if (value <= 250) return "200";
+      return "300";
+    };
+
+    const level = calculateLevel(e.currentTarget.value);
+    setScopeLevel((state) => ({
+      ...state,
+      [selectedLocation]: level,
+    }));
+  };
+
   return (
     <Background>
+      <div className="mapContainer" ref={mapContainerRef} />
       <Container>
         <ScopeSettingContainer>
           <LocationsContainer>
@@ -128,6 +91,7 @@ const SetLocationScopePage = () => {
                 className={`locationButton ${
                   selectedLocation === location ? "selected" : ""
                 }`}
+                key={location}
                 onClick={onLocationClick}
               >
                 {location}
@@ -144,8 +108,29 @@ const SetLocationScopePage = () => {
               </PlusButton>
             )}
           </LocationsContainer>
+          <SliderContainer>
+            <ScopeSlider
+              type="range"
+              min="0"
+              max="300"
+              step="1"
+              value={scopeLevel[selectedLocation] || "0"}
+              onChange={onSliderChange}
+              onMouseUp={onSliderMouseUp}
+            />
+            <div className="markers">
+              <div className="marker" style={{ left: "0%" }} />
+              <div className="marker" style={{ left: "33.33%" }} />
+              <div className="marker" style={{ left: "66.66%" }} />
+              <div className="marker" style={{ left: "100%" }} />
+            </div>
+            <div className="label left">가까운 동네</div>
+            <div className="label right">먼 동네</div>
+          </SliderContainer>
         </ScopeSettingContainer>
-        <CompleteButton>완료</CompleteButton>
+        <CompleteButton className={!locations.length ? "inactivated" : ""}>
+          완료
+        </CompleteButton>
       </Container>
     </Background>
   );

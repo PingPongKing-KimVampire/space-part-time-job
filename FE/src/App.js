@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createStitches } from "@stitches/react";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
