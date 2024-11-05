@@ -157,7 +157,7 @@ services:
     environment:
       - MONGO_HOST=parttimejobmongodb
       - MONGO_PORT=27017
-      - MONGO_DB=imageDB
+      - MONGO_DB=partTimeJobDB
       - GRPC_URL=userservice:2500
       - PORT=3000
     depends_on:
