@@ -78,6 +78,7 @@ const SearchLocationPage = () => {
                   className={`searchItem ${selected ? "selected" : ""} ${
                     inactivated ? "inactivated" : ""
                   }`}
+                  key={location}
                   onClick={onLocationClick}
                   disabled={inactivated}
                 >
