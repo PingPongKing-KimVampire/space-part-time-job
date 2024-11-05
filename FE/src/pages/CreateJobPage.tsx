@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { gql, useMutation } from "@apollo/client";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
 import {
@@ -57,6 +58,18 @@ type IsFocused = {
   pay: boolean;
   description: boolean;
 };
+
+const CREATE_JOB_POST = gql`
+  mutation CreateJobPost($input: CreateJobPostInput!) {
+    createJobPost(input: $input) {
+      id
+      title
+      jobDescription
+      salaryType
+      salaryAmount
+    }
+  }
+`;
 
 const CreateJobPage = () => {
   useBackgroundColor("#F9FBFC");
@@ -211,61 +224,43 @@ const CreateJobPage = () => {
     return true;
   }, [isValid, term]);
 
+  // useMutation 훅을 사용하여 뮤테이션 함수 생성
+  const [createJobPost, { data, loading, error }] =
+    useMutation(CREATE_JOB_POST);
+
   const postJob = async () => {
-    const requestUrl = "";
-    const workTime = `
-      startTime: ${time.start}
-      endTime: ${time.end}
-    `;
+    const workDayInfo =
+      term === TERM.SHORT_TERM ? { dates } : { days: weekDays };
+    const workTimeInfo =
+      time.type === WORKTIME_TYPES.FIXED
+        ? { start: time.start, end: time.end }
+        : {};
 
-    const query: string = `
-      mutation {
-        createJobPost(input: {
-          title: ${title}
-          jobDescription: ${jobTypes}
-          workPeriod: {
-            type: ${term}
-            ${
-              term === TERM.SHORT_TERM ? `dates: ${dates}` : `days: ${weekDays}`
-            }
-          }
-          workTime: {
-            type: ${time.type}
-            ${time.type === WORKTIME_TYPES.FIXED ? `${workTime}` : ``}
-          }
-          salary: {
-            salaryType: ${pay.type}
-            salaryAmount: ${pay.amount.replaceAll(",", "")}
-          }
-          photos: ${images}
-          detailedDescription: ${description}
-        }) {
-          id
-          title
-          jobDescription
-          salaryType
-          salaryAmount
-        }
-      }`;
+    const input = {
+      title,
+      jobDescription: jobTypes,
+      workPeriod: { type: term, ...workDayInfo },
+      workTime: { type: time.type, ...workTimeInfo },
+      salary: {
+        salaryType: pay.type,
+        salaryAmount: pay.amount.replaceAll(",", ""),
+      },
+      photos: images,
+      detailedDescription: description,
+    };
 
-    let response: Response;
     try {
-      response = await fetch(requestUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
-      });
+      await createJobPost({ variables: { input } });
     } catch {
       throw new Error(ERROR.NETWORK);
     }
-
-    if (!response.ok) throw new Error(ERROR.SERVER);
   };
 
   const onPostButtonClick = async () => {
     try {
       await postJob();
       alert("공고 등록 성공!");
+      // TODO : 조회 페이지로 이동
     } catch (e) {
       setPostWarning(e.message);
     }
