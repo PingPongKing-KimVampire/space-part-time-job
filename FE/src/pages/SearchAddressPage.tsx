@@ -6,6 +6,7 @@ import {
   Container,
   SearchItemContent,
 } from "../styles/SearchAddressPage.styles.ts";
+import { SESSION_STORAGE_KEY } from "./CreateJobPage.tsx";
 
 const SEARCH_RESULT = [
   // 임시 하드코딩 데이터
@@ -16,43 +17,43 @@ const SEARCH_RESULT = [
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
   },
   {
-    zipCode: "06194",
+    zipCode: "12345",
     roadNameAddress:
       "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
   },
   {
-    zipCode: "06194",
+    zipCode: "11111",
     roadNameAddress:
       "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
   },
   {
-    zipCode: "06194",
+    zipCode: "22222",
     roadNameAddress:
       "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
   },
   {
-    zipCode: "06194",
+    zipCode: "33333",
     roadNameAddress:
       "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
   },
   {
-    zipCode: "06194",
+    zipCode: "44444",
     roadNameAddress:
       "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
   },
   {
-    zipCode: "06194",
+    zipCode: "55555",
     roadNameAddress:
       "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
   },
   {
-    zipCode: "06194",
+    zipCode: "66666",
     roadNameAddress:
       "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
     streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
@@ -63,8 +64,15 @@ const SearchAddressPage = () => {
   const navigate = useNavigate();
 
   const onAddressClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // 장소 선택 페이지에서 선택된 주소를 세션 스토리지에 저장한다.
     const place = e.currentTarget.getAttribute("data-place");
-    navigate(`/create-job?place=${place}`);
+    const saved = sessionStorage.getItem(SESSION_STORAGE_KEY) || "";
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      parsed.place = place;
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(parsed));
+    }
+    navigate("/create-job");
   };
 
   const resultElements = useMemo(() => {
@@ -76,6 +84,7 @@ const SearchAddressPage = () => {
           style={{ padding: "0" }}
           onClick={onAddressClick}
           data-place={streetNumber}
+          key={zipCode}
         >
           <SearchItemContent>
             <div className="zipCode">{zipCode}</div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gql, useMutation } from "@apollo/client";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
@@ -48,6 +48,7 @@ type IsValid = {
   pay: string;
   description: boolean;
   images: { size: boolean; count: boolean; response: boolean };
+  place: boolean;
 };
 
 type IsFocused = {
@@ -70,6 +71,8 @@ const CREATE_JOB_POST = gql`
     }
   }
 `;
+
+export const SESSION_STORAGE_KEY = "createJobData";
 
 const CreateJobPage = () => {
   useBackgroundColor("#F9FBFC");
@@ -106,6 +109,7 @@ const CreateJobPage = () => {
     pay: "", // 오류 상황이 두 가지라서..(빔, 최저시급 불충족)
     description: false,
     images: { size: true, count: true, response: true },
+    place: false,
   });
   const [isFocused, setIsFocused] = useState<IsFocused>({
     // 포커스 또는 선택된 적 있는가?
@@ -118,6 +122,51 @@ const CreateJobPage = () => {
   });
 
   const [isPayMessageVisible, setIsPayMessageVisible] = useState<boolean>(true);
+
+  const placeSectionRef = useRef<HTMLDivElement>(null);
+  const [isReturn, setIsReturn] = useState<boolean>(false); // TODO: 임시방편 문제 해결
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(SESSION_STORAGE_KEY) || "";
+    if (!saved) return;
+    // 장소 검색 페이지에서 공고 페이지로 돌아왔을 때 세션 스토리지에 저장된 데이터를 로드한다.
+    const parsed = JSON.parse(saved);
+    setTitle(parsed.title || title);
+    setJobTypes(parsed.jobTypes || jobTypes);
+    setTerm(parsed.term || term);
+    setWeekDays(parsed.weekDays || weekDays);
+    setDates(new Set(parsed.dates) || dates);
+    setTime(parsed.time || time);
+    setPay(parsed.pay || pay);
+    setPlace(parsed.place || place);
+    setImages(parsed.images || images);
+    setDescription(parsed.description || description);
+    setIsFocused(parsed.isFocused || isFocused);
+    setIsValid(
+      { ...parsed.isValid, place: parsed.place ? true : false } || isValid
+    );
+    sessionStorage.clear();
+    placeSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    setIsReturn(true);
+  }, []);
+
+  const saveToSessionStorage = () => {
+    const createJobData = {
+      title,
+      jobTypes,
+      term,
+      weekDays,
+      dates: Array.from(dates), // Set 자료구조는 JSON으로 변환할 수 없으므로
+      time,
+      pay,
+      place,
+      images,
+      description,
+      isValid,
+      isFocused,
+    };
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(createJobData));
+  };
 
   useEffect(() => {
     const newWarnings: Warnings = {};
@@ -156,7 +205,7 @@ const CreateJobPage = () => {
       ...state,
       pay: checkRulePassInCreateJob.pay(pay.type, pay.amount),
     }));
-  }, [pay.type]);
+  }, [pay.type, isReturn]);
 
   const toggleSelected = (
     list: string[],
@@ -220,8 +269,10 @@ const CreateJobPage = () => {
   }, [term, setIsValid, dates.size, weekDays.length]);
 
   const isAllValid = useMemo(() => {
-    const { title, jobTypes, weekDays, dates, pay, description } = isValid;
-    if (!title || !jobTypes || pay !== "" || !description) return false;
+    const { title, jobTypes, weekDays, dates, pay, description, place } =
+      isValid;
+    if (!title || !jobTypes || pay !== "" || !description || !place)
+      return false;
     if (term === TERM.LONG_TERM && !weekDays) return false;
     if (term === TERM.SHORT_TERM && !dates) return false;
     return true;
@@ -246,7 +297,7 @@ const CreateJobPage = () => {
       workTime: { type: time.type, ...workTimeInfo },
       salary: {
         salaryType: pay.type,
-        salaryAmount: pay.amount.replaceAll(",", ""),
+        salaryAmount: pay.amount.replace(/,/g, ""),
       },
       photos: images,
       detailedDescription: description,
@@ -385,7 +436,11 @@ const CreateJobPage = () => {
 
           {/* TODO: 일하는 장소 FormField 추가해야함 */}
           <FormField id="place" title="일하는 장소" warning="">
-            <PlaceSection place={place} setPlace={setPlace} />
+            <PlaceSection
+              place={place}
+              saveToSessionStorage={saveToSessionStorage}
+              ref={placeSectionRef}
+            />
           </FormField>
         </FormSection>
 

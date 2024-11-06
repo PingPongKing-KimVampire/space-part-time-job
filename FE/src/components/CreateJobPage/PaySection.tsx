@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, forwardRef } from "react";
 import Chips from "../Chips.tsx";
 import CustomInput from "../CustomInput.tsx";
 import {
@@ -12,18 +12,35 @@ import {
   Unit,
   MinimumMessage,
 } from "../../styles/CreateJobPage/PaySection.styles.ts";
-import { checkRulePassInCreateJob } from "../../utils/checkRulePass.ts";
 
-const PaySection = ({
-  pay,
-  setPay,
-  term,
-  weekDays,
-  time,
-  onFocus,
-  onBlurStart,
-  isPayMessageVisible,
-}) => {
+type PaySectionProps = {
+  pay: { type: string; amount: string };
+  term: string;
+  setPay: React.Dispatch<
+    React.SetStateAction<{
+      type: string;
+      amount: string;
+    }>
+  >;
+  weekDays: string[];
+  time: { start: string; end: string };
+  onFocus: () => void;
+  onBlurStart: () => void;
+  isPayMessageVisible: boolean;
+};
+
+const PaySection = (props: PaySectionProps) => {
+  const {
+    pay,
+    setPay,
+    term,
+    weekDays,
+    time,
+    onFocus,
+    onBlurStart,
+    isPayMessageVisible,
+  } = props;
+
   const VISIBLE_PAY_TYPES = useMemo(() => {
     if (term !== TERM.LONG_TERM) {
       const payTypes = Object.values(PAY_TYPES);
@@ -104,7 +121,7 @@ const PaySection = ({
       setPay((state) => ({ ...state, amount: "" }));
       return;
     }
-    const pureValue = parseInt(pay.amount.replaceAll(",", ""));
+    const pureValue = parseInt(pay.amount.replace(/,/g, ""));
     setPay((state) => ({ ...state, amount: formatCurrency(pureValue) }));
   };
 
