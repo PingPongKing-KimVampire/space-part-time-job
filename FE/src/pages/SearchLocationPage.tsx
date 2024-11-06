@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import {
   Background,
@@ -31,33 +31,24 @@ const SEARCH_RESULT = [
 
 const SearchLocationPage = () => {
   useBackgroundColor("#F9FBFC");
+  const navigate = useNavigate();
 
   const [locations, setLocations] = useState<string[]>([]);
-  const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
-    // URL에 따라 locations 상태 동기화
-    const queryParams = new URLSearchParams(location.search);
-    const locationsParam = queryParams.get("locations");
-    setLocations(locationsParam ? locationsParam.split(",") : []);
-  }, [location.search]);
+    // 세션 스토리지에 place가 있으면 locations로 세팅
+    const placeSaved = sessionStorage.getItem("locations") || "";
+    if (placeSaved) setLocations(JSON.parse(placeSaved));
+  }, []);
 
-  const onLocationClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      const locationClicked = e.currentTarget.textContent || "";
-      if (locations.includes(locationClicked)) {
-        navigate(
-          `?locations=${locations
-            .filter((loc) => loc !== locationClicked)
-            .join(",")}`
-        );
-      } else {
-        navigate(`?locations=${locations.concat(locationClicked).join(",")}`);
-      }
-    },
-    [locations, navigate]
-  );
+  const onLocationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const locationClicked = e.currentTarget.textContent || "";
+    if (locations.includes(locationClicked)) {
+      setLocations((state) => state.filter((loc) => loc !== locationClicked));
+    } else {
+      setLocations((state) => state.concat(locationClicked));
+    }
+  };
 
   const searchResultElements = useMemo(() => {
     return SEARCH_RESULT.map((location) => {
@@ -78,9 +69,15 @@ const SearchLocationPage = () => {
     });
   }, [locations, onLocationClick]);
 
-  const isAllVaid = useMemo(() => {
+  const isAllValid = useMemo(() => {
     return 1 <= locations.length && locations.length <= 3;
   }, [locations]);
+
+  const onNextClick = () => {
+    // locations 값을 세션 스토리지에 저장하고 동네 범위 설정 페이지로 이동
+    sessionStorage.setItem("locations", JSON.stringify(locations));
+    navigate("/set-location-scope");
+  };
 
   return (
     <Background>
@@ -94,11 +91,9 @@ const SearchLocationPage = () => {
           style={{ height: "420px" }}
         />
         <NextButton
-          className={!isAllVaid ? "inactivated" : ""}
-          onClick={() => {
-            navigate(`/set-location-scope?locations=${locations.join(",")}`);
-          }}
-          disabled={!isAllVaid}
+          className={!isAllValid ? "inactivated" : ""}
+          onClick={onNextClick}
+          disabled={!isAllValid}
         >
           다음
           <div className="selectedCount">({locations.length}개 동 선택됨)</div>
