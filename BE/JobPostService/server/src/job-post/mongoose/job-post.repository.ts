@@ -18,7 +18,7 @@ export class JobPostRepository {
     return this.jobPostModel.findById(id).exec();
   }
 
-  async findAll(): Promise<JobPost[]> {
+  async findAll(): Promise<JobPost[]> {	
     return this.jobPostModel.find().exec();
   }
 }
