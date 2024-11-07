@@ -1,4 +1,8 @@
-import { SalaryType, WorkPeriodType, WorkTimeType } from './job-post.dto.enum';
+import {
+  SalaryType,
+  WorkPeriodType,
+  WorkTimeType,
+} from 'src/job-post/mongoose/job-post.enum';
 
 export class WorkPeriod {
   type: WorkPeriodType;

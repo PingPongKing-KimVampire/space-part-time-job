@@ -10,7 +10,11 @@ import {
   ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { SalaryType, WorkPeriodType, WorkTimeType } from './job-post.dto.enum';
+import {
+  SalaryType,
+  WorkPeriodType,
+  WorkTimeType,
+} from 'src/job-post/mongoose/job-post.enum';
 
 @InputType()
 export class WorkPeriodInput {
