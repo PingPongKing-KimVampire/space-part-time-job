@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gql, useMutation } from "@apollo/client";
+import { format, addDays } from "date-fns";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
 import {
   JOB_TYPES,
   TERM,
+  TERM_KEY,
   DAYS,
   PAY_TYPES,
   WORKTIME_TYPES,
   ERROR,
+  WORKTIME_TYPES_KEY,
+  PAY_TYPES_KEY,
 } from "../constants/constants.ts";
 import {
   Background,
@@ -58,6 +62,18 @@ type IsFocused = {
   dates: boolean;
   pay: boolean;
   description: boolean;
+};
+
+type WorkPeriodInput = {
+  type: "SHORT_TERM" | "LONG_TERM";
+  dates?: string[];
+  days?: string[];
+};
+
+type WorkTime = {
+  type: "FIXED" | "FLEXIBLE";
+  startTime?: string;
+  endTime?: string;
 };
 
 const CREATE_JOB_POST = gql`
@@ -142,9 +158,7 @@ const CreateJobPage = () => {
     setImages(parsed.images || images);
     setDescription(parsed.description || description);
     setIsFocused(parsed.isFocused || isFocused);
-    setIsValid(
-      { ...parsed.isValid, place: parsed.place ? true : false } || isValid
-    );
+    setIsValid({ ...parsed.isValid, place: parsed.place ? true : false });
     sessionStorage.clear();
     placeSectionRef.current?.scrollIntoView({ behavior: "smooth" });
     setIsReturn(true);
@@ -283,31 +297,42 @@ const CreateJobPage = () => {
     useMutation(CREATE_JOB_POST);
 
   const postJob = async () => {
-    const workDayInfo =
-      term === TERM.SHORT_TERM ? { dates } : { days: weekDays };
-    const workTimeInfo =
-      time.type === WORKTIME_TYPES.FIXED
-        ? { start: time.start, end: time.end }
-        : {};
+    const tempTerm = term === TERM.LONG_TERM ? TERM.LONG_TERM : TERM.SHORT_TERM;
+    const workPeriod: WorkPeriodInput = { type: TERM_KEY[tempTerm] };
+    if (term === TERM.TODAY) {
+      workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
+    } else if (term === TERM.TOMORROW) {
+      workPeriod.dates = [format(addDays(new Date(), 1), "yyyy-MM-dd")];
+    } else if (term === TERM.SHORT_TERM) {
+      workPeriod.dates = Array.from(dates);
+    } else {
+      workPeriod.days = weekDays;
+    }
+    const workTime: WorkTime = { type: WORKTIME_TYPES_KEY[time.type] };
+    if (time.type === WORKTIME_TYPES.FIXED) {
+      workTime.startTime = time.start;
+      workTime.endTime = time.end;
+    }
 
     const input = {
       title,
       jobDescription: jobTypes,
-      workPeriod: { type: term, ...workDayInfo },
-      workTime: { type: time.type, ...workTimeInfo },
+      workPeriod,
+      workTime,
       salary: {
-        salaryType: pay.type,
-        salaryAmount: pay.amount.replace(/,/g, ""),
+        salaryType: PAY_TYPES_KEY[pay.type],
+        salaryAmount: parseFloat(pay.amount.replace(/,/g, "")),
       },
       photos: images,
       detailedDescription: description,
     };
+    console.log("input", input);
 
-    try {
-      await createJobPost({ variables: { input } });
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
+    // try {
+    //   await createJobPost({ variables: { input } });
+    // } catch {
+    //   throw new Error(ERROR.NETWORK);
+    // }
   };
 
   const onPostButtonClick = async () => {

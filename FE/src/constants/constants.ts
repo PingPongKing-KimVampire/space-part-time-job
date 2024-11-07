@@ -44,6 +44,13 @@ export const ERROR = {
   },
 };
 
+const reverseKeyValue = (object: { [key: string]: string }) => {
+  return Object.entries(object).reduce((acc, [key, value]) => {
+    acc[value] = key;
+    return acc;
+  }, {});
+};
+
 export const JOB_TYPES = {
   SERVING: "서빙",
   KITCHEN_ASSISTANT: "주방보조/설거지",
@@ -71,6 +78,7 @@ export const TERM = {
   SHORT_TERM: "단기",
   LONG_TERM: "1개월 이상",
 };
+export const TERM_KEY = reverseKeyValue(TERM);
 
 export const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -84,11 +92,13 @@ export const PAY_TYPES: PayTypes = {
   PER_TASK: "건당",
   MONTHLY: "월급",
 };
+export const PAY_TYPES_KEY = reverseKeyValue(PAY_TYPES);
 
 export const WORKTIME_TYPES = {
   FLEXIBLE: "협의 가능",
   FIXED: "시간 설정",
 };
+export const WORKTIME_TYPES_KEY = reverseKeyValue(WORKTIME_TYPES);
 
 export const SEND_AUTHNUMBER_COUNTDOWN_SEC = 300;
 
