@@ -298,7 +298,7 @@ const CreateJobPage = () => {
 
   const postJob = async () => {
     const tempTerm = term === TERM.LONG_TERM ? TERM.LONG_TERM : TERM.SHORT_TERM;
-    const workPeriod: WorkPeriodInput = { type: TERM_KEY[term] };
+    const workPeriod: WorkPeriodInput = { type: TERM_KEY[tempTerm] };
     if (term === TERM.TODAY) {
       workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
     } else if (term === TERM.TOMORROW) {

@@ -79,13 +79,51 @@ export const LocationIcon = styled(Location, {
 export const ContentContainer = styled("div", {
   width: "100%",
   display: "flex",
+  alignItems: "flex-start",
   gap: "35px",
-  "& .filter": {
-    width: "250px",
-    height: "1000px",
-    background: "white",
-    border: "1px solid #E3E9ED",
-    borderRadius: "16px",
+});
+
+export const JobFilterContainer = styled("div", {
+  width: "300px",
+  background: "white",
+  border: "1px solid #E3E9ED",
+  borderRadius: "16px",
+  padding: "25px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+  marginBottom: "40px",
+  "& .topContainer": {
+    display: "flex",
+    justifyContent: "space-between",
+    alignContent: "flex-end",
+    "& .title": {
+      fontSize: "20px",
+      fontWeight: "bold",
+    },
+    "& .initButton": {
+      background: "none",
+      border: "none",
+      fontSize: "14px",
+      color: "#828282",
+      textDecoration: "underline",
+      cursor: "pointer",
+    },
+  },
+});
+
+export const FilterField = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: "8px",
+  transition: "opacity 0.2s, height 0.2s",
+  "&.invisible": {
+    height: "0",
+    opacity: "0",
+  },
+  "& label": {
+    fontSize: "17px",
+    fontWeight: "500",
   },
 });
 
@@ -93,6 +131,7 @@ export const JobListContainer = styled("div", {
   flexGrow: "1",
   display: "flex",
   flexDirection: "column",
+  marginBottom: "60px",
 });
 
 export const JobItemContainer = styled("div", {

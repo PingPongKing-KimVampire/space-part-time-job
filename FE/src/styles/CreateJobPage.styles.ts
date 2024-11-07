@@ -74,6 +74,12 @@ export const FormFieldContainer = styled("div", {
   },
 });
 
+export const TimeContainer = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+});
+
 export const DescriptionSection = styled("div", {
   display: "flex",
   flexDirection: "column",

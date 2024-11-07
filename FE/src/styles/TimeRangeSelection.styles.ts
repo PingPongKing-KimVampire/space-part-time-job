@@ -1,16 +1,10 @@
 import { createStitches } from "@stitches/react";
-import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
-import { OptionHoverColor } from "../../styles/global.ts";
+import { OptionHoverColor } from "../styles/global.ts";
+import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 
 const { styled } = createStitches();
 
 export const Container = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px",
-});
-
-export const TimeSelectionsContainer = styled("div", {
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
@@ -18,20 +12,19 @@ export const TimeSelectionsContainer = styled("div", {
   width: "100%",
   marginTop: "20px",
   transition: "margin-bottom 0.2s",
-  variants: {
-    hasMarginBottom: {
-      true: {
-        marginBottom: "215px",
-      },
-      false: {
-        marginBottom: "0",
-      },
+  "&.hasMarginBottom": {
+    marginBottom: "215px",
+    "&.isMini": {
+      marginBottom: "160px",
     },
   },
   "& .waveSymbol": {
     fontSize: "30px",
     fontWeight: "300",
     color: "#B2B2B2",
+    "&.isMini": {
+      fontSize: "20px",
+    },
   },
 });
 
@@ -50,6 +43,11 @@ export const TimeSelectionContainer = styled("div", {
     textAlign: "left",
     borderRadius: "16px",
     transition: "background 0.2s",
+    "&.isMini": {
+      padding: "10px",
+      fontSize: "15px",
+      borderRadius: "10px",
+    },
     "&:hover": {
       background: OptionHoverColor,
     },
@@ -60,6 +58,10 @@ export const TimeSelectionContainer = styled("div", {
     left: "0px",
     color: "#9A9A9A",
     fontSize: "14px",
+    "&.isMini": {
+      fontSize: "13px",
+      top: "-20px",
+    },
   },
 });
 
@@ -110,6 +112,14 @@ export const SelectBox = styled("div", {
     "&:hover": {
       background: OptionHoverColor,
       color: "black",
+    },
+  },
+  "&.isMini": {
+    height: "150px",
+    padding: "4px",
+    "& .optionButton": {
+      padding: "6px",
+      fontSize: "14px",
     },
   },
   "&::-webkit-scrollbar": {

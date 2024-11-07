@@ -2,6 +2,7 @@ import React from "react";
 import { MainBackgroundColor } from "../styles/global.ts";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import JobList from "../components/BrowseJobPage/JobList.tsx";
+import JobFilter from "../components/BrowseJobPage/JobFilter.tsx";
 import {
   Background,
   Container,
@@ -26,7 +27,7 @@ const BrowseJobPage = () => {
           <input placeholder="주변 알바 검색" />
         </InputContainer>
         <ContentContainer>
-          <div className="filter">필터링 UI</div>
+          <JobFilter />
           <JobList />
         </ContentContainer>
       </Container>
