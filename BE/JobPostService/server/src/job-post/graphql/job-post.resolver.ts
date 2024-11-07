@@ -1,6 +1,6 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateJobPostInput } from './job-post.dto';
 import { JobPostRepository } from '../mongoose/job-post.repository';
+import { CreateJobPostInput } from './dto/job-post.input.dto';
 
 @Resolver('JobPost')
 export class JobPostResolver {
