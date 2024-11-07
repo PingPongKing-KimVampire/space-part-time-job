@@ -1,0 +1,90 @@
+# 아르바이트 공고의 일하는 기간 (단기 or 1개월 이상) 설정을 위한 enum
+enum WorkPeriodType {
+  SHORT_TERM
+  LONG_TERM
+}
+
+# 근무 시간을 협의 가능한지 또는 특정 시간 설정인지 설정하는 enum
+enum WorkTimeType {
+  FLEXIBLE
+  FIXED
+}
+
+# 급여 타입을 시급, 건당, 월급으로 구분하는 enum
+enum SalaryType {
+  HOURLY
+  PER_TASK
+  MONTHLY
+}
+
+# 단기 근무일 날짜 리스트 또는 1개월 이상 근무일 요일 리스트를 포함한 근무 기간 타입
+input WorkPeriodInput {
+  type: WorkPeriodType!
+  dates: [String!]
+  days: [String!]
+}
+
+# 시작 시간과 종료 시간을 포함한 근무 시간 설정
+input WorkTimeInput {
+  type: WorkTimeType!
+  startTime: String
+  endTime: String
+}
+
+input SalaryInput {
+  salaryType: SalaryType!
+  salaryAmount: Float!
+}
+
+# 공고 생성 요청 시 필요한 입력 타입
+input CreateJobPostInput {
+  title: String!
+  jobDescription: [String!]!
+  workPeriod: WorkPeriodInput!
+  workTime: WorkTimeInput!
+  salary: SalaryInput!
+  photos: [String!]
+  detailedDescription: String
+}
+
+# 응답용 WorkPeriod 타입
+type WorkPeriod {
+  type: WorkPeriodType!
+  dates: [String!]
+  days: [String!]
+}
+
+# 응답용 WorkTime 타입
+type WorkTime {
+  type: WorkTimeType!
+  startTime: String
+  endTime: String
+}
+
+# 응답용 Salary 타입
+type Salary {
+  salaryType: SalaryType!
+  salaryAmount: Float!
+}
+
+# 공고 응답 타입 (JobPost)
+type JobPost {
+  id: ID!
+  title: String!
+  jobDescription: [String!]!
+  workPeriod: WorkPeriod!
+  workTime: WorkTime!
+  salary: Salary!
+  photos: [String!]
+  detailedDescription: String
+}
+
+# 공고를 생성하는 mutation
+type Mutation {
+  createJobPost(input: CreateJobPostInput!): JobPost
+}
+
+type Query {
+  getJobPost(id: ID!): JobPost
+  #listJobPosts: [JobPost]
+}
