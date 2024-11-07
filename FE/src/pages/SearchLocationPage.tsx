@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import {
@@ -7,6 +7,7 @@ import {
   NextButton,
 } from "../styles/SearchLocationPage.styles.ts";
 import SearchBox from "../components/SearchBox.tsx";
+import { MainBackgroundColor } from "../styles/global.ts";
 
 const SEARCH_RESULT = [
   // 임히 하드코딩 데이터
@@ -30,7 +31,7 @@ const SEARCH_RESULT = [
 ];
 
 const SearchLocationPage = () => {
-  useBackgroundColor("#F9FBFC");
+  useBackgroundColor(MainBackgroundColor);
   const navigate = useNavigate();
 
   const [locations, setLocations] = useState<string[]>([]);

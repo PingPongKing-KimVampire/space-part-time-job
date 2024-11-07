@@ -4,7 +4,7 @@ import CustomInput from "../components/CustomInput.tsx";
 import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import PasswordInput from "../components/PasswordInput.tsx";
 import NotificationBox from "../components/NotificationBox.tsx";
-import { WarningText } from "../styles/global.ts";
+import { WarningText, MainBackgroundColor } from "../styles/global.ts";
 import {
   Background,
   Container,
@@ -45,7 +45,7 @@ type LoginResponseData = {
 };
 
 const LoginPage = (): React.JSX.Element => {
-  useBackgroundColor("#F9FBFC");
+  useBackgroundColor(MainBackgroundColor);
   const navigate = useNavigate();
   const countdownTimer = useCountdownTimer(SEND_AUTHNUMBER_COUNTDOWN_SEC);
 

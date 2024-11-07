@@ -31,7 +31,7 @@ import PaySection from "../components/CreateJobPage/PaySection.tsx";
 import ImageSection from "../components/CreateJobPage/ImageSection.tsx";
 import PlaceSection from "../components/CreateJobPage/PlaceSection.tsx";
 import { checkRulePassInCreateJob } from "../utils/checkRulePass.ts";
-import { WarningText } from "../styles/global.ts";
+import { WarningText, MainBackgroundColor } from "../styles/global.ts";
 
 type Warnings = {
   title?: string;
@@ -91,7 +91,7 @@ const CREATE_JOB_POST = gql`
 export const SESSION_STORAGE_KEY = "createJobData";
 
 const CreateJobPage = () => {
-  useBackgroundColor("#F9FBFC");
+  useBackgroundColor(MainBackgroundColor);
 
   const [title, setTitle] = useState<string>("");
   const [jobTypes, setJobTypes] = useState<string[]>([]);
@@ -298,7 +298,7 @@ const CreateJobPage = () => {
 
   const postJob = async () => {
     const tempTerm = term === TERM.LONG_TERM ? TERM.LONG_TERM : TERM.SHORT_TERM;
-    const workPeriod: WorkPeriodInput = { type: TERM_KEY[tempTerm] };
+    const workPeriod: WorkPeriodInput = { type: TERM_KEY[term] };
     if (term === TERM.TODAY) {
       workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
     } else if (term === TERM.TOMORROW) {
@@ -313,16 +313,19 @@ const CreateJobPage = () => {
       workTime.startTime = time.start;
       workTime.endTime = time.end;
     }
+    const payAmount = parseFloat(pay.amount.replace(/,/g, ""));
+    const salary = {
+      salaryType: PAY_TYPES_KEY[pay.type],
+      salaryAmount:
+        pay.type === PAY_TYPES.MONTHLY ? payAmount * 10000 : payAmount,
+    };
 
     const input = {
       title,
       jobDescription: jobTypes,
       workPeriod,
       workTime,
-      salary: {
-        salaryType: PAY_TYPES_KEY[pay.type],
-        salaryAmount: parseFloat(pay.amount.replace(/,/g, "")),
-      },
+      salary,
       photos: images,
       detailedDescription: description,
     };

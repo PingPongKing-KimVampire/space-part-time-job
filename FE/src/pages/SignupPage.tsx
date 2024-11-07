@@ -11,6 +11,7 @@ import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import { IP_ADDRESS, ERROR } from "../constants/constants.ts";
+import { MainBackgroundColor } from "../styles/global.ts";
 
 type InputValue = {
   id: string;
@@ -47,7 +48,7 @@ type SignupResponseData = {
 };
 
 const SignupPage = () => {
-  useBackgroundColor("#F9FBFC");
+  useBackgroundColor(MainBackgroundColor);
   const [inputValue, setInputValue] = useState<InputValue>({
     id: "",
     password: "",

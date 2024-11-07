@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainColor } from "../../styles/global.ts";
+import { MainColor, OptionHoverColor } from "../../styles/global.ts";
 
 const { styled } = createStitches();
 
@@ -50,7 +50,7 @@ export const DateItem = styled("button", {
       color: "#BD2A2E",
     },
     "&:hover": {
-      background: "#DCE2FF",
+      background: OptionHoverColor,
     },
     "&.selected": {
       background: MainColor,

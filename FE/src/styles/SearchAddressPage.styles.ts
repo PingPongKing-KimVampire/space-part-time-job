@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainColor } from "../styles/global.ts";
+import { MainColor, OptionHoverColor } from "../styles/global.ts";
 
 const { styled } = createStitches();
 
@@ -42,7 +42,7 @@ export const SearchItemContent = styled("div", {
       borderRadius: "7px",
       padding: "3px",
       boxSizing: "border-box",
-      background: "#DCE2FF",
+      background: OptionHoverColor,
       color: MainColor,
       transition: "background 0.2s",
     },

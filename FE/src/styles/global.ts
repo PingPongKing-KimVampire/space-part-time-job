@@ -4,6 +4,8 @@ const { styled } = createStitches();
 
 export const MainColor = "#4361EE";
 export const MainHoverColor = "#2E4BD5";
+export const MainBackgroundColor = "#F9FBFC";
+export const OptionHoverColor = "#DCE2FF";
 
 const ButtonStyle = {
   fontWeight: "bold",
@@ -59,8 +61,8 @@ export const OptionButtonStyle = {
     cursor: "pointer",
     fontWeight: "600",
     "&:hover": {
-      background: "#DCE2FF",
-      borderColor: "#DCE2FF",
+      background: OptionHoverColor,
+      borderColor: OptionHoverColor,
     },
   },
 };

@@ -7,6 +7,7 @@ import CreateJobPage from "./pages/CreateJobPage.tsx";
 import SearchLocationPage from "./pages/SearchLocationPage.tsx";
 import SetLocationScopePage from "./pages/SetLocationScopePage.tsx";
 import SearchAddressPage from "./pages/SearchAddressPage.tsx";
+import BrowseJobPage from "./pages/BrowseJobPage.tsx";
 import { IP_ADDRESS } from "./constants/constants.ts";
 
 const { styled } = createStitches();
@@ -36,6 +37,7 @@ function App() {
               path="/set-location-scope"
               element={<SetLocationScopePage />}
             />
+            <Route path="/browse-job" element={<BrowseJobPage />} />
           </Routes>
         </Background>
       </BrowserRouter>

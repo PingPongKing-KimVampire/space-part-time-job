@@ -1,6 +1,10 @@
 import React from "react";
 import { createStitches } from "@stitches/react";
-import { MainColor, MainHoverColor } from "../styles/global.ts";
+import {
+  MainColor,
+  MainHoverColor,
+  OptionHoverColor,
+} from "../styles/global.ts";
 
 const { styled } = createStitches();
 
@@ -23,8 +27,8 @@ const Option = styled("button", {
   "&:not(.selected)": {
     background: "white",
     "&:hover": {
-      background: "#DCE2FF",
-      borderColor: "#DCE2FF",
+      background: OptionHoverColor,
+      borderColor: OptionHoverColor,
     },
   },
   "&.selected": {
