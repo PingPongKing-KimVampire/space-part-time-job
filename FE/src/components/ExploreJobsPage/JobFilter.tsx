@@ -3,7 +3,7 @@ import Chips from "../Chips.tsx";
 import {
   JobFilterContainer,
   FilterField,
-} from "../../styles/BrowseJobPage.styles.ts";
+} from "../../styles/ExploreJobsPage.styles.ts";
 import { JOB_TYPES, TERM, DAYS } from "../../constants/constants.ts";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 

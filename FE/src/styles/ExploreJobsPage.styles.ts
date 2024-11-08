@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { OptionHoverColor } from "../styles/global.ts";
+import { OptionHoverColor } from "./global.ts";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../assets/icons/location.svg";
 

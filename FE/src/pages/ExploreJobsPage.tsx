@@ -1,8 +1,8 @@
 import React from "react";
 import { MainBackgroundColor } from "../styles/global.ts";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import JobList from "../components/BrowseJobPage/JobList.tsx";
-import JobFilter from "../components/BrowseJobPage/JobFilter.tsx";
+import JobList from "../components/ExploreJobsPage/JobList.tsx";
+import JobFilter from "../components/ExploreJobsPage/JobFilter.tsx";
 import {
   Background,
   Container,
@@ -11,9 +11,9 @@ import {
   LocationIcon,
   ArrowDownIcon,
   ContentContainer,
-} from "../styles/BrowseJobPage.styles.ts";
+} from "../styles/ExploreJobsPage.styles.ts";
 
-const BrowseJobPage = () => {
+const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);
   return (
     <Background>
@@ -35,4 +35,4 @@ const BrowseJobPage = () => {
   );
 };
 
-export default BrowseJobPage;
+export default ExploreJobsPage;

@@ -1,8 +1,8 @@
 import React from "react";
-import { JobListContainer } from "../../styles/BrowseJobPage.styles.ts";
+import { JobListContainer } from "../../styles/ExploreJobsPage.styles.ts";
 import JobItem from "./JobItem.tsx";
-import testImage1 from "../../assets/test/BrowseJobTest1.jpeg";
-import testImage2 from "../../assets/test/BrowseJobTest2.jpeg";
+import testImage1 from "../../assets/test/ExploreJobsTest1.jpeg";
+import testImage2 from "../../assets/test/ExploreJobsTest2.jpeg";
 
 const JOB_RESULT = [
   // 임시 하드코딩 데이터
