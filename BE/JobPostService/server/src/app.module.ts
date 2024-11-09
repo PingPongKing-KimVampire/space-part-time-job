@@ -20,7 +20,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
-	  csrfPrevention: false,
+      csrfPrevention: false,
+      path: '/api/graphql',
     }),
     JobPostModule,
   ],
