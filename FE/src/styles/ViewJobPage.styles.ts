@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainColor, OptionHoverColor } from "./global.ts";
+import { MainColor, OptionHoverColor, MainButtonStyle } from "./global.ts";
 
 const { styled } = createStitches();
 
@@ -53,6 +53,24 @@ export const ContentContainer = styled("div", {
   gap: "50px",
   "& .leftSection": {
     width: "40%",
+  },
+  "& .rightSection": {
+    width: "60%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "30px",
+    "& .detail": {
+      "& .title": {
+        fontSize: "18px",
+        fontWeight: "bold",
+        marginBottom: "10px",
+      },
+      "& .description": {
+        fontSize: "14px",
+        lineHeight: "22px",
+        whiteSpace: "pre-line",
+      },
+    },
   },
 });
 
@@ -155,14 +173,55 @@ export const BasicInfoContainer = styled("div", {
   flexGrow: "1",
   "& .item": {
     display: "flex",
-    alignItems: "center",
+    flexDirection: "column",
     gap: "10px",
+    borderRadius: "10px",
+    transition: "background 1s, padding 1s",
+    "&.isDetailVisible:hover": {
+      background: OptionHoverColor,
+      padding: "6px",
+      fontWeight: "bold",
+    },
+    "& .main": {
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+      fontSize: "14px",
+      "& svg": {
+        width: "23px",
+        height: "23px",
+        stroke: MainColor,
+        strokeWidth: "1",
+      },
+    },
+  },
+});
+
+export const InteractionContainer = styled("div", {
+  "& .info": {
+    color: "#828282",
     fontSize: "13px",
+    marginBottom: "10px",
+  },
+  "& .interaction": {
+    display: "flex",
+    gap: "15px",
+    "& .applyButton": {
+      ...MainButtonStyle,
+      fontSize: "20px",
+      padding: "12px",
+      width: "94%",
+    },
     "& svg": {
-      width: "23px",
-      height: "23px",
-      stroke: MainColor,
-      strokeWidth: "1",
+      width: "6%",
+      strokeWidth: "0.6",
+      stroke: "#828282",
+      transition: "all 0.2s",
+      "&:hover": {
+        fill: OptionHoverColor,
+        stroke: MainColor,
+        strokeWidth: "0.8",
+      },
     },
   },
 });

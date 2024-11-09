@@ -42,10 +42,7 @@ const JobItem: React.FC<JobItemProps> = (props) => {
           </div>
         </div>
         <div className="subInfo">
-          <span className="pay">
-            {PAY_TYPES[pay.type]} {payToDisplay.amount}
-            {payToDisplay.unit}
-          </span>
+          <span className="pay">{payToDisplay}</span>
           <span className="periodAndTime">
             {" "}
             ㆍ {periodToDisplay} ㆍ {timeToDisplay}

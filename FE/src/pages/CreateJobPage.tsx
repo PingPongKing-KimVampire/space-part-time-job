@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { format, addDays } from "date-fns";
+import { format, addDays, addMonths } from "date-fns";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
 import {
@@ -25,7 +25,7 @@ import {
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import FormSection from "../components/CreateJobPage/FormSection.tsx";
 import FormField from "../components/CreateJobPage/FormField.tsx";
-import CustomCalendar from "../components/CreateJobPage/CustomCalendar.tsx";
+import CustomCalendar from "../components/CustomCalendar.tsx";
 import TimeSection from "../components/CreateJobPage/TimeSection.tsx";
 import PaySection from "../components/CreateJobPage/PaySection.tsx";
 import ImageSection from "../components/CreateJobPage/ImageSection.tsx";
@@ -82,8 +82,6 @@ const CREATE_JOB_POST = gql`
       id
       title
       jobDescription
-      salaryType
-      salaryAmount
     }
   }
 `;
@@ -331,11 +329,11 @@ const CreateJobPage = () => {
     };
     console.log("input", input);
 
-    // try {
-    //   await createJobPost({ variables: { input } });
-    // } catch {
-    //   throw new Error(ERROR.NETWORK);
-    // }
+    try {
+      await createJobPost({ variables: { input } });
+    } catch {
+      throw new Error(ERROR.NETWORK);
+    }
   };
 
   const onPostButtonClick = async () => {
@@ -414,10 +412,12 @@ const CreateJobPage = () => {
               <CustomCalendar
                 dates={dates}
                 setDates={setDates}
+                lastDate={addMonths(new Date(), 1)}
                 onClickStart={() => {
                   if (!isFocused.dates)
                     setIsFocused((state) => ({ ...state, dates: true }));
                 }}
+                style={{ width: "43%", marginTop: "-30px" }}
               />
             </FormField>
           )}

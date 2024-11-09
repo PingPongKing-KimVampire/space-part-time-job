@@ -1,17 +1,15 @@
 import { createStitches } from "@stitches/react";
-import { MainColor, OptionHoverColor } from "../../styles/global.ts";
+import { MainColor, OptionHoverColor } from "./global.ts";
 
 const { styled } = createStitches();
 
 export const Container = styled("div", {
-  width: "50%",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   gap: "10px",
-  marginTop: "-30px",
   "& .title": {
-    fontSize: "20px",
+    fontSize: "18px",
     fontWeight: "bold",
     padding: "15px",
   },
@@ -31,26 +29,29 @@ export const Calendar = styled("div", {
   },
   "& .weekDay": {
     padding: "4px",
-    fontSize: "15px",
+    fontSize: "14px",
     color: "#9A9A9A",
+    fontWeight: "normal",
   },
 });
 
 export const DateItem = styled("button", {
   borderRadius: "100px",
-  padding: "12px",
-  fontSize: "18px",
+  padding: "10px",
+  fontSize: "16px",
   border: "none",
   background: "none",
   transitionProperty: "background border-radius",
   transitionDuration: "0.2s",
   "&.selectable": {
     cursor: "pointer",
-    "&.sunday": {
-      color: "#BD2A2E",
-    },
     "&:hover": {
       background: OptionHoverColor,
+    },
+  },
+  "&.selectable, &.viewable": {
+    "&.sunday": {
+      color: "#BD2A2E",
     },
     "&.selected": {
       background: MainColor,
@@ -65,7 +66,7 @@ export const DateItem = styled("button", {
       },
     },
   },
-  "&:not(.selectable)": {
+  "&:not(.selectable):not(.viewable)": {
     color: "#9A9A9A",
     cursor: "not-allowed",
   },
