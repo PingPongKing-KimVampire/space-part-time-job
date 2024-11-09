@@ -20,9 +20,10 @@ export class JobPostResolver {
     let userId;
     if (!accessToken) throw new HttpException('토큰 없음', 401);
     try {
-      userId = await this.userService.authenticateUser(
+      const {id} = await this.userService.authenticateUser(
         req.cookies.access_token,
       );
+      userId = id;
     } catch (e) {
       if (e.message === '유저 인증 실패')
         throw new HttpException('유저 인증 실패', 401);
