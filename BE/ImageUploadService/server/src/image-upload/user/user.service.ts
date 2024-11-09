@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 
 interface AuthService {
-  authenticateUser(data: { token: string }): Observable<{ id: number }>;
+  authenticateUser(data: { token: string }): Observable<{ id: string }>;
 }
 
 @Injectable()
@@ -36,7 +36,7 @@ export class UserService implements OnModuleInit {
     this.authService = this.client.getService<AuthService>('AuthService');
   }
 
-  async authenticateUser(token: string) {
+  async authenticateUser(token: string): Promise<{ id: string }> {
     try {
       const response = await this.authService
         .authenticateUser({ token })

@@ -17,10 +17,10 @@ export class JobPostResolver {
     @Context('req') req: Request,
   ) {
     const accessToken = req.cookies.access_token;
-    let userId;
+    let userId: string;
     if (!accessToken) throw new HttpException('토큰 없음', 401);
     try {
-      const {id} = await this.userService.authenticateUser(
+      const { id } = await this.userService.authenticateUser(
         req.cookies.access_token,
       );
       userId = id;
