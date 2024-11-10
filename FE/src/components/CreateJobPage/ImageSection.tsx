@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import { ReactComponent as CameraIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as XmarkIcon } from "../../assets/icons/x-mark.svg";
 import {
@@ -54,9 +54,18 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
     const validSizeImages = selectedImages.filter(
       (image) => image.size <= VALID_IMAGE_BYTE
     );
-    const validCountImages = validSizeImages.slice(0, 10 - images.length);
+    const validCountImages = validSizeImages.slice(
+      0,
+      10 - Object.keys(images).length
+    );
     const imageUrls = validCountImages.map((file) => URL.createObjectURL(file));
-    setImages((state) => state.concat(imageUrls));
+    setImages((state) => {
+      const newState = { ...state };
+      imageUrls.forEach((url) => {
+        newState[url] = null;
+      });
+      return newState;
+    });
 
     let isResponseValid: boolean = true;
     if (validCountImages.length) {
@@ -66,12 +75,22 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
         imageUrls.forEach((url, index) => {
           imageUrlsMap[url] = fetchedImageUrls[index];
         });
-        setImages((state) =>
-          state.map((url) => (imageUrlsMap[url] ? imageUrlsMap[url] : url))
-        );
+        setImages((state) => {
+          const newState = { ...state };
+          Object.entries(state).forEach(([key, val]) => {
+            newState[key] = imageUrls[key] ? imageUrls[key] : val;
+          });
+          return newState;
+        });
       } catch {
         isResponseValid = false;
-        setImages((state) => state.filter((url) => !imageUrls.includes(url)));
+        setImages((state) => {
+          const newState = { ...state };
+          imageUrls.forEach((url) => {
+            if (newState[url]) delete newState[url];
+          });
+          return newState;
+        });
       }
     }
 
@@ -89,7 +108,13 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
 
   const onXmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const imageUrl = e.currentTarget.getAttribute("data-url");
-    setImages((prev) => prev.filter((url) => url !== imageUrl));
+    setImages((state) => {
+      const newState = { ...state };
+      Object.keys(state).forEach((key) => {
+        if (key === imageUrl) delete newState[key];
+      });
+      return newState;
+    });
   };
 
   return (
@@ -117,14 +142,14 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
         }}
       >
         <CameraIcon />
-        {images.length}/10
+        {Object.keys(images).length}/10
       </UploadButton>
       <ImagesContainer>
         {images &&
-          images.map((imageUrl, index) => (
-            <ImageDisplay key={imageUrl}>
-              <img src={imageUrl} alt={`uploaded ${index}`} />
-              <button onClick={onXmarkClick} data-url={imageUrl}>
+          Object.keys(images).map((url, index) => (
+            <ImageDisplay key={url}>
+              <img src={url} alt={`uploaded ${index}`} />
+              <button onClick={onXmarkClick} data-url={url}>
                 <XmarkIcon />
               </button>
             </ImageDisplay>

@@ -109,7 +109,7 @@ const CreateJobPage = () => {
   });
   const [pay, setPay] = useState({ type: PAY_TYPES.HOURLY, amount: "" });
   const [place, setPlace] = useState("");
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<Record<string, string>>({});
   const [description, setDescription] = useState<string>("");
 
   const [warnings, setWarnings] = useState<Warnings>({});
@@ -138,7 +138,7 @@ const CreateJobPage = () => {
   const [isPayMessageVisible, setIsPayMessageVisible] = useState<boolean>(true);
 
   const placeSectionRef = useRef<HTMLDivElement>(null);
-  const [isReturn, setIsReturn] = useState<boolean>(false); // TODO: 임시방편 문제 해결
+  const [isSessionLoaded, setIsSessionLoaded] = useState<boolean>(false); // TODO: 임시방편 문제 해결
 
   useEffect(() => {
     const saved = sessionStorage.getItem(SESSION_STORAGE_KEY) || "";
@@ -159,7 +159,7 @@ const CreateJobPage = () => {
     setIsValid({ ...parsed.isValid, place: parsed.place ? true : false });
     sessionStorage.clear();
     placeSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-    setIsReturn(true);
+    setIsSessionLoaded(true);
   }, []);
 
   const saveToSessionStorage = () => {
@@ -217,7 +217,7 @@ const CreateJobPage = () => {
       ...state,
       pay: checkRulePassInCreateJob.pay(pay.type, pay.amount),
     }));
-  }, [pay.type, isReturn]);
+  }, [pay.type, isSessionLoaded]);
 
   const toggleSelected = (
     list: string[],
@@ -324,7 +324,7 @@ const CreateJobPage = () => {
       workPeriod,
       workTime,
       salary,
-      photos: images,
+      photos: Object.values(images),
       detailedDescription: description,
     };
     console.log("input", input);
