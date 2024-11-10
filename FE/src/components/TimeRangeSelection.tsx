@@ -70,9 +70,12 @@ const TimeSelection = (props) => {
         onClick={onTimeInputClick}
       >
         {time}
-        <ArrowDownIcon isSelected={isSelecting} />
+        <ArrowDownIcon
+          className={isMini ? "isMini" : ""}
+          isSelected={isSelecting}
+        />
       </button>
-      <label className={isMini ? "isMini" : ""}>{label}</label>
+      {!isMini && <label>{label}</label>}
       {isSelecting && (
         <SelectBox className={isMini ? "isMini" : ""}>
           {TIMES &&

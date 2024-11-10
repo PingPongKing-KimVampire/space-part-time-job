@@ -3,6 +3,8 @@ import Chips from "../Chips.tsx";
 import {
   JobFilterContainer,
   FilterField,
+  ChipsContainerStyle,
+  ChipsOptionStyle,
 } from "../../styles/ExploreJobsPage.styles.ts";
 import { JOB_TYPES, TERM, DAYS } from "../../constants/constants.ts";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
@@ -64,6 +66,8 @@ const JobFilter = () => {
           options={termToDisplay}
           onClick={onTermClick}
           isSelected={(t) => t === term}
+          containerStyle={ChipsContainerStyle}
+          optionStyle={ChipsOptionStyle}
         />
       </FilterField>
       <FilterField>
@@ -73,17 +77,23 @@ const JobFilter = () => {
           options={Object.values(JOB_TYPES)}
           onClick={onJobTypeClick}
           isSelected={(type) => jobTypes.includes(type)}
+          containerStyle={ChipsContainerStyle}
+          optionStyle={ChipsOptionStyle}
         />
       </FilterField>
-      <FilterField className={term !== TERM.LONG_TERM ? "invisible" : ""}>
-        <label htmlFor="weekDays">일하는 요일</label>
-        <Chips
-          id="weekDays"
-          options={DAYS}
-          onClick={onWeekDayClick}
-          isSelected={(day) => weekDays.includes(day)}
-        />
-      </FilterField>
+      {term === TERM.LONG_TERM && (
+        <FilterField>
+          <label htmlFor="weekDays">일하는 요일</label>
+          <Chips
+            id="weekDays"
+            options={DAYS}
+            onClick={onWeekDayClick}
+            isSelected={(day) => weekDays.includes(day)}
+            containerStyle={ChipsContainerStyle}
+            optionStyle={ChipsOptionStyle}
+          />
+        </FilterField>
+      )}
       <FilterField>
         <label htmlFor="weekDays">일하는 시간</label>
         <TimeRangeSelection time={time} setTime={setTime} isMini={true} />

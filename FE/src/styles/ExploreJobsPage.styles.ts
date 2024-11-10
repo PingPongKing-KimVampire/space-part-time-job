@@ -13,7 +13,7 @@ export const Background = styled("div", {
 });
 
 export const Container = styled("div", {
-  width: "1200px",
+  width: "1000px",
   marginTop: "40px",
   display: "flex",
   flexDirection: "column",
@@ -24,7 +24,7 @@ export const Container = styled("div", {
 export const InputContainer = styled("div", {
   background: "white",
   border: "1px solid #E3E9ED",
-  padding: "12px",
+  padding: "10px",
   boxSizing: "border-box",
   width: "100%",
   position: "relative",
@@ -49,7 +49,7 @@ export const LocationButton = styled("button", {
   padding: "7px 10px",
   background: "white",
   border: "1px solid black",
-  fontSize: "18px",
+  fontSize: "16px",
   fontWeight: "bold",
   borderRadius: "20px",
   display: "flex",
@@ -84,21 +84,21 @@ export const ContentContainer = styled("div", {
 });
 
 export const JobFilterContainer = styled("div", {
-  width: "300px",
+  width: "250px",
   background: "white",
   border: "1px solid #E3E9ED",
   borderRadius: "16px",
-  padding: "25px",
+  padding: "20px",
   display: "flex",
   flexDirection: "column",
-  gap: "20px",
   marginBottom: "40px",
+  gap: "20px",
   "& .topContainer": {
     display: "flex",
     justifyContent: "space-between",
     alignContent: "flex-end",
     "& .title": {
-      fontSize: "20px",
+      fontSize: "18px",
       fontWeight: "bold",
     },
     "& .initButton": {
@@ -117,15 +117,20 @@ export const FilterField = styled("div", {
   flexDirection: "column",
   gap: "8px",
   transition: "opacity 0.2s, height 0.2s",
-  "&.invisible": {
-    height: "0",
-    opacity: "0",
-  },
   "& label": {
-    fontSize: "17px",
-    fontWeight: "500",
+    fontSize: "16px",
+    fontWeight: "600",
   },
 });
+
+export const ChipsContainerStyle = {
+  gap: "6px 4px",
+};
+
+export const ChipsOptionStyle = {
+  fontSize: "14px",
+  padding: "4px 8px",
+};
 
 export const JobListContainer = styled("div", {
   flexGrow: "1",
@@ -140,7 +145,7 @@ export const JobItemContainer = styled("div", {
   alignItems: "center",
   width: "100%",
   position: "relative",
-  height: "150px",
+  height: "140px",
   cursor: "pointer",
   "& .imageBox": {
     height: "82%",
@@ -173,23 +178,23 @@ export const JobItemContextBox = styled("div", {
   flexGrow: "1",
   "& .mainInfo": {
     "& .title": {
-      fontSize: "20px",
+      fontSize: "18px",
       fontWeight: "bold",
     },
     "& .locationAndPostTime": {
       marginTop: "3px",
-      fontSize: "15px",
+      fontSize: "13px",
       color: "#828282",
     },
   },
   "& .subInfo": {
     "& .pay": {
-      fontSize: "17px",
+      fontSize: "15px",
       fontWeight: "bold",
       color: "#4D4D4D",
     },
     "& .periodAndTime": {
-      fontSize: "15px",
+      fontSize: "13px",
       color: "#828282",
     },
   },

@@ -10,12 +10,14 @@ export const Container = styled("div", {
   justifyContent: "space-between",
   alignItems: "center",
   width: "100%",
-  marginTop: "20px",
   transition: "margin-bottom 0.2s",
+  "&:not(.isMini)": {
+    marginTop: "20px",
+  },
   "&.hasMarginBottom": {
     marginBottom: "215px",
     "&.isMini": {
-      marginBottom: "160px",
+      marginBottom: "135px",
     },
   },
   "& .waveSymbol": {
@@ -23,7 +25,8 @@ export const Container = styled("div", {
     fontWeight: "300",
     color: "#B2B2B2",
     "&.isMini": {
-      fontSize: "20px",
+      fontSize: "12px",
+      fontWeight: "500",
     },
   },
 });
@@ -44,8 +47,8 @@ export const TimeSelectionContainer = styled("div", {
     borderRadius: "16px",
     transition: "background 0.2s",
     "&.isMini": {
-      padding: "10px",
-      fontSize: "15px",
+      padding: "8px",
+      fontSize: "13px",
       borderRadius: "10px",
     },
     "&:hover": {
@@ -58,10 +61,6 @@ export const TimeSelectionContainer = styled("div", {
     left: "0px",
     color: "#9A9A9A",
     fontSize: "14px",
-    "&.isMini": {
-      fontSize: "13px",
-      top: "-20px",
-    },
   },
 });
 
@@ -84,6 +83,12 @@ export const ArrowDownIcon = styled(ArrowDown, {
         transform: "translateY(-50%)",
       },
     },
+  },
+  "&.isMini": {
+    width: "18px",
+    height: "18px",
+    right: "7px",
+    strokeWidth: "1",
   },
 });
 
@@ -115,11 +120,12 @@ export const SelectBox = styled("div", {
     },
   },
   "&.isMini": {
-    height: "150px",
-    padding: "4px",
+    height: "130px",
+    padding: "3px",
+    top: "120%",
     "& .optionButton": {
-      padding: "6px",
-      fontSize: "14px",
+      padding: "5px",
+      fontSize: "13px",
     },
   },
   "&::-webkit-scrollbar": {
