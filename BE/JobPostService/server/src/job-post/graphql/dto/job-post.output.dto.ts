@@ -2,12 +2,14 @@ import {
   SalaryType,
   WorkPeriodType,
   WorkTimeType,
+  JobCategory,
+  DayOfWeek,
 } from 'src/job-post/mongoose/job-post.enum';
 
 export class WorkPeriod {
   type: WorkPeriodType;
   dates?: string[];
-  days?: string[];
+  days?: DayOfWeek[];
 }
 
 export class WorkTime {
@@ -24,10 +26,10 @@ export class Salary {
 export class JobPost {
   id: string;
   title: string;
-  jobDescription: string[];
+  jobDescription: JobCategory[];
   workPeriod: WorkPeriod;
   workTime: WorkTime;
   salary: Salary;
   photos: string[];
-  detailedDescription?: string;
+  detailedDescription: string;
 }
