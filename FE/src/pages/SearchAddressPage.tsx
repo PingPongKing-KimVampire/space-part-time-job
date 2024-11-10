@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBox from "../components/SearchBox.tsx";
 import {
@@ -63,6 +63,10 @@ const SEARCH_RESULT = [
 const SearchAddressPage = () => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const onAddressClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // 장소 선택 페이지에서 선택된 주소를 세션 스토리지에 저장한다.
     const place = e.currentTarget.getAttribute("data-place");
@@ -108,7 +112,7 @@ const SearchAddressPage = () => {
         <SearchBox
           placeholder="도로명, 건물명, 번지 검색"
           searchResult={resultElements}
-          style={{ height: "550px" }}
+          style={{}}
         />
       </Container>
     </Background>

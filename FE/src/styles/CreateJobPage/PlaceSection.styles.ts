@@ -26,6 +26,7 @@ export const ExposurePanel = styled("div", {
   borderRadius: "12px",
   padding: "16px",
   boxSizing: "border-box",
+  cursor: "pointer",
   "& .main": {
     position: "relative",
     "& span": {
@@ -43,10 +44,12 @@ export const ExposureDetailContent = styled("div", {
         height: "auto",
         opacity: "1",
         marginTop: "10px",
+        pointerEvents: "auto",
       },
       false: {
         height: "0",
         opacity: "0",
+        pointerEvents: "none",
       },
     },
   },

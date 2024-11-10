@@ -9,13 +9,15 @@ export const Background = styled("div", {
   position: "relative",
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
+  alignItems: "flex-start",
 });
 
 export const Container = styled("div", {
   width: "700px",
   display: "flex",
   flexDirection: "column",
+  marginTop: "50px",
+  paddingBottom: "50px",
 });
 
 export const SearchItemContent = styled("div", {

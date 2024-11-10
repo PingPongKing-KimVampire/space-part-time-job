@@ -26,7 +26,7 @@ export const MainButtonStyle = {
     color: "#B0B0B0",
     cursor: "not-allowed",
   },
-  "&:not(.inactivated) ": {
+  "&:not(.inactivated)": {
     background: MainColor,
     color: "white",
     cursor: "pointer",
