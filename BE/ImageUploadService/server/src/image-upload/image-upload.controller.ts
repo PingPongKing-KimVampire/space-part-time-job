@@ -26,8 +26,12 @@ export class ImageUploadController {
     @Req() req: Request,
   ) {
     if (!req.cookies.access_token) throw new HttpException('토큰 없음', 401);
+    let userId: string;
     try {
-      await this.userService.authenticateUser(req.cookies.access_token);
+      const { id } = await this.userService.authenticateUser(
+        req.cookies.access_token,
+      );
+      userId = id;
     } catch (e) {
       if (e.message === '유저 인증 실패')
         throw new HttpException('유저 인증 실패', 401);
@@ -45,7 +49,10 @@ export class ImageUploadController {
         );
       }
     }
-    const imageUrlList = await this.imageUploadService.uploadImages(files);
+    const imageUrlList = await this.imageUploadService.uploadImageList(
+      userId,
+      files,
+    );
     return { imageUrlList };
   }
 }
