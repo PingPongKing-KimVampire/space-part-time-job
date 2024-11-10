@@ -76,6 +76,7 @@ services:
       - SENDER_PHONE_NUMBER=${SENDER_PHONE_NUMBER}
       - COOLSMS_API_KEY=${COOLSMS_API_KEY}
       - COOLSMS_API_SECRET=${COOLSMS_API_SECRET}
+      - SMS_MODE=${SMS_MODE}
     depends_on:
       - kafka
     networks:
