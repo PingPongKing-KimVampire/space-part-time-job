@@ -31,9 +31,9 @@ services:
       - REDIS_PORT=6379
       - KAFKA_BROKER=kafka:9092
       - KAFKAJS_NO_PARTITIONER_WARNING=1
-      - JWT_SECRET=JWT_SECRET
       - GRPC_PORT=2500
       - PORT=3000
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mysqldb
       - redis
@@ -73,6 +73,9 @@ services:
     environment:
       - KAFKA_BROKER=kafka:9092
       - KAFKAJS_NO_PARTITIONER_WARNING=1
+      - SENDER_PHONE_NUMBER=${SENDER_PHONE_NUMBER}
+      - COOLSMS_API_KEY=${COOLSMS_API_KEY}
+      - COOLSMS_API_SECRET=${COOLSMS_API_SECRET}
     depends_on:
       - kafka
     networks:
@@ -131,6 +134,10 @@ services:
       - MONGO_DB=imageDB
       - GRPC_URL=userservice:2500
       - PORT=4000
+      - AWS_REGION=${AWS_REGION}
+      - AWS_S3_ACCESS_KEY=${AWS_S3_ACCESS_KEY}
+      - AWS_S3_SECRET_ACCESS_KEY=${AWS_S3_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
     depends_on:
       - imageuploadmongodb
       - userservice
