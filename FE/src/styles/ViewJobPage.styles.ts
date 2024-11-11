@@ -39,9 +39,10 @@ export const HeaderContainer = styled("div", {
     fontSize: "24px",
     fontWeight: "bold",
   },
-  "& .postTime": {
+  "& .subInfo": {
     color: "#828282",
     fontSize: "13px",
+    whiteSpace: "pre",
   },
 });
 
@@ -59,17 +60,36 @@ export const ContentContainer = styled("div", {
     display: "flex",
     flexDirection: "column",
     gap: "30px",
-    "& .detail": {
-      "& .title": {
-        fontSize: "18px",
-        fontWeight: "bold",
-        marginBottom: "10px",
+    "& .textInfo": {
+      display: "flex",
+      flexDirection: "column",
+      gap: "30px",
+      height: "360px",
+      overflow: "auto",
+      paddingRight: "20px",
+      "& .detail": {
+        "& .title": {
+          fontSize: "18px",
+          fontWeight: "bold",
+          marginBottom: "10px",
+        },
+        "& .description": {
+          fontSize: "14px",
+          lineHeight: "22px",
+          whiteSpace: "pre-line",
+        },
       },
-      "& .description": {
-        fontSize: "14px",
-        lineHeight: "22px",
-        whiteSpace: "pre-line",
-      },
+      // "& .detail": {
+      //   "& .title": {
+      //     fontSize: "18px",
+      //     fontWeight: "bold",
+      //     marginBottom: "10px",
+      //   },
+      //   "& .description": {
+      //     fontSize: "14px",
+      //     lineHeight: "22px",
+      //     whiteSpace: "pre-line",
+      //   },
     },
   },
 });
@@ -112,11 +132,13 @@ export const ImageSliderContainer = styled("div", {
       left: "50%",
       transform: "translateX(-50%)",
       "& .item": {
-        width: "5px",
-        height: "5px",
+        width: "8px",
+        height: "8px",
         background: "white",
         borderRadius: "10px",
         opacity: "0.3",
+        border: "none",
+        padding: "0",
         "&.active": {
           opacity: "1",
         },
@@ -170,7 +192,6 @@ export const BasicInfoContainer = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "8px",
-  flexGrow: "1",
   "& .item": {
     display: "flex",
     flexDirection: "column",

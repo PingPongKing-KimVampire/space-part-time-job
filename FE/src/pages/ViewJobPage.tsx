@@ -19,6 +19,8 @@ const ViewJobPage = () => {
           jobTypes={["STORE_MANAGEMENT", "BEVERAGE_MAKING", "BAKING"]}
           title="남광장 카페에서 경력직 주간 직원분 모십니다"
           postTime="10시간 전"
+          viewCount={25}
+          interestCount={8}
         />
         <Content />
       </Container>

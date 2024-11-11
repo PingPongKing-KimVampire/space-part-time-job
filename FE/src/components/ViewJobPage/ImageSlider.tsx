@@ -20,19 +20,13 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls }) => {
     );
   }, []);
 
-  const isSlidingPossible = useMemo(() => {
-    const right = currentIndex < imageUrls.length - 1;
-    const left = 0 < currentIndex;
-    return { right, left };
-  }, [currentIndex, imageUrls.length]);
-
-  const onArrowClick = (isForward: boolean) => {
+  const slidingTo = (index: number) => {
+    if (index < 0 || imageUrls.length <= index) return;
     if (!imageListRef.current) return;
-    if (isForward && !isSlidingPossible.right) return;
-    if (!isForward && !isSlidingPossible.left) return;
+    const dist = currentIndex - index; // 이동해야 하는 거리 (방향 포함)
     const currentPos = -(containerWidth * currentIndex);
-    const newPos = currentPos + (isForward ? -containerWidth : containerWidth);
-    setCurrentIndex((prev) => prev + (isForward ? 1 : -1));
+    const newPos = currentPos + dist * containerWidth;
+    setCurrentIndex(index);
     imageListRef.current.style.transform = `translateX(${newPos}px)`;
   };
 
@@ -48,20 +42,23 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls }) => {
       <div className="indicatorContainer">
         <div className="indicator">
           {Array.from({ length: imageUrls.length }).map((_, index) => (
-            <div
+            <button
               className={`item ${index === currentIndex ? "active" : ""}`}
               key={index}
+              onClick={() => slidingTo(index)}
             />
           ))}
         </div>
       </div>
       <LeftArrowIcon
-        className={`left ${!isSlidingPossible.left ? "inactive" : ""}`}
-        onClick={() => onArrowClick(false)}
+        className={`left ${currentIndex <= 0 ? "inactive" : ""}`}
+        onClick={() => slidingTo(currentIndex - 1)}
       />
       <RightArrowIcon
-        className={`right ${!isSlidingPossible.right ? "inactive" : ""}`}
-        onClick={() => onArrowClick(true)}
+        className={`right ${
+          imageUrls.length - 1 <= currentIndex ? "inactive" : ""
+        }`}
+        onClick={() => slidingTo(currentIndex + 1)}
       />
     </ImageSliderContainer>
   );
