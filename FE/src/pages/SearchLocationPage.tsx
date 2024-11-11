@@ -89,7 +89,7 @@ const SearchLocationPage = () => {
         <SearchBox
           placeholder="상주하는 동을 입력하세요. ex) 개포동, 대치동"
           searchResult={searchResultElements}
-          style={{ height: "420px" }}
+          style={{ height: "420px", overflowX: "hidden", overflowY: "auto" }}
         />
         <NextButton
           className={!isAllValid ? "inactivated" : ""}

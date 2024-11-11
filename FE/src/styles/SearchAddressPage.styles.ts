@@ -26,6 +26,7 @@ export const SearchItemContent = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "8px",
+  boxSizing: "border-box",
   "& .zipCode": {
     fontWeight: "500",
     fontSize: "18px",

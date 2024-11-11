@@ -104,7 +104,7 @@ const SearchAddressPage = () => {
         <SearchBox
           placeholder="도로명, 건물명, 번지 검색"
           searchResult={resultElements}
-          style={{}}
+          style={{ overflowX: "hidden", overflowY: "hidden" }}
         />
       </Container>
     </Background>
