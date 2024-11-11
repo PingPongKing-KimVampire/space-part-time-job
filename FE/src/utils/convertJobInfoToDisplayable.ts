@@ -2,6 +2,7 @@ import {
   PAY_TYPES,
   WORKTIME_TYPES,
   DAYS,
+  DAYS_KEY,
   TERM,
 } from "../constants/constants.ts";
 import formatCurrency from "./formatCurrency.ts";
@@ -40,17 +41,21 @@ export const converPeriodToDisplayable = (period: {
 }): string => {
   const getDaysToDisplay = (days: string[]): string => {
     if (days.length === 0) return "";
-    if (days.length === 1) return days[0];
+    if (days.length === 1) return DAYS[days[0]];
     // 요일이 모두 연속된 경우
-    const indexs = days.map((day) => DAYS.findIndex((d) => d === day));
+    const daysKeys = Object.keys(DAYS);
+    const indexs = days.map((day) => daysKeys.findIndex((d) => d === day));
     indexs.sort();
     const isContinuous = indexs.every((index, idx, arr) => {
       if (idx === arr.length - 1) return true;
       return index + 1 === arr[idx + 1];
     });
+    const daysValues = Object.values(DAYS);
     if (isContinuous)
-      return `${DAYS[indexs[0]]}~${DAYS[indexs[indexs.length - 1]]}`;
-    return days.join(", "); // 요일이 연속되지 않은 경우
+      return `${daysValues[indexs[0]]}~${
+        daysValues[indexs[indexs.length - 1]]
+      }`;
+    return days.map((day) => DAYS[day]).join(", "); // 요일이 연속되지 않은 경우
   };
   const getDatesToDisplay = (dates: string[]): string => {
     if (dates.length === 0) return "";

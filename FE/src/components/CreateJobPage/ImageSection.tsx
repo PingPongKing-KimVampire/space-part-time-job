@@ -59,38 +59,38 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
       10 - Object.keys(images).length
     );
     const imageUrls = validCountImages.map((file) => URL.createObjectURL(file));
-    setImages((state) => {
-      const newState = { ...state };
-      imageUrls.forEach((url) => {
-        newState[url] = null;
-      });
-      return newState;
-    });
+    setImages((state) => ({
+      ...state,
+      ...imageUrls.reduce((acc, url) => ({ ...acc, [url]: null }), {}),
+    }));
 
     let isResponseValid: boolean = true;
     if (validCountImages.length) {
       try {
-        const fetchedImageUrls: string[] = await uploadImages(validCountImages);
-        const imageUrlsMap = {}; // 프론트엔드 url과 백엔드 url을 매핑
-        imageUrls.forEach((url, index) => {
-          imageUrlsMap[url] = fetchedImageUrls[index];
-        });
-        setImages((state) => {
-          const newState = { ...state };
-          Object.entries(state).forEach(([key, val]) => {
-            newState[key] = imageUrls[key] ? imageUrls[key] : val;
-          });
-          return newState;
-        });
+        const fetchedUrls: string[] = await uploadImages(validCountImages);
+        // 프론트엔드 url과 백엔드 url을 매핑
+        const urlMap = imageUrls.reduce(
+          (acc, url, idx) => ({ ...acc, [url]: fetchedUrls[idx] }),
+          {}
+        );
+        // images 상태 업데이트 (응답받은 url을 저장)
+        setImages((state) => ({
+          ...state,
+          ...Object.keys(urlMap).reduce(
+            (acc, key) => ({ ...acc, [key]: urlMap[key] }),
+            {}
+          ),
+        }));
       } catch {
         isResponseValid = false;
-        setImages((state) => {
-          const newState = { ...state };
-          imageUrls.forEach((url) => {
-            if (newState[url]) delete newState[url];
-          });
-          return newState;
-        });
+        // 업로드 실패 시 url 제거
+        setImages((state) => ({
+          ...state,
+          ...imageUrls.reduce((acc, url) => {
+            const { [url]: _, ...rest } = acc; // 해당 URL 삭제
+            return rest;
+          }, state),
+        }));
       }
     }
 

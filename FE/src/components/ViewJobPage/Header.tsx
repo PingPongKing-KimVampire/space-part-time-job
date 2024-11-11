@@ -1,5 +1,6 @@
 import React from "react";
 import { HeaderContainer } from "../../styles/ViewJobPage.styles.ts";
+import { JOB_TYPES } from "../../constants/constants.ts";
 
 type HeaderProps = {
   jobTypes: string[];
@@ -14,7 +15,7 @@ const Header: React.FC<HeaderProps> = (props) => {
       <div className="jobTypesContainer">
         {jobTypes.map((type) => (
           <div key={type} className="jobType">
-            {type}
+            {JOB_TYPES[type]}
           </div>
         ))}
       </div>

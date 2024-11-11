@@ -107,7 +107,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
         }}
         onMouseMove={onMouseMove}
       >
-        {DAYS.map((day) => (
+        {Object.values(DAYS).map((day) => (
           <div className="weekDay" key={day}>
             {day}
           </div>

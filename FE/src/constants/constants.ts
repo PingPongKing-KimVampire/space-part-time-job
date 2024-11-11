@@ -54,7 +54,7 @@ const reverseKeyValue = (object: { [key: string]: string }) => {
 export const JOB_TYPES = {
   SERVING: "서빙",
   KITCHEN_ASSISTANT: "주방보조/설거지",
-  COOK: "주방장/조리사",
+  CHEF: "주방장/조리사",
   STORE_MANAGEMENT: "매장관리/판매",
   BEVERAGE_MAKING: "음료 제조",
   BAKING: "베이킹",
@@ -62,15 +62,16 @@ export const JOB_TYPES = {
   ERRAND: "심부름/소일거리",
   FLYER_DISTRIBUTION: "전단지 배포",
   TUTORING: "과외/학원",
-  SCHOOL_PICKUP: "등하원도우미",
-  CHILDCARE: "아이돌봄",
-  SENIOR_CARE: "어르신 돌봄",
+  SCHOOL_PICKUP_HELPER: "등하원도우미",
+  CHILD_CARE: "아이돌봄",
+  ELDER_CARE: "어르신 돌봄",
   HOUSEKEEPING: "가사/집정리",
-  MOVING: "짐 옮기기",
+  MOVING_ASSISTANCE: "짐 옮기기",
   PET_CARE: "반려동물 돌봄",
   CONVENIENCE_STORE: "편의점",
-  OTHERS: "기타",
+  OTHER: "기타",
 };
+export const JOB_TYPES_KEY = reverseKeyValue(JOB_TYPES);
 
 export const TERM = {
   TODAY: "오늘",
@@ -80,7 +81,16 @@ export const TERM = {
 };
 export const TERM_KEY = reverseKeyValue(TERM);
 
-export const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
+export const DAYS = {
+  SUNDAY: "일",
+  MONDAY: "월",
+  TUESDAY: "화",
+  WEDNESDAY: "수",
+  THURSDAY: "목",
+  FRIDAY: "금",
+  SATURDAY: "토",
+};
+export const DAYS_KEY = reverseKeyValue(DAYS);
 
 type PayTypes = {
   HOURLY: string;

@@ -16,7 +16,7 @@ const ViewJobPage = () => {
     <Background>
       <Container>
         <Header
-          jobTypes={["매장관리/판매", "음료 제조", "베이킹"]}
+          jobTypes={["STORE_MANAGEMENT", "BEVERAGE_MAKING", "BAKING"]}
           title="남광장 카페에서 경력직 주간 직원분 모십니다"
           postTime="10시간 전"
         />

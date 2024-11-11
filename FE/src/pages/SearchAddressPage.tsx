@@ -11,52 +11,44 @@ import { SESSION_STORAGE_KEY } from "./CreateJobPage.tsx";
 const SEARCH_RESULT = [
   // 임시 하드코딩 데이터
   {
-    zipCode: "06194",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
-  },
-  {
-    zipCode: "12345",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
+    zipCode: "18395",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
   },
   {
     zipCode: "11111",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
   },
   {
     zipCode: "22222",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
   },
   {
     zipCode: "33333",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
   },
   {
     zipCode: "44444",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
   },
   {
     zipCode: "55555",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
   },
   {
     zipCode: "66666",
-    roadNameAddress:
-      "서울특별시 강남구 테헤란로 428(대치동, 테헤란로 대우 아이빌)",
-    streetNumber: "서울특별시 강남구 대치동 891-6 테헤란로 대우 아이빌",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
+  },
+  {
+    zipCode: "77777",
+    roadNameAddress: "경기도 화성시 동탄지성로 333",
+    streetNumber: "경기도 화성시 기산동 464",
   },
 ];
 

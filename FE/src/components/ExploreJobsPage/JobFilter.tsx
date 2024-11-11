@@ -86,7 +86,7 @@ const JobFilter = () => {
           <label htmlFor="weekDays">일하는 요일</label>
           <Chips
             id="weekDays"
-            options={DAYS}
+            options={Object.values(DAYS)}
             onClick={onWeekDayClick}
             isSelected={(day) => weekDays.includes(day)}
             containerStyle={ChipsContainerStyle}

@@ -5,9 +5,11 @@ import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
 import {
   JOB_TYPES,
+  JOB_TYPES_KEY,
   TERM,
   TERM_KEY,
   DAYS,
+  DAYS_KEY,
   PAY_TYPES,
   WORKTIME_TYPES,
   ERROR,
@@ -254,7 +256,8 @@ const CreateJobPage = () => {
 
   const onWeekDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const sortDays = (days: string[]) => {
-      return days.sort((a, b) => DAYS.indexOf(a) - DAYS.indexOf(b));
+      const daysValues = Object.values(DAYS);
+      return days.sort((a, b) => daysValues.indexOf(a) - daysValues.indexOf(b));
     };
 
     if (!isFocused.weekDays)
@@ -304,7 +307,7 @@ const CreateJobPage = () => {
     } else if (term === TERM.SHORT_TERM) {
       workPeriod.dates = Array.from(dates);
     } else {
-      workPeriod.days = weekDays;
+      workPeriod.days = weekDays.map((day) => DAYS_KEY[day]);
     }
     const workTime: WorkTime = { type: WORKTIME_TYPES_KEY[time.type] };
     if (time.type === WORKTIME_TYPES.FIXED) {
@@ -320,7 +323,7 @@ const CreateJobPage = () => {
 
     const input = {
       title,
-      jobDescription: jobTypes,
+      jobDescription: jobTypes.map((type) => JOB_TYPES_KEY[type]),
       workPeriod,
       workTime,
       salary,
@@ -430,7 +433,7 @@ const CreateJobPage = () => {
             >
               <Chips
                 id="weekDays"
-                options={DAYS}
+                options={Object.values(DAYS)}
                 onClick={onWeekDayClick}
                 isSelected={(day: string) => weekDays.includes(day)}
               />

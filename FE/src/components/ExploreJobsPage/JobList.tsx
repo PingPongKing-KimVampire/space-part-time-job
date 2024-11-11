@@ -11,7 +11,7 @@ const JOB_RESULT = [
     title: "아이(5세) 하원 도우미, 돌봄 선생님 구합니다.",
     workPeriod: {
       type: "LONG_TERM",
-      days: ["월", "화", "수", "목", "금"],
+      days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
     },
     workTime: {
       type: "FIXED",
@@ -31,7 +31,7 @@ const JOB_RESULT = [
     title: "해탄 신영통점 홀서빙 직원 모집 (주 3~5일 가능)",
     workPeriod: {
       type: "LONG_TERM",
-      days: ["월", "화", "수", "목", "토"],
+      days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "SATURDAY"],
     },
     workTime: {
       type: "FIXED",
@@ -78,7 +78,7 @@ const JOB_RESULT = [
     title: "아이(5세) 하원 도우미, 돌봄 선생님 구합니다.",
     workPeriod: {
       type: "LONG_TERM",
-      days: ["월", "화", "수", "목", "금"],
+      days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
     },
     workTime: {
       type: "FIXED",
@@ -98,7 +98,7 @@ const JOB_RESULT = [
     title: "해탄 신영통점 홀서빙 직원 모집 (주 3~5일 가능)",
     workPeriod: {
       type: "LONG_TERM",
-      days: ["월", "화", "수", "목", "토"],
+      days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "SATURDAY"],
     },
     workTime: {
       type: "FIXED",
@@ -145,7 +145,7 @@ const JOB_RESULT = [
     title: "아이(5세) 하원 도우미, 돌봄 선생님 구합니다.",
     workPeriod: {
       type: "LONG_TERM",
-      days: ["월", "화", "수", "목", "금"],
+      days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
     },
     workTime: {
       type: "FIXED",
@@ -165,7 +165,7 @@ const JOB_RESULT = [
     title: "해탄 신영통점 홀서빙 직원 모집 (주 3~5일 가능)",
     workPeriod: {
       type: "LONG_TERM",
-      days: ["월", "화", "수", "목", "토"],
+      days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "SATURDAY"],
     },
     workTime: {
       type: "FIXED",
