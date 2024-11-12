@@ -17,7 +17,7 @@ type ContentProps = {
 const Content: React.FC<ContentProps> = (props) => {
   const imageUrls = [testImage, testImage1, testImage2];
   //   const imageUrls = [];
-  const dates = ["2024-11-10", "2024-11-12"];
+  const dates = ["2024-11-10", "2024-11-12", "2024-11-17", "2024-11-18"];
   const days = ["MONDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
   const description = `디저트 카페에서 경력있으신 알바분을 모십니다!
 저희 카페는 디저트 카페로 다양한 음료와 떡볶이, 튀김, 구움류 등 여러 종류가 있습니다. 조리에 자신있으시거나 경험이 많으신 분이 지원해주시면 더욱 즐겁게 일하실 수 있을 것 같습니다^^

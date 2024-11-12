@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import CustomMap from "../components/CustomMap.tsx";
 import { ReactComponent as XmarkIcon } from "../assets/icons/x-mark.svg";
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
 import {
@@ -14,20 +15,10 @@ import LevelSlider from "../components/SetLocationScopePage/LevelSlider.tsx";
 
 const SetLocationScopePage = () => {
   const navigate = useNavigate();
-  const mapContainerRef = useRef(null);
 
   const [locations, setLocations] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [scopeLevel, setScopeLevel] = useState<Record<string, string>>({}); // 지역과 레벨 매핑
-
-  useEffect(() => {
-    if (!mapContainerRef.current) return;
-    const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심 좌표
-      level: 3, //지도의 레벨(확대, 축소 정도)
-    };
-    const map = new kakao.maps.Map(mapContainerRef.current, options);
-  }, []);
 
   // 마운트될 때 세션 스토리지에서 locations 값 가져와서 locations 세팅
   useEffect(() => {
@@ -73,7 +64,16 @@ const SetLocationScopePage = () => {
 
   return (
     <Background>
-      <div className="mapContainer" ref={mapContainerRef} />
+      <CustomMap
+        style={{
+          position: "absolute",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "0",
+        }}
+      />
       <Container>
         <ScopeSettingContainer>
           <LocationsContainer>

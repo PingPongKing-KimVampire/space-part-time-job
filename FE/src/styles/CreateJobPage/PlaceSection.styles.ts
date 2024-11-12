@@ -9,13 +9,6 @@ export const Container = styled("div", {
   flexDirection: "column",
   gap: "10px",
   width: "100%",
-  "& .mapContainer": {
-    width: "100%",
-    height: "240px",
-    borderRadius: "16px",
-    border: "1px solid #E3E9ED",
-    boxShadow: "0 0 30px 10px rgba(0, 0, 0, 0.03)",
-  },
 });
 
 export const ExposurePanel = styled("div", {

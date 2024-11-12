@@ -12,14 +12,6 @@ export const Background = styled("div", {
   height: "100%",
   width: "100%",
   position: "relative",
-  "& .mapContainer": {
-    position: "absolute",
-    top: "0",
-    left: "0",
-    height: "100%",
-    width: "100%",
-    zIndex: "0",
-  },
 });
 
 export const Container = styled("div", {

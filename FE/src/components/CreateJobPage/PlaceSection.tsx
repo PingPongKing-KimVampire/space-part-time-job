@@ -1,6 +1,7 @@
 import React, { useRef, useState, forwardRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../CustomInput.tsx";
+import CustomMap from "../CustomMap.tsx";
 import {
   Container,
   ExposurePanel,
@@ -18,19 +19,9 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
     const { place, saveToSessionStorage } = props;
 
     const navigate = useNavigate();
-    const mapContainerRef = useRef(null);
 
     const [isExposureDetailVisible, setIsExposureDetailVisible] =
       useState(false);
-
-    useEffect(() => {
-      if (place === "" || !mapContainerRef.current) return;
-      const options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심 좌표
-        level: 3, //지도의 레벨(확대, 축소 정도)
-      };
-      const map = new kakao.maps.Map(mapContainerRef.current, options);
-    }, [place]);
 
     const onFocus = () => {
       // 장소 선택 페이지로 이동할 때 공고 작성 페이지에 입력된 모든 데이터를 세션 스토리지에 저장한다.
@@ -49,7 +40,7 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
         />
         {place !== "" && (
           <>
-            <div className="mapContainer" ref={mapContainerRef} />
+            <CustomMap />
             <ExposurePanel
               onClick={() => {
                 setIsExposureDetailVisible((prev) => !prev);

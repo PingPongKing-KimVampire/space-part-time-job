@@ -8,12 +8,11 @@ export const Background = styled("div", {
   height: "100%",
   display: "flex",
   justifyContent: "center",
-  alignItems: "flex-start",
+  alignItems: "center",
 });
 
 export const Container = styled("div", {
   width: "1000px",
-  marginTop: "40px",
 });
 
 export const HeaderContainer = styled("div", {
@@ -59,12 +58,13 @@ export const ContentContainer = styled("div", {
     width: "60%",
     display: "flex",
     flexDirection: "column",
-    gap: "30px",
+    gap: "20px",
     "& .textInfo": {
+      width: "100%",
+      aspectRatio: 6 / 4,
       display: "flex",
       flexDirection: "column",
       gap: "30px",
-      height: "360px",
       overflow: "auto",
       paddingRight: "20px",
       "& .detail": {
@@ -79,17 +79,6 @@ export const ContentContainer = styled("div", {
           whiteSpace: "pre-line",
         },
       },
-      // "& .detail": {
-      //   "& .title": {
-      //     fontSize: "18px",
-      //     fontWeight: "bold",
-      //     marginBottom: "10px",
-      //   },
-      //   "& .description": {
-      //     fontSize: "14px",
-      //     lineHeight: "22px",
-      //     whiteSpace: "pre-line",
-      //   },
     },
   },
 });
@@ -100,7 +89,7 @@ export const ImageSliderContainer = styled("div", {
   border: "1px solid #DBDBDB",
   borderRadius: "10px",
   overflow: "hidden",
-  marginBottom: "10px",
+  marginBottom: "20px",
   position: "relative",
   "& .imageList": {
     display: "flex",
@@ -197,12 +186,7 @@ export const BasicInfoContainer = styled("div", {
     flexDirection: "column",
     gap: "10px",
     borderRadius: "10px",
-    transition: "background 1s, padding 1s",
-    "&.isDetailVisible:hover": {
-      background: OptionHoverColor,
-      padding: "6px",
-      fontWeight: "bold",
-    },
+    transition: "background 0.2s, padding 0.2s",
     "& .main": {
       display: "flex",
       alignItems: "center",
@@ -214,6 +198,21 @@ export const BasicInfoContainer = styled("div", {
         stroke: MainColor,
         strokeWidth: "1",
       },
+      "& .hoverTarget": {
+        fontSize: "13px",
+        color: MainColor,
+        transition: "background 0.2s",
+        padding: "2px 7px",
+        borderRadius: "10px",
+        marginLeft: "-5px",
+        "&:hover": {
+          background: OptionHoverColor,
+        },
+      },
+    },
+    "& .detail": {
+      marginBottom: "15px",
+      padding: "0 20px",
     },
   },
 });

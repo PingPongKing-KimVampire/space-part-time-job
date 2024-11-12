@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { max } from "date-fns";
 import CustomCalendar from "../CustomCalendar.tsx";
+import CustomMap from "../CustomMap.tsx";
 import {
   converPayToDisplayable,
   converTimeToDisplayable,
@@ -23,114 +24,86 @@ type BasicInfoProps = {
 const BasicInfo: React.FC<BasicInfoProps> = (props) => {
   const { pay, address, period, time } = props;
 
-  const [isHovering, setIsHovering] = useState({
-    period: false,
-    address: false,
-  });
-
   const dates: Set<string> | null = useMemo(() => {
     return TERM[period.type] === TERM.SHORT_TERM ? new Set(period.dates) : null;
   }, [period]);
+  const lastDate: Date = useMemo(() => {
+    if (TERM[period.type] !== TERM.SHORT_TERM) return new Date();
+    const dateObjs = period.dates!.map((date) => new Date(date));
+    return max(dateObjs);
+  }, [period]);
 
   const payToDisplay = useMemo(() => converPayToDisplayable(pay), [pay]);
-
   const timeToDisplay = useMemo(() => converTimeToDisplayable(time), [time]);
-
   const periodToDisplay = useMemo(
     () => converPeriodToDisplayable(period),
     [period]
   );
 
-  const updateIsHovering = (field: string, type: "enter" | "leave") => {
-    setIsHovering((state) => ({ ...state, [field]: type === "enter" }));
-  };
-
-  const lastDate: Date = useMemo(() => {
-    if (TERM[period.type] !== TERM.SHORT_TERM) return new Date();
-    const dateObjs = period.dates!.map((date) => new Date(date));
-    return max(dateObjs);
-  }, [period.dates]);
+  const detailCalendarElement = useMemo(
+    () => (
+      <CustomCalendar
+        dates={dates || new Set()}
+        lastDate={lastDate}
+        isTitleVisible={false}
+        style={{ width: "70%" }}
+      />
+    ),
+    [dates, lastDate]
+  );
 
   // TODO: WonIcon outline 아이콘으로 다시 찾아보기
-
   return (
     <BasicInfoContainer>
       <InfoItem iconElement={<WonIcon />} text={payToDisplay} />
       <InfoItem
         iconElement={<LocationIcon />}
         text={address}
-        eventHandlers={{
-          onMouseEnter: () => {
-            updateIsHovering("address", "enter");
-          },
-          onMouseLeave: () => {
-            updateIsHovering("address", "leave");
-          },
+        detail={{
+          name: "지도",
+          element: <CustomMap style={{ boxShadow: "none" }} />,
         }}
-        isHovering={isHovering.address}
       />
       <InfoItem
         iconElement={<CalendarIcon />}
         text={periodToDisplay}
-        eventHandlers={{
-          onMouseEnter: () => {
-            updateIsHovering("period", "enter");
-          },
-          onMouseLeave: () => {
-            updateIsHovering("period", "leave");
-          },
-        }}
-        detailElement={
-          <CustomCalendar
-            dates={dates || new Set()}
-            lastDate={lastDate}
-            isTitleVisible={false}
-            style={{ width: "70%" }}
-          />
-        }
-        isHovering={isHovering.period}
+        detail={{ name: "달력", element: detailCalendarElement }}
       />
       <InfoItem iconElement={<ClockIcon />} text={timeToDisplay} />
     </BasicInfoContainer>
   );
 };
 
-type EventHandlers = {
-  onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
-  onMouseLeave?: (event: React.MouseEvent<HTMLDivElement>) => void;
-};
-
-type InfoItem = {
+type InfoItemProps = {
   iconElement: React.JSX.Element;
   text: string;
-  eventHandlers?: EventHandlers;
-  detailElement?: React.JSX.Element;
-  isHovering?: boolean;
+  detail?: {
+    name: string;
+    element: React.JSX.Element;
+  };
 };
 
-const InfoItem: React.FC<InfoItem> = (props) => {
-  const {
-    iconElement,
-    text,
-    eventHandlers = {},
-    detailElement,
-    isHovering,
-  } = props;
-  const { onMouseEnter, onMouseLeave } = eventHandlers;
+const InfoItem: React.FC<InfoItemProps> = (props) => {
+  const { iconElement, text, detail } = props;
+
+  const [isHovering, setHovering] = useState(false); // 호버 타겟 호버링 여부
 
   return (
-    <div
-      className={`item ${detailElement ? "isDetailVisible" : ""}`}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
+    <div className="item">
       <div className="main">
         {iconElement}
         {text}
+        {detail && (
+          <div
+            className="hoverTarget"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+          >
+            {detail.name} 보기
+          </div>
+        )}
       </div>
-      {detailElement && isHovering && (
-        <div className="detail">{detailElement}</div>
-      )}
+      {detail && isHovering && <div className="detail">{detail.element}</div>}
     </div>
   );
 };
