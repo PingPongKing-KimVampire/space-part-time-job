@@ -75,3 +75,9 @@ export const checkRulePassInCreateJob = {
   },
   ...checkRulePassCommon,
 };
+
+export const checkRulePassInApplication = {
+  selfIntroduction: (selfIntroduction: string): boolean => {
+    return 15 <= selfIntroduction.length && selfIntroduction.length <= 200;
+  },
+};

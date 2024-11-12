@@ -11,10 +11,12 @@ import testImage1 from "../../assets/test/ExploreJobsTest1.jpeg";
 import testImage2 from "../../assets/test/ExploreJobsTest2.jpeg";
 
 type ContentProps = {
-  //   imageUrl: string;
+  displayApplicationModal: () => void;
 };
 
 const Content: React.FC<ContentProps> = (props) => {
+  const { displayApplicationModal } = props;
+
   const imageUrls = [testImage, testImage1, testImage2];
   //   const imageUrls = [];
   const dates = ["2024-11-10", "2024-11-12", "2024-11-17", "2024-11-18"];
@@ -49,7 +51,10 @@ const Content: React.FC<ContentProps> = (props) => {
             <div className="description">{description}</div>
           </div>
         </div>
-        <Interaction />
+        <Interaction
+          alreadyApplied={false}
+          displayApplicationModal={displayApplicationModal}
+        />
       </div>
     </ContentContainer>
   );

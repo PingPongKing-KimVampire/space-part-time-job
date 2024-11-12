@@ -80,47 +80,6 @@ export const TimeContainer = styled("div", {
   gap: "20px",
 });
 
-export const DescriptionSection = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-end",
-  gap: "6px",
-  position: "relative",
-  "& textarea": {
-    width: "100%",
-    background: "white",
-    border: "0.6px solid #343434",
-    padding: "17px",
-    fontSize: "18px",
-    boxSizing: "border-box",
-    borderRadius: "16px",
-    lineHeight: "26px",
-    fontFamily: "inherit",
-    "&::placeholder": {
-      fontSize: "18px",
-      color: "#B2B2B2",
-    },
-    outline: "none",
-    "&.invalid": {
-      border: "2px solid #FF4043",
-    },
-    "&:focus": {
-      border: `2px solid ${MainColor}`,
-    },
-  },
-  "& #charCountInfo": {
-    color: "#9A9A9A",
-    fontWeight: "300",
-    position: "absolute",
-    bottom: "-27px",
-    right: "0px",
-    "& span": {
-      color: "black",
-      fontWeight: "400",
-    },
-  },
-});
-
 export const PostButton = styled("button", {
   ...MainButtonStyle,
   width: "1000px",

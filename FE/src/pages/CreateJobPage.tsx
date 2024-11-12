@@ -3,6 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import { format, addDays, addMonths } from "date-fns";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
+import CustomTextarea from "../components/CustomTextarea.tsx";
 import {
   JOB_TYPES,
   JOB_TYPES_KEY,
@@ -21,7 +22,6 @@ import {
   CancelButton,
   LoadButton,
   Container,
-  DescriptionSection,
   PostButton,
 } from "../styles/CreateJobPage.styles.ts";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
@@ -230,10 +230,6 @@ const CreateJobPage = () => {
       return list.filter((element) => element !== target);
     if (preprocessing) return preprocessing(list.concat(target));
     return list.concat(target);
-  };
-
-  const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value);
   };
 
   const onTermClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -495,30 +491,28 @@ const CreateJobPage = () => {
             title="자세한 설명"
             warning={warnings.description}
           >
-            <DescriptionSection>
-              <textarea
-                placeholder="구체적인 업무 내용, 근무 요건, 지원자가 갖추어야 할 능력 등 우대 사항에 대해 알려주세요."
-                rows={5}
-                value={description}
-                onFocus={() => {
+            <CustomTextarea
+              placeholder="구체적인 업무 내용, 근무 요건, 지원자가 갖추어야 할 능력 등 우대 사항에 대해 알려주세요."
+              value={description}
+              eventHandlers={{
+                onFocus: () => {
                   if (!isFocused.description)
                     setIsFocused((state) => ({ ...state, description: true }));
-                }}
-                onChange={onDescriptionChange}
-                onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => {
+                },
+                onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                  setDescription(e.target.value);
+                },
+                onBlur: (e: React.FocusEvent<HTMLTextAreaElement>) => {
                   setIsValid((state) => ({
                     ...state,
                     description: checkRulePassInCreateJob.description(
                       e.target.value
                     ),
                   }));
-                }}
-                maxLength={2000}
-              />
-              <div id="charCountInfo">
-                <span>{description.length}</span>/2000
-              </div>
-            </DescriptionSection>
+                },
+              }}
+              maxLength={2000}
+            />
           </FormField>
         </FormSection>
         <WarningText>{postWarning}</WarningText>
