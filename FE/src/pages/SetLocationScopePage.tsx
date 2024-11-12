@@ -42,7 +42,7 @@ const SetLocationScopePage = () => {
   useEffect(() => {
     setScopeLevel(
       locations.reduce((result, location) => {
-        result[location] = "1";
+        result[location] = "0";
         return result;
       }, {})
     );

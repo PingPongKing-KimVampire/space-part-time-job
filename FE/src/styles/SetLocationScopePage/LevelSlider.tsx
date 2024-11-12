@@ -5,32 +5,34 @@ const { styled } = createStitches();
 
 export const Container = styled("div", {
   width: "100%",
-  position: "relative",
   display: "flex",
-  alignItems: "center",
-  marginBottom: "28px",
-  "& .label": {
-    fontSize: "13px",
-    color: "#7C7C7C",
-    position: "absolute",
-    bottom: "-32px",
-    "&.left": {
-      left: "0",
-    },
-    "&.right": {
-      right: "0",
+  flexDirection: "column",
+  gap: "16px",
+  "& .sliderContainer": {
+    width: "100%",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+  },
+  "& .labels": {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    "& .label": {
+      fontSize: "13px",
+      color: "#7C7C7C",
     },
   },
 });
 
 export const Slider = styled("input", {
-  width: "100%",
   "-webkit-appearance": "none",
+  width: "100%",
   height: "5px",
   background: "#EDEDED",
+  margin: "0",
   "&::-webkit-slider-thumb": {
     "-webkit-appearance": "none",
-    appearance: "none",
     width: "24px",
     height: "24px",
     background: MainColor,
