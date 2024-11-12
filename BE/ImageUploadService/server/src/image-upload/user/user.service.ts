@@ -21,7 +21,7 @@ export class UserService implements OnModuleInit {
   constructor(private readonly configService: ConfigService) {}
 
   onModuleInit() {
-    const grpcUrl = this.configService.get<string>('GRPC_URL');
+    const grpcUrl = this.configService.get<string>('GRPC_USER_SERVER_URL');
     const clientOptions: ClientOptions = {
       transport: Transport.GRPC,
       options: {
