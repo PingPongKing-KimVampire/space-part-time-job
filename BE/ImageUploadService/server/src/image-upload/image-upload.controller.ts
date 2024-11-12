@@ -11,6 +11,7 @@ import { ImageUploadService } from './image-upload.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { UserService } from './user/user.service';
+import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller('/api/image-upload')
 export class ImageUploadController {
@@ -54,5 +55,18 @@ export class ImageUploadController {
       files,
     );
     return { imageUrlList };
+  }
+
+  @GrpcMethod('ImageUploadService', 'AreAllUserUrlList')
+  async areAllUserURLList(data: {
+    userId: string;
+    urls: string[];
+  }): Promise<{ result: boolean }> {
+    const { userId, urls } = data;
+    const isValid = await this.imageUploadService.areAllUserURLList(
+      userId,
+      urls,
+    );
+    return { result: isValid };
   }
 }

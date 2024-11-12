@@ -4,12 +4,14 @@ import { CreateJobPostInput } from './dto/job-post.input.dto';
 import { UserService } from '../user/user.service';
 import { Request } from 'express';
 import { HttpException } from '@nestjs/common';
+import { ImageUploadService } from 'src/image-upload/image-upload.service';
 
 @Resolver('JobPost')
 export class JobPostResolver {
   constructor(
     private readonly jobPostService: JobPostRepository,
     private readonly userService: UserService,
+    private readonly imageUploadService: ImageUploadService,
   ) {}
   @Mutation()
   async createJobPost(
@@ -29,6 +31,15 @@ export class JobPostResolver {
         throw new HttpException('유저 인증 실패', 401);
       throw e;
     }
+    const isValidImageUrl =
+      await this.imageUploadService.areAllUserImageURLList(
+        userId,
+        input.photos,
+      );
+
+    if (!isValidImageUrl)
+      throw new HttpException('유저가 업로드한 이미지 아님', 400);
+
     return this.jobPostService.createJobPost(input, userId);
   }
 

@@ -5,12 +5,13 @@ import { JobPostRepository } from './mongoose/job-post.repository';
 import { JobPostResolver } from './graphql/job-post.resolver';
 import { UserService } from './user/user.service';
 import { ConfigModule } from '@nestjs/config';
+import { ImageUploadService } from 'src/image-upload/image-upload.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: JobPost.name, schema: JobPostSchema }]),
     ConfigModule,
   ],
-  providers: [JobPostRepository, JobPostResolver, UserService],
+  providers: [JobPostRepository, JobPostResolver, UserService, ImageUploadService],
 })
 export class JobPostModule {}

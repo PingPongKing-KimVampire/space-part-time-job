@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package image_upload;
+
+service ImageUploadService {
+  rpc AreAllUserUrlList(URLVerificationRequest) returns (URLVerificationResponse);
+}
+
+message URLVerificationRequest {
+  string userId = 1;
+  repeated string urls = 2;
+}
+
+message URLVerificationResponse {
+  bool result = 1;
+}

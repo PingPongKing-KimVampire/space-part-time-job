@@ -116,4 +116,26 @@ export class ImageUploadService {
     });
     await this.s3Client.send(command);
   }
+
+  async areAllUserURLList(user_id: string, urls: string[]): Promise<boolean> {
+    try {
+      const userPhotos = await this.photoModel
+        .find({ user_id })
+        .select('file_name');
+
+      const userFileNameList = userPhotos.map((photo) => photo.file_name);
+
+      const extractedFileNames = urls.map((url) => {
+        const urlParts = url.split('/');
+        return urlParts[urlParts.length - 1];
+      });
+
+      return extractedFileNames.every((fileName) =>
+        userFileNameList.includes(fileName),
+      );
+    } catch (error) {
+      console.error('URL 검증 중 오류 발생:', error);
+      return false;
+    }
+  }
 }
