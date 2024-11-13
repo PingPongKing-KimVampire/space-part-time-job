@@ -53,7 +53,9 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
                   // onClick={onArrowDownClick}
                 />
               </div>
-              <ExposureDetailContent isVisible={isExposureDetailVisible}>
+              <ExposureDetailContent
+                className={isExposureDetailVisible ? "visible" : ""}
+              >
                 세류1동, 세류2동, 세류3동, 권선1동, 권선2동, 인계동, 매탄1동,
                 매탄2동, 매탄3동, 매탄4동, 영통1동, 영통2동, 태장동, 세마동,
                 지안동, 병점1동, 병점2동, 반월동, 동탄1동, 동탄2동, 동탄3동,

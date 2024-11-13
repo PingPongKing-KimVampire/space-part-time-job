@@ -4,6 +4,13 @@ import {
   ERROR,
 } from "../constants/constants.ts";
 
+const getLength = (str: string) => {
+  // 자바스크립트에서는 문자열을 UTF-16으로 처리함
+  // UTF-16에서 문자열의 길이 = 코드 유닛임, 이모지같은 일부 특수 문자는 여러 코드 유닛으로 구성됨
+  // spread 문법을 사용하면, 여러 코드 유닛으로 구성된 문자도 길이가 1로 취급됨
+  return [...str].length;
+};
+
 const checkRulePassCommon = {
   phoneNumber: (phoneNumber: string): boolean => {
     phoneNumber = phoneNumber.replaceAll("-", "");
@@ -52,7 +59,7 @@ export const checkRulePassInAuth = {
 
 export const checkRulePassInCreateJob = {
   title: (title: string): boolean => {
-    return 6 <= title.length && title.length <= 30;
+    return 6 <= getLength(title) && getLength(title) <= 30;
   },
   jobTypes: (jobTypes: string[]): boolean => {
     return 1 <= jobTypes.length && jobTypes.length <= 3;
@@ -65,19 +72,21 @@ export const checkRulePassInCreateJob = {
     if (amount.length === 0) return ERROR.CREATE_JOB.FOLLOW_PAY_RULE;
     if (
       type === PAY_TYPES.HOURLY &&
-      parseInt(amount.replaceAll(",", "")) < MINIMUM_HOURLY_PAY
+      parseInt(amount.replace(/,/g, "")) < MINIMUM_HOURLY_PAY
     )
       return ERROR.CREATE_JOB.FOLLOW_PAY_HOURLY_RULE;
     return "";
   },
   description: (description: string): boolean => {
-    return 15 <= description.length && description.length <= 2000;
+    return 15 <= getLength(description) && getLength(description) <= 2000;
   },
   ...checkRulePassCommon,
 };
 
 export const checkRulePassInApplication = {
   selfIntroduction: (selfIntroduction: string): boolean => {
-    return 15 <= selfIntroduction.length && selfIntroduction.length <= 200;
+    return (
+      15 <= getLength(selfIntroduction) && getLength(selfIntroduction) <= 200
+    );
   },
 };

@@ -59,7 +59,7 @@ export const JOB_TYPES = {
   BEVERAGE_MAKING: "음료 제조",
   BAKING: "베이킹",
   CLEANING: "업체 청소",
-  ERRAND: "심부름/소일거리",
+  ERRANDS: "심부름/소일거리",
   FLYER_DISTRIBUTION: "전단지 배포",
   TUTORING: "과외/학원",
   SCHOOL_PICKUP_HELPER: "등하원도우미",

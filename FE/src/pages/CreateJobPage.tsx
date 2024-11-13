@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import { useNavigate } from "react-router";
 import { gql, useMutation } from "@apollo/client";
 import { format, addDays, addMonths } from "date-fns";
 import CustomInput from "../components/CustomInput.tsx";
@@ -92,6 +93,7 @@ export const SESSION_STORAGE_KEY = "createJobData";
 
 const CreateJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState<string>("");
   const [jobTypes, setJobTypes] = useState<string[]>([]);
@@ -338,8 +340,7 @@ const CreateJobPage = () => {
   const onPostButtonClick = async () => {
     try {
       await postJob();
-      alert("공고 등록 성공!");
-      // TODO : 조회 페이지로 이동
+      navigate("/explore-jobs");
     } catch (e) {
       setPostWarning(e.message);
     }

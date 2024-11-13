@@ -31,20 +31,14 @@ export const ExposurePanel = styled("div", {
 export const ExposureDetailContent = styled("div", {
   lineHeight: "23px",
   transition: "all 0.2s",
-  variants: {
-    isVisible: {
-      true: {
-        height: "auto",
-        opacity: "1",
-        marginTop: "10px",
-        pointerEvents: "auto",
-      },
-      false: {
-        height: "0",
-        opacity: "0",
-        pointerEvents: "none",
-      },
-    },
+  height: "0",
+  opacity: "0",
+  pointerEvents: "none",
+  "&.visible": {
+    height: "auto",
+    opacity: "1",
+    marginTop: "10px",
+    pointerEvents: "auto",
   },
 });
 

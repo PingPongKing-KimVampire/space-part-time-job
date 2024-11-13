@@ -85,7 +85,6 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
         isResponseValid = false;
         // 업로드 실패 시 url 제거
         setImages((state) => ({
-          ...state,
           ...imageUrls.reduce((acc, url) => {
             const { [url]: _, ...rest } = acc; // 해당 URL 삭제
             return rest;
