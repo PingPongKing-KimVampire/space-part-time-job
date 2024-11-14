@@ -23,7 +23,7 @@ const JOB_RESULT = [
       amount: 12000,
     },
     photos: [],
-    location: "석우동",
+    neighbor: "석우동",
     postTime: "30분 전",
   },
   {
@@ -43,7 +43,7 @@ const JOB_RESULT = [
       amount: 3000000,
     },
     photos: [testImage1],
-    location: "반월동",
+    neighbor: "반월동",
     postTime: "2시간 전",
   },
   {
@@ -70,7 +70,7 @@ const JOB_RESULT = [
       amount: 10000,
     },
     photos: [testImage2],
-    location: "반송동",
+    neighbor: "반송동",
     postTime: "9시간 전",
   },
   {
@@ -90,7 +90,7 @@ const JOB_RESULT = [
       amount: 12000,
     },
     photos: [],
-    location: "석우동",
+    neighbor: "석우동",
     postTime: "30분 전",
   },
   {
@@ -110,7 +110,7 @@ const JOB_RESULT = [
       amount: 3000000,
     },
     photos: [testImage1],
-    location: "반월동",
+    neighbor: "반월동",
     postTime: "2시간 전",
   },
   {
@@ -137,7 +137,7 @@ const JOB_RESULT = [
       amount: 10000,
     },
     photos: [testImage2],
-    location: "반송동",
+    neighbor: "반송동",
     postTime: "9시간 전",
   },
   {
@@ -157,7 +157,7 @@ const JOB_RESULT = [
       amount: 12000,
     },
     photos: [],
-    location: "석우동",
+    neighbor: "석우동",
     postTime: "30분 전",
   },
   {
@@ -177,7 +177,7 @@ const JOB_RESULT = [
       amount: 3000000,
     },
     photos: [testImage1],
-    location: "반월동",
+    neighbor: "반월동",
     postTime: "2시간 전",
   },
   {
@@ -204,7 +204,7 @@ const JOB_RESULT = [
       amount: 10000,
     },
     photos: [testImage2],
-    location: "반송동",
+    neighbor: "반송동",
     postTime: "9시간 전",
   },
 ];
@@ -220,13 +220,13 @@ const JobList = () => {
           workTime,
           pay,
           photos,
-          location,
+          neighbor,
           postTime,
         } = job;
         return (
           <JobItem
             title={title}
-            location={location}
+            neighbor={neighbor}
             postTime={postTime}
             pay={pay}
             period={workPeriod}

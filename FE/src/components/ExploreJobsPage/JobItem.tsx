@@ -12,7 +12,7 @@ import { PAY_TYPES } from "../../constants/constants.ts";
 
 type JobItemProps = {
   title: string;
-  location: string;
+  neighbor: string;
   postTime: string;
   pay: { type: string; amount: number };
   period: { type: string; dates?: string[]; days?: string[] };
@@ -21,7 +21,7 @@ type JobItemProps = {
 };
 
 const JobItem: React.FC<JobItemProps> = (props) => {
-  const { title, location, postTime, pay, period, time, photos } = props;
+  const { title, neighbor, postTime, pay, period, time, photos } = props;
 
   const payToDisplay = useMemo(() => converPayToDisplayable(pay), [pay]);
 
@@ -37,8 +37,8 @@ const JobItem: React.FC<JobItemProps> = (props) => {
       <JobItemContextBox>
         <div className="mainInfo">
           <div className="title">{title}</div>
-          <div className="locationAndPostTime">
-            {location} ㆍ {postTime}
+          <div className="neighborAndPostTime">
+            {neighbor} ㆍ {postTime}
           </div>
         </div>
         <div className="subInfo">

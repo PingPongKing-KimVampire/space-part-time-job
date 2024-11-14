@@ -7,7 +7,7 @@ import {
   Background,
   Container,
   InputContainer,
-  LocationButton,
+  NeighborButton,
   LocationIcon,
   ArrowDownIcon,
   ContentContainer,
@@ -19,11 +19,11 @@ const ExploreJobsPage = () => {
     <Background>
       <Container>
         <InputContainer>
-          <LocationButton>
+          <NeighborButton>
             <LocationIcon />
-            <div className="location">기산동</div>
+            <div className="neighbor">기산동</div>
             <ArrowDownIcon />
-          </LocationButton>
+          </NeighborButton>
           <input placeholder="주변 알바 검색" />
         </InputContainer>
         <ContentContainer>

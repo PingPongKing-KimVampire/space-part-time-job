@@ -1,9 +1,5 @@
 import { createStitches } from "@stitches/react";
-import {
-  MainButtonStyle,
-  MainColor,
-  OptionButtonStyle,
-} from "../styles/global.ts";
+import { MainButtonStyle, MainColor, OptionButtonStyle } from "./global.ts";
 
 export const { styled } = createStitches();
 
@@ -33,14 +29,14 @@ export const ScopeSettingContainer = styled("div", {
   marginBottom: "20px",
 });
 
-export const LocationsContainer = styled("div", {
+export const NeighborsContainer = styled("div", {
   width: "100%",
   display: "flex",
   flexDirection: "row",
   gap: "7px",
   height: "55px",
   marginBottom: "28px",
-  "& .locationButton": {
+  "& .neighborButton": {
     ...OptionButtonStyle,
     textAlign: "left",
     borderRadius: "9px",
