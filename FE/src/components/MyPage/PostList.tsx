@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { ListItem } from "../../styles/MyPage.styles.ts";
 
 const POSTS = [
@@ -20,6 +21,8 @@ const POSTS = [
 ];
 
 const PostList = () => {
+  const navigate = useNavigate();
+
   const onItemMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.classList.add("isHovering");
   };
@@ -35,6 +38,15 @@ const PostList = () => {
   const onButtonMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.classList.remove("isHovering");
     e.currentTarget.parentElement!.parentElement!.classList.add("isHovering");
+  };
+
+  const onApplicantButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // 지원자가 0명인 경우, 지원자 조회 페이지로 이동 불가능
+    const applicantCount = parseInt(
+      e.currentTarget.getAttribute("data-applicant-count") || ""
+    );
+    if (isNaN(applicantCount) || applicantCount === 0) return;
+    navigate(`/view-applicants/${1}`); // TODO: 1 자리에 공고 ID를 넣어야 함
   };
 
   return (
@@ -64,7 +76,8 @@ const PostList = () => {
               }`}
               onMouseEnter={onButtonMouseEnter}
               onMouseLeave={onButtonMouseLeave}
-              // TODO: disabled를 설정할 수 없으므로, onClick 이벤트 시 지원자 0명인 경우를 유의하기
+              onClick={onApplicantButtonClick}
+              data-applicant-count={applicantCount}
             >
               지원자 확인<span className="count">({applicantCount}명)</span>
             </button>

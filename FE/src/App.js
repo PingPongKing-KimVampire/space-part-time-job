@@ -15,6 +15,7 @@ import SearchAddressPage from "./pages/SearchAddressPage.tsx";
 import ExploreJobsPage from "./pages/ExploreJobsPage.tsx";
 import ViewJobPage from "./pages/ViewJobPage.tsx";
 import MyPage from "./pages/MyPage.tsx";
+import ViewApplicantsPage from "./pages/ViewApplicantsPage.tsx";
 import { IP_ADDRESS } from "./constants/constants.ts";
 
 const { styled } = createStitches();
@@ -52,6 +53,10 @@ function App() {
             <Route path="/explore-jobs" element={<ExploreJobsPage />} />
             <Route path="/view-job/:id" element={<ViewJobPage />} />
             <Route path="/mypage" element={<MyPage />} />
+            <Route
+              path="/view-applicants/:id"
+              element={<ViewApplicantsPage />}
+            />
           </Routes>
         </Background>
       </BrowserRouter>
