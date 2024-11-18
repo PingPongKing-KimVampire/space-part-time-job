@@ -8,8 +8,9 @@ const PORT = 10000;
 // JSON 데이터 읽기
 const __dirname = path.resolve();
 const districtsData = JSON.parse(
-    readFileSync(path.join(__dirname, 'districts.json'), 'utf-8')
+    readFileSync(path.join(__dirname, '../district-data/행정동_districts.json'), 'utf-8')
 );
+
 
 // GET /district
 app.get('/district', (req, res) => {
