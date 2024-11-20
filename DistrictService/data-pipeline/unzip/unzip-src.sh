@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SRC_DIR="../src"   # ZIP 파일들이 있는 디렉토리
-DATA_DIR="../unzip-src" # 압축 해제된 파일들을 저장할 디렉토리
+SRC_DIR="../../src"   # ZIP 파일들이 있는 디렉토리
+DATA_DIR="../../unzip-src" # 압축 해제된 파일들을 저장할 디렉토리
 
 # data 디렉토리가 없으면 생성
 mkdir -p "$DATA_DIR"
