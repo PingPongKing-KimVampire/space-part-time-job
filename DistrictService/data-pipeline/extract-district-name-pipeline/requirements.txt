@@ -1,6 +1,0 @@
-geopandas
-pandas
-shapely
-fiona
-pyproj
-GDAL==3.4.1  # 사용 중인 GDAL 버전에 맞춰 설정
