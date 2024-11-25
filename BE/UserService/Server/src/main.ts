@@ -1,28 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const gRPCPort = process.env.GRPC_PORT ?? 2500;
-  const grpcApp = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'auth',
-        protoPath: join(__dirname, 'proto/auth.proto'),
-        url: `0.0.0.0:${gRPCPort}`,
-      },
-    },
-  );
-  await grpcApp.listen();
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  app.enableCors({
-    origin: true,
-    credentials: true,
-  });
+  app.use(cookieParser());
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

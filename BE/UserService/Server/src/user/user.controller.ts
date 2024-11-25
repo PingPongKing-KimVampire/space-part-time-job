@@ -21,6 +21,7 @@ import { AuthTokenService } from 'src/auth-token/auth-token.service';
 import { LoginPhoneAuthCodeRequestDto } from './dto/controller/login-phone-auth-code.request.dto';
 import { PhoneLoginRequestDto } from './dto/controller/login-phone.request.dto';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UserController {
@@ -202,13 +203,23 @@ export class UserController {
     return { remainingPhoneAuthenticationCount };
   }
 
-  @GrpcMethod('AuthService', 'AuthenticateUser')
-  authenticateUserByToken(data: { token: string }): { id: string } {
+  @Get('authenticate-token')
+  async authenticateUserByToken(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const accessToken = req.cookies['access_token'];
+    if (!accessToken) throw new HttpException('토큰 없음', 401);
     try {
-      const { id } = this.authTokenService.verifyAccessToken(data.token);
+      const { id } = this.authTokenService.verifyAccessToken(accessToken);
+      const user = await this.usersService.getUserById(id);
+      res.setHeader(
+        'space-part-time-job-user-data-base64',
+        Buffer.from(JSON.stringify(user)).toString('base64'),
+      );
       return { id };
     } catch (e) {
-      throw new RpcException('유저 인증 실패');
+      throw new HttpException('유저 인증 실패', 401);
     }
   }
 }

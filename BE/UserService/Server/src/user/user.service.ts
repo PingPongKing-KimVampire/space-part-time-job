@@ -98,4 +98,11 @@ export class UserService {
     if (!user) throw new Error('존재하지 않는 회원');
     return user.id;
   }
+
+  async getUserById(id: string): Promise<Omit<User, 'password'>> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new Error('존재하지 않는 회원');
+    delete user.password;
+    return user;
+  }
 }
