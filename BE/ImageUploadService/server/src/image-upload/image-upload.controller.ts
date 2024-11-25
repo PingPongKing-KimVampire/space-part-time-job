@@ -10,15 +10,11 @@ import {
 import { ImageUploadService } from './image-upload.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import { UserService } from './user/user.service';
 import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller('/api/image-upload')
 export class ImageUploadController {
-  constructor(
-    private readonly imageUploadService: ImageUploadService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly imageUploadService: ImageUploadService) {}
 
   @Post('')
   @UseInterceptors(FilesInterceptor('imageFiles'))
@@ -26,18 +22,9 @@ export class ImageUploadController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Req() req: Request,
   ) {
-    if (!req.cookies.access_token) throw new HttpException('토큰 없음', 401);
-    let userId: string;
-    try {
-      const { id } = await this.userService.authenticateUser(
-        req.cookies.access_token,
-      );
-      userId = id;
-    } catch (e) {
-      if (e.message === '유저 인증 실패')
-        throw new HttpException('유저 인증 실패', 401);
-      throw e;
-    }
+    const userDataHeader = req.headers['space-part-time-job-user-data-base64'];
+    const userId = this.parseUserDataHeader(userDataHeader);
+
     if (!files) throw new HttpException('파일이 없습니다.', 400);
     if (files.length > 10)
       throw new HttpException(`최대 파일개수 초과`, HttpStatus.BAD_REQUEST);
@@ -55,6 +42,20 @@ export class ImageUploadController {
       files,
     );
     return { imageUrlList };
+  }
+
+  private parseUserDataHeader(userData: string | string[] | undefined): string {
+    try {
+      const decodedData = Buffer.from(userData as string, 'base64').toString(
+        'utf-8',
+      );
+      let user = JSON.parse(decodedData);
+      const { id: userId } = user;
+      return userId;
+    } catch (e) {
+      console.error(e);
+      throw new HttpException('예상하지 못한 오류', 500);
+    }
   }
 
   @GrpcMethod('ImageUploadService', 'AreAllUserUrlList')
