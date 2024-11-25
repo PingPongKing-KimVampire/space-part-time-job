@@ -196,6 +196,17 @@ services:
       - be-network
     restart: on-failure
 
+  districtservice:
+    build:
+      context: ./DistrictService
+      dockerfile: Dockerfile
+    container_name: districtservice
+    ports:
+      - "10000:3000"
+    networks:
+      - be-network
+    restart: on-failure
+
 networks:
   be-network:
     driver: bridge
