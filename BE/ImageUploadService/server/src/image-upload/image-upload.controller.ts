@@ -25,6 +25,15 @@ export class ImageUploadController {
     const userDataHeader = req.headers['space-part-time-job-user-data-base64'];
     const userId = this.parseUserDataHeader(userDataHeader);
 
+    this.validateFile(files);
+    const imageUrlList = await this.imageUploadService.uploadImageList(
+      userId,
+      files,
+    );
+    return { imageUrlList };
+  }
+
+  private validateFile(files: Array<Express.Multer.File>) {
     if (!files) throw new HttpException('파일이 없습니다.', 400);
     if (files.length > 10)
       throw new HttpException(`최대 파일개수 초과`, HttpStatus.BAD_REQUEST);
@@ -37,11 +46,6 @@ export class ImageUploadController {
         );
       }
     }
-    const imageUrlList = await this.imageUploadService.uploadImageList(
-      userId,
-      files,
-    );
-    return { imageUrlList };
   }
 
   private parseUserDataHeader(userData: string | string[] | undefined): string {
