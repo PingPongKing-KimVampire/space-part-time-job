@@ -16,6 +16,7 @@ import ExploreJobsPage from "./pages/ExploreJobsPage.tsx";
 import ViewJobPage from "./pages/ViewJobPage.tsx";
 import MyPage from "./pages/MyPage.tsx";
 import ViewApplicantsPage from "./pages/ViewApplicantsPage.tsx";
+import ScrollToTop from "./components/ScrollToTop.tsx";
 import { IP_ADDRESS } from "./constants/constants.ts";
 
 const { styled } = createStitches();
@@ -39,6 +40,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <BrowserRouter>
+        <ScrollToTop />
         <Background>
           <Routes>
             <Route path="/signup" element={<SignupPage />} />

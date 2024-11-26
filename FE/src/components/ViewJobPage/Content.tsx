@@ -6,9 +6,9 @@ import Interaction from "./Interaction.tsx";
 import { ContentContainer } from "../../styles/ViewJobPage.styles.ts";
 import defaultImage from "../../assets/images/jobDefault.png";
 
-import testImage from "../../assets/test/ViewJobTest.jpeg";
-import testImage1 from "../../assets/test/ExploreJobsTest1.jpeg";
-import testImage2 from "../../assets/test/ExploreJobsTest2.jpeg";
+import testImage from "../../assets/test/ViewJobTest1.jpeg";
+import testImage1 from "../../assets/test/ViewJobTest2.jpeg";
+import testImage2 from "../../assets/test/ViewJobTest3.jpeg";
 
 type ContentProps = {
   displayApplicationModal: () => void;
@@ -42,7 +42,7 @@ const Content: React.FC<ContentProps> = (props) => {
         <div className="textInfo">
           <BasicInfo
             pay={{ type: "MONTHLY", amount: 2500000 }}
-            address="경기 화성시 동탄문화센터로 71-3"
+            address="경기 화성시 동탄지성로 333"
             period={{ type: "SHORT_TERM", days: days, dates: dates }}
             time={{ type: "FIXED", startTime: "07:30", endTime: "17:30" }}
           />
