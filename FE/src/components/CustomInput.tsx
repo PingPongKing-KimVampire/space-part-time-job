@@ -96,6 +96,7 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         maxLength={maxLength}
         disabled={disabled}
         readOnly={readOnly}
+        autoComplete="off"
       ></Input>
       {children}
     </div>

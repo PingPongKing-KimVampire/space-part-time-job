@@ -1,22 +1,35 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import CustomInput from "../components/CustomInput.tsx";
-import { Container, ResultBox } from "../styles/SearchBox.styles.ts";
+import {
+  Container,
+  ContentBox,
+  ResultBox,
+  FixedBox,
+} from "../styles/SearchBox.styles.ts";
 
 type SearchBoxProps = {
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
   searchResult: React.JSX.Element[];
-  style: React.CSSProperties;
+  resultBoxStyle: React.CSSProperties;
+  onScroll?: React.UIEventHandler<HTMLDivElement>;
+  contentBoxHeight?: string;
+  fixed?: React.JSX.Element[];
 };
 
-const SearchBox: React.FC<SearchBoxProps> = ({
-  searchValue,
-  setSearchValue,
-  placeholder,
-  searchResult,
-  style,
-}) => {
+const SearchBox = forwardRef<HTMLDivElement, SearchBoxProps>((props, ref) => {
+  const {
+    searchValue,
+    setSearchValue,
+    placeholder,
+    searchResult,
+    resultBoxStyle,
+    onScroll,
+    contentBoxHeight,
+    fixed = [],
+  } = props;
+
   return (
     <Container>
       <CustomInput
@@ -29,11 +42,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({
           },
         }}
       />
-      <ResultBox style={style}>
-        {searchResult && searchResult.map((element) => element)}
-      </ResultBox>
+      <ContentBox style={{ height: contentBoxHeight }}>
+        {fixed.length !== 0 && (
+          <FixedBox>{fixed.map((element) => element)}</FixedBox>
+        )}
+        <ResultBox style={resultBoxStyle} onScroll={onScroll} ref={ref}>
+          {searchResult && searchResult.map((element) => element)}
+        </ResultBox>{" "}
+      </ContentBox>
     </Container>
   );
-};
+});
 
 export default SearchBox;
