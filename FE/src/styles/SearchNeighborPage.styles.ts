@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainButtonStyle } from "./global.ts";
+import { MainButtonStyle, OptionButtonStyle } from "./global.ts";
 
 const { styled } = createStitches();
 
@@ -24,9 +24,35 @@ export const Container = styled("div", {
   },
 });
 
+export const NeighborContainer = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  "& .selectedBox": {
+    display: "flex",
+    gap: "8px",
+    transition: "margin-top 0.2s",
+    height: "0",
+    opacity: "0",
+    "&.visible": {
+      height: "auto",
+      opacity: "1",
+      marginTop: "14px",
+    },
+  },
+  "& .resultBox": {
+    marginTop: "16px",
+  },
+  "& .searchItem": {
+    ...OptionButtonStyle,
+    width: "100%",
+    textAlign: "left",
+    marginBottom: "10px",
+  },
+});
+
 export const NextButton = styled("button", {
   width: "100%",
-  marginTop: "40px",
+  marginTop: "30px",
   ...MainButtonStyle,
   "& .selectedCount": {
     fontSize: "18px",

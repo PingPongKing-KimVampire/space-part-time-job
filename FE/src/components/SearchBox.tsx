@@ -1,4 +1,5 @@
-import React, { forwardRef } from "react";
+import React, { useMemo, forwardRef } from "react";
+import { FixedSizeList as List } from "react-window";
 import CustomInput from "../components/CustomInput.tsx";
 import {
   Container,
@@ -14,7 +15,6 @@ type SearchBoxProps = {
   searchResult: React.JSX.Element[];
   resultBoxStyle: React.CSSProperties;
   onScroll?: React.UIEventHandler<HTMLDivElement>;
-  contentBoxHeight?: string;
   fixed?: React.JSX.Element[];
 };
 
@@ -26,9 +26,18 @@ const SearchBox = forwardRef<HTMLDivElement, SearchBoxProps>((props, ref) => {
     searchResult,
     resultBoxStyle,
     onScroll,
-    contentBoxHeight,
     fixed = [],
   } = props;
+
+  const resultBoxHeight = useMemo(() => {
+    //  // ref가 콜백 형태로 전달된 경우 고려
+    if (ref && typeof ref !== "function" && ref.current) {
+      console.log("resultBoxHeight", ref.current.clientHeight);
+      return ref.current.clientHeight;
+    }
+    console.log("resultBoxHeight", 420);
+    return 420;
+  }, [ref]);
 
   return (
     <Container>
@@ -42,13 +51,24 @@ const SearchBox = forwardRef<HTMLDivElement, SearchBoxProps>((props, ref) => {
           },
         }}
       />
-      <ContentBox style={{ height: contentBoxHeight }}>
-        {fixed.length !== 0 && (
-          <FixedBox>{fixed.map((element) => element)}</FixedBox>
-        )}
+      <ContentBox>
+        <FixedBox className={fixed.length !== 0 ? "visible" : ""}>
+          {fixed.map((element) => element)}
+        </FixedBox>
         <ResultBox style={resultBoxStyle} onScroll={onScroll} ref={ref}>
-          {searchResult && searchResult.map((element) => element)}
-        </ResultBox>{" "}
+          {searchResult && (
+            <List
+              height={resultBoxHeight}
+              itemCount={searchResult.length}
+              itemSize={62.8}
+              width="100%"
+            >
+              {({ index, style }) => (
+                <div style={style}>{searchResult[index]}</div>
+              )}
+            </List>
+          )}
+        </ResultBox>
       </ContentBox>
     </Container>
   );

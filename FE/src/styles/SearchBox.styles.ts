@@ -12,26 +12,27 @@ export const Container = styled("div", {
 export const ContentBox = styled("div", {
   display: "flex",
   flexDirection: "column",
+  "& .searchItem": {
+    ...OptionButtonStyle,
+    width: "100%",
+    textAlign: "left",
+    marginBottom: "10px",
+  },
 });
 
-const ListBoxStyle = {
-  display: "flex",
-  flexDirection: "column",
-  "& .searchItem": {
-    textAlign: "left",
-    ...OptionButtonStyle,
-  },
-};
-
 export const FixedBox = styled("div", {
-  ...ListBoxStyle,
+  display: "flex",
   gap: "8px",
-  marginTop: "14px",
+  transition: "all 0.2s",
+  height: "0",
+  opacity: "0",
+  "&.visible": {
+    height: "auto",
+    opacity: "1",
+    marginTop: "14px",
+  },
 });
 
 export const ResultBox = styled("div", {
-  ...ListBoxStyle,
-  overflow: "scroll",
-  gap: "12px",
-  marginTop: "24px",
+  marginTop: "16px",
 });
