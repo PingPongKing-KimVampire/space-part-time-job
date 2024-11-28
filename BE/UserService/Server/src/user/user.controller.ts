@@ -212,7 +212,7 @@ export class UserController {
     if (!accessToken) throw new HttpException('토큰 없음', 401);
     try {
       const { id } = this.authTokenService.verifyAccessToken(accessToken);
-      const user = await this.usersService.getUserById(id);
+      const user = await this.usersService.findByIdWithResidentDistricts(id);
       res.setHeader(
         'space-part-time-job-user-data-base64',
         Buffer.from(JSON.stringify(user)).toString('base64'),

@@ -53,6 +53,14 @@ export class UserRepository {
     return user;
   }
 
+  async findByIdWithResidentDistricts(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: { residentDistricts: true },
+    });
+    return user;
+  }
+
   async resetUserResidentDistricts(
     id: string,
     residentDistricts: UserResidentDistrict[],
