@@ -55,7 +55,7 @@ const SearchNeighborPage = () => {
   const fetchTotalNeighbors = async (): Promise<Neighbor[]> => {
     let response: Response;
     let data: SearchNeighborResponseData;
-    const requestUrl = `http://${IP_ADDRESS}:10000/district`;
+    const requestUrl = `http://${IP_ADDRESS}:15000/district`;
     try {
       response = await fetch(requestUrl);
     } catch {
@@ -98,10 +98,6 @@ const SearchNeighborPage = () => {
     },
     [selectedNeighbors]
   );
-
-  useEffect(() => {
-    console.log("selectedNeighbors", selectedNeighbors);
-  }, [selectedNeighbors]);
 
   const isAllValid = useMemo(() => {
     return 1 <= selectedNeighbors.length && selectedNeighbors.length <= 3;
