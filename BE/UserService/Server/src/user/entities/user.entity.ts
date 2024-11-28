@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  OneToMany,
+} from 'typeorm';
+import { UserResidentDistrict } from './user-resident-district.entity';
 
 @Entity('user')
 @Unique('UQ_USER_ID', ['userId'])
@@ -24,6 +31,9 @@ export class User {
     nullable: false,
   })
   phoneNumber: string;
+
+  @OneToMany(() => UserResidentDistrict, (urd) => urd.user)
+  residentDistricts: UserResidentDistrict[];
 
   static of({
     userId,

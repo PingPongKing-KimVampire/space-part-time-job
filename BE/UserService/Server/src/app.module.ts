@@ -10,6 +10,7 @@ import { UtilModule } from './util/util.module';
 import { RedisModule } from './redis/redis.module';
 import { ProducerModule } from './producer/producer.module';
 import { AuthTokenModule } from './auth-token/auth-token.module';
+import { UserResidentDistrict } from './user/entities/user-resident-district.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { AuthTokenModule } from './auth-token/auth-token.module';
         username: configService.get<string>('MYSQL_USER'),
         password: configService.get<string>('MYSQL_PASSWORD'),
         database: configService.get<string>('MYSQL_DB'),
-        entities: [User],
+        entities: [User, UserResidentDistrict],
         synchronize: true, //운영환경에서는 false가 되어야 함
       }),
     }),

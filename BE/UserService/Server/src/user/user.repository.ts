@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { UserResidentDistrict } from './entities/user-resident-district.entity';
 
 @Injectable()
 export class UserRepository {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(UserResidentDistrict)
+    private usersResidentDistrictRepository: Repository<UserResidentDistrict>,
   ) {}
 
   async createUser(user: User): Promise<User> {
@@ -48,5 +51,13 @@ export class UserRepository {
       where: { id },
     });
     return user;
+  }
+
+  async resetUserResidentDistricts(
+    id: string,
+    residentDistricts: UserResidentDistrict[],
+  ) {
+    await this.usersResidentDistrictRepository.delete({ userId: id });
+    await this.usersResidentDistrictRepository.save(residentDistricts);
   }
 }

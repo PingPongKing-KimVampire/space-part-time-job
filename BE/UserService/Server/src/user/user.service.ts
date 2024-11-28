@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import { AuthCodeService } from 'src/user/auth-code/auth-code.service';
 import * as bcrypt from 'bcrypt';
+import { UserResidentDistrict } from './entities/user-resident-district.entity';
 
 @Injectable()
 export class UserService {
@@ -104,5 +105,13 @@ export class UserService {
     if (!user) throw new Error('존재하지 않는 회원');
     delete user.password;
     return user;
+  }
+
+  async resetUserResidentDistricts(id: string, districts: string[]) {
+    //districts에 대한 검증 추가하기
+    const residentDistricts = districts.map((district) =>
+      UserResidentDistrict.of(id, district),
+    );
+    await this.userRepository.resetUserResidentDistricts(id, residentDistricts);
   }
 }

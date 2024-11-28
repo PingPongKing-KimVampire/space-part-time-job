@@ -9,10 +9,11 @@ import { RedisModule } from 'src/redis/redis.module';
 import { AuthCodeService } from './auth-code/auth-code.service';
 import { ProducerModule } from 'src/producer/producer.module';
 import { AuthTokenModule } from 'src/auth-token/auth-token.module';
+import { UserResidentDistrict } from './entities/user-resident-district.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, UserResidentDistrict]),
     UtilModule,
     RedisModule,
     ProducerModule,

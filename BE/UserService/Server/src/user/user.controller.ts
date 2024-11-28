@@ -222,4 +222,21 @@ export class UserController {
       throw new HttpException('유저 인증 실패', 401);
     }
   }
+
+  @GrpcMethod('UserService', 'SetUserResidentDistrict')
+  async setUserResidentDistrict(data: {
+    userId: string;
+    residentDistrict: string[];
+  }) {
+    const { userId, residentDistrict } = data;
+    try {
+      await this.usersService.resetUserResidentDistricts(
+        userId,
+        residentDistrict,
+      );
+    } catch (e) {
+      console.error('예상하지 못한 오류', e);
+      throw new RpcException('상주 행정동 업데이트 실패');
+    }
+  }
 }
