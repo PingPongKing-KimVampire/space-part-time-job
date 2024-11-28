@@ -39,7 +39,13 @@ const LevelSlider = ({ level, value, setValue }) => {
         <MarkersContainer>
           {Array.from({ length: level }).map((_, index) => {
             const left = (index / (level - 1)) * 100;
-            return <div className="marker" style={{ left: `${left}%` }} />;
+            return (
+              <div
+                className="marker"
+                key={index}
+                style={{ left: `${left}%` }}
+              />
+            );
           })}
         </MarkersContainer>
       </div>

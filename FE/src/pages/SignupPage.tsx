@@ -94,7 +94,7 @@ const SignupPage = () => {
     const requestUrl: string = `https://${IP_ADDRESS}/api/users/check-${fieldName}/${inputValue[fieldName]}`;
     try {
       response = await fetch(requestUrl);
-    } catch (e) {
+    } catch {
       throw new Error(ERROR.NETWORK);
     }
 
