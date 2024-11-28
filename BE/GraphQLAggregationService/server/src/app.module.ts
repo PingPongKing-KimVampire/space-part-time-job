@@ -7,6 +7,8 @@ import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { JobPostResolver } from './job-post/job-post.resolver';
 import { meResolver } from './user/user.resolver';
+import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -20,8 +22,10 @@ import { meResolver } from './user/user.resolver';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       path: '/api/graphql',
     }),
+    ConfigModule.forRoot(),
+    UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JobPostResolver, meResolver],
+  providers: [AppService, JobPostResolver],
 })
 export class AppModule {}

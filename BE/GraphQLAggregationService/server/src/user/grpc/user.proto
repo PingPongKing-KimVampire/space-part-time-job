@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc SetUserResidentDistrict(SetUserResidentDistrictRequest) returns (Empty);
+}
+
+message SetUserResidentDistrictRequest {
+  string userId = 1;
+  repeated string residentDistrict = 2;
+}
+
+message Empty {}
