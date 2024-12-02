@@ -79,7 +79,7 @@ export interface CreateJobPostInput {
     workTime: WorkTimeInput;
     salary: SalaryInput;
     photos?: Nullable<string[]>;
-    detailedDescription?: Nullable<string>;
+    detailedDescription: string;
 }
 
 export interface NeighborhoodInput {

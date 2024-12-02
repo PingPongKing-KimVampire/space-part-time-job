@@ -78,7 +78,7 @@ input CreateJobPostInput {
   workTime: WorkTimeInput!         # 근무 시간
   salary: SalaryInput!             # 급여 정보
   photos: [String!]                # 공고 이미지 리스트, URL형식
-  detailedDescription: String      # 공고 상세 설명
+  detailedDescription: String!      # 공고 상세 설명
 }
 
 # **응답용 근무 기간 타입**
