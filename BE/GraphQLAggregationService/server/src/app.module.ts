@@ -5,10 +5,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import { JobPostResolver } from './job-post/job-post.resolver';
-import { meResolver } from './user/user.resolver';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { JobPostModule } from './job-post/job-post.module';
 
 @Module({
   imports: [
@@ -24,8 +23,9 @@ import { UserModule } from './user/user.module';
     }),
     ConfigModule.forRoot(),
     UserModule,
+    JobPostModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JobPostResolver],
+  providers: [AppService],
 })
 export class AppModule {}

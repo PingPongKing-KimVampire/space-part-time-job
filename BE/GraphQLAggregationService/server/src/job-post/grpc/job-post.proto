@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package jobPost;
+
+// Enum definitions
+enum JobCategory {
+  SERVING = 0;
+  KITCHEN_ASSISTANT = 1;
+  CHEF = 2;
+  STORE_MANAGEMENT = 3;
+  BEVERAGE_MAKING = 4;
+  BAKING = 5;
+  CLEANING = 6;
+  ERRANDS = 7;
+  FLYER_DISTRIBUTION = 8;
+  TUTORING = 9;
+  SCHOOL_PICKUP_HELPER = 10;
+  CHILD_CARE = 11;
+  ELDER_CARE = 12;
+  HOUSEKEEPING = 13;
+  MOVING_ASSISTANCE = 14;
+  PET_CARE = 15;
+  CONVENIENCE_STORE = 16;
+  OTHER = 17;
+}
+
+enum WorkPeriodType {
+  SHORT_TERM = 0;
+  LONG_TERM = 1;
+}
+
+enum WorkTimeType {
+  FLEXIBLE = 0;
+  FIXED = 1;
+}
+
+enum SalaryType {
+  HOURLY = 0;
+  PER_TASK = 1;
+  MONTHLY = 2;
+}
+
+// Input message definitions
+message WorkPeriodInput {
+  WorkPeriodType type = 1;
+  repeated string dates = 2; // Optional
+  repeated string days = 3;  // Optional (e.g., MONDAY, TUESDAY)
+}
+
+message WorkTimeInput {
+  WorkTimeType type = 1;
+  string startTime = 2; // Optional (e.g., "08:00")
+  string endTime = 3;   // Optional (e.g., "17:00")
+}
+
+message SalaryInput {
+  SalaryType salaryType = 1;
+  float salaryAmount = 2;
+}
+
+message CreateJobPostInput {
+  string userId = 1;
+  string title = 2;
+  repeated JobCategory jobDescription = 3;
+  WorkPeriodInput workPeriod = 4;
+  WorkTimeInput workTime = 5;
+  SalaryInput salary = 6;
+  repeated string photos = 7;     // Optional
+  string detailedDescription = 8; // Optional
+}
+
+// Response message definition
+message CreateJobPostResponse {
+  string id = 1; // Only return the ID of the created job post
+}
+
+// Service definition
+service JobPostService {
+  rpc CreateJobPost(CreateJobPostInput) returns (CreateJobPostResponse);
+}
