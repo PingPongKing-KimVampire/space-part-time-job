@@ -17,7 +17,7 @@ import {
   IsUrl,
   Validate,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   DayOfWeek,
   JobCategory,
@@ -31,11 +31,19 @@ import {
   IsValidWorkPeriod,
   IsValidWorkTime,
 } from './job-post.input.dto.validator';
+import {
+  DayOfWeekMapping,
+  JobCategoryMapping,
+  SalaryTypeMapping,
+  WorkPeriodTypeMapping,
+  WorkTimeTypeMapping,
+} from 'src/job-post/grpc/job-post.enum-mapping';
 
 @InputType()
 export class WorkPeriodInput {
   @Field()
   @IsEnum(WorkPeriodType)
+  @Transform(({ value }) => WorkPeriodTypeMapping[value], { toClassOnly: true })
   type: WorkPeriodType;
 
   @Field(() => [String], { nullable: true })
@@ -55,6 +63,9 @@ export class WorkPeriodInput {
   @IsArray()
   @IsEnum(DayOfWeek, { each: true })
   @ArrayMinSize(1, { message: '요일은 최소 1개 이상 선택해야 합니다.' })
+  @Transform(({ value }) => value.map((v: number) => DayOfWeekMapping[v]), {
+    toClassOnly: true,
+  })
   days?: string[];
 }
 
@@ -62,6 +73,7 @@ export class WorkPeriodInput {
 export class WorkTimeInput {
   @Field()
   @IsEnum(WorkTimeType)
+  @Transform(({ value }) => WorkTimeTypeMapping[value], { toClassOnly: true })
   type: WorkTimeType;
 
   @Field({ nullable: true })
@@ -81,6 +93,7 @@ export class WorkTimeInput {
 export class SalaryInput {
   @Field()
   @IsEnum(SalaryType)
+  @Transform(({ value }) => SalaryTypeMapping[value], { toClassOnly: true })
   salaryType: SalaryType;
 
   @Field()
@@ -92,6 +105,10 @@ export class SalaryInput {
 
 @InputType()
 export class CreateJobPostInput {
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+
   @Field()
   @IsNotEmpty()
   @IsString()
@@ -104,6 +121,10 @@ export class CreateJobPostInput {
   @IsEnum(JobCategory, { each: true })
   @ArrayMinSize(1, { message: '하는 일은 최소 1개 선택해야 합니다.' })
   @ArrayMaxSize(3, { message: '하는 일은 최대 3개까지 선택할 수 있습니다.' })
+  @Transform(
+    ({ value }) => value.map((job: number) => JobCategoryMapping[job]),
+    { toClassOnly: true },
+  )
   jobDescription: string[];
 
   @Field(() => WorkPeriodInput)

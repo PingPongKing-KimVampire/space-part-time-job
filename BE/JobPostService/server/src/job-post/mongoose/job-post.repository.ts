@@ -9,8 +9,8 @@ export class JobPostRepository {
     @InjectModel(JobPost.name) private jobPostModel: Model<JobPostDocument>,
   ) {}
 
-  async createJobPost(input: any, userId: string) {
-    const jobPost = new this.jobPostModel({ ...input, userId });
+  async createJobPost(input: any) {
+    const jobPost = new this.jobPostModel(input);
     return jobPost.save();
   }
 
@@ -18,7 +18,7 @@ export class JobPostRepository {
     return this.jobPostModel.findById(id).exec();
   }
 
-  async findAll(): Promise<JobPost[]> {	
+  async findAll(): Promise<JobPost[]> {
     return this.jobPostModel.find().exec();
   }
 }

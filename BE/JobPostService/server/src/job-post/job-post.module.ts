@@ -5,6 +5,7 @@ import { JobPostRepository } from './mongoose/job-post.repository';
 import { JobPostResolver } from './graphql/job-post.resolver';
 import { ConfigModule } from '@nestjs/config';
 import { ImageUploadService } from 'src/image-upload/image-upload.service';
+import { JobPostController } from './job-post.controller';
 
 @Module({
   imports: [
@@ -12,5 +13,6 @@ import { ImageUploadService } from 'src/image-upload/image-upload.service';
     ConfigModule,
   ],
   providers: [JobPostRepository, JobPostResolver, ImageUploadService],
+  controllers: [JobPostController],
 })
 export class JobPostModule {}
