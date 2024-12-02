@@ -48,7 +48,6 @@ export class ImageUploadService implements OnModuleInit {
   ): Promise<boolean> {
     if (!urls || urls.length === 0) return true;
     try {
-      console.log({ userId: userId, urls });
       const response = await this.imageUploadService
         .areAllUserUrlList({ userId: userId, urls })
         .toPromise();
