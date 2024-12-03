@@ -14,6 +14,14 @@ async function bootstrap() {
         package: 'user',
         protoPath: join(__dirname, 'user/proto/user.proto'),
         url: `0.0.0.0:${gRPCPort}`,
+        loader: {
+          keepCase: true,
+          longs: String,
+          enums: String,
+          defaults: true,
+          arrays: true,
+          objects: true,
+        },
       },
     },
   );
