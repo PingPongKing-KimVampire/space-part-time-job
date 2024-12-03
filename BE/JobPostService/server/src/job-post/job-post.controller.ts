@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { ImageUploadService } from 'src/image-upload/image-upload.service';
 import { JobPostRepository } from './mongoose/job-post.repository';
-import { CreateJobPostInput } from './graphql/dto/job-post.input.dto';
+import { CreateJobPostInput } from './grpc/dto/job-post.input.dto';
 
 import { validate, ValidationError } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
