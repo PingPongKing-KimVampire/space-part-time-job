@@ -202,8 +202,8 @@ services:
       context: ./DistrictService
       dockerfile: Dockerfile
     container_name: districtservice
-    ports:
-      - "10000:3000"
+    environment:
+      - PORT=3000
     networks:
       - be-network
     restart: on-failure

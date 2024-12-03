@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from "fs";
 import path from "path";
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // 데이터 로드 함수
 function loadData() {
