@@ -13,6 +13,14 @@ async function bootstrap() {
         package: 'district',
         protoPath: join(__dirname, 'grpc/district.proto'),
         url: `0.0.0.0:${gRPCPort}`,
+        loader: {
+          keepCase: true,
+          longs: String,
+          enums: String,
+          defaults: true,
+          arrays: true,
+          objects: true,
+        },
       },
     },
   );

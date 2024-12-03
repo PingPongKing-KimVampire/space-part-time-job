@@ -213,9 +213,18 @@ export class UserController {
     try {
       const { id } = this.authTokenService.verifyAccessToken(accessToken);
       const user = await this.usersService.findByIdWithResidentDistricts(id);
+      const userData = {
+        id: user.id,
+        userId: user.userId,
+        nickname: user.nickname,
+        phoneNumber: user.phoneNumber,
+        residentDistricts: user.residentDistricts?.map(
+          (residentDistrict) => residentDistrict.districtId,
+        ),
+      };
       res.setHeader(
         'space-part-time-job-user-data-base64',
-        Buffer.from(JSON.stringify(user)).toString('base64'),
+        Buffer.from(JSON.stringify(userData)).toString('base64'),
       );
       return { id };
     } catch (e) {

@@ -8,6 +8,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { JobPostModule } from './job-post/job-post.module';
+import { DistrictModule } from './district/district.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { JobPostModule } from './job-post/job-post.module';
     ConfigModule.forRoot(),
     UserModule,
     JobPostModule,
+    DistrictModule,
   ],
   controllers: [AppController],
   providers: [AppService],

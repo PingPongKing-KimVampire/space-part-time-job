@@ -221,6 +221,7 @@ services:
       - PORT=3000
       - GRPC_USER_SERVER_URL=userservice:2500
       - GRPC_JOB_POST_SERVER_URL=jobpostservice:2500
+      - GRPC_DISTRICT_SERVER_URL=districtservice:2500
     networks:
       - be-network
     restart: on-failure
