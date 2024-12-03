@@ -50,10 +50,10 @@ export class DistrictService {
     );
     if (!districtsNeighborData)
       throw new NotFoundException('동네를 찾을 수 없음');
-    delete districtsNeighborData.district_id;
-    delete districtsNeighborData.district_korean_name;
-    delete districtsNeighborData.district_english_name;
-    return districtsNeighborData;
+    const ret = {
+      levels: districtsNeighborData.levels,
+    };
+    return ret;
   }
 
   getDistrictNames(ids: string[]): Record<string, string> {
