@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { DistrictService } from './district.service';
 
 @Controller('district')
@@ -20,7 +20,14 @@ export class DistrictController {
   getDistrictNames(data: { ids: string[] }): {
     district_names: Record<string, string>;
   } {
-    const districtNames = this.districtService.getDistrictNames(data.ids);
-    return { district_names: districtNames };
+    try {
+      const districtNames = this.districtService.getDistrictNames(data.ids);
+      return { district_names: districtNames };
+    } catch (e) {
+      if (e.message === '동네를 찾을 수 없음') {
+        throw new RpcException('동네를 찾을 수 없음');
+      }
+      throw e;
+    }
   }
 }
