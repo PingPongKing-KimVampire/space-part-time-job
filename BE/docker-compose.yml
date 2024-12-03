@@ -38,6 +38,7 @@ services:
       - GRPC_PORT=2500
       - PORT=3000
       - JWT_SECRET=${JWT_SECRET}
+      - GRPC_DISTRICT_SERVER_URL=districtservice:2500
     depends_on:
       - mysqldb
       - redis
@@ -204,6 +205,7 @@ services:
     container_name: districtservice
     environment:
       - PORT=3000
+      - GRPC_PORT=2500
     networks:
       - be-network
     restart: on-failure

@@ -235,6 +235,8 @@ export class UserController {
         residentDistrict,
       );
     } catch (e) {
+      if (e.message === '동네를 찾을 수 없음')
+        throw new RpcException(e.message);
       console.error('예상하지 못한 오류', e);
       throw new RpcException('상주 행정동 업데이트 실패');
     }

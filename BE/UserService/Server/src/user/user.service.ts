@@ -5,12 +5,14 @@ import { UserRepository } from './user.repository';
 import { AuthCodeService } from 'src/user/auth-code/auth-code.service';
 import * as bcrypt from 'bcrypt';
 import { UserResidentDistrict } from './entities/user-resident-district.entity';
+import { DistrictService } from 'src/district/district.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly authCodeService: AuthCodeService,
+    private readonly districtService: DistrictService,
   ) {}
 
   async signup(signupDto: SignupDto): Promise<User> {
@@ -110,10 +112,15 @@ export class UserService {
   }
 
   async resetUserResidentDistricts(id: string, districts: string[]) {
-    //districts에 대한 검증 추가하기
+    await this.checkDistricts(districts);
     const residentDistricts = districts.map((district) =>
       UserResidentDistrict.of(id, district),
     );
     await this.userRepository.resetUserResidentDistricts(id, residentDistricts);
+  }
+
+  private async checkDistricts(districts: string[]) {
+    //행정동 이름 조회 실패시 throw됨
+    await this.districtService.getDistrictNames(districts);
   }
 }

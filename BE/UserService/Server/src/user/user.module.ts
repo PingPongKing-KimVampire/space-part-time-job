@@ -10,6 +10,7 @@ import { AuthCodeService } from './auth-code/auth-code.service';
 import { ProducerModule } from 'src/producer/producer.module';
 import { AuthTokenModule } from 'src/auth-token/auth-token.module';
 import { UserResidentDistrict } from './entities/user-resident-district.entity';
+import { DistrictModule } from 'src/district/district.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserResidentDistrict } from './entities/user-resident-district.entity';
     RedisModule,
     ProducerModule,
     AuthTokenModule,
+    DistrictModule,
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository, AuthCodeService],
