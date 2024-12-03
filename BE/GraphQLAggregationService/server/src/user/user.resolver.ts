@@ -1,6 +1,6 @@
 import { HttpException } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { SetResidentNeighborhoodInput } from 'src/graphql';
+import { Neighborhood, SetResidentNeighborhoodInput, User } from 'src/graphql';
 import { UserService } from './user.service';
 
 @Resolver('User')
@@ -12,7 +12,7 @@ export class meResolver {
     return user;
   }
 
-  private parseUserDataHeader(req: Request): string {
+  private parseUserDataHeader(req: Request): User {
     try {
       const userDataHeader =
         req.headers['space-part-time-job-user-data-base64'];
@@ -32,12 +32,18 @@ export class meResolver {
   async setResidentNeighborhood(
     @Args('input') setResidentNeighborhoodInput: SetResidentNeighborhoodInput,
     @Context('req') req: Request,
-  ) {
-    const user: any = this.parseUserDataHeader(req);
+  ): Promise<[Neighborhood]> {
+    const user: User = this.parseUserDataHeader(req);
     await this.userService.setUserResidentDistrict(
       user.id,
       setResidentNeighborhoodInput.neighborhoods,
     );
-    return setResidentNeighborhoodInput.neighborhoods;
+
+    return setResidentNeighborhoodInput.neighborhoods.map(
+      (NeighborhoodInput) => ({
+        id: NeighborhoodInput.id,
+        name: '하드코딩',
+      }),
+    ) as [Neighborhood];
   }
 }
