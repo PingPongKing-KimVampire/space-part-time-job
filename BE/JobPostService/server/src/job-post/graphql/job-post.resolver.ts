@@ -28,7 +28,7 @@ export class JobPostResolver {
     if (!isValidImageUrl)
       throw new HttpException('유저가 업로드한 이미지 아님', 400);
 
-    return this.jobPostService.createJobPost(input, userId);
+    return this.jobPostService.createJobPost(input);
   }
 
   private parseUserDataHeader(userData: string | string[] | undefined): string {
