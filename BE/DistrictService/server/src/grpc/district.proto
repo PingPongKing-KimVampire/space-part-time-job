@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package district;
+
+message DistrictRequest {
+  repeated string ids = 1;
+}
+
+message DistrictResponse {
+  map<string, string> district_names = 1;
+}
+
+service DistrictService {
+  rpc GetDistrictNames(DistrictRequest) returns (DistrictResponse);
+}

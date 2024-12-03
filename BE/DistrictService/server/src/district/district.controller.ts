@@ -16,11 +16,11 @@ export class DistrictController {
     return this.districtService.getDistrictNeighbors(id);
   }
 
-  //   @GrpcMethod('DistrictService', 'GetDistrictNames')
-  //   getDistrictNames(data: { ids: string[] }): {
-  //     district_names: Record<string, string>;
-  //   } {
-  //     const districtNames = this.districtService.getDistrictNames(data.ids);
-  //     return { district_names: districtNames };
-  //   }
+  @GrpcMethod('DistrictService', 'GetDistrictNames')
+  getDistrictNames(data: { ids: string[] }): {
+    district_names: Record<string, string>;
+  } {
+    const districtNames = this.districtService.getDistrictNames(data.ids);
+    return { district_names: districtNames };
+  }
 }

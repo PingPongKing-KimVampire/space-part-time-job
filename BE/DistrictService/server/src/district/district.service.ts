@@ -56,11 +56,11 @@ export class DistrictService {
     return districtsNeighborData;
   }
 
-  //   getDistrictNames(ids: string[]): Record<string, string> {
-  //     return ids.reduce((acc, id) => {
-  //       if (!this.districtsData[id]) throw new Error('동네를 찾을 수 없음');
-  //       acc[id] = this.districtsData[id];
-  //       return acc;
-  //     }, {});
-  //   }
+  getDistrictNames(ids: string[]): Record<string, string> {
+    return ids.reduce((acc, id) => {
+      if (!this.districtsData[id]) throw new Error('동네를 찾을 수 없음');
+      acc[id] = this.districtsData[id];
+      return acc;
+    }, {});
+  }
 }
