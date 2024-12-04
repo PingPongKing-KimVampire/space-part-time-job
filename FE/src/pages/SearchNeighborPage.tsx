@@ -55,7 +55,7 @@ const SearchNeighborPage = () => {
   const fetchTotalNeighbors = async (): Promise<Neighbor[]> => {
     let response: Response;
     let data: SearchNeighborResponseData;
-    const requestUrl = `http://${IP_ADDRESS}:15000/district`;
+    const requestUrl = `https://${IP_ADDRESS}/district`;
     try {
       response = await fetch(requestUrl);
     } catch {

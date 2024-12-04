@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { createStitches } from "@stitches/react";
+import { MainColor } from "../styles/global.ts";
 
 const { styled } = createStitches();
 
@@ -19,7 +20,8 @@ type CustomMapProps = {
 const CustomMap: React.FC<CustomMapProps> = (props) => {
   const { style = {}, polygonLine = [] } = props;
   const mapContainerRef = useRef(null);
-  const mapRef = useRef(null);
+  const mapRef = useRef<kakao.maps>(null);
+  const polygonRef = useRef<kakao.maps.Polygon>(null);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -29,23 +31,38 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
       level: 3, //지도의 레벨(확대, 축소 정도)
     };
     mapRef.current = new kakao.maps.Map(mapContainerRef.current, options);
-    // polygonLine이 있다면 폴리곤 표시하기
+    mapRef.current.setDraggable(false);
+    mapRef.current.setZoomable(false);
   }, []);
 
   useEffect(() => {
+    if (polygonRef.current) polygonRef.current?.setMap(null); // 이전 폴리곤 삭제
     if (polygonLine.length === 0) return;
-    const linePath = polygonLine.map(
+
+    const setPolygon = (polygonPath) => {
+      polygonRef.current = new kakao.maps.Polygon({
+        path: polygonPath, // 선을 구성하는 좌표배열
+        strokeWeight: 3,
+        strokeColor: MainColor,
+        strokeOpacity: 1,
+        fillColor: MainColor,
+        fillOpacity: 0.2,
+      });
+      polygonRef.current?.setMap(mapRef.current);
+    };
+    const setCenter = (polygonPath) => {
+      const bounds = new kakao.maps.LatLngBounds();
+      polygonPath.forEach((point) => {
+        bounds.extend(point);
+      });
+      mapRef.current.panTo(bounds);
+    };
+
+    const polygonPath = polygonLine.map(
       (coordinate) => new kakao.maps.LatLng(...coordinate)
     );
-    const polygon = new kakao.maps.Polyline({
-      path: linePath, // 선을 구성하는 좌표배열
-      strokeWeight: 5,
-      strokeColor: "#FFAE00",
-      strokeOpacity: 0.7,
-      strokeStyle: "solid",
-    });
-    mapRef.current?.setCenter(linePath[0]); // 임시로 중심 설정
-    polygon.setMap(mapRef.current);
+    setPolygon(polygonPath); // 폴리곤 표시
+    setCenter(polygonPath); // 지도 중심 설정
   }, [polygonLine]);
 
   return <Container ref={mapContainerRef} style={style} />;

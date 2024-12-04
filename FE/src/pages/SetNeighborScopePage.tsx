@@ -34,8 +34,8 @@ const SetNeighborScopePage = () => {
   const [selectedNeighbor, setSelectedNeighbor] = useState<Neighbor | null>(
     null
   );
-  const [scopeLevel, setScopeLevel] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
-  const [distructBoundaries, setDistructBoundaries] = useState<
+  const [scopeValue, setScopeValue] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
+  const [districtBoundaries, setDistrictBoundaries] = useState<
     Record<string, Level>
   >({}); // TODO : useMemo를 쓰는 게 낫나?
   const [polygonLine, setPolygonLine] = useState<[number, number][]>([]);
@@ -51,16 +51,16 @@ const SetNeighborScopePage = () => {
     const setupDistrictBoundaries = async () => {
       const result = {};
       for (const { id } of placeParsed) {
-        result[id] = await fetchDistructBoundary(id);
+        result[id] = await fetchDistrictBoundary(id);
       }
-      setDistructBoundaries(result);
+      setDistrictBoundaries(result);
     };
     setupDistrictBoundaries();
   }, []);
 
-  const fetchDistructBoundary = async (id) => {
+  const fetchDistrictBoundary = async (id) => {
     let response: Response;
-    const requestUrl = `http://${IP_ADDRESS}:15000/district/${id}/neighbors`;
+    const requestUrl = `https://${IP_ADDRESS}/district/${id}/neighbors`;
     try {
       response = await fetch(requestUrl);
     } catch {
@@ -73,21 +73,31 @@ const SetNeighborScopePage = () => {
     } catch {
       throw new Error(ERROR.SERVER);
     }
+    for (const level in data.levels) {
+      // TODO : 백엔드에서 위도, 경도 순서 바꾸면 제거하기
+      data.levels[level].outer_boundary.coordinates.forEach((coordinate) => {
+        coordinate.reverse();
+      });
+    }
     return data.levels;
   };
 
+  // 폴리곤 상태 업데이트
   useEffect(() => {
     if (
       !selectedNeighbor ||
-      Object.keys(distructBoundaries).length === 0 ||
-      Object.keys(scopeLevel).length === 0
-    )
+      !districtBoundaries[selectedNeighbor.id] ||
+      !scopeValue[selectedNeighbor.id]
+    ) {
+      setPolygonLine([]);
       return;
-    // TODO : scope level 가공해서 사용하기
+    }
+    const level = parseInt(scopeValue[selectedNeighbor.id]) / 100 + 1;
+    if (!districtBoundaries[selectedNeighbor.id][level]) return;
     setPolygonLine(
-      distructBoundaries[selectedNeighbor.id][1].outer_boundary.coordinates
+      districtBoundaries[selectedNeighbor.id][level].outer_boundary.coordinates
     );
-  }, [distructBoundaries, selectedNeighbor, scopeLevel]);
+  }, [districtBoundaries, selectedNeighbor, scopeValue]);
 
   const onNeighborClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const neighborClicked = JSON.parse(
@@ -103,9 +113,9 @@ const SetNeighborScopePage = () => {
     setNeighbors((state) => state.filter((el) => el.id !== neighborClicked.id));
   };
 
-  // x 눌렀을 때 scopeLevel 업데이트
+  // x 눌렀을 때 scopeValue 업데이트
   useEffect(() => {
-    setScopeLevel((prev) => {
+    setScopeValue((prev) => {
       return neighbors.reduce((result, neighbor) => {
         result[neighbor.id] = prev[neighbor.id] || "0";
         return result;
@@ -143,6 +153,7 @@ const SetNeighborScopePage = () => {
           height: "100%",
           width: "100%",
           zIndex: "0",
+          boxSizing: "border-box",
         }}
         polygonLine={polygonLine}
       />
@@ -172,9 +183,9 @@ const SetNeighborScopePage = () => {
           </NeighborsContainer>
           <LevelSlider
             level={4}
-            value={selectedNeighbor ? scopeLevel[selectedNeighbor.id] : "0"}
+            value={selectedNeighbor ? scopeValue[selectedNeighbor.id] : "0"}
             setValue={(value: string) => {
-              setScopeLevel((state) => {
+              setScopeValue((state) => {
                 const newState = { ...state };
                 if (selectedNeighbor) newState[selectedNeighbor.id] = value;
                 return newState;
