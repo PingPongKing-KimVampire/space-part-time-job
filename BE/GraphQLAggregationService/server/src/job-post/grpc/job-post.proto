@@ -72,7 +72,8 @@ message CreateJobPostInput {
 
 // Response message definition
 message CreateJobPostResponse {
-  string id = 1; // Only return the ID of the created job post
+  string id = 1;
+  string addressName = 2; //실제로 저장된 주소의 이름이 반환됨
 }
 
 // Service definition

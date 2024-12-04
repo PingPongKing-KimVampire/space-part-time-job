@@ -180,6 +180,7 @@ services:
       - GRPC_IMAGE_UPLOAD_SERVER_URL=imageuploadservice:2500
       - PORT=3000
       - gRPCPort=2500
+      - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
     depends_on:
       - jobpostmongodb
       - userservice

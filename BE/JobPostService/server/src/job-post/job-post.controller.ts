@@ -15,14 +15,22 @@ export class JobPostController {
   ) {}
 
   @GrpcMethod('JobPostService', 'CreateJobPost')
-  async createJobPost(input: any): Promise<{ id: string }> {
+  async createJobPost(
+    input: CreateJobPostInput,
+  ): Promise<{ id: string; addressName: string }> {
     input = plainToInstance(CreateJobPostInput, input);
     await this.validateFormat(input);
     await this.validateImageUrl(input);
+    const officialAddressName = await this.validateAddressName(
+      input.addressName,
+    );
 
     try {
-      const createdJobPost = await this.jobPostRepository.createJobPost(input);
-      return { id: createdJobPost.id };
+      const createdJobPost = await this.jobPostRepository.createJobPost({
+        ...input,
+        addressName: officialAddressName,
+      });
+      return { id: createdJobPost.id, addressName: officialAddressName };
     } catch (e) {
       console.error('예상하지 못한 에러', e);
       throw new RpcException('예상하지 못한 에러');
@@ -60,6 +68,49 @@ export class JobPostController {
       await this.imageUploadService.areAllUserImageURLList(userId, photos);
     if (!isValidImageUrl) {
       throw new RpcException('유저가 업로드한 이미지 아님');
+    }
+  }
+
+  private async validateAddressName(addressName: string) {
+    const { meta, documents } = await this.fetchKakaoAPI(addressName);
+    const totalCount = meta?.total_count;
+    if (!totalCount) {
+      throw new RpcException('존재하지 않는 주소임');
+    }
+
+    const addressObj = documents[0];
+    if (
+      addressObj.address_type != 'ROAD_ADDR' &&
+      addressObj.address_type != 'REGION_ADDR'
+    ) {
+      throw new RpcException('이 주소는 지번 주소나 도로명 주소가 아님');
+    }
+    return addressObj.address_name;
+  }
+
+  async fetchKakaoAPI(addressName: string) {
+    const kakaoApiUrl = 'https://dapi.kakao.com/v2/local/search/address.json';
+    const apiKey = process.env.KAKAO_REST_API_KEY;
+    try {
+      const response = await fetch(
+        `${kakaoApiUrl}?analyze_type=similar&page=1&size=1&query=${encodeURIComponent(addressName)}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `KakaoAK ${apiKey}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('예상하지 못한 오류', error);
+      throw error;
     }
   }
 }

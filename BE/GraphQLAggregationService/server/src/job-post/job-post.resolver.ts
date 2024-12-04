@@ -18,8 +18,9 @@ export class JobPostResolver {
       ...createJobPostInput,
       userId: user.id,
     };
-    const { id } = await this.jobPostService.createJobPost(grpcPayload);
-    return { ...createJobPostInput, id };
+    const { id, addressName: realAddressName } =
+      await this.jobPostService.createJobPost(grpcPayload);
+    return { ...createJobPostInput, id, addressName: realAddressName };
   }
 
   private parseUserDataHeader(header: string): any {

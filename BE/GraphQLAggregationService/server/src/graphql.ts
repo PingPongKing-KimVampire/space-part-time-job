@@ -80,6 +80,7 @@ export interface CreateJobPostInput {
     salary: SalaryInput;
     photos?: Nullable<string[]>;
     detailedDescription: string;
+    addressName: string;
 }
 
 export interface NeighborhoodInput {
@@ -116,6 +117,7 @@ export interface JobPost {
     salary: Salary;
     photos?: Nullable<string[]>;
     detailedDescription: string;
+    addressName: string;
 }
 
 export interface Neighborhood {

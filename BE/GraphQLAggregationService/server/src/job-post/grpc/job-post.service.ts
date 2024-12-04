@@ -13,7 +13,9 @@ import { CreateJobPostInput } from 'src/graphql';
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
 
 interface JobPostServiceGrpc {
-  createJobPost(data: GrpcCreateJobPostInput): Observable<{ id: string }>;
+  createJobPost(
+    data: GrpcCreateJobPostInput,
+  ): Observable<{ id: string; addressName: string }>;
 }
 
 @Injectable()
@@ -41,7 +43,9 @@ export class JobPostService implements OnModuleInit {
       grpcClient.getService<JobPostServiceGrpc>('JobPostService');
   }
 
-  async createJobPost(data: GrpcCreateJobPostInput): Promise<{ id: string }> {
+  async createJobPost(
+    data: GrpcCreateJobPostInput,
+  ): Promise<{ id: string; addressName: string }> {
     try {
       const response = await lastValueFrom(
         this.jobPostService.createJobPost(data),
