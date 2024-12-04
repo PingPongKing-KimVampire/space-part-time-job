@@ -66,7 +66,8 @@ message CreateJobPostInput {
   WorkTimeInput workTime = 5;
   SalaryInput salary = 6;
   repeated string photos = 7;     // Optional
-  string detailedDescription = 8; // Optional
+  string detailedDescription = 8;
+  string addressName = 9;
 }
 
 // Response message definition

@@ -63,8 +63,13 @@ export class JobPost {
   @Prop([String])
   photos: string[];
 
+  @Prop({ required: true })
   @Prop()
-  detailedDescription?: string;
+  detailedDescription: string;
+
+  @Prop({ required: true })
+  @Prop()
+  addressName: string;
 }
 
 export const JobPostSchema = SchemaFactory.createForClass(JobPost);

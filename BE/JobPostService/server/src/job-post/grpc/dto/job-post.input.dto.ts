@@ -156,4 +156,8 @@ export class CreateJobPostInput {
   @MinLength(15, { message: '상세 설명은 최소 15자 이상이어야 합니다.' })
   @MaxLength(2000, { message: '상세 설명은 최대 2000자 이하이어야 합니다.' })
   detailedDescription: string;
+
+  @IsString()
+  @MaxLength(300, { message: '주소는 최대 300자 이하이어야 합니다.' })
+  addressName: string;
 }

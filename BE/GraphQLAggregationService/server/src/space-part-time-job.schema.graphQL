@@ -78,7 +78,8 @@ input CreateJobPostInput {
   workTime: WorkTimeInput!         # 근무 시간
   salary: SalaryInput!             # 급여 정보
   photos: [String!]                # 공고 이미지 리스트, URL형식
-  detailedDescription: String!      # 공고 상세 설명
+  detailedDescription: String!     # 공고 상세 설명
+  addressName: String!             # 도로명 주소 or 지번 주소
 }
 
 # **응답용 근무 기간 타입**
@@ -111,6 +112,7 @@ type JobPost {
   salary: Salary!                 # 급여 정보
   photos: [String!]               # 공고 이미지 리스트
   detailedDescription: String!    # 공고 상세 설명
+  addressName: String!            # 도로명 주소 or 지번 주소
 }
 
 # **동네 입력 타입**
@@ -126,7 +128,7 @@ input SetResidentNeighborhoodInput {
 # **동네 타입**
 type Neighborhood {
   id: ID!      # 동네 ID
-  name: String! # 동네 이름
+  name: String! # 동네 이름 -> 일단 사용X(현재는 오류올것임)
 }
 
 # **사용자 타입**
