@@ -74,6 +74,7 @@ const SearchNeighborPage = () => {
 
   useEffect(() => {
     // 검색 키워드 바뀔 때마다 스크롤을 최상단으로 이동
+    console.log("searchResultBoxRef.current", searchResultBoxRef.current);
     searchResultBoxRef.current?.scrollTo(0, 0);
     // 검색 키워드에 맞는 동만 필터링
     setFilteredNeighbors(
@@ -124,6 +125,7 @@ const SearchNeighborPage = () => {
               setSearchValue(e.target.value);
             },
           }}
+          maxLength={20}
         />
         <NeighborContent
           selectedNeighbors={selectedNeighbors}

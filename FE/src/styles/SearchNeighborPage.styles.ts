@@ -22,32 +22,36 @@ export const Container = styled("div", {
     width: "100%",
     textAlign: "center",
   },
+  "& .content": {
+    display: "flex",
+    flexDirection: "column",
+  },
 });
 
-export const NeighborContainer = styled("div", {
+const itemStyle = {
+  ...OptionButtonStyle,
+  width: "100%",
+  textAlign: "left",
+  marginBottom: "10px",
+};
+
+export const SelectedContainer = styled("div", {
   display: "flex",
-  flexDirection: "column",
-  "& .selectedBox": {
-    display: "flex",
-    gap: "8px",
-    transition: "margin-top 0.2s",
-    height: "0",
-    opacity: "0",
-    "&.visible": {
-      height: "auto",
-      opacity: "1",
-      marginTop: "14px",
-    },
+  gap: "8px",
+  transition: "margin-top 0.2s",
+  height: "0",
+  opacity: "0",
+  "&.visible": {
+    height: "auto",
+    opacity: "1",
+    marginTop: "14px",
   },
-  "& .resultBox": {
-    marginTop: "16px",
-  },
-  "& .searchItem": {
-    ...OptionButtonStyle,
-    width: "100%",
-    textAlign: "left",
-    marginBottom: "10px",
-  },
+  "& .searchItem": itemStyle,
+});
+
+export const ResultContainer = styled("div", {
+  marginTop: "16px",
+  "& .searchItem": itemStyle,
 });
 
 export const NextButton = styled("button", {
