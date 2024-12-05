@@ -1,5 +1,4 @@
-import React, { useRef, useState, forwardRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, forwardRef } from "react";
 import CustomInput from "../CustomInput.tsx";
 import CustomMap from "../CustomMap.tsx";
 import {
@@ -11,22 +10,25 @@ import {
 
 type PlaceSectionProps = {
   place: string;
+  setPlace: React.Dispatch<React.SetStateAction<string>>;
   saveToSessionStorage: () => void;
 };
 
 const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
   (props, ref) => {
-    const { place, saveToSessionStorage } = props;
-
-    const navigate = useNavigate();
+    const { place, setPlace, saveToSessionStorage } = props;
 
     const [isExposureDetailVisible, setIsExposureDetailVisible] =
       useState(false);
 
-    const onFocus = () => {
-      // 장소 선택 페이지로 이동할 때 공고 작성 페이지에 입력된 모든 데이터를 세션 스토리지에 저장한다.
-      saveToSessionStorage();
-      navigate("/search-address");
+    const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      e.currentTarget.blur();
+      saveToSessionStorage(); // 공고 작성 페이지에 입력된 데이터를 세션 스토리지에 저장 TODO : 필요없어질 것
+      new daum.Postcode({
+        oncomplete: (data) => {
+          setPlace(data.address);
+        },
+      }).open();
     };
 
     return (
@@ -40,7 +42,7 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
         />
         {place !== "" && (
           <>
-            <CustomMap />
+            <CustomMap markerAddress={place} />
             <ExposurePanel
               onClick={() => {
                 setIsExposureDetailVisible((prev) => !prev);
@@ -48,10 +50,7 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
             >
               <div className="main">
                 <span>기산동 외 57개 동네</span>에서 노출{" "}
-                <ArrowDownIcon
-                  isSelected={isExposureDetailVisible}
-                  // onClick={onArrowDownClick}
-                />
+                <ArrowDownIcon isSelected={isExposureDetailVisible} />
               </div>
               <ExposureDetailContent
                 className={isExposureDetailVisible ? "visible" : ""}

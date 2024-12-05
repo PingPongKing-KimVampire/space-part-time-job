@@ -466,6 +466,7 @@ const CreateJobPage = () => {
           <FormField id="place" title="일하는 장소" warning="">
             <PlaceSection
               place={place}
+              setPlace={setPlace}
               saveToSessionStorage={saveToSessionStorage}
               ref={placeSectionRef}
             />

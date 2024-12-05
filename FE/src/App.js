@@ -11,7 +11,6 @@ import LoginPage from "./pages/LoginPage.tsx";
 import CreateJobPage from "./pages/CreateJobPage.tsx";
 import SearchNeighborPage from "./pages/SearchNeighborPage.tsx";
 import SetNeighborScopePage from "./pages/SetNeighborScopePage.tsx";
-import SearchAddressPage from "./pages/SearchAddressPage.tsx";
 import ExploreJobsPage from "./pages/ExploreJobsPage.tsx";
 import ViewJobPage from "./pages/ViewJobPage.tsx";
 import MyPage from "./pages/MyPage.tsx";
@@ -46,7 +45,6 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-job" element={<CreateJobPage />} />
-            <Route path="/search-address" element={<SearchAddressPage />} />
             <Route path="/search-neighbor" element={<SearchNeighborPage />} />
             <Route
               path="/set-neighbor-scope"

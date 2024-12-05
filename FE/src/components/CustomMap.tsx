@@ -13,12 +13,13 @@ const Container = styled("div", {
 });
 
 type CustomMapProps = {
-  style: Record<string, string>;
+  style?: Record<string, string>;
   polygonLine?: [number, number][];
+  markerAddress?: string;
 };
 
 const CustomMap: React.FC<CustomMapProps> = (props) => {
-  const { style = {}, polygonLine = [] } = props;
+  const { style = {}, polygonLine = [], markerAddress } = props;
   const mapContainerRef = useRef(null);
   const mapRef = useRef<kakao.maps>(null);
   const polygonRef = useRef<kakao.maps.Polygon>(null);
@@ -64,6 +65,21 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
     setPolygon(polygonPath); // 폴리곤 표시
     setCenter(polygonPath); // 지도 중심 설정
   }, [polygonLine]);
+
+  useEffect(() => {
+    // 전달된 주소에 마커 표시하기
+    if (!markerAddress) return;
+    const geocoder = new kakao.maps.services.Geocoder();
+    geocoder.addressSearch(markerAddress, (result, status) => {
+      if (status !== kakao.maps.services.Status.OK) return;
+      const coordinate = new kakao.maps.LatLng(result[0].y, result[0].x);
+      const marker = new kakao.maps.Marker({
+        map: mapRef.current,
+        position: coordinate,
+      });
+      mapRef.current.setCenter(coordinate);
+    });
+  }, [markerAddress]);
 
   return <Container ref={mapContainerRef} style={style} />;
 };
