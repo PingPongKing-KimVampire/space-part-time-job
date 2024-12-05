@@ -14,7 +14,8 @@ import {
   NextButton,
 } from "../styles/SearchNeighborPage.styles.ts";
 import CustomInput from "../components/CustomInput.tsx";
-import NeighborContent from "../components/SearchNeighborPage/NeighborContent.tsx";
+import SelectedNeighbors from "../components/SearchNeighborPage/SelectedNeighbors.tsx";
+import ResultNeighbors from "../components/SearchNeighborPage/ResultNeighbors.tsx";
 import { MainBackgroundColor } from "../styles/global.ts";
 import { IP_ADDRESS, ERROR } from "../constants/constants.ts";
 
@@ -36,7 +37,7 @@ const SearchNeighborPage = () => {
   const [selectedNeighbors, setSelectedNeighbors] = useState<Neighbor[]>([]);
 
   const [searchValue, setSearchValue] = useState<string>("");
-  const debouncedSearchValue = useDebounce(searchValue, 300);
+  const debouncedSearchValue = useDebounce(searchValue, 100);
   const searchResultBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,7 +75,6 @@ const SearchNeighborPage = () => {
 
   useEffect(() => {
     // 검색 키워드 바뀔 때마다 스크롤을 최상단으로 이동
-    console.log("searchResultBoxRef.current", searchResultBoxRef.current);
     searchResultBoxRef.current?.scrollTo(0, 0);
     // 검색 키워드에 맞는 동만 필터링
     setFilteredNeighbors(
@@ -98,6 +98,30 @@ const SearchNeighborPage = () => {
       }
     },
     [selectedNeighbors]
+  );
+
+  const getNeighborElements = useCallback(
+    (neighbors: Neighbor[]) => {
+      return neighbors.map((neighbor) => {
+        const { id, name } = neighbor;
+        const selected = selectedNeighbors.some((el) => el.id === id);
+        const inactivated = !selected && 3 <= selectedNeighbors.length;
+        return (
+          <button
+            className={`searchItem ${selected ? "selected" : ""} ${
+              inactivated ? "inactivated" : ""
+            }`}
+            key={id}
+            onClick={onNeighborClick}
+            disabled={inactivated}
+            data-neighbor={JSON.stringify(neighbor)}
+          >
+            {name}
+          </button>
+        );
+      });
+    },
+    [selectedNeighbors, onNeighborClick]
   );
 
   const isAllValid = useMemo(() => {
@@ -127,11 +151,17 @@ const SearchNeighborPage = () => {
           }}
           maxLength={20}
         />
-        <NeighborContent
-          selectedNeighbors={selectedNeighbors}
-          filteredNeighbors={filteredNeighbors}
-          onNeighborClick={onNeighborClick}
-        />
+        <div className="content">
+          <SelectedNeighbors
+            neighbors={selectedNeighbors}
+            getElements={getNeighborElements}
+          />
+          <ResultNeighbors
+            neighbors={filteredNeighbors}
+            getElements={getNeighborElements}
+            ref={searchResultBoxRef}
+          />
+        </div>
         <NextButton
           className={!isAllValid ? "inactivated" : ""}
           onClick={onNextClick}

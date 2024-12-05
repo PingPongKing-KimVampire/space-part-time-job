@@ -32,26 +32,27 @@ const itemStyle = {
   ...OptionButtonStyle,
   width: "100%",
   textAlign: "left",
-  marginBottom: "10px",
 };
 
 export const SelectedContainer = styled("div", {
   display: "flex",
   gap: "8px",
   transition: "margin-top 0.2s",
-  height: "0",
-  opacity: "0",
-  "&.visible": {
-    height: "auto",
-    opacity: "1",
-    marginTop: "14px",
+  marginTop: "14px",
+  height: "52.5px",
+  "&.empty": {
+    background: "#E4E4E4",
+    color: "#7C7C7C",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "16px",
   },
   "& .searchItem": itemStyle,
 });
 
 export const ResultContainer = styled("div", {
   marginTop: "16px",
-  "& .searchItem": itemStyle,
+  "& .searchItem": { ...itemStyle, marginBottom: "10px" },
 });
 
 export const NextButton = styled("button", {
