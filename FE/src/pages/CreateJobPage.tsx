@@ -142,47 +142,6 @@ const CreateJobPage = () => {
   const [isPayMessageVisible, setIsPayMessageVisible] = useState<boolean>(true);
 
   const placeSectionRef = useRef<HTMLDivElement>(null);
-  const [isSessionLoaded, setIsSessionLoaded] = useState<boolean>(false); // TODO: 임시방편 문제 해결
-
-  useEffect(() => {
-    const saved = sessionStorage.getItem(SESSION_STORAGE_KEY) || "";
-    if (!saved) return;
-    // 장소 검색 페이지에서 공고 페이지로 돌아왔을 때 세션 스토리지에 저장된 데이터를 로드한다.
-    const parsed = JSON.parse(saved);
-    setTitle(parsed.title || title);
-    setJobTypes(parsed.jobTypes || jobTypes);
-    setTerm(parsed.term || term);
-    setWeekDays(parsed.weekDays || weekDays);
-    setDates(new Set(parsed.dates) || dates);
-    setTime(parsed.time || time);
-    setPay(parsed.pay || pay);
-    setPlace(parsed.place || place);
-    setImages(parsed.images || images);
-    setDescription(parsed.description || description);
-    setIsFocused(parsed.isFocused || isFocused);
-    setIsValid({ ...parsed.isValid, place: parsed.place ? true : false });
-    sessionStorage.clear();
-    placeSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-    setIsSessionLoaded(true);
-  }, []);
-
-  const saveToSessionStorage = () => {
-    const createJobData = {
-      title,
-      jobTypes,
-      term,
-      weekDays,
-      dates: Array.from(dates), // Set 자료구조는 JSON으로 변환할 수 없으므로
-      time,
-      pay,
-      place,
-      images,
-      description,
-      isValid,
-      isFocused,
-    };
-    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(createJobData));
-  };
 
   useEffect(() => {
     const newWarnings: Warnings = {};
@@ -221,7 +180,7 @@ const CreateJobPage = () => {
       ...state,
       pay: checkRulePassInCreateJob.pay(pay.type, pay.amount),
     }));
-  }, [pay.type, isSessionLoaded]);
+  }, [pay.type]);
 
   const toggleSelected = (
     list: string[],
@@ -312,7 +271,7 @@ const CreateJobPage = () => {
       workTime.startTime = time.start;
       workTime.endTime = time.end;
     }
-    const payAmount = parseFloat(pay.amount.replace(/,/g, ""));
+    const payAmount = parseInt(pay.amount.replace(/,/g, ""));
     const salary = {
       salaryType: PAY_TYPES_KEY[pay.type],
       salaryAmount:
@@ -327,8 +286,8 @@ const CreateJobPage = () => {
       salary,
       photos: Object.values(images),
       detailedDescription: description,
+      addressName: place,
     };
-    console.log("input", input);
 
     try {
       await createJobPost({ variables: { input } });
@@ -462,12 +421,13 @@ const CreateJobPage = () => {
             />
           </FormField>
 
-          {/* TODO: 일하는 장소 FormField 추가해야함 */}
           <FormField id="place" title="일하는 장소" warning="">
             <PlaceSection
               place={place}
               setPlace={setPlace}
-              saveToSessionStorage={saveToSessionStorage}
+              onSelect={() => {
+                setIsValid((prev) => ({ ...prev, place: true }));
+              }}
               ref={placeSectionRef}
             />
           </FormField>

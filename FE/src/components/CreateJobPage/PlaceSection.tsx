@@ -11,22 +11,22 @@ import {
 type PlaceSectionProps = {
   place: string;
   setPlace: React.Dispatch<React.SetStateAction<string>>;
-  saveToSessionStorage: () => void;
+  onSelect: () => void;
 };
 
 const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
   (props, ref) => {
-    const { place, setPlace, saveToSessionStorage } = props;
+    const { place, setPlace, onSelect } = props;
 
     const [isExposureDetailVisible, setIsExposureDetailVisible] =
       useState(false);
 
     const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       e.currentTarget.blur();
-      saveToSessionStorage(); // 공고 작성 페이지에 입력된 데이터를 세션 스토리지에 저장 TODO : 필요없어질 것
       new daum.Postcode({
         oncomplete: (data) => {
-          setPlace(data.address);
+          setPlace(data.roadAddress);
+          onSelect();
         },
       }).open();
     };
