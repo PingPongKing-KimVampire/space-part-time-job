@@ -158,10 +158,9 @@ const SetNeighborScopePage = () => {
     const input = {
       neighborhoods: neighbors.map((neighbor) => ({ id: neighbor.id })),
     };
-    console.log("sendResidentNeighborhood input", input);
 
     try {
-      await setResidentNeighborhood({ variables: input });
+      await setResidentNeighborhood({ variables: { input } });
     } catch {
       throw new Error(ERROR.NETWORK);
     }

@@ -188,8 +188,8 @@ const LoginPage = (): React.JSX.Element => {
   ] = useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
     onCompleted: (data) => {
       if (
-        !data.residentNeighborhood ||
-        data.residentNeighborhood.length === 0
+        !data.me.residentNeighborhood ||
+        data.me.residentNeighborhood.length === 0
       ) {
         navigate("/search-neighbor");
       } else {
