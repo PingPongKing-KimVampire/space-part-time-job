@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 import CustomMap from "../components/CustomMap.tsx";
 import { ReactComponent as XmarkIcon } from "../assets/icons/x-mark.svg";
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
@@ -14,6 +15,9 @@ import {
 import LevelSlider from "../components/SetNeighborScopePage/LevelSlider.tsx";
 import { Neighbor } from "./SearchNeighborPage.tsx";
 import { IP_ADDRESS, ERROR } from "../constants/constants.ts";
+import { SET_RESIDENT_NEIGHBORHOOD } from "../graphql/mutations.js";
+import LoadingOverlay from "../components/LoadingOverlay.tsx";
+import { WarningText } from "../styles/global.ts";
 
 type Level = {
   districts: string[];
@@ -39,6 +43,7 @@ const SetNeighborScopePage = () => {
     Record<string, Level>
   >({}); // TODO : useMemo를 쓰는 게 낫나?
   const [polygonLine, setPolygonLine] = useState<[number, number][]>([]);
+  const [warning, setWarning] = useState<string>("");
 
   useEffect(() => {
     // 마운트될 때 세션 스토리지에서 neighbors 값 가져와서 neighbors 세팅
@@ -138,13 +143,44 @@ const SetNeighborScopePage = () => {
     navigate("/search-neighbor");
   };
 
-  const onCompleteButtonClick = () => {
+  const [
+    setResidentNeighborhood,
+    {
+      loading: setResidentNeighborhoodLoading,
+      error: setResidentNeighborhoodError,
+    },
+  ] = useMutation(SET_RESIDENT_NEIGHBORHOOD);
+  useEffect(() => {
+    setWarning(setResidentNeighborhoodError ? ERROR.SERVER : "");
+  }, [setResidentNeighborhoodError]);
+
+  const sendResidentNeighborhood = async () => {
+    const input = {
+      neighborhoods: neighbors.map((neighbor) => ({ id: neighbor.id })),
+    };
+    console.log("sendResidentNeighborhood input", input);
+
+    try {
+      await setResidentNeighborhood({ variables: input });
+    } catch {
+      throw new Error(ERROR.NETWORK);
+    }
+  };
+
+  const onCompleteButtonClick = async () => {
     sessionStorage.clear();
-    navigate("/explore-jobs");
+    try {
+      await sendResidentNeighborhood();
+      navigate("/explore-jobs");
+    } catch (e) {
+      // TODO : 경고 메시지 표시해야 함
+      console.log(e);
+    }
   };
 
   return (
     <Background>
+      {setResidentNeighborhoodLoading && <LoadingOverlay />}
       <CustomMap
         style={{
           position: "absolute",
@@ -192,6 +228,7 @@ const SetNeighborScopePage = () => {
               });
             }}
           />
+          <WarningText>{warning}</WarningText>
         </ScopeSettingContainer>
         <CompleteButton
           className={!neighbors.length ? "inactivated" : ""}
