@@ -7,7 +7,7 @@ export const MainHoverColor = "#2E4BD5";
 export const MainBackgroundColor = "#F9FBFC";
 export const OptionHoverColor = "#DCE2FF";
 
-const ButtonStyle = {
+export const ButtonStyle = {
   fontWeight: "bold",
   padding: "16px",
   borderRadius: "16px",

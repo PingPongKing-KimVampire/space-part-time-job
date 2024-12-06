@@ -19,8 +19,10 @@ export class DistrictService {
   } {
     const filePath = path.join(
       __dirname,
-      '../../../district-data/행정동-경계-districts-data.json',
+      '../../../district-data/districts-data.json',
     );
+
+    console.log(filePath);
 
     if (!existsSync(filePath)) {
       throw new Error(`파일이 존재하지 않습니다: ${filePath}`);
