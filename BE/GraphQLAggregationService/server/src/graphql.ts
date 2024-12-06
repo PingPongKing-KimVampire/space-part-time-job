@@ -55,6 +55,17 @@ export enum SalaryType {
     MONTHLY = "MONTHLY"
 }
 
+export interface CreateJobPostInput {
+    title: string;
+    jobDescription: JobCategory[];
+    workPeriod: WorkPeriodInput;
+    workTime: WorkTimeInput;
+    salary: SalaryInput;
+    photos?: Nullable<string[]>;
+    detailedDescription: string;
+    addressName: string;
+}
+
 export interface WorkPeriodInput {
     type: WorkPeriodType;
     dates?: Nullable<string[]>;
@@ -72,23 +83,24 @@ export interface SalaryInput {
     salaryAmount: number;
 }
 
-export interface CreateJobPostInput {
-    title: string;
-    jobDescription: JobCategory[];
-    workPeriod: WorkPeriodInput;
-    workTime: WorkTimeInput;
-    salary: SalaryInput;
-    photos?: Nullable<string[]>;
-    detailedDescription: string;
-    addressName: string;
+export interface SetResidentNeighborhoodInput {
+    neighborhoods: NeighborhoodInput[];
 }
 
 export interface NeighborhoodInput {
     id: string;
 }
 
-export interface SetResidentNeighborhoodInput {
-    neighborhoods: NeighborhoodInput[];
+export interface JobPost {
+    id: string;
+    title: string;
+    jobDescription: JobCategory[];
+    workPeriod: WorkPeriod;
+    workTime: WorkTime;
+    salary: Salary;
+    photos?: Nullable<string[]>;
+    detailedDescription: string;
+    addressName: string;
 }
 
 export interface WorkPeriod {
@@ -108,16 +120,10 @@ export interface Salary {
     salaryAmount: number;
 }
 
-export interface JobPost {
-    id: string;
-    title: string;
-    jobDescription: JobCategory[];
-    workPeriod: WorkPeriod;
-    workTime: WorkTime;
-    salary: Salary;
-    photos?: Nullable<string[]>;
-    detailedDescription: string;
-    addressName: string;
+export interface IMutation {
+    createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
+    setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
+    _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export interface Neighborhood {
@@ -132,14 +138,9 @@ export interface User {
     residentNeighborhood?: Nullable<Neighborhood[]>;
 }
 
-export interface IMutation {
-    createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
-    setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
-}
-
 export interface IQuery {
-    getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
     me(): User | Promise<User>;
+    _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 type Nullable<T> = T | null;

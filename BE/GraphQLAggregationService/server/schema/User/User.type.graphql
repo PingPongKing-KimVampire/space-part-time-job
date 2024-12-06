@@ -1,0 +1,7 @@
+# User 관련 타입
+type User {
+  id: ID!
+  nickname: String!
+  phoneNumber: String!
+  residentNeighborhood: [Neighborhood!]
+}

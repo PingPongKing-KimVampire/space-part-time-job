@@ -1,0 +1,51 @@
+# 하는 일 카테고리
+enum JobCategory {
+  SERVING
+  KITCHEN_ASSISTANT
+  CHEF
+  STORE_MANAGEMENT
+  BEVERAGE_MAKING
+  BAKING
+  CLEANING
+  ERRANDS
+  FLYER_DISTRIBUTION
+  TUTORING
+  SCHOOL_PICKUP_HELPER
+  CHILD_CARE
+  ELDER_CARE
+  HOUSEKEEPING
+  MOVING_ASSISTANCE
+  PET_CARE
+  CONVENIENCE_STORE
+  OTHER
+}
+
+# 일하는 요일
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+# 근무 기간
+enum WorkPeriodType {
+  SHORT_TERM
+  LONG_TERM
+}
+
+# 근무 시간 협의 여부
+enum WorkTimeType {
+  FLEXIBLE
+  FIXED
+}
+
+# 급여 타입
+enum SalaryType {
+  HOURLY
+  PER_TASK
+  MONTHLY
+}

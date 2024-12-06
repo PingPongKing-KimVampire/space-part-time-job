@@ -1,0 +1,28 @@
+type JobPost {
+  id: ID!
+  title: String!
+  jobDescription: [JobCategory!]!
+  workPeriod: WorkPeriod!
+  workTime: WorkTime!
+  salary: Salary!
+  photos: [String!]
+  detailedDescription: String!
+  addressName: String!
+}
+
+type WorkPeriod {
+  type: WorkPeriodType!
+  dates: [String!]
+  days: [DayOfWeek!]
+}
+
+type WorkTime {
+  type: WorkTimeType!
+  startTime: String
+  endTime: String
+}
+
+type Salary {
+  salaryType: SalaryType!
+  salaryAmount: Int!
+}

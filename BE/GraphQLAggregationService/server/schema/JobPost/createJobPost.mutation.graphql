@@ -1,0 +1,32 @@
+extend type Mutation {
+  createJobPost(input: CreateJobPostInput!): JobPost
+}
+
+input CreateJobPostInput {
+  title: String!
+  jobDescription: [JobCategory!]!
+  workPeriod: WorkPeriodInput!
+  workTime: WorkTimeInput!
+  salary: SalaryInput!
+  photos: [String!]
+  detailedDescription: String!
+  addressName: String!
+}
+
+input WorkPeriodInput {
+  type: WorkPeriodType!
+  dates: [String!]
+  days: [DayOfWeek!]
+}
+
+input WorkTimeInput {
+  type: WorkTimeType!
+  startTime: String
+  endTime: String
+}
+
+input SalaryInput {
+  salaryType: SalaryType!
+  salaryAmount: Int!
+}
+

@@ -1,0 +1,11 @@
+extend type Mutation {
+  setResidentNeighborhood(input: SetResidentNeighborhoodInput!): [Neighborhood!]!
+}
+
+input SetResidentNeighborhoodInput {
+  neighborhoods: [NeighborhoodInput!]!
+}
+
+input NeighborhoodInput {
+  id: ID!
+}

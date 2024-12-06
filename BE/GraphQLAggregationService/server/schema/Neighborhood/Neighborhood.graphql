@@ -1,0 +1,4 @@
+type Neighborhood {
+  id: ID!
+  name: String!
+}
