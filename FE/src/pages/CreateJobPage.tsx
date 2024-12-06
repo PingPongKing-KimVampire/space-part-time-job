@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { format, addDays, addMonths } from "date-fns";
 import CustomInput from "../components/CustomInput.tsx";
 import Chips from "../components/Chips.tsx";
@@ -18,6 +18,7 @@ import {
   WORKTIME_TYPES_KEY,
   PAY_TYPES_KEY,
 } from "../constants/constants.ts";
+import { CREATE_JOB_POST } from "../graphql/mutations.js";
 import {
   Background,
   CancelButton,
@@ -35,6 +36,7 @@ import ImageSection from "../components/CreateJobPage/ImageSection.tsx";
 import PlaceSection from "../components/CreateJobPage/PlaceSection.tsx";
 import { checkRulePassInCreateJob } from "../utils/checkRulePass.ts";
 import { WarningText, MainBackgroundColor } from "../styles/global.ts";
+import LoadingOverlay from "../components/LoadingOverlay.tsx";
 
 type Warnings = {
   title?: string;
@@ -78,18 +80,6 @@ type WorkTime = {
   startTime?: string;
   endTime?: string;
 };
-
-const CREATE_JOB_POST = gql`
-  mutation CreateJobPost($input: CreateJobPostInput!) {
-    createJobPost(input: $input) {
-      id
-      title
-      jobDescription
-    }
-  }
-`;
-
-export const SESSION_STORAGE_KEY = "createJobData";
 
 const CreateJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -251,8 +241,13 @@ const CreateJobPage = () => {
   }, [isValid, term]);
 
   // useMutation 훅을 사용하여 뮤테이션 함수 생성
-  const [createJobPost, { data, loading, error }] =
-    useMutation(CREATE_JOB_POST);
+  const [
+    createJobPost,
+    { loading: createJobPostLoading, error: createJobPostError },
+  ] = useMutation(CREATE_JOB_POST);
+  useEffect(() => {
+    setPostWarning(createJobPostError ? ERROR.SERVER : "");
+  }, [createJobPostError]);
 
   const postJob = async () => {
     const tempTerm = term === TERM.LONG_TERM ? TERM.LONG_TERM : TERM.SHORT_TERM;
@@ -307,6 +302,7 @@ const CreateJobPage = () => {
 
   return (
     <Background>
+      {createJobPostLoading && <LoadingOverlay />}
       <CancelButton>취소</CancelButton>
       <LoadButton>불러오기</LoadButton>
       <Container>
