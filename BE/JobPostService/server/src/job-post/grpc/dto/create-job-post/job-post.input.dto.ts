@@ -1,4 +1,3 @@
-import { Field, InputType } from '@nestjs/graphql';
 import {
   IsEnum,
   IsNotEmpty,
@@ -39,14 +38,12 @@ import {
   WorkTimeTypeMapping,
 } from 'src/job-post/grpc/job-post.enum-mapping';
 
-@InputType()
 export class WorkPeriodInput {
-  @Field()
+
   @IsEnum(WorkPeriodType)
   @Transform(({ value }) => WorkPeriodTypeMapping[value], { toClassOnly: true })
   type: WorkPeriodType;
 
-  @Field(() => [String], { nullable: true })
   @IsOptional()
   @IsArray()
   @Matches(/^\d{4}-\d{2}-\d{2}$/, {
@@ -58,7 +55,6 @@ export class WorkPeriodInput {
   })
   dates?: string[];
 
-  @Field(() => [DayOfWeek], { nullable: true })
   @IsOptional()
   @IsArray()
   @IsEnum(DayOfWeek, { each: true })
@@ -69,54 +65,44 @@ export class WorkPeriodInput {
   days?: string[];
 }
 
-@InputType()
 export class WorkTimeInput {
-  @Field()
   @IsEnum(WorkTimeType)
   @Transform(({ value }) => WorkTimeTypeMapping[value], { toClassOnly: true })
   type: WorkTimeType;
 
-  @Field({ nullable: true })
   @IsOptional()
   @IsString()
   @Matches(/^\d{2}:\d{2}$/, { message: '시간 형식은 HH:mm 이어야 합니다.' })
   startTime?: string;
 
-  @Field({ nullable: true })
   @IsOptional()
   @IsString()
   @Matches(/^\d{2}:\d{2}$/, { message: '시간 형식은 HH:mm 이어야 합니다.' })
   endTime?: string;
 }
 
-@InputType()
 export class SalaryInput {
-  @Field()
   @IsEnum(SalaryType)
   @Transform(({ value }) => SalaryTypeMapping[value], { toClassOnly: true })
   salaryType: SalaryType;
 
-  @Field()
   @IsNumber()
   @ValidateIf((o) => o.salaryType === SalaryType.HOURLY)
   @Min(9860, { message: '시급은 최소 9860 이상이어야 합니다.' })
   salaryAmount: number;
 }
 
-@InputType()
 export class CreateJobPostInput {
   @IsNotEmpty()
   @IsString()
   userId: string;
 
-  @Field()
   @IsNotEmpty()
   @IsString()
   @MinLength(6, { message: '제목은 6자 이상이여야 합니다.' })
   @MaxLength(30, { message: '제목은 30자 이하이여야 합니다.' })
   title: string;
 
-  @Field(() => [JobCategory])
   @IsArray()
   @IsEnum(JobCategory, { each: true })
   @ArrayMinSize(1, { message: '하는 일은 최소 1개 선택해야 합니다.' })
@@ -127,31 +113,26 @@ export class CreateJobPostInput {
   )
   jobDescription: string[];
 
-  @Field(() => WorkPeriodInput)
   @Validate(IsValidWorkPeriod)
   @ValidateNested()
   @Type(() => WorkPeriodInput)
   workPeriod: WorkPeriodInput;
 
-  @Field(() => WorkTimeInput)
   @ValidateNested()
   @Validate(IsValidWorkTime)
   @Type(() => WorkTimeInput)
   workTime: WorkTimeInput;
 
-  @Field(() => SalaryInput)
   @ValidateNested()
   @Type(() => SalaryInput)
   salary: SalaryInput;
 
-  @Field(() => [String], { nullable: true })
   @IsOptional()
   @IsArray()
   @IsUrl({}, { each: true, message: '각 사진은 유효한 URL 형식이어야 합니다.' })
   @ArrayMaxSize(10, { message: '사진은 최대 10개까지 업로드 가능합니다.' })
   photos?: string[];
 
-  @Field({ nullable: true })
   @IsString()
   @MinLength(15, { message: '상세 설명은 최소 15자 이상이어야 합니다.' })
   @MaxLength(2000, { message: '상세 설명은 최대 2000자 이하이어야 합니다.' })
