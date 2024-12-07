@@ -39,10 +39,20 @@ enum SalaryType {
   MONTHLY = 2;
 }
 
+enum DayOfWeekType {
+  MONDAY = 0;
+  TUESDAY = 1;
+  WEDNESDAY = 2;
+  THURSDAY = 3;
+  FRIDAY = 4;
+  SATURDAY = 5;
+  SUNDAY = 6;
+}
+
 message WorkPeriodInput {
   WorkPeriodType type = 1;
   repeated string dates = 2; // Optional
-  repeated string days = 3;  // Optional (e.g., MONDAY, TUESDAY)
+  repeated DayOfWeekType days = 3;  // Optional (e.g., MONDAY, TUESDAY)
 }
 
 message WorkTimeInput {

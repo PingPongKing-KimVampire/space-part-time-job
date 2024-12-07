@@ -13,7 +13,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         package: 'jobPost',
-        protoPath: join(__dirname, 'job-post/grpc/job-post.proto'),
+        protoPath: join(__dirname, 'job-post/grpc/proto/job-post.proto'),
         url: `0.0.0.0:${gRPCPort}`,
       },
     },

@@ -31,7 +31,7 @@ export class JobPostService implements OnModuleInit {
       transport: Transport.GRPC,
       options: {
         package: 'jobPost',
-        protoPath: join(__dirname, './job-post.proto'),
+        protoPath: [join(__dirname, './proto/job-post.proto')],
         url: grpcUrl,
       },
     };
