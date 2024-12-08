@@ -1,5 +1,10 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { CreateJobPostInput, JobPost } from 'src/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  CreateJobPostInput,
+  JobPost,
+  JobPostConnection,
+  JobPostSearchFilter,
+} from 'src/graphql';
 import { JobPostService } from './grpc/job-post.service';
 
 @Resolver('JobPost')
@@ -21,6 +26,33 @@ export class JobPostResolver {
     const { id, addressName: realAddressName } =
       await this.jobPostService.createJobPost(grpcPayload);
     return { ...createJobPostInput, id, addressName: realAddressName };
+  }
+
+  @Query('searchJobPosts')
+  async searchJobPosts(
+    @Args('filters') filters: JobPostSearchFilter,
+    @Args('pagination') pagination: { afterCursor: string; first: number },
+  ): Promise<JobPostConnection> {
+    const grpcFilters = {
+      neighborhoodIds: filters.neighborhoodIds,
+      workPeriodType: filters.workPeriodType || undefined,
+      days: filters.days || undefined,
+      jobCategories: filters.jobCategories || undefined,
+      startTime: filters.startTime || undefined,
+      endTime: filters.endTime || undefined,
+    };
+
+    const grpcPagination = {
+      afterCursor: pagination.afterCursor || null,
+      first: pagination.first,
+    };
+
+    const result = await this.jobPostService.searchJobPosts(
+      grpcFilters,
+      grpcPagination,
+    );
+
+    return result;
   }
 
   private parseUserDataHeader(header: string): any {

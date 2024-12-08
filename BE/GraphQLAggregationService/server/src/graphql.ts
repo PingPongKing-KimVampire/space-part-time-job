@@ -83,6 +83,20 @@ export interface SalaryInput {
     salaryAmount: number;
 }
 
+export interface JobPostSearchFilter {
+    neighborhoodIds: string[];
+    workPeriodType?: Nullable<WorkPeriodType>;
+    days?: Nullable<DayOfWeek[]>;
+    jobCategories?: Nullable<JobCategory[]>;
+    startTime?: Nullable<string>;
+    endTime?: Nullable<string>;
+}
+
+export interface JobPostCursorInput {
+    afterCursor?: Nullable<string>;
+    first: number;
+}
+
 export interface SetResidentNeighborhoodInput {
     neighborhoods: NeighborhoodInput[];
 }
@@ -126,6 +140,28 @@ export interface IMutation {
     _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
+export interface IQuery {
+    searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;
+    me(): User | Promise<User>;
+    _empty(): Nullable<string> | Promise<Nullable<string>>;
+}
+
+export interface JobPostConnection {
+    totalCount: number;
+    edges: JobPostEdge[];
+    pageInfo: PageInfo;
+}
+
+export interface JobPostEdge {
+    cursor: string;
+    node: JobPost;
+}
+
+export interface PageInfo {
+    hasNextPage: boolean;
+    endCursor?: Nullable<string>;
+}
+
 export interface Neighborhood {
     id: string;
     name: string;
@@ -136,11 +172,6 @@ export interface User {
     nickname: string;
     phoneNumber: string;
     residentNeighborhood?: Nullable<Neighborhood[]>;
-}
-
-export interface IQuery {
-    me(): User | Promise<User>;
-    _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 type Nullable<T> = T | null;

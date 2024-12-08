@@ -1,0 +1,43 @@
+extend type Query {
+  searchJobPosts(
+    filters: JobPostSearchFilter!  # 검색 조건
+    pagination: JobPostCursorInput! # 페이지네이션 조건
+  ): JobPostConnection!            # 검색 결과
+}
+
+
+# 시작시간 ~ 종료시간 사이에 시작시간, 종료시간이 있는 알바를 모두 보낸다., 협의가능 알바도 보낸다.
+# **검색 조건 입력 타입** (각 필드에서 조건을 걸지 않고 모두 조회하려면 null로 보냄)
+input JobPostSearchFilter {
+  neighborhoodIds: [ID!]!         # 검색하려는 동네 ID 리스트(null로 보낼 수 없음)
+  workPeriodType: WorkPeriodType  # 단기/장기 여부 필터
+  days: [DayOfWeek!]              # (장기 근무일 시) 요일 필터
+  jobCategories: [JobCategory!]   # 하는 일 카테고리 필터
+  startTime: String               # 근무 시작 시간 필터 (HH:mm)
+  endTime: String                 # 근무 종료 시간 필터 (HH:mm)
+}
+
+# **페이지네이션을 위한 커서 입력 타입**
+input JobPostCursorInput {
+  afterCursor: ID  # 마지막으로 조회된 JobPost의 커서(첫 조회면 null)
+  first: Int!      # 한 번에 가져올 데이터 개수(최대 20개)
+}
+
+# **페이지네이션 응답 타입**
+type JobPostConnection {
+  totalCount: Int!                # 총 데이터 개수
+  edges: [JobPostEdge!]!          # JobPost 데이터 리스트(데이터 없으면 빈배열)
+  pageInfo: PageInfo!             # 페이지네이션 정보
+}
+
+# **JobPost의 엣지 타입**
+type JobPostEdge {
+  cursor: ID!                     # JobPost의 커서 값
+  node: JobPost!                  # JobPost 데이터
+}
+
+# **페이지네이션 정보 타입**
+type PageInfo {
+  hasNextPage: Boolean!           # 다음 페이지가 있는지 여부
+  endCursor: String               # 마지막 데이터의 커서(데이터가 없으면 null)
+}

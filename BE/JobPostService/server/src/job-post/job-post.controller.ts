@@ -2,10 +2,11 @@ import { Controller } from '@nestjs/common';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { ImageUploadService } from 'src/image-upload/image-upload.service';
 import { JobPostRepository } from './mongoose/job-post.repository';
-import { CreateJobPostInput } from './grpc/dto/job-post.input.dto';
+import { CreateJobPostInput } from './grpc/dto/create-job-post/job-post.input.dto';
 
 import { validate, ValidationError } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { SearchJobPostsInput } from './grpc/dto/search-job-posts/search-job-posts.input.dto';
 
 @Controller()
 export class JobPostController {
@@ -111,6 +112,27 @@ export class JobPostController {
     } catch (error) {
       console.error('예상하지 못한 오류', error);
       throw error;
+    }
+  }
+
+  @GrpcMethod('JobPostService', 'SearchJobPosts')
+  async searchJobPosts(input: SearchJobPostsInput) {
+    console.log(input);
+    input = plainToInstance(SearchJobPostsInput, input);
+    const { filters, pagination } = input;
+    try {
+      const { totalCount, edges, pageInfo } =
+        await this.jobPostRepository.searchJobPosts(filters, pagination);
+      return {
+        result: {
+          totalCount,
+          edges,
+          pageInfo,
+        },
+      };
+    } catch (e) {
+      console.error('searchJobPosts 에러 발생:', e);
+      throw new RpcException('searchJobPosts 처리 중 에러 발생');
     }
   }
 }

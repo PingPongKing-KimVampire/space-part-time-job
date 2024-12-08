@@ -8,14 +8,48 @@ import {
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom, Observable } from 'rxjs';
-import { CreateJobPostInput } from 'src/graphql';
+import { CreateJobPostInput, JobPost } from 'src/graphql';
+import {
+  DayOfWeekMapping,
+  JobCategoryMapping,
+  SalaryTypeMapping,
+  WorkPeriodTypeMapping,
+  WorkTimeTypeMapping,
+} from './job-post.enum-mapping';
 
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
+
+type GrpcSearchJobPostsRequest = {
+  filters: {
+    neighborhoodIds: string[];
+    workPeriodType?: string;
+    days?: string[];
+    jobCategories?: string[];
+    startTime?: string;
+    endTime?: string;
+  };
+  pagination: {
+    afterCursor?: string;
+    first: number;
+  };
+};
+
+type GrpcSearchJobPostsResponse = {
+  result: {
+    totalCount: number;
+    edges: { cursor: string; node: JobPost }[];
+    pageInfo: { hasNextPage: boolean; endCursor?: string };
+  };
+};
 
 interface JobPostServiceGrpc {
   createJobPost(
     data: GrpcCreateJobPostInput,
   ): Observable<{ id: string; addressName: string }>;
+
+  searchJobPosts(
+    data: GrpcSearchJobPostsRequest,
+  ): Observable<GrpcSearchJobPostsResponse>;
 }
 
 @Injectable()
@@ -55,5 +89,58 @@ export class JobPostService implements OnModuleInit {
       console.error('jobPost grpc 에러 발생:', e);
       throw new Error(e.details);
     }
+  }
+
+  async searchJobPosts(
+    filters: GrpcSearchJobPostsRequest['filters'],
+    pagination: GrpcSearchJobPostsRequest['pagination'],
+  ): Promise<GrpcSearchJobPostsResponse['result']> {
+    try {
+      const response = await lastValueFrom(
+        this.jobPostService.searchJobPosts({ filters, pagination }),
+      );
+      response.result = this.transformGrpcJobPostsResponse(response.result);
+      return response.result;
+    } catch (e) {
+      console.error('searchJobPosts grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  private transformGrpcJobPostsResponse(
+    result: GrpcSearchJobPostsResponse['result'],
+  ): GrpcSearchJobPostsResponse['result'] {
+    result.edges ??= [];
+    result.pageInfo.endCursor ??= null;
+
+    result.edges = result.edges.map((edge) =>
+      this.transformGrpcJobPostEdge(edge),
+    );
+
+    return result;
+  }
+
+  private transformGrpcJobPostEdge(
+    edge: GrpcSearchJobPostsResponse['result']['edges'][number],
+  ): GrpcSearchJobPostsResponse['result']['edges'][number] {
+    if (edge.node.jobDescription) {
+      edge.node.jobDescription = edge.node.jobDescription.map(
+        (jobDescription) => JobCategoryMapping[jobDescription],
+      );
+    }
+
+    edge.node.salary.salaryType =
+      SalaryTypeMapping[edge.node.salary.salaryType];
+    edge.node.workPeriod.type =
+      WorkPeriodTypeMapping[edge.node.workPeriod.type];
+    edge.node.workTime.type = WorkTimeTypeMapping[edge.node.workTime.type];
+
+    if (edge.node.workPeriod.days) {
+      edge.node.workPeriod.days = edge.node.workPeriod.days.map(
+        (day) => DayOfWeekMapping[day],
+      );
+    }
+
+    return edge;
   }
 }
