@@ -1,17 +1,13 @@
 import React, { useMemo, useEffect, forwardRef } from "react";
 import Chips from "../Chips.tsx";
 import CustomInput from "../CustomInput.tsx";
-import {
-  PAY_TYPES,
-  TERM,
-  MINIMUM_HOURLY_PAY,
-} from "../../constants/constants.ts";
-import formatCurrency from "../../utils/formatCurrency.ts";
+import { PAY_TYPES, TERM, MINIMUM_HOURLY_PAY } from "../../constants/constants";
+import formatCurrency from "../../utils/formatCurrency";
 import {
   Container,
   Unit,
   MinimumMessage,
-} from "../../styles/CreateJobPage/PaySection.styles.ts";
+} from "../../styles/CreateJobPage/PaySection.styles";
 
 type PaySectionProps = {
   pay: { type: string; amount: string };

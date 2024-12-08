@@ -1,8 +1,4 @@
-import {
-  PAY_TYPES,
-  MINIMUM_HOURLY_PAY,
-  ERROR,
-} from "../constants/constants.ts";
+import { PAY_TYPES, MINIMUM_HOURLY_PAY, ERROR } from "../constants/constants";
 
 const getLength = (str: string) => {
   // 자바스크립트에서는 문자열을 UTF-16으로 처리함

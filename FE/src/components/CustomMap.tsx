@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { createStitches } from "@stitches/react";
-import { MainColor } from "../styles/global.ts";
+import { MainColor } from "../styles/global";
 
 const { styled } = createStitches();
 

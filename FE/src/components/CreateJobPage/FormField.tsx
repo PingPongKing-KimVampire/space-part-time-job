@@ -1,6 +1,6 @@
 import React from "react";
-import { FormFieldContainer } from "../../styles/CreateJobPage.styles.ts";
-import { WarningText } from "../../styles/global.ts";
+import { FormFieldContainer } from "../../styles/CreateJobPage.styles";
+import { WarningText } from "../../styles/global";
 
 const FormField = (props) => {
   const { id, title, subInfo, children, warning } = props;

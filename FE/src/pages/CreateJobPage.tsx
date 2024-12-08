@@ -17,7 +17,7 @@ import {
   ERROR,
   WORKTIME_TYPES_KEY,
   PAY_TYPES_KEY,
-} from "../constants/constants.ts";
+} from "../constants/constants";
 import { CREATE_JOB_POST } from "../graphql/mutations.js";
 import {
   Background,
@@ -25,8 +25,8 @@ import {
   LoadButton,
   Container,
   PostButton,
-} from "../styles/CreateJobPage.styles.ts";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
+} from "../styles/CreateJobPage.styles";
+import useBackgroundColor from "../utils/useBackgroundColor";
 import FormSection from "../components/CreateJobPage/FormSection.tsx";
 import FormField from "../components/CreateJobPage/FormField.tsx";
 import CustomCalendar from "../components/CustomCalendar.tsx";
@@ -34,8 +34,8 @@ import TimeSection from "../components/CreateJobPage/TimeSection.tsx";
 import PaySection from "../components/CreateJobPage/PaySection.tsx";
 import ImageSection from "../components/CreateJobPage/ImageSection.tsx";
 import PlaceSection from "../components/CreateJobPage/PlaceSection.tsx";
-import { checkRulePassInCreateJob } from "../utils/checkRulePass.ts";
-import { WarningText, MainBackgroundColor } from "../styles/global.ts";
+import { checkRulePassInCreateJob } from "../utils/checkRulePass";
+import { WarningText, MainBackgroundColor } from "../styles/global";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 
 type Warnings = {

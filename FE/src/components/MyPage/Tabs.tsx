@@ -1,5 +1,5 @@
 import React from "react";
-import { TabsContainer } from "../../styles/MyPage.styles.ts";
+import { TabsContainer } from "../../styles/MyPage.styles";
 import { TAB_INFO, Tab } from "../../pages/MyPage.tsx";
 
 type TabsProps = {

@@ -3,7 +3,7 @@ import {
   Container,
   Textarea,
   CharCounter,
-} from "../styles/CustomTextarea.styles.ts";
+} from "../styles/CustomTextarea.styles";
 
 type CustomTextareaProps = {
   placeholder: string;

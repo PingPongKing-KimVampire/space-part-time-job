@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileContainer } from "../../styles/MyPage.styles.ts";
+import { ProfileContainer } from "../../styles/MyPage.styles";
 import { ReactComponent as ProfileIcon } from "../../assets/icons/profile.svg";
 
 const Profile = () => {

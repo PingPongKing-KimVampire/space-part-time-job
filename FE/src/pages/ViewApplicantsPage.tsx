@@ -1,7 +1,7 @@
 import React from "react";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import { MainBackgroundColor } from "../styles/global.ts";
-import { Container, Item } from "../styles/ViewApplicantsPage.styles.ts";
+import useBackgroundColor from "../utils/useBackgroundColor";
+import { MainBackgroundColor } from "../styles/global";
+import { Container, Item } from "../styles/ViewApplicantsPage.styles";
 import { ReactComponent as CheckBadgeIcon } from "../assets/icons/check-badge.svg";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 

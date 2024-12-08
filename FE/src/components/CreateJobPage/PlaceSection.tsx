@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef, useEffect } from "react";
 import CustomInput from "../CustomInput.tsx";
 import CustomMap from "../CustomMap.tsx";
 import {
@@ -6,7 +6,8 @@ import {
   ExposurePanel,
   ExposureDetailContent,
   ArrowDownIcon,
-} from "../../styles/CreateJobPage/PlaceSection.styles.ts";
+} from "../../styles/CreateJobPage/PlaceSection.styles";
+import { ERROR } from "../../constants/constants";
 
 type PlaceSectionProps = {
   place: string;

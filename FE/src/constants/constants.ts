@@ -1,4 +1,4 @@
-import formatCurrency from "../utils/formatCurrency.ts";
+import formatCurrency from "../utils/formatCurrency";
 
 export const IP_ADDRESS = "localhost";
 

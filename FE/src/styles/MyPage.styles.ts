@@ -4,7 +4,7 @@ import {
   MainColor,
   MainHoverColor,
   OptionHoverColor,
-} from "./global.ts";
+} from "./global";
 
 const { styled } = createStitches();
 

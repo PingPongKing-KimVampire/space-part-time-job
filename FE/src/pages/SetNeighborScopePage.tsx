@@ -11,13 +11,13 @@ import {
   NeighborsContainer,
   PlusButton,
   CompleteButton,
-} from "../styles/SetNeighborScopePage.styles.ts";
+} from "../styles/SetNeighborScopePage.styles";
 import LevelSlider from "../components/SetNeighborScopePage/LevelSlider.tsx";
 import { Neighbor } from "./SearchNeighborPage.tsx";
-import { IP_ADDRESS, ERROR } from "../constants/constants.ts";
+import { IP_ADDRESS, ERROR } from "../constants/constants";
 import { SET_RESIDENT_NEIGHBORHOOD } from "../graphql/mutations.js";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
-import { WarningText } from "../styles/global.ts";
+import { WarningText } from "../styles/global";
 
 type Level = {
   districts: string[];

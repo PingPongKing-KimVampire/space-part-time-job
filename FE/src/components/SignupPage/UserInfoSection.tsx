@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CustomInput from "../CustomInput.tsx";
 import PasswordInput from "../PasswordInput.tsx";
-import { WarningText } from "../../styles/global.ts";
-import { ERROR } from "../../constants/constants.ts";
+import { WarningText } from "../../styles/global";
+import { ERROR } from "../../constants/constants";
 
 const UserInfoSection = (props) => {
   const {

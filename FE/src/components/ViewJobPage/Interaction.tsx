@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactComponent as HeartIcon } from "../../assets/icons/heart.svg";
-import { InteractionContainer } from "../../styles/ViewJobPage.styles.ts";
+import { InteractionContainer } from "../../styles/ViewJobPage.styles";
 
 type InteractionProps = {
   alreadyApplied: boolean;

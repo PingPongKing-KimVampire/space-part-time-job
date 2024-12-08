@@ -6,7 +6,7 @@ import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import PasswordInput from "../components/PasswordInput.tsx";
 import NotificationBox from "../components/NotificationBox.tsx";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
-import { WarningText, MainBackgroundColor } from "../styles/global.ts";
+import { WarningText, MainBackgroundColor } from "../styles/global";
 import {
   Background,
   Container,
@@ -17,15 +17,15 @@ import {
   LoginButton,
   SignupMessage,
   PhoneNumberInputChild,
-} from "../styles/LoginPage.styles.ts";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import { checkRulePassInAuth } from "../utils/checkRulePass.ts";
-import useCountdownTimer from "../utils/useCountdownTimer.ts";
+} from "../styles/LoginPage.styles";
+import useBackgroundColor from "../utils/useBackgroundColor";
+import { checkRulePassInAuth } from "../utils/checkRulePass";
+import useCountdownTimer from "../utils/useCountdownTimer";
 import {
   SEND_AUTHNUMBER_COUNTDOWN_SEC,
   IP_ADDRESS,
   ERROR,
-} from "../constants/constants.ts";
+} from "../constants/constants";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../graphql/queries.js";
 
 const ID_PW = "ID_PW";

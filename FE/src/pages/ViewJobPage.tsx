@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import Header from "../components/ViewJobPage/Header.tsx";
 import Content from "../components/ViewJobPage/Content.tsx";
 import ApplicationModal from "../components/ViewJobPage/ApplicationModal.tsx";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import { Background, Container } from "../styles/ViewJobPage.styles.ts";
-import { MainBackgroundColor } from "../styles/global.ts";
+import useBackgroundColor from "../utils/useBackgroundColor";
+import { Background, Container } from "../styles/ViewJobPage.styles";
+import { MainBackgroundColor } from "../styles/global";
 
 const ViewJobPage = () => {
   useBackgroundColor(MainBackgroundColor);

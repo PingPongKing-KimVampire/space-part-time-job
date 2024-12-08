@@ -1,5 +1,5 @@
 import React from "react";
-import { FormSectionContainer } from "../../styles/CreateJobPage.styles.ts";
+import { FormSectionContainer } from "../../styles/CreateJobPage.styles";
 
 const FormSection = ({ title, id, children }) => {
   return (

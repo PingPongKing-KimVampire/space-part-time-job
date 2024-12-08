@@ -6,18 +6,18 @@ import React, {
   useRef,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import useDebounce from "../utils/useDebounce.ts";
+import useBackgroundColor from "../utils/useBackgroundColor";
+import useDebounce from "../utils/useDebounce";
 import {
   Background,
   Container,
   NextButton,
-} from "../styles/SearchNeighborPage.styles.ts";
+} from "../styles/SearchNeighborPage.styles";
 import CustomInput from "../components/CustomInput.tsx";
 import SelectedNeighbors from "../components/SearchNeighborPage/SelectedNeighbors.tsx";
 import ResultNeighbors from "../components/SearchNeighborPage/ResultNeighbors.tsx";
-import { MainBackgroundColor } from "../styles/global.ts";
-import { IP_ADDRESS, ERROR } from "../constants/constants.ts";
+import { MainBackgroundColor } from "../styles/global";
+import { IP_ADDRESS, ERROR } from "../constants/constants";
 
 export type Neighbor = {
   id: string;

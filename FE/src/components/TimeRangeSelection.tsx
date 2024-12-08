@@ -4,8 +4,8 @@ import {
   TimeSelectionContainer,
   ArrowDownIcon,
   SelectBox,
-} from "../styles/TimeRangeSelection.styles.ts";
-import { TIMES } from "../constants/constants.ts";
+} from "../styles/TimeRangeSelection.styles";
+import { TIMES } from "../constants/constants";
 
 const TimeRangeSelection = ({ time, setTime, isMini = false }) => {
   const [isSelecting, setIsSelecting] = useState({

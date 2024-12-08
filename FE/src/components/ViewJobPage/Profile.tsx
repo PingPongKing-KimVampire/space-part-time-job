@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileContainer } from "../../styles/ViewJobPage.styles.ts";
+import { ProfileContainer } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as UserProfileIcon } from "../../assets/icons/profile.svg";
 
 type ProfileProps = {

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ListItem } from "../../styles/MyPage.styles.ts";
+import { ListItem } from "../../styles/MyPage.styles";
 
 const POSTS = [
   {

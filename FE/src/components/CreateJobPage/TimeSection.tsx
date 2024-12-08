@@ -1,7 +1,7 @@
 import React from "react";
-import { WORKTIME_TYPES } from "../../constants/constants.ts";
+import { WORKTIME_TYPES } from "../../constants/constants";
 import Chips from "../Chips.tsx";
-import { TimeContainer } from "../../styles/CreateJobPage.styles.ts";
+import { TimeContainer } from "../../styles/CreateJobPage.styles";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 
 const TimeSection = ({ time, setTime }) => {

@@ -4,8 +4,8 @@ import {
   DAYS,
   DAYS_KEY,
   TERM,
-} from "../constants/constants.ts";
-import formatCurrency from "./formatCurrency.ts";
+} from "../constants/constants";
+import formatCurrency from "./formatCurrency";
 import { format, isToday, isTomorrow, min, max } from "date-fns";
 
 export const converPayToDisplayable = (pay: {

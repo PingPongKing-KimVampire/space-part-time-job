@@ -1,6 +1,6 @@
 import React, { useMemo, forwardRef } from "react";
 import { FixedSizeList as List } from "react-window";
-import { ResultContainer } from "../../styles/SearchNeighborPage.styles.ts";
+import { ResultContainer } from "../../styles/SearchNeighborPage.styles";
 import { Neighbor } from "../../pages/SearchNeighborPage.tsx";
 
 type ResultNeighborsProps = {

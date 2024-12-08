@@ -1,7 +1,5 @@
 import React, { useState, useMemo } from "react";
 import {
-  addMonths,
-  subDays,
   startOfWeek,
   endOfWeek,
   eachDayOfInterval,
@@ -10,12 +8,8 @@ import {
   compareAsc,
   isSunday,
 } from "date-fns";
-import { DAYS } from "../constants/constants.ts";
-import {
-  Container,
-  Calendar,
-  DateItem,
-} from "../styles/CustomCalendar.styles.ts";
+import { DAYS } from "../constants/constants";
+import { Container, Calendar, DateItem } from "../styles/CustomCalendar.styles";
 
 type CustomCalendarProps = {
   dates: Set<string>;
@@ -25,16 +19,6 @@ type CustomCalendarProps = {
   isTitleVisible?: boolean;
   style?: { width?: string; marginTop?: string };
 };
-
-// 알바 공고 페이지에서
-// 보이는 주: 오늘이 있는 주 ~ 한 달 후가 있는 주
-// 활성화된 날짜: 오늘 ~ 한달 후의 날짜
-// 비활성화된 날짜는 not-allowed, 활성화된 날짜는 pointer
-// 단일 알바 조회 페이지에서
-// 보이는 주: 오늘이 있는 주 ~ 마지막 날짜가 있는 주
-// cursor는 동일하게 설정하지 않음
-
-// 마지막 날짜를 받자.
 
 const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
   const {

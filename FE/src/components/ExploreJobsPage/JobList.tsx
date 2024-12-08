@@ -1,5 +1,5 @@
 import React from "react";
-import { JobListContainer } from "../../styles/ExploreJobsPage.styles.ts";
+import { JobListContainer } from "../../styles/ExploreJobsPage.styles";
 import JobItem from "./JobItem.tsx";
 import testImage1 from "../../assets/test/ExploreJobsTest1.jpeg";
 import testImage2 from "../../assets/test/ExploreJobsTest2.jpeg";

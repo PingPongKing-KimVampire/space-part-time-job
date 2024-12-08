@@ -6,8 +6,8 @@ import {
   UploadButton,
   ImagesContainer,
   ImageDisplay,
-} from "../../styles/CreateJobPage/ImageSection.styles.ts";
-import { IP_ADDRESS, ERROR } from "../../constants/constants.ts";
+} from "../../styles/CreateJobPage/ImageSection.styles";
+import { IP_ADDRESS, ERROR } from "../../constants/constants";
 
 type UploadImagesResponseData = {
   error?: string;

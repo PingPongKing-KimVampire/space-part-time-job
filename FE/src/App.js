@@ -16,7 +16,7 @@ import ViewJobPage from "./pages/ViewJobPage.tsx";
 import MyPage from "./pages/MyPage.tsx";
 import ViewApplicantsPage from "./pages/ViewApplicantsPage.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
-import { IP_ADDRESS } from "./constants/constants.ts";
+import { IP_ADDRESS } from "./constants/constants";
 
 const { styled } = createStitches();
 
@@ -26,7 +26,7 @@ const Background = styled("div", {
 });
 
 const httpLink = new HttpLink({
-  uri: `https://localhost/api/graphql`, // 서버의 GraphQL 엔드포인트
+  uri: `https://${IP_ADDRESS}/api/graphql`, // 서버의 GraphQL 엔드포인트
   credentials: "include", // 쿠키를 포함하여 요청을 보냄
 });
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import CustomTextarea from "../CustomTextarea.tsx";
-import { ApplicationModalBackground } from "../../styles/ViewJobPage.styles.ts";
+import { ApplicationModalBackground } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as XIcon } from "../../assets/icons/x-mark.svg";
-import { checkRulePassInApplication } from "../../utils/checkRulePass.ts";
+import { checkRulePassInApplication } from "../../utils/checkRulePass";
 
 const ApplicationModal = ({ onXClick }) => {
   const [value, setValue] = useState("");

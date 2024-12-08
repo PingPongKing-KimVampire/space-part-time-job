@@ -6,9 +6,9 @@ import {
   converPayToDisplayable,
   converTimeToDisplayable,
   converPeriodToDisplayable,
-} from "../../utils/convertJobInfoToDisplayable.ts";
-import { TERM } from "../../constants/constants.ts";
-import { BasicInfoContainer } from "../../styles/ViewJobPage.styles.ts";
+} from "../../utils/convertJobInfoToDisplayable";
+import { TERM } from "../../constants/constants";
+import { BasicInfoContainer } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as WonIcon } from "../../assets/icons/won.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
 import { ReactComponent as LocationIcon } from "../../assets/icons/location-outline.svg";

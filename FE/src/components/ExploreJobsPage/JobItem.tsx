@@ -2,13 +2,13 @@ import React, { useMemo } from "react";
 import {
   JobItemContainer,
   JobItemContextBox,
-} from "../../styles/ExploreJobsPage.styles.ts";
+} from "../../styles/ExploreJobsPage.styles";
 import {
   converPayToDisplayable,
   converTimeToDisplayable,
   converPeriodToDisplayable,
-} from "../../utils/convertJobInfoToDisplayable.ts";
-import { PAY_TYPES } from "../../constants/constants.ts";
+} from "../../utils/convertJobInfoToDisplayable";
+import { PAY_TYPES } from "../../constants/constants";
 
 type JobItemProps = {
   title: string;

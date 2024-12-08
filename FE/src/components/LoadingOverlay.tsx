@@ -1,7 +1,7 @@
 import React from "react";
 import { createStitches } from "@stitches/react";
 import { GridLoader } from "react-spinners";
-import { MainColor } from "../styles/global.ts";
+import { MainColor } from "../styles/global";
 
 const { styled } = createStitches();
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { MainBackgroundColor } from "../styles/global.ts";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
+import { MainBackgroundColor } from "../styles/global";
+import useBackgroundColor from "../utils/useBackgroundColor";
 import JobList from "../components/ExploreJobsPage/JobList.tsx";
 import JobFilter from "../components/ExploreJobsPage/JobFilter.tsx";
 import {
@@ -11,7 +11,7 @@ import {
   LocationIcon,
   ArrowDownIcon,
   ContentContainer,
-} from "../styles/ExploreJobsPage.styles.ts";
+} from "../styles/ExploreJobsPage.styles";
 
 const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);

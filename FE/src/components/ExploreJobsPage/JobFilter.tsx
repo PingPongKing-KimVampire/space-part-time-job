@@ -5,8 +5,8 @@ import {
   FilterField,
   ChipsContainerStyle,
   ChipsOptionStyle,
-} from "../../styles/ExploreJobsPage.styles.ts";
-import { JOB_TYPES, TERM, DAYS } from "../../constants/constants.ts";
+} from "../../styles/ExploreJobsPage.styles";
+import { JOB_TYPES, TERM, DAYS } from "../../constants/constants";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 
 const JobFilter = () => {

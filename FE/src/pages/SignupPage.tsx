@@ -4,14 +4,14 @@ import {
   Background,
   Container,
   SignupButton,
-} from "../styles/SignupPage.styles.ts";
-import { checkRulePassInAuth } from "../utils/checkRulePass.ts";
-import { Title } from "../styles/LoginPage.styles.ts";
+} from "../styles/SignupPage.styles";
+import { checkRulePassInAuth } from "../utils/checkRulePass";
+import { Title } from "../styles/LoginPage.styles";
 import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import { IP_ADDRESS, ERROR } from "../constants/constants.ts";
-import { MainBackgroundColor } from "../styles/global.ts";
+import useBackgroundColor from "../utils/useBackgroundColor";
+import { IP_ADDRESS, ERROR } from "../constants/constants";
+import { MainBackgroundColor } from "../styles/global";
 
 type InputValue = {
   id: string;

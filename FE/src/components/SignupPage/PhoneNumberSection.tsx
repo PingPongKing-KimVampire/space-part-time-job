@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import CustomInput from "../CustomInput.tsx";
 import PhoneNumberInput from "../PhoneNumberInput.tsx";
-import useCountdownTimer from "../../utils/useCountdownTimer.ts";
+import useCountdownTimer from "../../utils/useCountdownTimer";
 import NotificationBox from "../NotificationBox.tsx";
 import {
   PhoneNumberContainer,
   SendNumberButton,
   TimeCounter,
-} from "../../styles/SignupPage.styles.ts";
-import { WarningText } from "../../styles/global.ts";
+} from "../../styles/SignupPage.styles";
+import { WarningText } from "../../styles/global";
 import {
   SEND_AUTHNUMBER_COUNTDOWN_SEC,
   IP_ADDRESS,
   ERROR,
-} from "../../constants/constants.ts";
+} from "../../constants/constants";
 
 type SendAuthNumberResponseData = {
   error?: string;

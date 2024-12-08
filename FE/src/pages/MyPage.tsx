@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
+import useBackgroundColor from "../utils/useBackgroundColor";
 import Profile from "../components/MyPage/Profile.tsx";
 import Tabs from "../components/MyPage/Tabs.tsx";
 import PostList from "../components/MyPage/PostList.tsx";
-import { MainBackgroundColor } from "../styles/global.ts";
-import { Background, TopArea, BottomArea } from "../styles/MyPage.styles.ts";
+import { MainBackgroundColor } from "../styles/global";
+import { Background, TopArea, BottomArea } from "../styles/MyPage.styles";
 
 export type Tab = {
   label: "지원 내역" | "게시한 공고" | "관심 목록";

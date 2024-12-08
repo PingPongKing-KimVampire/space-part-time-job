@@ -1,6 +1,6 @@
 import React from "react";
-import { HeaderContainer } from "../../styles/ViewJobPage.styles.ts";
-import { JOB_TYPES } from "../../constants/constants.ts";
+import { HeaderContainer } from "../../styles/ViewJobPage.styles";
+import { JOB_TYPES } from "../../constants/constants";
 
 type HeaderProps = {
   jobTypes: string[];
