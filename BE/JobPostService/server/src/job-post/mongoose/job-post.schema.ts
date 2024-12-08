@@ -64,11 +64,9 @@ export class JobPost {
   photos: string[];
 
   @Prop({ required: true })
-  @Prop()
   detailedDescription: string;
 
   @Prop({ required: true })
-  @Prop()
   addressName: string;
 
   @Prop({ required: true })
