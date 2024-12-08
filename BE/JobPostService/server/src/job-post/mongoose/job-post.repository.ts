@@ -66,9 +66,9 @@ export class JobPostRepository {
 
   private getQueryByFilter(filters: SearchJobPostsInput['filters']) {
     const query: any = {};
-    // if (filters.neighborhoodIds) {
-    //   query.neighborhoodId = { $in: filters.neighborhoodIds };
-    // }
+    if (filters.neighborhoodIds) {
+      query.neighborhoodId = { $in: filters.neighborhoodIds };
+    }
     if (filters.jobCategories) {
       query.jobDescription = { $in: filters.jobCategories };
     }
