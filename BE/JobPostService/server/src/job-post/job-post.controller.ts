@@ -158,7 +158,6 @@ export class JobPostController {
 
   @GrpcMethod('JobPostService', 'SearchJobPosts')
   async searchJobPosts(input: SearchJobPostsInput) {
-    console.log(input);
     input = plainToInstance(SearchJobPostsInput, input);
     const { filters, pagination } = input;
     try {
