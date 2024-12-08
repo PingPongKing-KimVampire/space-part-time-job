@@ -22,14 +22,18 @@ export class JobPostController {
     input = plainToInstance(CreateJobPostInput, input);
     await this.validateFormat(input);
     await this.validateImageUrl(input);
-    const officialAddressName = await this.validateAddressName(
-      input.addressName,
-    );
+    const {
+      addressName: officialAddressName,
+      longitude,
+      latitude,
+    } = await this.validateAddressName(input.addressName);
+    const neighborhoodId = await this.getNeighborHoodId(longitude, latitude);
 
     try {
       const createdJobPost = await this.jobPostRepository.createJobPost({
         ...input,
         addressName: officialAddressName,
+        neighborhoodId,
       });
       return { id: createdJobPost.id, addressName: officialAddressName };
     } catch (e) {
@@ -86,7 +90,12 @@ export class JobPostController {
     ) {
       throw new RpcException('이 주소는 지번 주소나 도로명 주소가 아님');
     }
-    return addressObj.address_name;
+
+    return {
+      addressName: addressObj.address_name,
+      longitude: addressObj.x,
+      latitude: addressObj.y,
+    };
   }
 
   async fetchKakaoAPI(addressName: string) {
@@ -109,6 +118,38 @@ export class JobPostController {
 
       const data = await response.json();
       return data;
+    } catch (error) {
+      console.error('예상하지 못한 오류', error);
+      throw error;
+    }
+  }
+
+  private async getNeighborHoodId(longitude: string, latitude: string) {
+    const kakaoApiUrl =
+      'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json';
+    const apiKey = process.env.KAKAO_REST_API_KEY;
+    try {
+      const response = await fetch(
+        `${kakaoApiUrl}?x=${longitude}&y=${latitude}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `KakaoAK ${apiKey}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const neighborHoodId = data.documents.reduce((acc, doc) => {
+        if (doc.region_type == 'H') return doc.code;
+      }, '');
+      if (data.meta.total_count === 0 || !neighborHoodId)
+        throw new Error('좌표 조회 실패');
+      return neighborHoodId;
     } catch (error) {
       console.error('예상하지 못한 오류', error);
       throw error;

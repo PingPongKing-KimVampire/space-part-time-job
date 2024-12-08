@@ -70,6 +70,9 @@ export class JobPost {
   @Prop({ required: true })
   @Prop()
   addressName: string;
+
+  @Prop({ required: true })
+  neighborhoodId: string;
 }
 
 export const JobPostSchema = SchemaFactory.createForClass(JobPost);
