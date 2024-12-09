@@ -1,0 +1,53 @@
+[
+	{
+	  "id": 1,
+	  "imageUrl": "https://picsum.photos/id/237/300/200",
+	  "description": "A random image from Lorem Picsum"
+	},
+	{
+	  "id": 2,
+	  "imageUrl": "https://picsum.photos/id/238/400/300",
+	  "description": "A beautiful landscape from Lorem Picsum"
+	},
+	{
+	  "id": 3,
+	  "imageUrl": "https://picsum.photos/id/239/500/400",
+	  "description": "A stunning view from Lorem Picsum"
+	},
+	{
+	  "id": 4,
+	  "imageUrl": "https://picsum.photos/id/240/600/300",
+	  "description": "A scenic image from Lorem Picsum"
+	},
+	{
+	  "id": 5,
+	  "imageUrl": "https://picsum.photos/id/241/700/500",
+	  "description": "A vibrant shot from Lorem Picsum"
+	},
+	{
+	  "id": 6,
+	  "imageUrl": "https://picsum.photos/id/242/800/600",
+	  "description": "A high-resolution image from Lorem Picsum"
+	},
+	{
+	  "id": 7,
+	  "imageUrl": "https://picsum.photos/id/243/300/300",
+	  "description": "A square image from Lorem Picsum"
+	},
+	{
+	  "id": 8,
+	  "imageUrl": "https://picsum.photos/id/244/400/400",
+	  "description": "A perfect square shot from Lorem Picsum"
+	},
+	{
+	  "id": 9,
+	  "imageUrl": "https://picsum.photos/id/245/500/500",
+	  "description": "A random picture with square dimensions"
+	},
+	{
+	  "id": 10,
+	  "imageUrl": "https://picsum.photos/id/246/600/400",
+	  "description": "A random image with rectangular dimensions"
+	}
+  ]
+  
