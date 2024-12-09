@@ -1,4 +1,9 @@
 import React, { useState, forwardRef, useEffect } from "react";
+import {
+  fetchCoordinateByAddress,
+  fetchNeighborInfoByCoordinate,
+  fetchDistrictBoundary,
+} from "../../utils/fetchData";
 import CustomInput from "../CustomInput.tsx";
 import CustomMap from "../CustomMap.tsx";
 import {
@@ -7,7 +12,6 @@ import {
   ExposureDetailContent,
   ArrowDownIcon,
 } from "../../styles/CreateJobPage/PlaceSection.styles";
-import { ERROR } from "../../constants/constants";
 
 type PlaceSectionProps = {
   place: string;
@@ -21,6 +25,10 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
 
     const [isExposureDetailVisible, setIsExposureDetailVisible] =
       useState(false);
+    const [exposureNeighbors, setExposureNeighbors] = useState({
+      main: "",
+      sub: [],
+    });
 
     const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       e.currentTarget.blur();
@@ -31,6 +39,19 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
         },
       }).open();
     };
+
+    useEffect(() => {
+      const displayExposureNeighbors = async () => {
+        const coordinate = await fetchCoordinateByAddress(place); // 주소 -> 좌표
+        if (!coordinate) return;
+        const { id, name } = await fetchNeighborInfoByCoordinate(coordinate); // 좌표 -> 동 ID, 행정동
+        if (!id || !name) return;
+        const boundary = await fetchDistrictBoundary(id); // 동 ID -> 동 경계 데이터
+        if (!boundary) return;
+        setExposureNeighbors({ main: name, sub: boundary[4].districts });
+      };
+      if (place) displayExposureNeighbors();
+    }, [place]);
 
     return (
       <Container ref={ref}>
@@ -50,18 +71,16 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
               }}
             >
               <div className="main">
-                <span>기산동 외 57개 동네</span>에서 노출{" "}
-                <ArrowDownIcon isSelected={isExposureDetailVisible} />
+                <span>
+                  {exposureNeighbors.main} 외 {exposureNeighbors.sub.length}개
+                  동네
+                </span>
+                에서 노출 <ArrowDownIcon isSelected={isExposureDetailVisible} />
               </div>
               <ExposureDetailContent
                 className={isExposureDetailVisible ? "visible" : ""}
               >
-                세류1동, 세류2동, 세류3동, 권선1동, 권선2동, 인계동, 매탄1동,
-                매탄2동, 매탄3동, 매탄4동, 영통1동, 영통2동, 태장동, 세마동,
-                지안동, 병점1동, 병점2동, 반월동, 동탄1동, 동탄2동, 동탄3동,
-                망포동, 능동, 반송동, 기산동, 석우동, 오산동, 송산동, 안녕동,
-                영천동, 황계동, 농서동, 외삼미동, 양산동, 세교동, 내삼이동,
-                화산동, 기배동, 영통동, 신동, 메탕동, 장지동, 곡반정동, 대황교동
+                {exposureNeighbors.sub.join(", ")}
               </ExposureDetailContent>
             </ExposurePanel>
           </>

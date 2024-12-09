@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
+import { fetchDistrictBoundary } from "../utils/fetchData";
 import CustomMap from "../components/CustomMap.tsx";
 import { ReactComponent as XmarkIcon } from "../assets/icons/x-mark.svg";
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
@@ -62,30 +63,6 @@ const SetNeighborScopePage = () => {
     };
     setupDistrictBoundaries();
   }, []);
-
-  const fetchDistrictBoundary = async (id) => {
-    let response: Response;
-    const requestUrl = `https://${IP_ADDRESS}/district/${id}/neighbors`;
-    try {
-      response = await fetch(requestUrl);
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-    if (!response.ok) throw new Error(ERROR.SERVER);
-    let data: DistrictBoundaryResponseData;
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(ERROR.SERVER);
-    }
-    for (const level in data.levels) {
-      // TODO : 백엔드에서 위도, 경도 순서 바꾸면 제거하기
-      data.levels[level].outer_boundary.coordinates.forEach((coordinate) => {
-        coordinate.reverse();
-      });
-    }
-    return data.levels;
-  };
 
   // 폴리곤 상태 업데이트
   useEffect(() => {
