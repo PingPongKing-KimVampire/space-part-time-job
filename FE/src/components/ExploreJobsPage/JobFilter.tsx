@@ -8,19 +8,26 @@ import {
 } from "../../styles/ExploreJobsPage.styles";
 import { JOB_TYPES, TERM, DAYS } from "../../constants/constants";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
+import { Filter } from "../../pages/ExploreJobsPage";
 
-const JobFilter = () => {
-  const [term, setTerm] = useState<string>(TERM.SHORT_TERM);
-  const [jobTypes, setJobTypes] = useState<string[]>([]);
-  const [time, setTime] = useState({ start: "00:00", end: "00:00" });
-  const [weekDays, setWeekDays] = useState<string[]>([]);
+type JobFilterProps = {
+  filter: Filter;
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+};
+
+const JobFilter: React.FC<JobFilterProps> = (props) => {
+  const { filter, setFilter } = props;
+  const { term, jobTypes, time, weekDays } = filter;
 
   const termToDisplay = useMemo(() => [TERM.SHORT_TERM, TERM.LONG_TERM], []);
 
   // TODO: CreateJobPage와 중복되는 코드
   const onTermClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const TermClicked = e.currentTarget.textContent || TERM.TODAY;
-    setTerm(TermClicked);
+    const termClicked = e.currentTarget.textContent;
+    setFilter((state) => ({
+      ...state,
+      term: termClicked || TERM.TODAY,
+    }));
   };
 
   const toggleSelected = (
@@ -36,19 +43,34 @@ const JobFilter = () => {
 
   const onJobTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const jobTypeClicked = e.currentTarget.textContent || JOB_TYPES.SERVING;
-    setJobTypes(toggleSelected(jobTypes, jobTypeClicked));
+    setFilter((state) => ({
+      ...state,
+      jobTypes: toggleSelected(jobTypes, jobTypeClicked),
+    }));
   };
 
   const onWeekDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const dayClicked = e.currentTarget.textContent || "";
-    setWeekDays(toggleSelected(weekDays, dayClicked));
+    setFilter((state) => ({
+      ...state,
+      weekDays: toggleSelected(state.weekDays, dayClicked),
+    }));
   };
 
   const onInitClick = () => {
-    setTerm("");
-    setJobTypes([]);
-    setWeekDays([]);
-    setTime({ start: "00:00", end: "00:00" });
+    setFilter({
+      term: "",
+      jobTypes: [],
+      weekDays: [],
+      time: { start: "00:00", end: "00:00" },
+    });
+  };
+
+  const setTime = (getTime) => {
+    setFilter((state) => ({
+      ...state,
+      time: getTime(state.time),
+    }));
   };
 
   return (

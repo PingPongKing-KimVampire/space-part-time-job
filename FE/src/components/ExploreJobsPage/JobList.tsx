@@ -3,6 +3,7 @@ import { JobListContainer } from "../../styles/ExploreJobsPage.styles";
 import JobItem from "./JobItem.tsx";
 import testImage1 from "../../assets/test/ExploreJobsTest1.jpeg";
 import testImage2 from "../../assets/test/ExploreJobsTest2.jpeg";
+import { JobPost } from "../../pages/ExploreJobsPage";
 
 const JOB_RESULT = [
   // 임시 하드코딩 데이터
@@ -209,26 +210,23 @@ const JOB_RESULT = [
   },
 ];
 
-const JobList = () => {
+type JobListProps = {
+  jobPosts: JobPost[];
+};
+
+const JobList: React.FC<JobListProps> = ({ jobPosts }) => {
   return (
     <JobListContainer>
-      {JOB_RESULT.map((job) => {
-        const {
-          id,
-          title,
-          workPeriod,
-          workTime,
-          pay,
-          photos,
-          neighbor,
-          postTime,
-        } = job;
+      {jobPosts.map((job) => {
+        const { id, title, workPeriod, workTime, salary, photos, addressName } =
+          job;
+        const postTime = "2시간 전"; // TODO : 임시
         return (
           <JobItem
             title={title}
-            neighbor={neighbor}
+            neighbor={addressName}
             postTime={postTime}
-            pay={pay}
+            pay={{ type: salary.salaryType, amount: salary.salaryAmount }}
             period={workPeriod}
             time={workTime}
             photos={photos}
