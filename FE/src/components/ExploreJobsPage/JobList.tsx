@@ -74,7 +74,7 @@ const JOB_RESULT = [
     postTime: "9시간 전",
   },
   {
-    id: 1,
+    id: 4,
     title: "아이(5세) 하원 도우미, 돌봄 선생님 구합니다.",
     workPeriod: {
       type: "LONG_TERM",
@@ -94,7 +94,7 @@ const JOB_RESULT = [
     postTime: "30분 전",
   },
   {
-    id: 2,
+    id: 5,
     title: "해탄 신영통점 홀서빙 직원 모집 (주 3~5일 가능)",
     workPeriod: {
       type: "LONG_TERM",
@@ -114,7 +114,7 @@ const JOB_RESULT = [
     postTime: "2시간 전",
   },
   {
-    id: 3,
+    id: 6,
     title: "커트헤어모델 구해요~!",
     workPeriod: {
       type: "SHORT_TERM",
@@ -141,7 +141,7 @@ const JOB_RESULT = [
     postTime: "9시간 전",
   },
   {
-    id: 1,
+    id: 7,
     title: "아이(5세) 하원 도우미, 돌봄 선생님 구합니다.",
     workPeriod: {
       type: "LONG_TERM",
@@ -161,7 +161,7 @@ const JOB_RESULT = [
     postTime: "30분 전",
   },
   {
-    id: 2,
+    id: 8,
     title: "해탄 신영통점 홀서빙 직원 모집 (주 3~5일 가능)",
     workPeriod: {
       type: "LONG_TERM",
@@ -181,7 +181,7 @@ const JOB_RESULT = [
     postTime: "2시간 전",
   },
   {
-    id: 3,
+    id: 9,
     title: "커트헤어모델 구해요~!",
     workPeriod: {
       type: "SHORT_TERM",

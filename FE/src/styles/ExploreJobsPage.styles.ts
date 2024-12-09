@@ -44,22 +44,67 @@ export const InputContainer = styled("div", {
   },
 });
 
-export const NeighborButton = styled("button", {
-  height: "100%",
-  padding: "7px 10px",
-  background: "white",
-  border: "1px solid black",
-  fontSize: "16px",
-  fontWeight: "bold",
-  borderRadius: "20px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "3px",
-  cursor: "pointer",
-  transition: "background 0.2s",
-  "&:hover": {
-    background: OptionHoverColor,
+export const NeighborSelectorContainer = styled("div", {
+  "& .selectButton": {
+    height: "100%",
+    padding: "7px 10px",
+    background: "white",
+    border: "1px solid black",
+    fontSize: "16px",
+    fontWeight: "bold",
+    borderRadius: "20px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "3px",
+    cursor: "pointer",
+    transition: "background 0.2s",
+    position: "relative",
+    "&:hover": {
+      background: OptionHoverColor,
+    },
+  },
+  "& .selectBox": {
+    position: "absolute",
+    left: "10px",
+    top: "80%",
+    padding: "3px",
+    marginTop: "0px",
+    borderRadius: "15px",
+    background: "white",
+    border: "1px solid black",
+    height: "0",
+    opacity: "0",
+    transition: "margin 0.3s",
+    display: "flex",
+    flexDirection: "column",
+    gap: "3px",
+    boxSizing: "border-box",
+    "&.isVisible": {
+      height: "auto",
+      opacity: "1",
+      marginTop: "10px",
+    },
+    "& .optionButton": {
+      background: "none",
+      border: "none",
+      padding: "5px 29px",
+      fontSize: "16px",
+      fontWeight: "bold",
+      transition: "background 0.3s",
+      borderRadius: "13px",
+      whiteSpace: "nowrap",
+      cursor: "pointer",
+      "&:hover": {
+        background: OptionHoverColor,
+      },
+      "&.selected": {
+        background: OptionHoverColor,
+        "&:hover": {
+          background: "#C3CDFF",
+        },
+      },
+    },
   },
 });
 
@@ -68,6 +113,14 @@ export const ArrowDownIcon = styled(ArrowDown, {
   height: "18px",
   strokeWidth: "1.4",
   color: "black",
+  transition: "transform 0.2s",
+  variants: {
+    isSelected: {
+      true: {
+        transform: "rotate(180deg)",
+      },
+    },
+  },
 });
 
 export const LocationIcon = styled(Location, {

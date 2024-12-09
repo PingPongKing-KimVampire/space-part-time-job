@@ -1,6 +1,6 @@
 import { ERROR, IP_ADDRESS } from "../constants/constants";
 
-// TODO : 모든 데이터 패치 함수를 여기에 구현하기
+// TODO : 모든 데이터 패치 함수를 여기에 구현하기 (graphql 제외)
 
 const fetchData = async (requestUrl, headers, processData) => {
   let response: Response, data;

@@ -76,7 +76,7 @@ const LoginPage = (): React.JSX.Element => {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({
-          phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
+          phoneNumber: inputValue.phoneNumber.replace(/-/g, ""),
         }),
       });
     } catch {
@@ -147,7 +147,7 @@ const LoginPage = (): React.JSX.Element => {
       body.password = inputValue.password;
       requestUrl = `https://${IP_ADDRESS}/api/users/login`;
     } else if (selectedTab === PHONE_NUMBER) {
-      body.phoneNumber = inputValue.phoneNumber.replaceAll("-", "");
+      body.phoneNumber = inputValue.phoneNumber.replace(/-/g, "");
       body.smsCode = inputValue.authNumber;
       requestUrl = `https://${IP_ADDRESS}/api/users/login/phone`;
     }
