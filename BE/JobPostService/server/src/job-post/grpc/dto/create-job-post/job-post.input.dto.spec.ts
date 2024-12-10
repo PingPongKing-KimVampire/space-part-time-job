@@ -1,3 +1,5 @@
+import "reflect-metadata"; //없으면 테스트시 Reflect.getMetadata is not a function 오류가 생김
+
 import { validate } from 'class-validator';
 import { CreateJobPostInput } from './job-post.input.dto';
 import {
