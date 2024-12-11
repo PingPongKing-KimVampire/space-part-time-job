@@ -25,7 +25,7 @@ const JOB_RESULT = [
     },
     photos: [],
     addressName: "석우동",
-    postTime: "30분 전",
+    createdAt: "30분 전",
   },
   {
     id: 2,
@@ -45,7 +45,7 @@ const JOB_RESULT = [
     },
     photos: [testImage1],
     addressName: "반월동",
-    postTime: "2시간 전",
+    createdAt: "2시간 전",
   },
   {
     id: 3,
@@ -72,7 +72,7 @@ const JOB_RESULT = [
     },
     photos: [testImage2],
     addressName: "반송동",
-    postTime: "9시간 전",
+    createdAt: "9시간 전",
   },
   {
     id: 4,
@@ -92,7 +92,7 @@ const JOB_RESULT = [
     },
     photos: [],
     addressName: "석우동",
-    postTime: "30분 전",
+    createdAt: "30분 전",
   },
   {
     id: 5,
@@ -112,7 +112,7 @@ const JOB_RESULT = [
     },
     photos: [testImage1],
     addressName: "반월동",
-    postTime: "2시간 전",
+    createdAt: "2시간 전",
   },
   {
     id: 6,
@@ -139,7 +139,7 @@ const JOB_RESULT = [
     },
     photos: [testImage2],
     addressName: "반송동",
-    postTime: "9시간 전",
+    createdAt: "9시간 전",
   },
   {
     id: 7,
@@ -159,7 +159,7 @@ const JOB_RESULT = [
     },
     photos: [],
     addressName: "석우동",
-    postTime: "30분 전",
+    createdAt: "30분 전",
   },
   {
     id: 8,
@@ -179,7 +179,7 @@ const JOB_RESULT = [
     },
     photos: [testImage1],
     addressName: "반월동",
-    postTime: "2시간 전",
+    createdAt: "2시간 전",
   },
   {
     id: 9,
@@ -206,7 +206,7 @@ const JOB_RESULT = [
     },
     photos: [testImage2],
     addressName: "반송동",
-    postTime: "9시간 전",
+    createdAt: "9시간 전",
   },
 ];
 
@@ -250,13 +250,13 @@ const JobList: React.FC<JobListProps> = (props) => {
               salary,
               photos,
               addressName,
+              createdAt,
             } = job;
-            const postTime = "2시간 전"; // TODO : 임시
             return (
               <JobItem
                 title={title}
                 neighbor={addressName}
-                postTime={postTime}
+                createdAt={createdAt}
                 pay={{ type: salary.salaryType, amount: salary.salaryAmount }}
                 period={workPeriod}
                 time={workTime}

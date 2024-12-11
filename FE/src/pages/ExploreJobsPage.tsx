@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { fetchDistrictBoundary } from "../utils/fetchData";
 import { MainBackgroundColor } from "../styles/global";
+import formatTimeAgo from "../utils/formatTimeAgo";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import useDebounce from "../utils/useDebounce";
 import JobList from "../components/ExploreJobsPage/JobList.tsx";
@@ -89,6 +90,13 @@ const ExploreJobsPage = () => {
     { loading: searchJobPostsLoading, error: searchJobPostsError },
   ] = useLazyQuery(SEARCH_JOB_POSTS, {
     onCompleted: (data) => {
+      // 게시 시간 가공
+      data.edges = data.edges.map((edge) => ({
+        ...edge,
+        node: {
+          createdAt: formatTimeAgo(edge.node.createdAt),
+        },
+      }));
       if (isChangedSearchCondition) {
         // 검색 조건이 바뀐 후 패치 -> 기존 데이터 날리고 새로 저장
         setJobPosts(data.edges.map((edge) => edge.node));
