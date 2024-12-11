@@ -7,7 +7,7 @@ export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 
   @Get()
-  getDistricts() {
+  getDistricts(): { districts: Record<string, string>[] } {
     return { districts: this.districtService.getDistricts() };
   }
 

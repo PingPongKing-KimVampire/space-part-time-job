@@ -25,17 +25,24 @@ def process_district(index_and_row, gdf, step_distances, total_count, progress_c
         neighbors = gdf[gdf.geometry.distance(target_row.geometry) <= step_distance]
 
         if not neighbors.empty:
-            districts = neighbors["EMD_KOR_NM"].tolist()
+            districts = neighbors["EMD_CD"].tolist()
             combined_geometry = neighbors.geometry.aggregate("union_all")
             outer_boundary = combined_geometry.convex_hull
 
             outer_boundary_wgs84 = gpd.GeoSeries([outer_boundary], crs=5179).to_crs(epsg=4326).iloc[0]
 
+            coordinates = []
+            for x, y in outer_boundary_wgs84.exterior.coords:
+                coordinates.append({
+                    "longitude": x,
+                    "latitude": y
+                })
+
             structure["levels"][step_level] = {
                 "districts": districts,
                 "outer_boundary": {
                     "type": "Polygon",
-                    "coordinates": list(outer_boundary_wgs84.exterior.coords)
+                    "coordinates": coordinates
                 }
             }
 
@@ -68,7 +75,7 @@ def main():
     combined_gdf = combined_gdf.dropna(subset=["geometry"])
 
     # 단계별 거리 설정
-    step_distances = {100: "1", 500: "2", 1000: "3", 1500: "4"}
+    step_distances = {1: "1", 50: "2", 1000: "3", 1500: "4"}
 
     # 전체 처리 개수
     total_count = len(combined_gdf)
@@ -88,7 +95,7 @@ def main():
     output_dir = "district-data"
     os.makedirs(output_dir, exist_ok=True)
 
-    output_file = os.path.join(output_dir, "행정동-경계-districts-data.json")
+    output_file = os.path.join(output_dir, "districts-data.json")
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
 

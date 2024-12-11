@@ -1,21 +1,29 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { readFileSync, existsSync } from 'fs';
 import * as path from 'path';
+import {
+  District,
+  DistrictId,
+  DistrictLevels,
+  DistrictName,
+} from './district.interface';
+import { SrcDistrict } from './src-district.interface';
 
 @Injectable()
 export class DistrictService {
-  private readonly districtsData: Record<string, string>;
-  private readonly districtsNeighborsData: [any];
+  private readonly districtsIdNameMappingData: Record<DistrictId, DistrictName>;
+  private readonly districtsNeighborsData: District[];
 
   constructor() {
-    const { districtsData, districtsNeighborsData } = this.loadData();
-    this.districtsData = districtsData;
+    const { districtsIdNameMappingData, districtsNeighborsData } =
+      this.loadData();
+    this.districtsIdNameMappingData = districtsIdNameMappingData;
     this.districtsNeighborsData = districtsNeighborsData;
   }
 
   private loadData(): {
-    districtsData: Record<string, string>;
-    districtsNeighborsData: any;
+    districtsIdNameMappingData: Record<DistrictId, DistrictName>;
+    districtsNeighborsData: District[];
   } {
     const filePath = path.join(
       __dirname,
@@ -29,39 +37,64 @@ export class DistrictService {
     }
 
     const fileContent = readFileSync(filePath, 'utf-8');
-    const fileData = JSON.parse(fileContent);
+    const srcDistrictData = JSON.parse(fileContent) as SrcDistrict[];
 
-    const districtsNeighborsData = fileData;
-    const districtsData = fileData.reduce((acc, district) => {
-      acc[district.district_id] = district.district_korean_name;
-      return acc;
-    }, {});
-    return { districtsData, districtsNeighborsData };
-  }
+    const districtsIdNameMappingData = srcDistrictData.reduce(
+      (acc, district) => {
+        acc[district.district_id] = district.district_korean_name;
+        return acc;
+      },
+      {},
+    );
 
-  getDistricts(): { id: string; name: string }[] {
-    return Object.entries(this.districtsData).map(([id, name]) => ({
-      id,
-      name,
+    const districtsNeighborsData: any = srcDistrictData.map((srcDistrict) => ({
+      district_id: srcDistrict.district_id,
+      district_korean_name: srcDistrict.district_korean_name,
+      district_english_name: srcDistrict.district_english_name,
+      levels: [1, 2, 3, 4].reduce((acc, level) => {
+        acc[level] = {
+          districts: srcDistrict.levels[level].districts.map((districtId) => ({
+            id: districtId,
+            name: districtsIdNameMappingData[districtId],
+          })),
+          outer_boundary: srcDistrict.levels[level].outer_boundary,
+        };
+        return acc;
+      }, {}),
     }));
+    return { districtsIdNameMappingData, districtsNeighborsData };
   }
 
-  getDistrictNeighbors(districtId: string): any {
-    const districtsNeighborData = this.districtsNeighborsData.find(
+  getDistricts(): { id: DistrictId; name: DistrictName }[] {
+    return Object.entries(this.districtsIdNameMappingData).map(
+      ([id, name]) => ({
+        id,
+        name,
+      }),
+    );
+  }
+
+  getDistrictNeighbors(districtId: string): { levels: DistrictLevels } {
+    console.log(this.districtsNeighborsData);
+    const districtNeighborsData = this.districtsNeighborsData.find(
       (data) => data.district_id === districtId,
     );
-    if (!districtsNeighborData)
+    if (!districtNeighborsData)
       throw new NotFoundException('동네를 찾을 수 없음');
+    // {
+    // 	levels: districtsNeighborData.levels[1].districts.
+    // }
     const ret = {
-      levels: districtsNeighborData.levels,
+      levels: districtNeighborsData.levels,
     };
     return ret;
   }
 
-  getDistrictNames(ids: string[]): Record<string, string> {
+  getDistrictNames(ids: string[]): Record<DistrictId, DistrictName> {
     return ids.reduce((acc, id) => {
-      if (!this.districtsData[id]) throw new Error('동네를 찾을 수 없음');
-      acc[id] = this.districtsData[id];
+      if (!this.districtsIdNameMappingData[id])
+        throw new Error('동네를 찾을 수 없음');
+      acc[id] = this.districtsIdNameMappingData[id];
       return acc;
     }, {});
   }
