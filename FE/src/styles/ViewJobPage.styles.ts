@@ -128,6 +128,7 @@ export const ImageSliderContainer = styled("div", {
         opacity: "0.3",
         border: "none",
         padding: "0",
+        cursor: "pointer",
         "&.active": {
           opacity: "1",
         },

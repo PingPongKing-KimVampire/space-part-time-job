@@ -15,7 +15,7 @@ import {
 } from "../styles/SetNeighborScopePage.styles";
 import LevelSlider from "../components/SetNeighborScopePage/LevelSlider.tsx";
 import { Neighbor } from "./SearchNeighborPage.tsx";
-import { IP_ADDRESS, ERROR } from "../constants/constants";
+import { ERROR } from "../constants/constants";
 import { SET_RESIDENT_NEIGHBORHOOD } from "../graphql/mutations.js";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WarningText } from "../styles/global";
@@ -28,10 +28,6 @@ type Level = {
   };
 };
 
-type DistrictBoundaryResponseData = {
-  levels: Record<string, Level>;
-};
-
 const SetNeighborScopePage = () => {
   const navigate = useNavigate();
 
@@ -39,7 +35,7 @@ const SetNeighborScopePage = () => {
   const [selectedNeighbor, setSelectedNeighbor] = useState<Neighbor | null>(
     null
   );
-  const [scopeValue, setScopeValue] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
+  const [scopeValues, setScopeValues] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
   const [districtBoundaries, setDistrictBoundaries] = useState<
     Record<string, Level>
   >({}); // TODO : useMemo를 쓰는 게 낫나?
@@ -64,22 +60,26 @@ const SetNeighborScopePage = () => {
     setupDistrictBoundaries();
   }, []);
 
+  const convertScopeValueToLevel = (scopeValue) => {
+    return parseInt(scopeValue) / 100 + 1;
+  };
+
   // 폴리곤 상태 업데이트
   useEffect(() => {
     if (
       !selectedNeighbor ||
       !districtBoundaries[selectedNeighbor.id] ||
-      !scopeValue[selectedNeighbor.id]
+      !scopeValues[selectedNeighbor.id]
     ) {
       setPolygonLine([]);
       return;
     }
-    const level = parseInt(scopeValue[selectedNeighbor.id]) / 100 + 1;
+    const level = convertScopeValueToLevel(scopeValues[selectedNeighbor.id]);
     if (!districtBoundaries[selectedNeighbor.id][level]) return;
     setPolygonLine(
       districtBoundaries[selectedNeighbor.id][level].outer_boundary.coordinates
     );
-  }, [districtBoundaries, selectedNeighbor, scopeValue]);
+  }, [districtBoundaries, selectedNeighbor, scopeValues]);
 
   const onNeighborClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const neighborClicked = JSON.parse(
@@ -95,9 +95,9 @@ const SetNeighborScopePage = () => {
     setNeighbors((state) => state.filter((el) => el.id !== neighborClicked.id));
   };
 
-  // x 눌렀을 때 scopeValue 업데이트
+  // x 눌렀을 때 scopeValues 업데이트
   useEffect(() => {
-    setScopeValue((prev) => {
+    setScopeValues((prev) => {
       return neighbors.reduce((result, neighbor) => {
         result[neighbor.id] = prev[neighbor.id] || "0";
         return result;
@@ -133,9 +133,11 @@ const SetNeighborScopePage = () => {
 
   const sendResidentNeighborhood = async () => {
     const input = {
-      neighborhoods: neighbors.map((neighbor) => ({ id: neighbor.id })),
+      neighborhoods: neighbors.map((neighbor) => ({
+        id: neighbor.id,
+        level: convertScopeValueToLevel(scopeValues[neighbor.id]),
+      })),
     };
-
     try {
       await setResidentNeighborhood({ variables: { input } });
     } catch {
@@ -195,9 +197,9 @@ const SetNeighborScopePage = () => {
           </NeighborsContainer>
           <LevelSlider
             level={4}
-            value={selectedNeighbor ? scopeValue[selectedNeighbor.id] : "0"}
+            value={selectedNeighbor ? scopeValues[selectedNeighbor.id] : "0"}
             setValue={(value: string) => {
-              setScopeValue((state) => {
+              setScopeValues((state) => {
                 const newState = { ...state };
                 if (selectedNeighbor) newState[selectedNeighbor.id] = value;
                 return newState;
