@@ -23,9 +23,17 @@ export class JobPostResolver {
       ...createJobPostInput,
       userId: user.id,
     };
-    const { id, addressName: realAddressName } =
-      await this.jobPostService.createJobPost(grpcPayload);
-    return { ...createJobPostInput, id, addressName: realAddressName };
+    const {
+      id,
+      addressName: realAddressName,
+      createdAt,
+    } = await this.jobPostService.createJobPost(grpcPayload);
+    return {
+      ...createJobPostInput,
+      createdAt,
+      id,
+      addressName: realAddressName,
+    };
   }
 
   @Query('searchJobPosts')

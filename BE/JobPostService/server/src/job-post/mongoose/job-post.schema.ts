@@ -71,6 +71,9 @@ export class JobPost {
 
   @Prop({ required: true })
   neighborhoodId: string;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export const JobPostSchema = SchemaFactory.createForClass(JobPost);

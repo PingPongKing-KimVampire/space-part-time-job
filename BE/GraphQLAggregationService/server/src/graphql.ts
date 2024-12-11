@@ -117,6 +117,7 @@ export interface JobPost {
     photos?: Nullable<string[]>;
     detailedDescription: string;
     addressName: string;
+    createdAt: string;
 }
 
 export interface WorkPeriod {

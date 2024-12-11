@@ -8,6 +8,7 @@ type JobPost {
   photos: [String!]
   detailedDescription: String!
   addressName: String!
+  createdAt: String!
 }
 
 type WorkPeriod {

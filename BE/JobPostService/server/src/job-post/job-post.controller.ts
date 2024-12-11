@@ -18,7 +18,7 @@ export class JobPostController {
   @GrpcMethod('JobPostService', 'CreateJobPost')
   async createJobPost(
     input: CreateJobPostInput,
-  ): Promise<{ id: string; addressName: string }> {
+  ): Promise<{ id: string; addressName: string; createdAt: string }> {
     input = plainToInstance(CreateJobPostInput, input);
     await this.validateFormat(input);
     await this.validateImageUrl(input);
@@ -35,7 +35,12 @@ export class JobPostController {
         addressName: officialAddressName,
         neighborhoodId,
       });
-      return { id: createdJobPost.id, addressName: officialAddressName };
+
+      return {
+        id: createdJobPost.id,
+        addressName: officialAddressName,
+        createdAt: createdJobPost.createdAt.toISOString(),
+      };
     } catch (e) {
       console.error('예상하지 못한 에러', e);
       throw new RpcException('예상하지 못한 에러');

@@ -46,7 +46,7 @@ type GrpcSearchJobPostsResponse = {
 interface JobPostServiceGrpc {
   createJobPost(
     data: GrpcCreateJobPostInput,
-  ): Observable<{ id: string; addressName: string }>;
+  ): Observable<{ id: string; addressName: string; createdAt: string }>;
 
   searchJobPosts(
     data: GrpcSearchJobPostsRequest,
@@ -80,7 +80,7 @@ export class JobPostService implements OnModuleInit {
 
   async createJobPost(
     data: GrpcCreateJobPostInput,
-  ): Promise<{ id: string; addressName: string }> {
+  ): Promise<{ id: string; addressName: string; createdAt: string }> {
     try {
       const response = await lastValueFrom(
         this.jobPostService.createJobPost(data),
