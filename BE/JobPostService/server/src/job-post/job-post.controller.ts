@@ -168,10 +168,17 @@ export class JobPostController {
     try {
       const { totalCount, edges, pageInfo } =
         await this.jobPostRepository.searchJobPosts(filters, pagination);
+      const formattedEdges = edges.map((edge) => ({
+        ...edge,
+        node: {
+          ...edge.node,
+          createdAt: edge.node.createdAt.toISOString(),
+        },
+      }));
       return {
         result: {
           totalCount,
-          edges,
+          edges: formattedEdges,
           pageInfo,
         },
       };

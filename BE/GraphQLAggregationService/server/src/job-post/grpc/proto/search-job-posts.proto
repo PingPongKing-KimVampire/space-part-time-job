@@ -49,6 +49,7 @@ message JobPost {
   repeated string photos = 7;
   string detailedDescription = 8;
   string addressName = 9;
+  string createdAt = 10;
 }
 
 // Request and response for search
