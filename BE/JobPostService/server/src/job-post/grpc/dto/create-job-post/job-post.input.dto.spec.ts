@@ -61,7 +61,6 @@ describe('CreateJobPostInput 유효성 검사', () => {
   it('올바른 입력값으로 유효성 검사 통과', async () => {
     const validInput = plainToClass(CreateJobPostInput, getValidInput());
     const errors = await validate(validInput);
-    console.log(errors);
     expect(errors.length).toBe(0);
   });
 
