@@ -29,9 +29,6 @@ export class DistrictService {
       __dirname,
       '../../../district-data/districts-data.json',
     );
-
-    console.log(filePath);
-
     if (!existsSync(filePath)) {
       throw new Error(`파일이 존재하지 않습니다: ${filePath}`);
     }
@@ -75,15 +72,11 @@ export class DistrictService {
   }
 
   getDistrictNeighbors(districtId: string): { levels: DistrictLevels } {
-    console.log(this.districtsNeighborsData);
     const districtNeighborsData = this.districtsNeighborsData.find(
       (data) => data.district_id === districtId,
     );
     if (!districtNeighborsData)
       throw new NotFoundException('동네를 찾을 수 없음');
-    // {
-    // 	levels: districtsNeighborData.levels[1].districts.
-    // }
     const ret = {
       levels: districtNeighborsData.levels,
     };
