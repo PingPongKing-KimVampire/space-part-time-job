@@ -17,7 +17,6 @@ export const Container = styled("div", {
   marginTop: "40px",
   display: "flex",
   flexDirection: "column",
-  gap: "20px",
 });
 
 // TODO: CustomInput의 스타일과 재사용할 방법 없나!
@@ -73,16 +72,16 @@ export const NeighborSelectorContainer = styled("div", {
     borderRadius: "15px",
     background: "white",
     border: "1px solid black",
-    height: "0",
+    visibility: "hidden",
     opacity: "0",
-    transition: "margin 0.3s",
+    transition: "all 0.3s",
     display: "flex",
     flexDirection: "column",
     gap: "3px",
     boxSizing: "border-box",
     "&.isVisible": {
-      height: "auto",
       opacity: "1",
+      visibility: "visible",
       marginTop: "10px",
     },
     "& .optionButton": {
@@ -131,6 +130,7 @@ export const LocationIcon = styled(Location, {
 
 export const ContentContainer = styled("div", {
   width: "100%",
+  marginTop: "10px",
   display: "flex",
   alignItems: "flex-start",
   gap: "35px",
@@ -189,7 +189,11 @@ export const JobListContainer = styled("div", {
   flexGrow: "1",
   display: "flex",
   flexDirection: "column",
-  marginBottom: "60px",
+  "& .jobList": {
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: "40px",
+  },
 });
 
 export const JobItemContainer = styled("div", {

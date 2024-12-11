@@ -9,6 +9,9 @@ export const Container = styled("div", {
   flexDirection: "column",
   gap: "10px",
   width: "100%",
+  "& input": {
+    cursor: "pointer",
+  },
 });
 
 export const ExposurePanel = styled("div", {

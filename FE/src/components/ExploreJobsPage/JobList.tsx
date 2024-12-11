@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { JobListContainer } from "../../styles/ExploreJobsPage.styles";
 import JobItem from "./JobItem.tsx";
 import testImage1 from "../../assets/test/ExploreJobsTest1.jpeg";
@@ -19,12 +19,12 @@ const JOB_RESULT = [
       startTime: "15:30",
       endTime: "18:00",
     },
-    pay: {
-      type: "HOURLY",
-      amount: 12000,
+    salary: {
+      salaryType: "HOURLY",
+      salaryAmount: 12000,
     },
     photos: [],
-    neighbor: "석우동",
+    addressName: "석우동",
     postTime: "30분 전",
   },
   {
@@ -39,12 +39,12 @@ const JOB_RESULT = [
       startTime: "10:00",
       endTime: "23:00",
     },
-    pay: {
-      type: "MONTHLY",
-      amount: 3000000,
+    salary: {
+      salaryType: "MONTHLY",
+      salaryAmount: 3000000,
     },
     photos: [testImage1],
-    neighbor: "반월동",
+    addressName: "반월동",
     postTime: "2시간 전",
   },
   {
@@ -66,12 +66,12 @@ const JOB_RESULT = [
       startTime: "10:00",
       endTime: "23:00",
     },
-    pay: {
-      type: "PER_TASK",
-      amount: 10000,
+    salary: {
+      salaryType: "PER_TASK",
+      salaryAmount: 10000,
     },
     photos: [testImage2],
-    neighbor: "반송동",
+    addressName: "반송동",
     postTime: "9시간 전",
   },
   {
@@ -86,12 +86,12 @@ const JOB_RESULT = [
       startTime: "15:30",
       endTime: "18:00",
     },
-    pay: {
-      type: "HOURLY",
-      amount: 12000,
+    salary: {
+      salaryType: "HOURLY",
+      salaryAmount: 12000,
     },
     photos: [],
-    neighbor: "석우동",
+    addressName: "석우동",
     postTime: "30분 전",
   },
   {
@@ -106,12 +106,12 @@ const JOB_RESULT = [
       startTime: "10:00",
       endTime: "23:00",
     },
-    pay: {
-      type: "MONTHLY",
-      amount: 3000000,
+    salary: {
+      salaryType: "MONTHLY",
+      salaryAmount: 3000000,
     },
     photos: [testImage1],
-    neighbor: "반월동",
+    addressName: "반월동",
     postTime: "2시간 전",
   },
   {
@@ -133,12 +133,12 @@ const JOB_RESULT = [
       startTime: "10:00",
       endTime: "23:00",
     },
-    pay: {
-      type: "PER_TASK",
-      amount: 10000,
+    salary: {
+      salaryType: "PER_TASK",
+      salaryAmount: 10000,
     },
     photos: [testImage2],
-    neighbor: "반송동",
+    addressName: "반송동",
     postTime: "9시간 전",
   },
   {
@@ -153,12 +153,12 @@ const JOB_RESULT = [
       startTime: "15:30",
       endTime: "18:00",
     },
-    pay: {
-      type: "HOURLY",
-      amount: 12000,
+    salary: {
+      salaryType: "HOURLY",
+      salaryAmount: 12000,
     },
     photos: [],
-    neighbor: "석우동",
+    addressName: "석우동",
     postTime: "30분 전",
   },
   {
@@ -173,12 +173,12 @@ const JOB_RESULT = [
       startTime: "10:00",
       endTime: "23:00",
     },
-    pay: {
-      type: "MONTHLY",
-      amount: 3000000,
+    salary: {
+      salaryType: "MONTHLY",
+      salaryAmount: 3000000,
     },
     photos: [testImage1],
-    neighbor: "반월동",
+    addressName: "반월동",
     postTime: "2시간 전",
   },
   {
@@ -200,41 +200,75 @@ const JOB_RESULT = [
       startTime: "10:00",
       endTime: "23:00",
     },
-    pay: {
-      type: "PER_TASK",
-      amount: 10000,
+    salary: {
+      salaryType: "PER_TASK",
+      salaryAmount: 10000,
     },
     photos: [testImage2],
-    neighbor: "반송동",
+    addressName: "반송동",
     postTime: "9시간 전",
   },
 ];
 
 type JobListProps = {
   jobPosts: JobPost[];
+  fetchMoreJobPosts: () => void;
 };
 
-const JobList: React.FC<JobListProps> = ({ jobPosts }) => {
+const JobList: React.FC<JobListProps> = (props) => {
+  const { jobPosts, fetchMoreJobPosts } = props;
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) fetchMoreJobPosts();
+      },
+      {
+        root: null, // 뷰포트 기준으로 관찰
+        rootMargin: "0px", // 추가적인 마진 설정 없음
+        threshold: 1.0, // 요소가 100% 화면에 보일 때만 작동
+      }
+    );
+    if (bottomRef.current) observer.observe(bottomRef.current);
+    return () => {
+      if (bottomRef.current) observer.unobserve(bottomRef.current);
+    };
+  });
+
   return (
-    <JobListContainer>
-      {jobPosts.map((job) => {
-        const { id, title, workPeriod, workTime, salary, photos, addressName } =
-          job;
-        const postTime = "2시간 전"; // TODO : 임시
-        return (
-          <JobItem
-            title={title}
-            neighbor={addressName}
-            postTime={postTime}
-            pay={{ type: salary.salaryType, amount: salary.salaryAmount }}
-            period={workPeriod}
-            time={workTime}
-            photos={photos}
-            key={id}
-          />
-        );
-      })}
-    </JobListContainer>
+    <>
+      <JobListContainer>
+        <div className="jobList">
+          {JOB_RESULT.map((job) => {
+            // TODO : jobPosts로 대체
+            const {
+              id,
+              title,
+              workPeriod,
+              workTime,
+              salary,
+              photos,
+              addressName,
+            } = job;
+            const postTime = "2시간 전"; // TODO : 임시
+            return (
+              <JobItem
+                title={title}
+                neighbor={addressName}
+                postTime={postTime}
+                pay={{ type: salary.salaryType, amount: salary.salaryAmount }}
+                period={workPeriod}
+                time={workTime}
+                photos={photos}
+                key={id}
+              />
+            );
+          })}
+        </div>
+        <div ref={bottomRef} style={{ height: "10px" }} />
+      </JobListContainer>
+    </>
   );
 };
 
