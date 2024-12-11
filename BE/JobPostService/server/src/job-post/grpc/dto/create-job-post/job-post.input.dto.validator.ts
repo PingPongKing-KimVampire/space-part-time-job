@@ -10,7 +10,7 @@ import {
 } from 'src/job-post/mongoose/job-post.enum';
 import { WorkPeriodInput, WorkTimeInput } from './job-post.input.dto';
 
-ValidatorConstraint({ name: 'isDateWithinOneMonth', async: false });
+@ValidatorConstraint({ name: 'isDateWithinOneMonth', async: false })
 export class IsDateWithinOneMonth implements ValidatorConstraintInterface {
   validate(dates: string[], args: ValidationArguments) {
     const today = new Date();
