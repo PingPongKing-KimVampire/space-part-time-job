@@ -218,9 +218,10 @@ export class UserController {
         userId: user.userId,
         nickname: user.nickname,
         phoneNumber: user.phoneNumber,
-        residentDistricts: user.residentDistricts?.map(
-          (residentDistrict) => residentDistrict.districtId,
-        ),
+        residentDistricts: user.residentDistricts?.map((residentDistrict) => ({
+          id: residentDistrict.districtId,
+          level: residentDistrict.level,
+        })),
       };
       res.setHeader(
         'space-part-time-job-user-data-base64',
@@ -235,16 +236,30 @@ export class UserController {
   @GrpcMethod('UserService', 'SetUserResidentDistrict')
   async setUserResidentDistrict(data: {
     userId: string;
-    residentDistrict: string[];
+    residentDistricts: { id: string; level: number }[];
   }) {
-    const { userId, residentDistrict } = data;
+    const { userId, residentDistricts } = data;
     try {
+      if (
+        !residentDistricts.every(
+          (residentDistrict) =>
+            residentDistrict.level >= 1 && residentDistrict.level <= 4,
+        )
+      ) {
+        throw new Error('동네 범위가 유효하지 않음');
+      }
       await this.usersService.resetUserResidentDistricts(
         userId,
-        residentDistrict,
+        residentDistricts.map((residentDistrict) => ({
+          id: residentDistrict.id,
+          level: residentDistrict.level,
+        })),
       );
     } catch (e) {
-      if (e.message === '동네를 찾을 수 없음')
+      if (
+        e.message === '동네를 찾을 수 없음' ||
+        e.message === '동네 범위가 유효하지 않음'
+      )
         throw new RpcException(e.message);
       console.error('예상하지 못한 오류', e);
       throw new RpcException('상주 행정동 업데이트 실패');

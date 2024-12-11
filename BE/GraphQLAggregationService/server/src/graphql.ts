@@ -103,6 +103,7 @@ export interface SetResidentNeighborhoodInput {
 
 export interface NeighborhoodInput {
     id: string;
+    level: number;
 }
 
 export interface JobPost {
@@ -164,6 +165,7 @@ export interface PageInfo {
 
 export interface Neighborhood {
     id: string;
+    level: number;
     name: string;
 }
 

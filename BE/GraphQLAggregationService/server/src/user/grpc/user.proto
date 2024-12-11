@@ -8,7 +8,12 @@ service UserService {
 
 message SetUserResidentDistrictRequest {
   string userId = 1;
-  repeated string residentDistrict = 2;
+  repeated ResidentDistrict residentDistricts = 2;
+}
+
+message ResidentDistrict {
+  string id = 1;
+  int32 level = 2;
 }
 
 message Empty {}

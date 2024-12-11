@@ -8,4 +8,5 @@ input SetResidentNeighborhoodInput {
 
 input NeighborhoodInput {
   id: ID!
+  level: Int!
 }

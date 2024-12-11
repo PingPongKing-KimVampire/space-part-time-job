@@ -111,12 +111,20 @@ export class UserService {
     return user;
   }
 
-  async resetUserResidentDistricts(id: string, districts: string[]) {
-    await this.checkDistricts(districts);
-    const residentDistricts = districts.map((district) =>
-      UserResidentDistrict.of(id, district),
+  async resetUserResidentDistricts(
+    id: string,
+    residentDistricts: { id: string; level: number }[],
+  ) {
+    await this.checkDistricts(
+      residentDistricts.map((residentDistrict) => residentDistrict.id),
     );
-    await this.userRepository.resetUserResidentDistricts(id, residentDistricts);
+    const userResidentDistricts = residentDistricts.map((residentDistrict) =>
+      UserResidentDistrict.of(id, residentDistrict.id, residentDistrict.level),
+    );
+    await this.userRepository.resetUserResidentDistricts(
+      id,
+      userResidentDistricts,
+    );
   }
 
   private async checkDistricts(districts: string[]) {

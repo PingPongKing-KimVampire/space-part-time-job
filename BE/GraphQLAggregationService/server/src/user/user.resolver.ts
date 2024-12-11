@@ -5,6 +5,14 @@ import { UserService } from './user.service';
 import { DistrictService } from 'src/district/district.service';
 import { RpcException } from '@nestjs/microservices';
 
+type UserData = {
+  id: string;
+  userId: string;
+  nickname: string;
+  phoneNumber: string;
+  residentDistricts: { id: string; level: number }[];
+};
+
 @Resolver('User')
 export class meResolver {
   constructor(
@@ -13,18 +21,32 @@ export class meResolver {
   ) {}
   @Query('me')
   async getMe(@Context('req') req: Request): Promise<User> {
-    const user = this.parseUserDataHeader(req);
-
-    if (user.residentDistricts) {
-      user.residentDistricts = await this.getNeighborhoodById(
-        user.residentDistricts,
-      );
-    }
+    const user: UserData = this.parseUserDataHeader(req);
+    const residentNeighborhood =
+      await this.getResidentNeighborhoodsByUserData(user);
     return {
       id: user.id,
       phoneNumber: user.phoneNumber,
-      residentNeighborhood: user.residentDistricts,
+      residentNeighborhood,
     } as User;
+  }
+
+  private async getResidentNeighborhoodsByUserData(
+    user: UserData,
+  ): Promise<Neighborhood[]> {
+    if (!user.residentDistricts) {
+      return null;
+    }
+    const neighborhoodsIdAndName = await this.getNeighborhoodIdAndNameById(
+      user.residentDistricts.map((residentDistrict) => residentDistrict.id),
+    );
+    return neighborhoodsIdAndName.map((neighborhoodIdAndName) => ({
+      id: neighborhoodIdAndName.id,
+      name: neighborhoodIdAndName.name,
+      level: user.residentDistricts.find(
+        (district) => district.id === neighborhoodIdAndName.id,
+      ).level,
+    }));
   }
 
   private parseUserDataHeader(req: Request): any {
@@ -49,15 +71,21 @@ export class meResolver {
     @Context('req') req: Request,
   ): Promise<Neighborhood[]> {
     try {
-      const user: User = this.parseUserDataHeader(req);
+      const user: UserData = this.parseUserDataHeader(req);
       await this.userService.setUserResidentDistrict(
         user.id,
         setResidentNeighborhoodInput.neighborhoods,
       );
 
-      return await this.getNeighborhoodById(
+      const neighborhoodsIdAndName = await this.getNeighborhoodIdAndNameById(
         setResidentNeighborhoodInput.neighborhoods.map((value) => value.id),
       );
+
+      return neighborhoodsIdAndName.map((neighborhoodName, idx) => ({
+        name: neighborhoodName.name,
+        id: setResidentNeighborhoodInput.neighborhoods[idx].id,
+        level: setResidentNeighborhoodInput.neighborhoods[idx].level,
+      }));
     } catch (e) {
       if (e.details === '동네를 찾을 수 없음') {
         throw new RpcException(e.details);
@@ -66,11 +94,13 @@ export class meResolver {
     }
   }
 
-  async getNeighborhoodById(districtIdList: string[]) {
+  async getNeighborhoodIdAndNameById(
+    districtIdList: string[],
+  ): Promise<{ id: string; name: string }[]> {
     const districtIdNameObj =
       await this.districtService.getDistrictNames(districtIdList);
     return Object.keys(districtIdNameObj).map((id) => ({
-      id,
+      id: id,
       name: districtIdNameObj[id],
     }));
   }

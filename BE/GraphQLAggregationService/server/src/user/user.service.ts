@@ -13,7 +13,7 @@ import { NeighborhoodInput } from 'src/graphql';
 interface UserServiceGrpc {
   setUserResidentDistrict(data: {
     userId: string;
-    residentDistrict: string[];
+    residentDistricts: { id: string; level: number }[];
   }): Observable<void>;
 }
 
@@ -46,13 +46,14 @@ export class UserService implements OnModuleInit {
     neighborhoodInputs: NeighborhoodInput[],
   ): Promise<void> {
     try {
-      const residentDistricts = neighborhoodInputs.map(
-        (neighborhoodInput) => neighborhoodInput.id,
-      );
+      const residentDistricts = neighborhoodInputs.map((neighborhoodInput) => ({
+        id: neighborhoodInput.id,
+        level: neighborhoodInput.level,
+      }));
       return await this.userServiceGrpc
         .setUserResidentDistrict({
           userId,
-          residentDistrict: residentDistricts,
+          residentDistricts,
         })
         .toPromise();
     } catch (e) {
