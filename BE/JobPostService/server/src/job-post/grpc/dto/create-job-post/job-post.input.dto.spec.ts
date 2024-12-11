@@ -101,6 +101,17 @@ describe('CreateJobPostInput 유효성 검사', () => {
     expect(errors.length).toBeGreaterThan(0);
   });
 
+  it('하는 일 목록이 중복일 때 실패', async () => {
+    const input = getValidInput();
+    input.jobDescription = [
+      ReverseJobCategoryMapping[JobCategory.CLEANING],
+      ReverseJobCategoryMapping[JobCategory.CLEANING],
+    ];
+    const transformedInput = plainToClass(CreateJobPostInput, input);
+    const errors = await validate(transformedInput);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
   it('단기 근무일 형식이 잘못될 때 실패', async () => {
     const input = getValidInput();
     input.workPeriod.dates = [format(new Date(), 'yyyy/MM/dd')];
@@ -226,6 +237,14 @@ describe('CreateJobPostInput 유효성 검사', () => {
   it('근무 시간이 올바른 형식이 아닐 때 실패', async () => {
     const input = getValidInput();
     input.workTime.startTime = '0900';
+    const transformedInput = plainToClass(CreateJobPostInput, input);
+    const errors = await validate(transformedInput);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it('근무 시간이 24시간 이상일 때 실패', async () => {
+    const input = getValidInput();
+    input.workTime.startTime = '24:00';
     const transformedInput = plainToClass(CreateJobPostInput, input);
     const errors = await validate(transformedInput);
     expect(errors.length).toBeGreaterThan(0);

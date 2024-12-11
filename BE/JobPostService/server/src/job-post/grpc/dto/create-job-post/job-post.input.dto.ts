@@ -15,6 +15,7 @@ import {
   Min,
   IsUrl,
   Validate,
+  ArrayUnique,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import {
@@ -39,7 +40,6 @@ import {
 } from 'src/job-post/grpc/job-post.enum-mapping';
 
 export class WorkPeriodInput {
-
   @IsEnum(WorkPeriodType)
   @Transform(({ value }) => WorkPeriodTypeMapping[value], { toClassOnly: true })
   type: WorkPeriodType;
@@ -72,12 +72,18 @@ export class WorkTimeInput {
 
   @IsOptional()
   @IsString()
-  @Matches(/^\d{2}:\d{2}$/, { message: '시간 형식은 HH:mm 이어야 합니다.' })
+  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message:
+      '시간 형식은 00:00부터 23:59까지 가능하며, HH:mm 형식을 따라야 합니다.',
+  })
   startTime?: string;
 
   @IsOptional()
   @IsString()
-  @Matches(/^\d{2}:\d{2}$/, { message: '시간 형식은 HH:mm 이어야 합니다.' })
+  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message:
+      '시간 형식은 00:00부터 23:59까지 가능하며, HH:mm 형식을 따라야 합니다.',
+  })
   endTime?: string;
 }
 
@@ -107,6 +113,7 @@ export class CreateJobPostInput {
   @IsEnum(JobCategory, { each: true })
   @ArrayMinSize(1, { message: '하는 일은 최소 1개 선택해야 합니다.' })
   @ArrayMaxSize(3, { message: '하는 일은 최대 3개까지 선택할 수 있습니다.' })
+  @ArrayUnique({ message: '같은 일을 중복으로 선택할 수 없습니다.' })
   @Transform(
     ({ value }) => value.map((job: number) => JobCategoryMapping[job]),
     { toClassOnly: true },
