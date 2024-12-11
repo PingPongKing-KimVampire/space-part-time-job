@@ -106,9 +106,9 @@ const ExploreJobsPage = () => {
   useEffect(() => {
     if (!meData?.me?.residentNeighborhood) return;
     const testData = [
-      { id: "1111064000", name: "이화동", level: "3" },
-      { id: "1114061500", name: "신당동", level: "2" },
-      { id: "1117051000", name: "후암동", level: "4" },
+      { id: "1111064000", name: "이화동", level: 3 },
+      { id: "1114061500", name: "신당동", level: 2 },
+      { id: "1117051000", name: "후암동", level: 4 },
     ];
 
     // 상주 지역과 그 인접 동 데이터 불러와서 neighbors 상태로 세팅
@@ -140,12 +140,12 @@ const ExploreJobsPage = () => {
   }, [neighbors]);
 
   const fetchJobPosts = (cursor) => {
-    // TODO : debouncedSearchValue 적용해서 요청 보내기
     if (Object.keys(neighbors).length === 0 || !selectedNeighborID) return;
     const selectedNeighbor = neighbors[selectedNeighborID];
     const days = filter.weekDays.map((day) => DAYS_KEY[day]);
     const filters = {
-      // neighbors: selectedNeighbor.districts, // TODO : 현재 이름 배열임, 동 ID 배열로 변환해야 함
+      neighbors: selectedNeighbor.districts.map((district) => district.id),
+      keyword: debouncedSearchValue,
       workPeriod: TERM_KEY[filter.term],
       jobCategories: filter.jobTypes.map((type) => JOB_TYPES_KEY[type]),
       startTime: filter.time.start,

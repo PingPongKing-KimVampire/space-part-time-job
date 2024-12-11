@@ -20,11 +20,16 @@ import { SET_RESIDENT_NEIGHBORHOOD } from "../graphql/mutations.js";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WarningText } from "../styles/global";
 
+export type Coordinate = {
+  longitude: number;
+  latitude: number;
+};
+
 type Level = {
   districts: string[];
   outer_boundary: {
     type: string;
-    coordinates: [number, number][];
+    coordinates: Coordinate[];
   };
 };
 
@@ -38,8 +43,8 @@ const SetNeighborScopePage = () => {
   const [scopeValues, setScopeValues] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
   const [districtBoundaries, setDistrictBoundaries] = useState<
     Record<string, Level>
-  >({}); // TODO : useMemo를 쓰는 게 낫나?
-  const [polygonLine, setPolygonLine] = useState<[number, number][]>([]);
+  >({});
+  const [polygonLine, setPolygonLine] = useState<Coordinate[]>([]);
   const [warning, setWarning] = useState<string>("");
 
   useEffect(() => {

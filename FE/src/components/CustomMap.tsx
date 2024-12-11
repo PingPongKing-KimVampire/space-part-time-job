@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { createStitches } from "@stitches/react";
 import { MainColor } from "../styles/global";
+import { Coordinate } from "../pages/SetNeighborScopePage";
 
 const { styled } = createStitches();
 
@@ -14,7 +15,7 @@ const Container = styled("div", {
 
 type CustomMapProps = {
   style?: Record<string, string>;
-  polygonLine?: [number, number][];
+  polygonLine?: Coordinate[];
   markerAddress?: string;
 };
 
@@ -60,7 +61,7 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
     };
 
     const polygonPath = polygonLine.map(
-      (coordinate) => new kakao.maps.LatLng(...coordinate)
+      ({ latitude, longitude }) => new kakao.maps.LatLng(latitude, longitude)
     );
     setPolygon(polygonPath); // 폴리곤 표시
     setCenter(polygonPath); // 지도 중심 설정
