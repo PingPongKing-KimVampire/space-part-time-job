@@ -110,7 +110,7 @@ export const ImageSliderContainer = styled("div", {
     left: "0",
     right: "0",
     bottom: "0",
-    height: "9%",
+    height: "10%",
     background:
       "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3))",
     "& .indicator": {
@@ -147,6 +147,7 @@ export const ImageSliderContainer = styled("div", {
     transition: "opacity 0.4s",
     "&.inactive": {
       opacity: "0",
+      pointerEvents: "none",
     },
     "&.left": {
       left: "0%",

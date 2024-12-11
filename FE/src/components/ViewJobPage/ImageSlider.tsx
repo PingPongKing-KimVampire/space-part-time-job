@@ -44,7 +44,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls }) => {
           {Array.from({ length: imageUrls.length }).map((_, index) => (
             <button
               className={`item ${index === currentIndex ? "active" : ""}`}
-              key={index}
+              key={imageUrls[index]}
               onClick={() => slidingTo(index)}
             />
           ))}
