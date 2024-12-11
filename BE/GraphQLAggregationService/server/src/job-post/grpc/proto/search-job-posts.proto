@@ -12,6 +12,7 @@ message JobPostSearchFilter {
   repeated JobCategory jobCategories = 4; // List of job categories
   string startTime = 5;                 // Filter by start time (HH:mm)
   string endTime = 6;                   // Filter by end time (HH:mm)
+  string keyword = 7;
 }
 
 // Pagination input

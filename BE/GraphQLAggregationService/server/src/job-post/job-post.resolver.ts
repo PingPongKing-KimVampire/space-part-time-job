@@ -40,6 +40,7 @@ export class JobPostResolver {
       jobCategories: filters.jobCategories || undefined,
       startTime: filters.startTime || undefined,
       endTime: filters.endTime || undefined,
+      keyword: filters.keyword || undefined,
     };
 
     const grpcPagination = {

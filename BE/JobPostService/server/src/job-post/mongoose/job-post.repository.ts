@@ -82,7 +82,7 @@ export class JobPostRepository {
     }
     if (filters.startTime && filters.endTime) {
       if (filters.startTime <= filters.endTime) {
-        query.$and = [
+        const andCondition = [
           { 'workTime.startTime': { $gte: filters.startTime } },
           { 'workTime.endTime': { $lte: filters.endTime } },
           {
@@ -91,8 +91,10 @@ export class JobPostRepository {
             },
           },
         ];
+        if (!query.$and) query.$and = [];
+        query.$and.concat(andCondition);
       } else if (filters.startTime > filters.endTime) {
-        query.$or = [
+        const orCondition = [
           {
             $and: [
               { 'workTime.startTime': { $lte: filters.endTime } },
@@ -112,7 +114,19 @@ export class JobPostRepository {
             ],
           },
         ];
+        if (!query.$or) query.$or = [];
+        query.$or.concat(orCondition);
       }
+    }
+    if (filters.keyword) {
+      const condition = [
+        { jobTitle: { $regex: filters.keyword, $options: 'i' } },
+        { jobDescription: { $regex: filters.keyword, $options: 'i' } },
+      ];
+      if (!query.$or) {
+        query.$or = [];
+      }
+      query.$or.concat(condition);
     }
     return query;
   }

@@ -27,6 +27,7 @@ type GrpcSearchJobPostsRequest = {
     jobCategories?: string[];
     startTime?: string;
     endTime?: string;
+    keyword?: string;
   };
   pagination: {
     afterCursor?: string;

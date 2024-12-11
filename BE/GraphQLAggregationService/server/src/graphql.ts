@@ -90,6 +90,7 @@ export interface JobPostSearchFilter {
     jobCategories?: Nullable<JobCategory[]>;
     startTime?: Nullable<string>;
     endTime?: Nullable<string>;
+    keyword?: Nullable<string>;
 }
 
 export interface JobPostCursorInput {
