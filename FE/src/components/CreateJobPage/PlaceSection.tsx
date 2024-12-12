@@ -48,7 +48,10 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
         if (!id || !name) return;
         const boundary = await fetchDistrictBoundary(id); // 동 ID -> 동 경계 데이터
         if (!boundary) return;
-        setExposureNeighbors({ main: name, sub: boundary[4].districts });
+        setExposureNeighbors({
+          main: name,
+          sub: boundary[4].districts.map((district) => district.name),
+        });
       };
       if (place) displayExposureNeighbors();
     }, [place]);

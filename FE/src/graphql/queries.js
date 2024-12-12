@@ -5,6 +5,8 @@ export const GET_RESIDENT_NEIGHBORHOOD = gql`
     me {
       residentNeighborhood {
         id
+        level
+        name
       }
     }
   }
@@ -37,6 +39,7 @@ export const SEARCH_JOB_POSTS = gql`
           }
           photos
           addressName
+          createdAt
         }
       }
       pageInfo {

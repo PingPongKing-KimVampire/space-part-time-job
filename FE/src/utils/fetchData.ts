@@ -22,15 +22,7 @@ export const fetchDistrictBoundary = async (id) => {
   return await fetchData(
     `https://${IP_ADDRESS}/district/${id}/neighbors`,
     {},
-    (data) => {
-      for (const level in data.levels) {
-        // TODO : 백엔드에서 위도, 경도 순서 바꾸면 제거하기
-        data.levels[level].outer_boundary.coordinates.forEach((coordinate) => {
-          coordinate.reverse();
-        });
-      }
-      return data.levels;
-    }
+    (data) => data.levels
   );
 };
 

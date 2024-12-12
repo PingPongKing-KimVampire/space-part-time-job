@@ -52,6 +52,7 @@ export type JobPost = {
   salary: { salaryType: string; salaryAmount: number };
   photos: string[];
   addressName: string;
+  createdAt: string;
 };
 
 const ExploreJobsPage = () => {
@@ -91,34 +92,23 @@ const ExploreJobsPage = () => {
   ] = useLazyQuery(SEARCH_JOB_POSTS, {
     onCompleted: (data) => {
       // 게시 시간 가공
-      data.edges = data.edges.map((edge) => ({
-        ...edge,
-        node: {
-          createdAt: formatTimeAgo(edge.node.createdAt),
-        },
+      const nodes = data.searchJobPosts.edges.map((edge) => ({
+        ...edge.node,
+        createdAt: formatTimeAgo(edge.node.createdAt),
       }));
       if (isChangedSearchCondition) {
         // 검색 조건이 바뀐 후 패치 -> 기존 데이터 날리고 새로 저장
-        setJobPosts(data.edges.map((edge) => edge.node));
+        setJobPosts(nodes);
         setIsChangedSearchCondition(false);
       } else {
         // 스크롤 다운 후 패치 -> 기존 데이터에 추가
-        setJobPosts((state) =>
-          state.concat(data.edges.map((edge) => edge.node))
-        );
+        setJobPosts((state) => state.concat(nodes));
       }
-      setPageInfo(data.pageInfo); // 페이지 정보 저장
+      setPageInfo(data.searchJobPosts.pageInfo); // 페이지 정보 저장
     },
   });
 
   useEffect(() => {
-    if (!meData?.me?.residentNeighborhood) return;
-    const testData = [
-      { id: "1111064000", name: "이화동", level: 3 },
-      { id: "1114061500", name: "신당동", level: 2 },
-      { id: "1117051000", name: "후암동", level: 4 },
-    ];
-
     // 상주 지역과 그 인접 동 데이터 불러와서 neighbors 상태로 세팅
     const setupNeighbors = async (residentNeighbors) => {
       const result = {};
@@ -136,7 +126,8 @@ const ExploreJobsPage = () => {
       }
       setNeighbors(result);
     };
-    setupNeighbors(testData); // TODO : meData.me.residentNeighborhood 로 교체하기
+    if (!meData?.me?.residentNeighborhood) return;
+    setupNeighbors(meData?.me?.residentNeighborhood);
   }, [meData]);
 
   useEffect(() => {
@@ -152,17 +143,19 @@ const ExploreJobsPage = () => {
     const selectedNeighbor = neighbors[selectedNeighborID];
     const days = filter.weekDays.map((day) => DAYS_KEY[day]);
     const filters = {
-      neighbors: selectedNeighbor.districts.map((district) => district.id),
-      keyword: debouncedSearchValue,
-      workPeriod: TERM_KEY[filter.term],
+      neighborhoodIds: selectedNeighbor.districts.map(
+        (district) => district.id
+      ),
+      keyword: debouncedSearchValue || null,
+      workPeriodType: TERM_KEY[filter.term],
       jobCategories: filter.jobTypes.map((type) => JOB_TYPES_KEY[type]),
       startTime: filter.time.start,
       endTime: filter.time.end,
       ...(filter.term === TERM.LONG_TERM && { days }),
     };
-    const jobPostCursorInput = { afterCursor: cursor, first: 20 };
+    const pagination = { afterCursor: cursor, first: 20 };
     setIsChangedSearchCondition(true);
-    // searchJobPosts({ variables: { filters, jobPostCursorInput } });
+    searchJobPosts({ variables: { filters, pagination } });
   };
 
   useEffect(() => {
@@ -171,7 +164,6 @@ const ExploreJobsPage = () => {
   }, [selectedNeighborID, debouncedSearchValue, filter]);
 
   const fetchMoreJobPosts = () => {
-    console.log("fetchMoreJobPosts");
     // 스크롤 영역이 바닥에 다다랐을 때 패치
     if (pageInfo.hasNextPage) fetchJobPosts(pageInfo.endCursor);
   };
