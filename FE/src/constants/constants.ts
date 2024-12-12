@@ -163,4 +163,6 @@ export const TIMES = [
   "23:30",
 ];
 
+export const TIME_NOT_SET = "-";
+
 export const MINIMUM_HOURLY_PAY = 9860;

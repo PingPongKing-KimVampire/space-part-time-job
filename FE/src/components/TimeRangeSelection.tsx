@@ -5,9 +5,14 @@ import {
   ArrowDownIcon,
   SelectBox,
 } from "../styles/TimeRangeSelection.styles";
-import { TIMES } from "../constants/constants";
+import { TIMES, TIME_NOT_SET } from "../constants/constants";
 
-const TimeRangeSelection = ({ time, setTime, isMini = false }) => {
+const TimeRangeSelection = ({
+  time,
+  setTime,
+  isMini = false,
+  notSetPossible = false,
+}) => {
   const [isSelecting, setIsSelecting] = useState({
     start: false,
     end: false,
@@ -33,6 +38,7 @@ const TimeRangeSelection = ({ time, setTime, isMini = false }) => {
           setIsSelecting((state) => ({ ...state, start: isSelecting }))
         }
         isMini={isMini}
+        notSetPossible={notSetPossible}
       />
       <div className={`waveSymbol ${isMini ? "isMini" : ""}`}>~</div>
       <TimeSelection
@@ -44,13 +50,22 @@ const TimeRangeSelection = ({ time, setTime, isMini = false }) => {
           setIsSelecting((state) => ({ ...state, end: isSelecting }))
         }
         isMini={isMini}
+        notSetPossible={notSetPossible}
       />
     </Container>
   );
 };
 
 const TimeSelection = (props) => {
-  const { label, time, setTime, isSelecting, setIsSelecting, isMini } = props;
+  const {
+    label,
+    time,
+    setTime,
+    isSelecting,
+    setIsSelecting,
+    isMini,
+    notSetPossible,
+  } = props;
 
   const onTimeInputClick = () => {
     setIsSelecting(!isSelecting);
@@ -78,6 +93,15 @@ const TimeSelection = (props) => {
       {!isMini && <label>{label}</label>}
       {isSelecting && (
         <SelectBox className={isMini ? "isMini" : ""}>
+          {notSetPossible && (
+            <button
+              className="optionButton"
+              key="미설정"
+              onClick={onOptionClick}
+            >
+              {TIME_NOT_SET}
+            </button>
+          )}
           {TIMES &&
             TIMES.map((time) => (
               <button

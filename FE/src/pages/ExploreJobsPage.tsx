@@ -27,6 +27,7 @@ import {
   TERM_KEY,
   JOB_TYPES_KEY,
   DAYS_KEY,
+  TIME_NOT_SET,
 } from "../constants/constants";
 
 export type SearchNeighbor = {
@@ -38,7 +39,7 @@ export type SearchNeighbor = {
 
 export type Filter = {
   // TODO : 타입을 더 구체적으로 명시할 수 없을까?
-  term: string;
+  term: string | null;
   jobTypes: string[];
   time: { start: string; end: string };
   weekDays: string[];
@@ -65,9 +66,9 @@ const ExploreJobsPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue, 100);
   const [filter, setFilter] = useState<Filter>({
-    term: TERM.SHORT_TERM,
+    term: null,
     jobTypes: [],
-    time: { start: "00:00", end: "00:00" },
+    time: { start: TIME_NOT_SET, end: TIME_NOT_SET },
     weekDays: [],
   });
   const [pageInfo, setPageInfo] = useState<{
@@ -78,8 +79,7 @@ const ExploreJobsPage = () => {
     endCursor: null,
   });
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
-  const [isChangedSearchCondition, setIsChangedSearchCondition] =
-    useState<boolean>(false);
+  const isChangedSearchConditionRef = useRef<boolean>(false);
 
   const {
     loading: getResidentNeighborhoodLoading,
@@ -96,10 +96,10 @@ const ExploreJobsPage = () => {
         ...edge.node,
         createdAt: formatTimeAgo(edge.node.createdAt),
       }));
-      if (isChangedSearchCondition) {
+      if (isChangedSearchConditionRef.current) {
         // 검색 조건이 바뀐 후 패치 -> 기존 데이터 날리고 새로 저장
         setJobPosts(nodes);
-        setIsChangedSearchCondition(false);
+        isChangedSearchConditionRef.current = false;
       } else {
         // 스크롤 다운 후 패치 -> 기존 데이터에 추가
         setJobPosts((state) => state.concat(nodes));
@@ -147,19 +147,19 @@ const ExploreJobsPage = () => {
         (district) => district.id
       ),
       keyword: debouncedSearchValue || null,
-      workPeriodType: TERM_KEY[filter.term],
+      workPeriodType: filter.term ? TERM_KEY[filter.term] : null,
       jobCategories: filter.jobTypes.map((type) => JOB_TYPES_KEY[type]),
-      startTime: filter.time.start,
-      endTime: filter.time.end,
+      startTime: filter.time.start === TIME_NOT_SET ? null : filter.time.start,
+      endTime: filter.time.end === TIME_NOT_SET ? null : filter.time.end,
       ...(filter.term === TERM.LONG_TERM && { days }),
     };
     const pagination = { afterCursor: cursor, first: 20 };
-    setIsChangedSearchCondition(true);
     searchJobPosts({ variables: { filters, pagination } });
   };
 
   useEffect(() => {
     // 검색 조건이 변경된 후 패치
+    isChangedSearchConditionRef.current = true;
     fetchJobPosts(null);
   }, [selectedNeighborID, debouncedSearchValue, filter]);
 

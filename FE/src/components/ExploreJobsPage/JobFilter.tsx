@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Chips from "../Chips.tsx";
 import {
   JobFilterContainer,
@@ -6,7 +6,7 @@ import {
   ChipsContainerStyle,
   ChipsOptionStyle,
 } from "../../styles/ExploreJobsPage.styles";
-import { JOB_TYPES, TERM, DAYS } from "../../constants/constants";
+import { JOB_TYPES, TERM, DAYS, TIME_NOT_SET } from "../../constants/constants";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 import { Filter } from "../../pages/ExploreJobsPage";
 
@@ -21,15 +21,6 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
 
   const termToDisplay = useMemo(() => [TERM.SHORT_TERM, TERM.LONG_TERM], []);
 
-  // TODO: CreateJobPage와 중복되는 코드
-  const onTermClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const termClicked = e.currentTarget.textContent;
-    setFilter((state) => ({
-      ...state,
-      term: termClicked || TERM.TODAY,
-    }));
-  };
-
   const toggleSelected = (
     list: string[],
     target: string,
@@ -39,6 +30,14 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
       return list.filter((element) => element !== target);
     if (preprocessing) return preprocessing(list.concat(target));
     return list.concat(target);
+  };
+
+  const onTermClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const termClicked = e.currentTarget.textContent || TERM.SHORT_TERM;
+    setFilter((state) => ({
+      ...state,
+      term: state.term === termClicked ? null : termClicked,
+    }));
   };
 
   const onJobTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,10 +58,10 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
 
   const onInitClick = () => {
     setFilter({
-      term: "",
+      term: null,
       jobTypes: [],
       weekDays: [],
-      time: { start: "00:00", end: "00:00" },
+      time: { start: TIME_NOT_SET, end: TIME_NOT_SET },
     });
   };
 
@@ -118,7 +117,12 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
       )}
       <FilterField>
         <label htmlFor="weekDays">일하는 시간</label>
-        <TimeRangeSelection time={time} setTime={setTime} isMini={true} />
+        <TimeRangeSelection
+          time={time}
+          setTime={setTime}
+          isMini={true}
+          notSetPossible={true}
+        />
       </FilterField>
     </JobFilterContainer>
   );
