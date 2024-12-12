@@ -17,7 +17,7 @@ type CustomTextareaProps = {
 };
 
 const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
-  const { placeholder, value, eventHandlers = {}, maxLength = 2000 } = props;
+  const { placeholder, value, eventHandlers = {}, maxLength = 200 } = props;
   const { onFocus, onChange, onBlur } = eventHandlers;
 
   return (
@@ -32,7 +32,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
         maxLength={maxLength}
       />
       <CharCounter>
-        <span>{value.length}</span>/2000
+        <span>{[...value].length}</span>/200
       </CharCounter>
     </Container>
   );

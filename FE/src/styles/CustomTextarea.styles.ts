@@ -18,13 +18,12 @@ export const Textarea = styled("textarea", {
   borderRadius: "16px",
   lineHeight: "26px",
   fontFamily: "inherit",
-  outline: "none",
   "&::placeholder": {
     fontSize: "18px",
     color: "#B2B2B2",
   },
   "&:focus": {
-    border: `2px solid ${MainColor}`,
+    outline: `1px solid ${MainColor}`,
   },
 });
 

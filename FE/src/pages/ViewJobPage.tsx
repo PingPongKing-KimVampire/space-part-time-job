@@ -11,10 +11,9 @@ const ViewJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
 
   const { id } = useParams();
-  console.log("선택된 포스트의 ID: ", id);
 
   const [isApplicationModalVisible, setIsApplicationModalVisible] =
-    useState(true);
+    useState(false);
 
   return (
     <Background>
