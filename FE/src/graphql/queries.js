@@ -49,3 +49,30 @@ export const SEARCH_JOB_POSTS = gql`
     }
   }
 `;
+
+export const GET_JOB_POST = gql`
+  query GetJobPost($id: ID!) {
+    getJobPost(id: $id) {
+      title
+      jobDescription
+      workPeriod {
+        type
+        dates
+        days
+      }
+      workTime {
+        type
+        startTime
+        endTime
+      }
+      salary {
+        salaryType
+        salaryAmount
+      }
+      photos
+      detailedDescription
+      addressName
+      createdAt
+    }
+  }
+`;

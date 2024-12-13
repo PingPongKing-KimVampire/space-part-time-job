@@ -46,6 +46,7 @@ const JobList: React.FC<JobListProps> = (props) => {
             } = job;
             return (
               <JobItem
+                id={id}
                 title={title}
                 neighbor={addressName}
                 createdAt={createdAt}

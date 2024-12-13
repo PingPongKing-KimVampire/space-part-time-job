@@ -4,51 +4,45 @@ import Profile from "./Profile.tsx";
 import BasicInfo from "./BasicInfo.tsx";
 import Interaction from "./Interaction.tsx";
 import { ContentContainer } from "../../styles/ViewJobPage.styles";
+import { JobPost } from "../../pages/ViewJobPage.tsx";
 import defaultImage from "../../assets/images/jobDefault.png";
 
-import testImage from "../../assets/test/ViewJobTest1.jpeg";
-import testImage1 from "../../assets/test/ViewJobTest2.jpeg";
-import testImage2 from "../../assets/test/ViewJobTest3.jpeg";
-
 type ContentProps = {
+  jobPost: JobPost;
   displayApplicationModal: () => void;
 };
 
 const Content: React.FC<ContentProps> = (props) => {
-  const { displayApplicationModal } = props;
-
-  const imageUrls = [testImage, testImage1, testImage2];
-  //   const imageUrls = [];
-  const dates = ["2024-11-10", "2024-11-12", "2024-11-17", "2024-11-18"];
-  const days = ["MONDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
-  const description = `디저트 카페에서 경력있으신 알바분을 모십니다!
-저희 카페는 디저트 카페로 다양한 음료와 떡볶이, 튀김, 구움류 등 여러 종류가 있습니다. 조리에 자신있으시거나 경험이 많으신 분이 지원해주시면 더욱 즐겁게 일하실 수 있을 것 같습니다^^
-
-바쁜 카페에서 일해보셨던 분, 배달주문 많은 곳에서 일해보신분, 손 빠른 분 등 관련 직종에서 일해보셨던 분 많은 지원 부탁드리겠습니다.
-디저트 카페에서 경력있으신 알바분을 모십니다!
-저희 카페는 디저트 카페로 다양한 음료와 떡볶이, 튀김, 구움류 등 여러 종류가 있습니다. 조리에 자신있으시거나 경험이 많으신 분이 지원해주시면 더욱 즐겁게 일하실 수 있을 것 같습니다^^
-
-바쁜 카페에서 일해보셨던 분, 배달주문 많은 곳에서 일해보신분, 손 빠른 분 등 관련 직종에서 일해보셨던 분 많은 지원 부탁드리겠습니다.`;
+  const { jobPost, displayApplicationModal } = props;
+  const {
+    workPeriod,
+    workTime,
+    salary,
+    photos,
+    detailedDescription,
+    addressName,
+  } = jobPost;
 
   return (
     <ContentContainer>
       <div className="leftSection">
         <ImageSlider
-          imageUrls={imageUrls.length ? imageUrls : [defaultImage]}
+          imageUrls={photos && photos.length ? photos : [defaultImage]}
         />
-        <Profile nickname="롤리" timeTogether="우주알바와 함께한지 6개월" />
+        <Profile nickname="롤리" timeTogether="우주알바와 함께한지 6개월" />{" "}
+        {/* 프랍에서 받은 값으로 교체하기 */}
       </div>
       <div className="rightSection">
         <div className="textInfo">
           <BasicInfo
-            pay={{ type: "MONTHLY", amount: 2500000 }}
-            address="경기 화성시 동탄지성로 333"
-            period={{ type: "SHORT_TERM", days: days, dates: dates }}
-            time={{ type: "FIXED", startTime: "07:30", endTime: "17:30" }}
+            pay={{ type: salary.salaryType, amount: salary.salaryAmount }}
+            address={addressName}
+            period={workPeriod}
+            time={workTime}
           />
           <div className="detail">
             <div className="title">상세 내용</div>
-            <div className="description">{description}</div>
+            <div className="description">{detailedDescription}</div>
           </div>
         </div>
         <Interaction

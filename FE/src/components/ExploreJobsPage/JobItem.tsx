@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useNavigate } from "react-router";
 import {
   JobItemContainer,
   JobItemContextBox,
@@ -8,9 +9,9 @@ import {
   converTimeToDisplayable,
   converPeriodToDisplayable,
 } from "../../utils/convertJobInfoToDisplayable";
-import { PAY_TYPES } from "../../constants/constants";
 
 type JobItemProps = {
+  id: string;
   title: string;
   neighbor: string;
   createdAt: string;
@@ -21,19 +22,22 @@ type JobItemProps = {
 };
 
 const JobItem: React.FC<JobItemProps> = (props) => {
-  const { title, neighbor, createdAt, pay, period, time, photos } = props;
+  const { id, title, neighbor, createdAt, pay, period, time, photos } = props;
+  const navigate = useNavigate();
 
   const payToDisplay = useMemo(() => converPayToDisplayable(pay), [pay]);
-
   const timeToDisplay = useMemo(() => converTimeToDisplayable(time), [time]);
-
   const periodToDisplay = useMemo(
     () => converPeriodToDisplayable(period),
     [period]
   );
 
   return (
-    <JobItemContainer>
+    <JobItemContainer
+      onClick={() => {
+        navigate(`/view-job/${id}`);
+      }}
+    >
       <JobItemContextBox>
         <div className="mainInfo">
           <div className="title">{title}</div>
