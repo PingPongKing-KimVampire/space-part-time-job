@@ -137,6 +137,7 @@ async function getDummyData(targetPath) {
       const randomDistrict = getRandomDistrict(districtData);
       dummy.addressName = randomDistrict.addressName;
       dummy.neighborhoodId = randomDistrict.neighborhoodId;
+      dummy.createdAt = new Date(Date.now());
     });
     await fs.writeFile(
       `${targetPath}`,
