@@ -73,6 +73,15 @@ export const GET_JOB_POST = gql`
       detailedDescription
       addressName
       createdAt
+      views
     }
   }
 `;
+
+// export const INCREMENT_JOB_POST_VIEWS = gql`
+//   query IncrementJobPostViews($id: ID!) {
+//     incrementJobPostViews(id: $id) {
+//       views // TODO : 반환하는 이름을 모르겠어!
+//     }
+//   }
+// `;

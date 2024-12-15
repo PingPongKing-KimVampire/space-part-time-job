@@ -9,7 +9,7 @@ import useBackgroundColor from "../utils/useBackgroundColor";
 import { Background, Container } from "../styles/ViewJobPage.styles";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { MainBackgroundColor } from "../styles/global";
-import { GET_JOB_POST } from "../graphql/queries";
+import { GET_JOB_POST, INCREMENT_JOB_POST_VIEWS } from "../graphql/queries";
 
 // TODO: ExploreJobsPage의 JobPost 타입과 어느 정도 반복되는 타입임
 export type JobPost = {
@@ -23,6 +23,7 @@ export type JobPost = {
   detailedDescription: string;
   addressName: string;
   createdAt: string;
+  views: number;
 };
 
 const ViewJobPage = () => {
@@ -41,34 +42,54 @@ const ViewJobPage = () => {
     detailedDescription: "",
     addressName: "",
     createdAt: "",
+    views: 0,
   });
 
   const { id = "" } = useParams();
 
-  const { loading, error, data } = useQuery<
-    { jobPost: JobPost }, // TODO : 틀리면 고치기
-    { id: string }
-  >(GET_JOB_POST, {
-    variables: { id },
-  });
-  useEffect(() => {
-    if (!data) return;
-    setJobPost({
-      ...data.jobPost, // TODO : 틀리면 고치기
-      createdAt: formatTimeAgo(jobPost.createdAt),
-    });
-  }, [data, setJobPost]);
+  // const {
+  //   loading: getJobPostLoading,
+  //   error: getJobPostError,
+  //   data: jobPostData,
+  // } = useQuery<
+  //   { jobPost: JobPost }, // TODO : 틀리면 고치기
+  //   { id: string }
+  // >(GET_JOB_POST, {
+  //   variables: { id },
+  // });
+  // useEffect(() => {
+  //   if (!jobPostData) return;
+  //   setJobPost({
+  //     ...jobPostData.jobPost, // TODO : 틀리면 고치기
+  //     createdAt: formatTimeAgo(jobPostData.jobPost.createdAt),
+  //   });
+  // }, [jobPostData, setJobPost]);
+
+  // const {
+  //   loading: incrementViewsLoading,
+  //   error: incrementViewsError,
+  //   data: incrementViewsData,
+  // } = useQuery(INCREMENT_JOB_POST_VIEWS, {
+  //   variables: { id },
+  // });
+  // useEffect(() => {
+  //   if (!incrementViewsData) return;
+  //   setJobPost((state) => ({
+  //     ...state,
+  //     views: incrementViewsData.views, // TODO : 이름 틀리면 고치기
+  //   }));
+  // }, [incrementViewsData]);
 
   return (
     <Background>
-      {loading && <LoadingOverlay />}
+      {/* {getJobPostLoading && incrementViewsLoading && <LoadingOverlay />} */}
       <Container>
         <Header
           jobTypes={jobPost.jobDescription}
           title={jobPost.title}
           postTime={jobPost.createdAt}
-          viewCount={25}
-          interestCount={8}
+          viewCount={jobPost.views}
+          interestCount={8} // TODO : 교체하기
         />
         <Content
           jobPost={jobPost}
