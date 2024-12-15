@@ -16,13 +16,16 @@ import ViewJobPage from "./pages/ViewJobPage.tsx";
 import MyPage from "./pages/MyPage.tsx";
 import ViewApplicantsPage from "./pages/ViewApplicantsPage.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
+import NavigationBar from "./components/NavigationBar.tsx";
 import { IP_ADDRESS } from "./constants/constants";
 
 const { styled } = createStitches();
 
 const Background = styled("div", {
-  width: "100vw",
-  height: "100vh",
+  minWidth: "100vw",
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
 });
 
 const httpLink = new HttpLink({
@@ -42,21 +45,23 @@ function App() {
         <ScrollToTop />
         <Background>
           <Routes>
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/create-job" element={<CreateJobPage />} />
-            <Route path="/search-neighbor" element={<SearchNeighborPage />} />
-            <Route
-              path="/set-neighbor-scope"
-              element={<SetNeighborScopePage />}
-            />
-            <Route path="/explore-jobs" element={<ExploreJobsPage />} />
-            <Route path="/view-job/:id" element={<ViewJobPage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route
-              path="/view-applicants/:id"
-              element={<ViewApplicantsPage />}
-            />
+            <Route element={<NavigationBar />}>
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/create-job" element={<CreateJobPage />} />
+              <Route path="/search-neighbor" element={<SearchNeighborPage />} />
+              <Route
+                path="/set-neighbor-scope"
+                element={<SetNeighborScopePage />}
+              />
+              <Route path="/explore-jobs" element={<ExploreJobsPage />} />
+              <Route path="/view-job/:id" element={<ViewJobPage />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route
+                path="/view-applicants/:id"
+                element={<ViewApplicantsPage />}
+              />
+            </Route>
           </Routes>
         </Background>
       </BrowserRouter>

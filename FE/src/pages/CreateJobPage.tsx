@@ -21,8 +21,6 @@ import {
 import { CREATE_JOB_POST } from "../graphql/mutations.js";
 import {
   Background,
-  CancelButton,
-  LoadButton,
   Container,
   PostButton,
 } from "../styles/CreateJobPage.styles";
@@ -303,8 +301,6 @@ const CreateJobPage = () => {
   return (
     <Background>
       {createJobPostLoading && <LoadingOverlay />}
-      <CancelButton>취소</CancelButton>
-      <LoadButton>불러오기</LoadButton>
       <Container>
         {/* ===== 기본 정보 ===== */}
         <FormSection title="기본 정보" id="basicInfo">

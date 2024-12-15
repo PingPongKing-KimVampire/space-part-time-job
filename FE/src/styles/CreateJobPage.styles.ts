@@ -21,16 +21,6 @@ const TopButtonStyle = {
   top: "20px",
 };
 
-export const CancelButton = styled("button", {
-  ...TopButtonStyle,
-  left: "20px",
-});
-
-export const LoadButton = styled("button", {
-  ...TopButtonStyle,
-  right: "20px",
-});
-
 export const Container = styled("div", {
   width: "1000px",
 });
