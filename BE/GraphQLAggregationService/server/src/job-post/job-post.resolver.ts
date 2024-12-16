@@ -36,6 +36,12 @@ export class JobPostResolver {
     };
   }
 
+  @Query('getJobPost')
+  async getJobPost(@Args('id') jobPostId: string): Promise<JobPost> {
+    const jobPost = await this.jobPostService.getJobPost(jobPostId);
+    return jobPost;
+  }
+
   @Query('searchJobPosts')
   async searchJobPosts(
     @Args('filters') filters: JobPostSearchFilter,

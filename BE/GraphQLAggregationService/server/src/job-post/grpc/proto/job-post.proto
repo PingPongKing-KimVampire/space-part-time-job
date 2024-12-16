@@ -1,11 +1,12 @@
 syntax = "proto3";
 
 package jobPost;
-import "common.proto";
 import "create-job-post.proto";
 import "search-job-posts.proto";
+import "get-job-post.proto";
 
 service JobPostService {
   rpc CreateJobPost(CreateJobPostInput) returns (CreateJobPostResponse);
   rpc SearchJobPosts(SearchJobPostsRequest) returns (SearchJobPostsResponse);
+  rpc GetJobPost(GetJobPostRequest) returns (GetJobPostResponse);
 }

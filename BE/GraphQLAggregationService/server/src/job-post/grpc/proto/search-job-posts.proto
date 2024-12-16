@@ -38,19 +38,6 @@ message PageInfo {
   string endCursor = 2;  // Cursor for the last item in the current page
 }
 
-// JobPost definition
-message JobPost {
-  string id = 1;
-  string title = 2;
-  repeated JobCategory jobDescription = 3; // Job categories
-  WorkPeriodInput workPeriod = 4;
-  WorkTimeInput workTime = 5;
-  SalaryInput salary = 6;
-  repeated string photos = 7;
-  string detailedDescription = 8;
-  string addressName = 9;
-  string createdAt = 10;
-}
 
 // Request and response for search
 message SearchJobPostsRequest {

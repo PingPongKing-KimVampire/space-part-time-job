@@ -17,7 +17,7 @@ export class JobPostRepository {
   }
 
   async findById(id: string): Promise<JobPost | null> {
-    return this.jobPostModel.findById(id).exec();
+    return this.jobPostModel.findById(id).lean().exec();
   }
 
   async findAll(): Promise<JobPost[]> {

@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package jobPost;
+
+import "common.proto";
+
+message GetJobPostRequest { string id = 1; }
+
+message GetJobPostResponse { JobPost jobPost = 1; }

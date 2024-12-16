@@ -144,6 +144,7 @@ export interface IMutation {
 }
 
 export interface IQuery {
+    getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
     searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;
     me(): User | Promise<User>;
     _empty(): Nullable<string> | Promise<Nullable<string>>;

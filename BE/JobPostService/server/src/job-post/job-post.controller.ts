@@ -187,4 +187,20 @@ export class JobPostController {
       throw new RpcException('searchJobPosts 처리 중 에러 발생');
     }
   }
+
+  @GrpcMethod('JobPostService', 'GetJobPost')
+  async getJobPost(input: { id: string }) {
+    try {
+      const { id } = input;
+      const jobPost = await this.jobPostRepository.findById(id);
+      const jobPostDto = {
+        ...jobPost,
+        id,
+        createdAt: jobPost.createdAt.toISOString(),
+      };
+      return { jobPost: jobPostDto };
+    } catch (e) {
+      throw new RpcException('공고 조회 실패');
+    }
+  }
 }

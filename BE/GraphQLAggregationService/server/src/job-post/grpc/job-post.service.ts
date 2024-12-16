@@ -43,6 +43,10 @@ type GrpcSearchJobPostsResponse = {
   };
 };
 
+type GrpcGetJobPostResponse = {
+  jobPost: JobPost;
+};
+
 interface JobPostServiceGrpc {
   createJobPost(
     data: GrpcCreateJobPostInput,
@@ -51,6 +55,8 @@ interface JobPostServiceGrpc {
   searchJobPosts(
     data: GrpcSearchJobPostsRequest,
   ): Observable<GrpcSearchJobPostsResponse>;
+
+  getJobPost(data: { id: string }): Observable<GrpcGetJobPostResponse>;
 }
 
 @Injectable()
@@ -114,34 +120,42 @@ export class JobPostService implements OnModuleInit {
     result.edges ??= [];
     result.pageInfo.endCursor ??= null;
 
-    result.edges = result.edges.map((edge) =>
-      this.transformGrpcJobPostEdge(edge),
-    );
+    result.edges.forEach((edge) => this.transformGrpcJobPost(edge.node));
 
     return result;
   }
 
-  private transformGrpcJobPostEdge(
-    edge: GrpcSearchJobPostsResponse['result']['edges'][number],
-  ): GrpcSearchJobPostsResponse['result']['edges'][number] {
-    if (edge.node.jobDescription) {
-      edge.node.jobDescription = edge.node.jobDescription.map(
+  private transformGrpcJobPost(jobPost: JobPost): JobPost {
+    if (jobPost.jobDescription) {
+      jobPost.jobDescription = jobPost.jobDescription.map(
         (jobDescription) => JobCategoryMapping[jobDescription],
       );
     }
 
-    edge.node.salary.salaryType =
-      SalaryTypeMapping[edge.node.salary.salaryType];
-    edge.node.workPeriod.type =
-      WorkPeriodTypeMapping[edge.node.workPeriod.type];
-    edge.node.workTime.type = WorkTimeTypeMapping[edge.node.workTime.type];
+    jobPost.salary.salaryType = SalaryTypeMapping[jobPost.salary.salaryType];
+    jobPost.workPeriod.type = WorkPeriodTypeMapping[jobPost.workPeriod.type];
+    jobPost.workTime.type = WorkTimeTypeMapping[jobPost.workTime.type];
 
-    if (edge.node.workPeriod.days) {
-      edge.node.workPeriod.days = edge.node.workPeriod.days.map(
+    if (jobPost.workPeriod.days) {
+      jobPost.workPeriod.days = jobPost.workPeriod.days.map(
         (day) => DayOfWeekMapping[day],
       );
     }
 
-    return edge;
+    return jobPost;
+  }
+
+  async getJobPost(id: string): Promise<JobPost> {
+    try {
+      const response = await lastValueFrom(
+        this.jobPostService.getJobPost({ id }),
+      );
+      const { jobPost } = response;
+      this.transformGrpcJobPost(jobPost);
+      return jobPost;
+    } catch (e) {
+      console.error('searchJobPosts grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
   }
 }

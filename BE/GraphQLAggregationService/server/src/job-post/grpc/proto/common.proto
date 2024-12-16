@@ -51,8 +51,8 @@ enum DayOfWeekType {
 
 message WorkPeriodInput {
   WorkPeriodType type = 1;
-  repeated string dates = 2; // Optional
-  repeated DayOfWeekType days = 3;  // Optional (e.g., MONDAY, TUESDAY)
+  repeated string dates = 2;       // Optional
+  repeated DayOfWeekType days = 3; // Optional (e.g., MONDAY, TUESDAY)
 }
 
 message WorkTimeInput {
@@ -64,4 +64,17 @@ message WorkTimeInput {
 message SalaryInput {
   SalaryType salaryType = 1;
   float salaryAmount = 2;
+}
+
+message JobPost {
+  string id = 1;
+  string title = 2;
+  repeated JobCategory jobDescription = 3; // Job categories
+  WorkPeriodInput workPeriod = 4;
+  WorkTimeInput workTime = 5;
+  SalaryInput salary = 6;
+  repeated string photos = 7;
+  string detailedDescription = 8;
+  string addressName = 9;
+  string createdAt = 10;
 }
