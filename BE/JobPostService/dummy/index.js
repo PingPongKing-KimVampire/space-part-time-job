@@ -107,11 +107,16 @@ async function getDummyData(targetPath) {
     );
     const srcData = await fs.readFile("./src.json", "utf8"); // 파일 읽기
     const srcArray = JSON.parse(srcData); // JSON 문자열을 객체로 변환
-    const dummyArray = srcArray.map((src) => ({
+    let dummyArray = srcArray.map((src) => ({
       userId: src.userId,
       title: src.title,
       detailedDescription: src.detailedDescription,
     }));
+    dummyArray = Array(100)
+      .fill(dummyArray)
+      .flat()
+      .map((dummy) => ({ ...dummy }));
+
     dummyArray.forEach((dummy) => {
       dummy.jobDescription = getRandomJobDescriptions();
       dummy.workPeriod = {
