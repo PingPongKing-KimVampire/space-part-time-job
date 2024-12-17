@@ -7,14 +7,18 @@ import {
 } from '@nestjs/microservices';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
-import { Observable } from 'rxjs';
-import { NeighborhoodInput } from 'src/graphql';
+import { lastValueFrom, Observable } from 'rxjs';
+import { NeighborhoodInput, UserPublicInfo } from 'src/graphql';
 
 interface UserServiceGrpc {
   setUserResidentDistrict(data: {
     userId: string;
     residentDistricts: { id: string; level: number }[];
   }): Observable<void>;
+
+  getUserPublicInfo(data: {
+    id: string;
+  }): Observable<{ id: string; nickname: string; createdAt: string }>;
 }
 
 @Injectable()
@@ -59,6 +63,18 @@ export class UserService implements OnModuleInit {
     } catch (e) {
       console.error('예상하지 못한 에러', e);
       throw e;
+    }
+  }
+
+  public async getUserPublicInfo(userId: string): Promise<UserPublicInfo> {
+    try {
+      const response = await lastValueFrom(
+        this.userServiceGrpc.getUserPublicInfo({ id: userId }),
+      );
+      return { ...response };
+    } catch (e) {
+      console.error('getJobPost grpc 에러 발생:', e);
+      throw new Error(e.details);
     }
   }
 }

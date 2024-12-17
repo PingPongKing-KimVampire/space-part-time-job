@@ -33,6 +33,11 @@ export class JobPostResolver {
       createdAt,
       id,
       addressName: realAddressName,
+      publisher: {
+        id: user.id,
+        nickname: user.nickname,
+        createdAt: user.createdAt,
+      },
     };
   }
 

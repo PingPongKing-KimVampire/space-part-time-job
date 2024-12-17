@@ -10,6 +10,7 @@ type UserData = {
   userId: string;
   nickname: string;
   phoneNumber: string;
+  createdAt: string;
   residentDistricts: { id: string; level: number }[];
 };
 
@@ -27,6 +28,8 @@ export class meResolver {
     return {
       id: user.id,
       phoneNumber: user.phoneNumber,
+      nickname: user.nickname,
+      createdAt: user.createdAt,
       residentNeighborhood,
     } as User;
   }

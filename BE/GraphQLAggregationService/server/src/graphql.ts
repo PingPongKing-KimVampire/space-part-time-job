@@ -118,6 +118,7 @@ export interface JobPost {
     detailedDescription: string;
     addressName: string;
     createdAt: string;
+    publisher: UserPublicInfo;
 }
 
 export interface WorkPeriod {
@@ -177,6 +178,12 @@ export interface User {
     nickname: string;
     phoneNumber: string;
     residentNeighborhood?: Nullable<Neighborhood[]>;
+}
+
+export interface UserPublicInfo {
+    id: string;
+    nickname: string;
+    createdAt: string;
 }
 
 type Nullable<T> = T | null;

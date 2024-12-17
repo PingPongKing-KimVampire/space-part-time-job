@@ -77,4 +77,5 @@ message JobPost {
   string detailedDescription = 8;
   string addressName = 9;
   string createdAt = 10;
+  string userId = 11;
 }

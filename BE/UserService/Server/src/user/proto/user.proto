@@ -4,6 +4,8 @@ package user;
 
 service UserService {
   rpc SetUserResidentDistrict(SetUserResidentDistrictRequest) returns (Empty);
+  rpc GetUserPublicInfo(getUserPublicInfoRequest)
+      returns (getUserPublicInfoResponse);
 }
 
 message SetUserResidentDistrictRequest {
@@ -17,3 +19,11 @@ message ResidentDistrict {
 }
 
 message Empty {}
+
+message getUserPublicInfoRequest { string id = 1; }
+
+message getUserPublicInfoResponse {
+  string id = 1;
+  string nickname = 2;
+  string createdAt = 3;
+}

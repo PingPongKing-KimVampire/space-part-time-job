@@ -3,5 +3,6 @@ type User {
   id: ID!
   nickname: String!
   phoneNumber: String!
+  createdAt: String!
   residentNeighborhood: [Neighborhood!]
 }

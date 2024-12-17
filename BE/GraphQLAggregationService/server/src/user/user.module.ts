@@ -7,5 +7,6 @@ import { DistrictModule } from 'src/district/district.module';
 @Module({
   imports: [ConfigModule, DistrictModule],
   providers: [UserModule, UserService, meResolver],
+  exports: [UserService],
 })
 export class UserModule {}

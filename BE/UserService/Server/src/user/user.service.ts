@@ -30,6 +30,13 @@ export class UserService {
     return this.userRepository.createUser(user);
   }
 
+  async getUserPublicInfo(
+    id: string,
+  ): Promise<{ id: string; nickname: string; createdAt: Date }> {
+    const user = await this.userRepository.findById(id);
+    return { id: user.id, nickname: user.nickname, createdAt: user.createdAt };
+  }
+
   private async saltAndHashPassword(password: string): Promise<string> {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);

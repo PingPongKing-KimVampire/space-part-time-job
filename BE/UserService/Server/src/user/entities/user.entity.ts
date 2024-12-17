@@ -4,6 +4,7 @@ import {
   Column,
   Unique,
   OneToMany,
+  CreateDateColumn,
 } from 'typeorm';
 import { UserResidentDistrict } from './user-resident-district.entity';
 
@@ -34,6 +35,11 @@ export class User {
 
   @OneToMany(() => UserResidentDistrict, (urd) => urd.user)
   residentDistricts: UserResidentDistrict[];
+
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  createdAt: Date;
 
   static of({
     userId,

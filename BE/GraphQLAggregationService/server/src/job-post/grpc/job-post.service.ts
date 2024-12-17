@@ -8,7 +8,7 @@ import {
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom, Observable } from 'rxjs';
-import { CreateJobPostInput, JobPost } from 'src/graphql';
+import { CreateJobPostInput, JobPost, UserPublicInfo } from 'src/graphql';
 import {
   DayOfWeekMapping,
   JobCategoryMapping,
@@ -16,6 +16,7 @@ import {
   WorkPeriodTypeMapping,
   WorkTimeTypeMapping,
 } from './job-post.enum-mapping';
+import { UserService } from 'src/user/user.service';
 
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
 
@@ -35,16 +36,18 @@ type GrpcSearchJobPostsRequest = {
   };
 };
 
+type grpcJobPost = JobPost & { userId: string };
+
 type GrpcSearchJobPostsResponse = {
   result: {
     totalCount: number;
-    edges: { cursor: string; node: JobPost }[];
+    edges: { cursor: string; node: grpcJobPost }[];
     pageInfo: { hasNextPage: boolean; endCursor?: string };
   };
 };
 
 type GrpcGetJobPostResponse = {
-  jobPost: JobPost;
+  jobPost: grpcJobPost;
 };
 
 interface JobPostServiceGrpc {
@@ -63,7 +66,10 @@ interface JobPostServiceGrpc {
 export class JobPostService implements OnModuleInit {
   private jobPostService: JobPostServiceGrpc;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
+  ) {}
 
   onModuleInit() {
     const grpcUrl = this.configService.get<string>('GRPC_JOB_POST_SERVER_URL');
@@ -106,7 +112,9 @@ export class JobPostService implements OnModuleInit {
       const response = await lastValueFrom(
         this.jobPostService.searchJobPosts({ filters, pagination }),
       );
-      response.result = this.transformGrpcJobPostsResponse(response.result);
+      response.result = await this.transformGrpcJobPostsResponse(
+        response.result,
+      );
       return response.result;
     } catch (e) {
       console.error('searchJobPosts grpc 에러 발생:', e);
@@ -114,18 +122,20 @@ export class JobPostService implements OnModuleInit {
     }
   }
 
-  private transformGrpcJobPostsResponse(
+  private async transformGrpcJobPostsResponse(
     result: GrpcSearchJobPostsResponse['result'],
-  ): GrpcSearchJobPostsResponse['result'] {
+  ): Promise<GrpcSearchJobPostsResponse['result']> {
     result.edges ??= [];
     result.pageInfo.endCursor ??= null;
 
-    result.edges.forEach((edge) => this.transformGrpcJobPost(edge.node));
+    for (const edge of result.edges) {
+      await this.transformGrpcJobPost(edge.node);
+    }
 
     return result;
   }
 
-  private transformGrpcJobPost(jobPost: JobPost): JobPost {
+  private async transformGrpcJobPost(jobPost: grpcJobPost): Promise<JobPost> {
     if (jobPost.jobDescription) {
       jobPost.jobDescription = jobPost.jobDescription.map(
         (jobDescription) => JobCategoryMapping[jobDescription],
@@ -142,6 +152,10 @@ export class JobPostService implements OnModuleInit {
       );
     }
 
+    jobPost.publisher = await this.userService.getUserPublicInfo(
+      jobPost.userId,
+    );
+
     return jobPost;
   }
 
@@ -152,9 +166,12 @@ export class JobPostService implements OnModuleInit {
       );
       const { jobPost } = response;
       this.transformGrpcJobPost(jobPost);
+      jobPost.publisher = await this.userService.getUserPublicInfo(
+        jobPost.userId,
+      );
       return jobPost;
     } catch (e) {
-      console.error('searchJobPosts grpc 에러 발생:', e);
+      console.error('getJobPost grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

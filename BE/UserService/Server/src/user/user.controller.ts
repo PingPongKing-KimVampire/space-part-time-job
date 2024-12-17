@@ -222,6 +222,7 @@ export class UserController {
           id: residentDistrict.districtId,
           level: residentDistrict.level,
         })),
+        createdAt: user.createdAt.toISOString(),
       };
       res.setHeader(
         'space-part-time-job-user-data-base64',
@@ -263,6 +264,23 @@ export class UserController {
         throw new RpcException(e.message);
       console.error('예상하지 못한 오류', e);
       throw new RpcException('상주 행정동 업데이트 실패');
+    }
+  }
+
+  @GrpcMethod('UserService', 'GetUserPublicInfo')
+  async getUserPublicInfo(data: {
+    id: string;
+  }): Promise<{ id: string; nickname: string; createdAt: string }> {
+    try {
+      const { id } = data;
+      const userPublicInfo = await this.usersService.getUserPublicInfo(id);
+      return {
+        ...userPublicInfo,
+        createdAt: userPublicInfo.createdAt.toISOString(),
+      };
+    } catch (e) {
+      console.error('예상하지 못한 오류', e);
+      throw new RpcException(e);
     }
   }
 }

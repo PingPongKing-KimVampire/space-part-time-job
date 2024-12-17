@@ -1,0 +1,5 @@
+type UserPublicInfo {
+  id: ID!
+  nickname: String!
+  createdAt: String!
+}
