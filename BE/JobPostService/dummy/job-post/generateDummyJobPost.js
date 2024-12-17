@@ -97,18 +97,25 @@ function getRandomPhotos(photos, count) {
   return selectedPhotos;
 }
 
-async function getDummyData(targetPath) {
+function getRandomUserId(userData) {
+  const randomUser = userData[Math.floor(Math.random() * userData.length)];
+  return randomUser.id;
+}
+
+async function getDummyData(targetPath = "../dummy-job-posts.json") {
   try {
     const districtData = JSON.parse(
-      await fs.readFile("./dummy-districts-data.json", "utf8")
+      await fs.readFile("../dummy-districts-data.json", "utf8")
     );
     const photoData = JSON.parse(
-      await fs.readFile("./dummy-photo.json", "utf8")
+      await fs.readFile("../dummy-photo.json", "utf8")
     );
-    const srcData = await fs.readFile("./src.json", "utf8"); // 파일 읽기
+    const userData = JSON.parse(
+      await fs.readFile("../dummy-users.json", "utf8")
+    );
+    const srcData = await fs.readFile("../src.json", "utf8"); // 파일 읽기
     const srcArray = JSON.parse(srcData); // JSON 문자열을 객체로 변환
     let dummyArray = srcArray.map((src) => ({
-      userId: src.userId,
       title: src.title,
       detailedDescription: src.detailedDescription,
     }));
@@ -118,6 +125,7 @@ async function getDummyData(targetPath) {
       .map((dummy) => ({ ...dummy }));
 
     dummyArray.forEach((dummy) => {
+      dummy.userId = getRandomUserId(userData);
       dummy.jobDescription = getRandomJobDescriptions();
       dummy.workPeriod = {
         type: Math.random() > 0.5 ? "SHORT_TERM" : "LONG_TERM",
@@ -149,10 +157,10 @@ async function getDummyData(targetPath) {
       JSON.stringify(dummyArray, null, 2),
       "utf8"
     );
-    console.log("Data successfully saved to dummy.json");
+    console.log("Data successfully saved to dummy-job-posts.json");
   } catch (err) {
     console.error("Error:", err);
   }
 }
 
-getDummyData("./dummy.json");
+getDummyData();
