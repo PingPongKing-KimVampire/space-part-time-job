@@ -23,7 +23,7 @@ export type JobPost = {
   detailedDescription: string;
   addressName: string;
   createdAt: string;
-  views: number;
+  // views: number;
   publisher: { nickname: string; createdAt: string };
 };
 
@@ -43,33 +43,30 @@ const ViewJobPage = () => {
     detailedDescription: "",
     addressName: "",
     createdAt: "",
-    views: 0,
+    // views: 0,
     publisher: { nickname: "", createdAt: "" },
   });
 
   const { id = "" } = useParams();
 
-  // const {
-  //   loading: getJobPostLoading,
-  //   error: getJobPostError,
-  //   data: jobPostData,
-  // } = useQuery<
-  //   { getJobPost: JobPost }, // TODO : 틀리면 고치기
-  //   { id: string }
-  // >(GET_JOB_POST, {
-  //   variables: { id },
-  // });
-  // useEffect(() => {
-  //   if (!jobPostData) return;
-  //   setJobPost({
-  //     ...jobPostData.getJobPost, // TODO : 틀리면 고치기
-  //     createdAt: formatTimeAgo(jobPostData.getJobPost.createdAt),
-  //     publisher: {
-  //       ...jobPostData.getJobPost.publisher,
-  //       createdAt: formatTimeAgo(jobPostData.getJobPost.publisher.createdAt),
-  //     },
-  //   });
-  // }, [jobPostData, setJobPost]);
+  const {
+    loading: getJobPostLoading,
+    error: getJobPostError,
+    data: jobPostData,
+  } = useQuery<{ getJobPost: JobPost }, { id: string }>(GET_JOB_POST, {
+    variables: { id },
+  });
+  useEffect(() => {
+    if (!jobPostData) return;
+    setJobPost({
+      ...jobPostData.getJobPost,
+      createdAt: formatTimeAgo(jobPostData.getJobPost.createdAt),
+      publisher: {
+        ...jobPostData.getJobPost.publisher,
+        createdAt: formatTimeAgo(jobPostData.getJobPost.publisher.createdAt),
+      },
+    });
+  }, [jobPostData, setJobPost]);
 
   // const {
   //   loading: incrementViewsLoading,
@@ -82,7 +79,7 @@ const ViewJobPage = () => {
   //   if (!incrementViewsData) return;
   //   setJobPost((state) => ({
   //     ...state,
-  //     views: incrementViewsData.views, // TODO : 이름 틀리면 고치기
+  //     views: incrementViewsData, // TODO : 이름 틀리면 고치기
   //   }));
   // }, [incrementViewsData]);
 
@@ -94,7 +91,8 @@ const ViewJobPage = () => {
           jobTypes={jobPost.jobDescription}
           title={jobPost.title}
           postTime={jobPost.createdAt}
-          viewCount={jobPost.views}
+          // viewCount={jobPost.views}
+          viewCount={20}
           interestCount={8} // TODO : 교체하기
         />
         <Content

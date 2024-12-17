@@ -90,6 +90,7 @@ const ExploreJobsPage = () => {
     searchJobPosts,
     { loading: searchJobPostsLoading, error: searchJobPostsError },
   ] = useLazyQuery(SEARCH_JOB_POSTS, {
+    fetchPolicy: "network-only",
     onCompleted: (data) => {
       // 게시 시간 가공
       const nodes = data.searchJobPosts.edges.map((edge) => ({

@@ -73,7 +73,7 @@ export const GET_JOB_POST = gql`
       detailedDescription
       addressName
       createdAt
-      views
+      # views
       publisher {
         nickname
         createdAt
