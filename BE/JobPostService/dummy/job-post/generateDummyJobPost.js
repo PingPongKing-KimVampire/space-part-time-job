@@ -102,6 +102,13 @@ function getRandomUserId(userData) {
   return randomUser.id;
 }
 
+function getRandomPastDate(daysAgo = 365) {
+  const now = Date.now();
+  const pastTime =
+    now - Math.floor(Math.random() * daysAgo * 24 * 60 * 60 * 1000);
+  return new Date(pastTime);
+}
+
 async function getDummyData(targetPath = "../dummy-job-posts.json") {
   try {
     const districtData = JSON.parse(
@@ -150,7 +157,7 @@ async function getDummyData(targetPath = "../dummy-job-posts.json") {
       const randomDistrict = getRandomDistrict(districtData);
       dummy.addressName = randomDistrict.addressName;
       dummy.neighborhoodId = randomDistrict.neighborhoodId;
-      dummy.createdAt = new Date(Date.now());
+      dummy.createdAt = getRandomPastDate();
     });
     await fs.writeFile(
       `${targetPath}`,
