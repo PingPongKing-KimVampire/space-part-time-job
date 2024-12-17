@@ -21,6 +21,7 @@ const Content: React.FC<ContentProps> = (props) => {
     photos,
     detailedDescription,
     addressName,
+    publisher,
   } = jobPost;
 
   return (
@@ -29,8 +30,10 @@ const Content: React.FC<ContentProps> = (props) => {
         <ImageSlider
           imageUrls={photos && photos.length ? photos : [defaultImage]}
         />
-        <Profile nickname="롤리" timeTogether="우주알바와 함께한지 6개월" />{" "}
-        {/* 프랍에서 받은 값으로 교체하기 */}
+        <Profile
+          nickname={publisher.nickname}
+          timeTogether={publisher.createdAt}
+        />
       </div>
       <div className="rightSection">
         <div className="textInfo">

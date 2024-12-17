@@ -24,6 +24,7 @@ export type JobPost = {
   addressName: string;
   createdAt: string;
   views: number;
+  publisher: { nickname: string; createdAt: string };
 };
 
 const ViewJobPage = () => {
@@ -43,6 +44,7 @@ const ViewJobPage = () => {
     addressName: "",
     createdAt: "",
     views: 0,
+    publisher: { nickname: "", createdAt: "" },
   });
 
   const { id = "" } = useParams();
@@ -52,7 +54,7 @@ const ViewJobPage = () => {
   //   error: getJobPostError,
   //   data: jobPostData,
   // } = useQuery<
-  //   { jobPost: JobPost }, // TODO : 틀리면 고치기
+  //   { getJobPost: JobPost }, // TODO : 틀리면 고치기
   //   { id: string }
   // >(GET_JOB_POST, {
   //   variables: { id },
@@ -60,8 +62,12 @@ const ViewJobPage = () => {
   // useEffect(() => {
   //   if (!jobPostData) return;
   //   setJobPost({
-  //     ...jobPostData.jobPost, // TODO : 틀리면 고치기
-  //     createdAt: formatTimeAgo(jobPostData.jobPost.createdAt),
+  //     ...jobPostData.getJobPost, // TODO : 틀리면 고치기
+  //     createdAt: formatTimeAgo(jobPostData.getJobPost.createdAt),
+  //     publisher: {
+  //       ...jobPostData.getJobPost.publisher,
+  //       createdAt: formatTimeAgo(jobPostData.getJobPost.publisher.createdAt),
+  //     },
   //   });
   // }, [jobPostData, setJobPost]);
 
