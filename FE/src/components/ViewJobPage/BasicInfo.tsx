@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { max } from "date-fns";
 import CustomCalendar from "../CustomCalendar.tsx";
 import CustomMap from "../CustomMap.tsx";
@@ -61,7 +61,9 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
         text={address}
         detail={{
           name: "지도",
-          element: <CustomMap style={{ boxShadow: "none" }} />,
+          element: (
+            <CustomMap style={{ boxShadow: "none" }} markerAddress={address} />
+          ),
         }}
       />
       <InfoItem
