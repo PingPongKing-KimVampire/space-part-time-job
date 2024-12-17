@@ -85,7 +85,9 @@ const ExploreJobsPage = () => {
     loading: getResidentNeighborhoodLoading,
     error: getResidentNeighborhoodError,
     data: meData,
-  } = useQuery(GET_RESIDENT_NEIGHBORHOOD);
+  } = useQuery(GET_RESIDENT_NEIGHBORHOOD, {
+    fetchPolicy: "network-only",
+  });
   const [
     searchJobPosts,
     { loading: searchJobPostsLoading, error: searchJobPostsError },

@@ -26,6 +26,7 @@ const Background = styled("div", {
   minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
+  position: "relative",
 });
 
 const httpLink = new HttpLink({
