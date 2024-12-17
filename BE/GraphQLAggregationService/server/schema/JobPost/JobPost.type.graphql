@@ -9,6 +9,7 @@ type JobPost {
   detailedDescription: String!
   addressName: String!
   createdAt: String!
+  publisher: UserPublicInfo!
 }
 
 type WorkPeriod {
