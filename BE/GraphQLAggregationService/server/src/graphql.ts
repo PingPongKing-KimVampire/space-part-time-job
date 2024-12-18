@@ -118,6 +118,7 @@ export interface JobPost {
     detailedDescription: string;
     addressName: string;
     createdAt: string;
+    views: number;
     publisher: UserPublicInfo;
 }
 

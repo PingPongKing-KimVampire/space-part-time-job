@@ -69,7 +69,7 @@ message SalaryInput {
 message JobPost {
   string id = 1;
   string title = 2;
-  repeated JobCategory jobDescription = 3; // Job categories
+  repeated JobCategory jobDescription = 3;
   WorkPeriodInput workPeriod = 4;
   WorkTimeInput workTime = 5;
   SalaryInput salary = 6;
@@ -78,4 +78,5 @@ message JobPost {
   string addressName = 9;
   string createdAt = 10;
   string userId = 11;
+  int64 views = 12;
 }

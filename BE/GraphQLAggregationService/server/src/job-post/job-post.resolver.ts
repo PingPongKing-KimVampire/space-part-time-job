@@ -33,6 +33,7 @@ export class JobPostResolver {
       createdAt,
       id,
       addressName: realAddressName,
+	  views: 0,
       publisher: {
         id: user.id,
         nickname: user.nickname,
