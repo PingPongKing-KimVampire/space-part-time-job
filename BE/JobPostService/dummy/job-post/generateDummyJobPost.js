@@ -146,9 +146,6 @@ async function getDummyData(targetPath = "../dummy-job-posts.json") {
       if (dummy.workTime.type === "FIXED") {
         let start = getRandomTime();
         let end = getRandomTime();
-        while (start !== end) {
-          end = getRandomTime();
-        }
         dummy.workTime.startTime = start;
         dummy.workTime.endTime = end;
       }
@@ -158,6 +155,7 @@ async function getDummyData(targetPath = "../dummy-job-posts.json") {
       dummy.addressName = randomDistrict.addressName;
       dummy.neighborhoodId = randomDistrict.neighborhoodId;
       dummy.createdAt = getRandomPastDate();
+	  dummy.views = Math.floor(Math.random() * 10000);
     });
     await fs.writeFile(
       `${targetPath}`,
