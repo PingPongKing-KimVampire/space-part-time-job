@@ -7,10 +7,12 @@ import { CreateJobPostInput } from './grpc/dto/create-job-post/job-post.input.dt
 import { validate, ValidationError } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { SearchJobPostsInput } from './grpc/dto/search-job-posts/search-job-posts.input.dto';
+import { JobPostService } from './job-post.service';
 
 @Controller()
 export class JobPostController {
   constructor(
+    private readonly jobPostService: JobPostService,
     private readonly jobPostRepository: JobPostRepository,
     private readonly imageUploadService: ImageUploadService,
   ) {}
@@ -213,7 +215,8 @@ export class JobPostController {
   }> {
     try {
       const { jobPostId, userId } = input;
-      const { views } = await this.jobPostRepository.incrementViews(
+
+      const { views } = await this.jobPostService.incrementJobPostViews(
         jobPostId,
         userId,
       );

@@ -148,10 +148,7 @@ export class JobPostRepository {
     return results;
   }
 
-  async incrementViews(
-    jobPostId: string,
-    userId: string,
-  ): Promise<{ views: number }> {
+  async incrementViews(jobPostId: string): Promise<{ views: number }> {
     try {
       const result = await this.jobPostModel.findByIdAndUpdate(
         jobPostId,
