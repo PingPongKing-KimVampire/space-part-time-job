@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package jobPost;
+
+import "common.proto";
+
+message IncrementJobPostViewsRequest {
+  string jobPostId = 1;
+  string userId = 2;
+}
+
+message IncrementJobPostViewsResponse { int64 views = 2; }

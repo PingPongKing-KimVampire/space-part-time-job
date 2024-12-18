@@ -60,6 +60,10 @@ interface JobPostServiceGrpc {
   ): Observable<GrpcSearchJobPostsResponse>;
 
   getJobPost(data: { id: string }): Observable<GrpcGetJobPostResponse>;
+  incrementJobPostViews(data: {
+    jobPostId: string;
+    userId: string;
+  }): Observable<{ views: number }>;
 }
 
 @Injectable()
@@ -80,6 +84,9 @@ export class JobPostService implements OnModuleInit {
         package: 'jobPost',
         protoPath: [join(__dirname, './proto/job-post.proto')],
         url: grpcUrl,
+        loader: {
+          longs: Number,
+        },
       },
     };
 
@@ -172,6 +179,21 @@ export class JobPostService implements OnModuleInit {
       return jobPost;
     } catch (e) {
       console.error('getJobPost grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async incrementJobPostViews(
+    jobPostId: string,
+    userId: string,
+  ): Promise<{ views: number }> {
+    try {
+      const response = await lastValueFrom(
+        this.jobPostService.incrementJobPostViews({ jobPostId, userId }),
+      );
+      return { views: response.views };
+    } catch (e) {
+      console.error('incrementJobPostViews grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

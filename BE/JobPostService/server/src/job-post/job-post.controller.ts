@@ -203,4 +203,24 @@ export class JobPostController {
       throw new RpcException('공고 조회 실패');
     }
   }
+
+  @GrpcMethod('JobPostService', 'IncrementJobPostViews')
+  async incrementJobPostViews(input: {
+    jobPostId: string;
+    userId: string;
+  }): Promise<{
+    views: number;
+  }> {
+    try {
+      const { jobPostId, userId } = input;
+      const { views } = await this.jobPostRepository.incrementViews(
+        jobPostId,
+        userId,
+      );
+      return { views };
+    } catch (e) {
+      console.error(e);
+      throw new RpcException('조회수 증가 실패');
+    }
+  }
 }

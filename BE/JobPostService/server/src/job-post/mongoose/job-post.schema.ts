@@ -74,6 +74,9 @@ export class JobPost {
 
   createdAt: Date;
   updatedAt: Date;
+
+  @Prop({ required: true, default: 0 })
+  views: number;
 }
 
 export const JobPostSchema = SchemaFactory.createForClass(JobPost);

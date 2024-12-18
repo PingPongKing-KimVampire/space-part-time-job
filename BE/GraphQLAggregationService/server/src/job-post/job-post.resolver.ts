@@ -86,4 +86,19 @@ export class JobPostResolver {
       throw new Error('유효하지 않은 유저 데이터 헤더');
     }
   }
+
+  @Mutation('incrementJobPostViews')
+  async incrementJobPostViews(
+    @Args('id') jobPostId: string,
+    @Context('req') req: Request,
+  ): Promise<number> {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    const { views } = await this.jobPostService.incrementJobPostViews(
+      jobPostId,
+      user.id,
+    );
+    return views;
+  }
 }

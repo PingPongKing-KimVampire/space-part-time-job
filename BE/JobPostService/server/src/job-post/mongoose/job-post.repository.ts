@@ -147,4 +147,26 @@ export class JobPostRepository {
       .lean();
     return results;
   }
+
+  async incrementViews(
+    jobPostId: string,
+    userId: string,
+  ): Promise<{ views: number }> {
+    try {
+      const result = await this.jobPostModel.findByIdAndUpdate(
+        jobPostId,
+        { $inc: { views: 1 } },
+        { new: true },
+      );
+      if (!result) {
+        throw new Error(
+          `${jobPostId}이 아이디인 아르바이트 공고가 없어 조회수 증가 실패`,
+        );
+      }
+      return { views: result.views };
+    } catch (error) {
+      console.error(`조회수 증가 실패`, error);
+      throw error;
+    }
+  }
 }

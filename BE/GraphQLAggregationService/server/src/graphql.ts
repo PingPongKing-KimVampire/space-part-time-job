@@ -140,6 +140,7 @@ export interface Salary {
 
 export interface IMutation {
     createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
+    incrementJobPostViews(id: string): number | Promise<number>;
     setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
     _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
@@ -177,6 +178,7 @@ export interface User {
     id: string;
     nickname: string;
     phoneNumber: string;
+    createdAt: string;
     residentNeighborhood?: Nullable<Neighborhood[]>;
 }
 
