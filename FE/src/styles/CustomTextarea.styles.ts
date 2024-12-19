@@ -18,6 +18,9 @@ export const Textarea = styled("textarea", {
   borderRadius: "16px",
   lineHeight: "26px",
   fontFamily: "inherit",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
   "&::placeholder": {
     fontSize: "18px",
     color: "#B2B2B2",

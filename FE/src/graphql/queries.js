@@ -12,6 +12,14 @@ export const GET_RESIDENT_NEIGHBORHOOD = gql`
   }
 `;
 
+export const GET_MY_ID = gql`
+  query GetResidentNeighborhood {
+    me {
+      id
+    }
+  }
+`;
+
 export const SEARCH_JOB_POSTS = gql`
   query SearchJobPosts(
     $filters: JobPostSearchFilter!
