@@ -73,17 +73,11 @@ export const GET_JOB_POST = gql`
       detailedDescription
       addressName
       createdAt
-      # views
+      views
       publisher {
         nickname
         createdAt
       }
     }
-  }
-`;
-
-export const INCREMENT_JOB_POST_VIEWS = gql`
-  query IncrementJobPostViews($id: ID!) {
-    incrementJobPostViews(id: $id)
   }
 `;

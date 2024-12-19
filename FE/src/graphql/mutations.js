@@ -18,3 +18,9 @@ export const SET_RESIDENT_NEIGHBORHOOD = gql`
     }
   }
 `;
+
+export const INCREMENT_JOB_POST_VIEWS = gql`
+  mutation IncrementJobPostViews($id: ID!) {
+    incrementJobPostViews(id: $id)
+  }
+`;
