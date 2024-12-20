@@ -142,7 +142,7 @@ export class JobPostRepository {
 
     const results = await this.jobPostModel
       .find({ ...query, ...cursorFilter })
-      .sort({ created_at: -1 })
+      .sort({ createdAt: -1 })
       .limit(limit)
       .lean();
     return results;
