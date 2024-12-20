@@ -12,7 +12,14 @@ const Profile = () => {
           <div className="subInfo">기산동 ㆍ 우주알바와 함께한지 6개월</div>
         </div>
       </div>
-      <button className="editButton">정보 수정</button>
+      <button
+        className="logoutButton"
+        onClick={() => {
+          // TODO : 로그아웃 구현하기
+        }}
+      >
+        로그아웃
+      </button>
     </ProfileContainer>
   );
 };

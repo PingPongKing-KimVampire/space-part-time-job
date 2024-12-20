@@ -55,7 +55,7 @@ export const ProfileContainer = styled("div", {
       },
     },
   },
-  "& .editButton": {
+  "& .logoutButton": {
     ...MainButtonStyle,
     fontSize: "17px",
     padding: "10px 22px",

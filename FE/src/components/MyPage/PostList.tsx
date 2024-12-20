@@ -4,16 +4,19 @@ import { ListItem } from "../../styles/MyPage.styles";
 
 const POSTS = [
   {
+    id: "1",
     title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
     isClosed: false,
     applicantCount: 0,
   },
   {
+    id: "2",
     title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
     isClosed: false,
     applicantCount: 1,
   },
   {
+    id: "3",
     title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
     isClosed: true,
     applicantCount: 5,
@@ -51,10 +54,11 @@ const PostList = () => {
 
   return (
     <>
-      {POSTS.map(({ title, isClosed, applicantCount }) => (
+      {POSTS.map(({ title, isClosed, applicantCount, id }) => (
         <ListItem
           onMouseEnter={onItemMouseEnter}
           onMouseLeave={onItemMouseLeave}
+          key={id}
         >
           <div className="title">
             {isClosed && <div className="closeTag">마감</div>}

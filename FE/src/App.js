@@ -17,7 +17,8 @@ import MyPage from "./pages/MyPage.tsx";
 import ViewApplicantsPage from "./pages/ViewApplicantsPage.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 import NavigationBar from "./components/NavigationBar.tsx";
-import AuthRoute from "./components/AuthRoute.tsx";
+import AuthRoute from "./routes/AuthRoute.tsx";
+import NotFoundRoute from "./routes/NotFoundRoute.tsx";
 import { IP_ADDRESS } from "./constants/constants";
 
 const { styled } = createStitches();
@@ -47,19 +48,16 @@ function App() {
         <ScrollToTop />
         <Background>
           <Routes>
-            <Route element={<NavigationBar />}>
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route element={<AuthRoute />}>
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<AuthRoute />}>
+              <Route path="/search-neighbor" element={<SearchNeighborPage />} />
+              <Route
+                path="/set-neighbor-scope"
+                element={<SetNeighborScopePage />}
+              />
+              <Route element={<NavigationBar />}>
                 <Route path="/create-job" element={<CreateJobPage />} />
-                <Route
-                  path="/search-neighbor"
-                  element={<SearchNeighborPage />}
-                />
-                <Route
-                  path="/set-neighbor-scope"
-                  element={<SetNeighborScopePage />}
-                />
                 <Route path="/explore-jobs" element={<ExploreJobsPage />} />
                 <Route path="/view-job/:id" element={<ViewJobPage />} />
                 <Route path="/mypage" element={<MyPage />} />
@@ -68,6 +66,7 @@ function App() {
                   element={<ViewApplicantsPage />}
                 />
               </Route>
+              <Route path="*" element={<NotFoundRoute />} />
             </Route>
           </Routes>
         </Background>
