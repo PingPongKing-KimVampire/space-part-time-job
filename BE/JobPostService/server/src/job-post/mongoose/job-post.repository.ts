@@ -38,13 +38,8 @@ export class JobPostRepository {
       pagination,
     );
 
-    const cursorFilter = pagination.afterCursor
-      ? { _id: { $gt: pagination.afterCursor } }
-      : {};
-
     const totalCount = await this.jobPostModel.countDocuments({
       ...query,
-      ...cursorFilter,
     });
 
     const edges = results.map((jobPost) => {
@@ -135,14 +130,31 @@ export class JobPostRepository {
     query: any,
     pagination: SearchJobPostsInput['pagination'],
   ) {
-    const limit = pagination.first;
-    const cursorFilter = pagination.afterCursor
-      ? { _id: { $gt: pagination.afterCursor } }
-      : {};
+    const andConditions: any[] = [];
+    andConditions.push(query);
 
+    if (pagination.afterCursor) {
+      const cursorJobPost = await this.jobPostModel.findOne({
+        _id: pagination.afterCursor,
+      });
+
+      const cursorFilter = {
+        $or: [
+          { createdAt: { $lt: cursorJobPost.createdAt } },
+          {
+            createdAt: cursorJobPost.createdAt,
+            _id: { $lt: cursorJobPost._id },
+          },
+        ],
+      };
+      andConditions.push(cursorFilter);
+    }
+
+    const finalQuery = { $and: andConditions };
+    const limit = pagination.first;
     const results = await this.jobPostModel
-      .find({ ...query, ...cursorFilter })
-      .sort({ createdAt: -1 })
+      .find(finalQuery)
+      .sort({ createdAt: -1, _id: -1 })
       .limit(limit)
       .lean();
     return results;
