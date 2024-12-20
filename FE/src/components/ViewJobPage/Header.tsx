@@ -5,7 +5,7 @@ import { JOB_TYPES } from "../../constants/constants";
 type HeaderProps = {
   jobTypes: string[];
   title: string;
-  postTime: string; // TODO: 시간만 받아서 가공하는 방식으로 변경될 예정
+  postTime: string;
   viewCount: number;
   interestCount: number;
 };
@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = (props) => {
       </div>
       <div className="title">{title}</div>
       <div className="subInfo">
-        {`${postTime}  ·  조회 ${viewCount}  ·  관심 ${interestCount}`}
+        {`${postTime} 전  ·  조회 ${viewCount}  ·  관심 ${interestCount}`}
       </div>
     </HeaderContainer>
   );

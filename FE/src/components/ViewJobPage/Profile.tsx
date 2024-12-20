@@ -4,7 +4,7 @@ import { ReactComponent as UserProfileIcon } from "../../assets/icons/profile.sv
 
 type ProfileProps = {
   nickname: string;
-  timeTogether: string; // TODO: 시간만 받아서 가공하는 방식으로 변경될 예정
+  timeTogether: string;
 };
 
 const Profile: React.FC<ProfileProps> = ({ nickname, timeTogether }) => {
@@ -13,7 +13,7 @@ const Profile: React.FC<ProfileProps> = ({ nickname, timeTogether }) => {
       <UserProfileIcon />
       <div className="userInfo">
         <div className="nickname">{nickname}</div>
-        <div className="timeTogether">{timeTogether}</div>
+        <div className="timeTogether">우주알바와 함께한지 {timeTogether}</div>
       </div>
     </ProfileContainer>
   );

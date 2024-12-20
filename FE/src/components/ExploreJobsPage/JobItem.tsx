@@ -42,7 +42,7 @@ const JobItem: React.FC<JobItemProps> = (props) => {
         <div className="mainInfo">
           <div className="title">{title}</div>
           <div className="neighborAndPostTime">
-            {neighbor} ㆍ {createdAt}
+            {neighbor} ㆍ {createdAt} 전
           </div>
         </div>
         <div className="subInfo">

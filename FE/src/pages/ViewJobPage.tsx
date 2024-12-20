@@ -72,13 +72,11 @@ const ViewJobPage = () => {
   const [
     incrementViews,
     { loading: incrementViewsLoading, error: incrementViewsError },
-  ] = useMutation<{ data: { incrementJobPostViews: number } }, { id: string }>(
-    INCREMENT_JOB_POST_VIEWS
-  );
+  ] = useMutation(INCREMENT_JOB_POST_VIEWS);
   useEffect(() => {
     if (!jobPostData) return;
     const setupViews = async () => {
-      const response: any = await incrementViews({
+      const response = await incrementViews({
         variables: { id },
       });
       setJobPost((state) => ({
@@ -98,7 +96,6 @@ const ViewJobPage = () => {
           title={jobPost.title}
           postTime={jobPost.createdAt}
           viewCount={jobPost.views}
-          // viewCount={20}
           interestCount={8} // TODO : 교체하기
         />
         <Content

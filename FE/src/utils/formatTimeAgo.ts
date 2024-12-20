@@ -8,15 +8,15 @@ const formatTimeAgo = (iso: string): string => {
   const day = hour * 24; // 일 당 초
 
   if (diffSeconds <= 0) {
-    return "금방";
+    return "방금";
   } else if (diffSeconds < minute) {
-    return `${diffSeconds}초 전`;
+    return `${diffSeconds}초`;
   } else if (diffSeconds < hour) {
-    return `${Math.floor(diffSeconds / minute)}분 전`;
+    return `${Math.floor(diffSeconds / minute)}분`;
   } else if (diffSeconds < day) {
-    return `${Math.floor(diffSeconds / hour)}시간 전`;
+    return `${Math.floor(diffSeconds / hour)}시간`;
   }
-  return `${Math.floor(diffSeconds / day)}일 전`;
+  return `${Math.floor(diffSeconds / day)}일`;
 };
 
 export default formatTimeAgo;
