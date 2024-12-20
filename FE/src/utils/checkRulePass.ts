@@ -55,6 +55,7 @@ export const checkRulePassInAuth = {
 
 export const checkRulePassInCreateJob = {
   title: (title: string): boolean => {
+    if (title.trim().length === 0) return false; // 공백 문자로만 이루어진 경우
     return 6 <= getLength(title) && getLength(title) <= 30;
   },
   jobTypes: (jobTypes: string[]): boolean => {
@@ -74,6 +75,7 @@ export const checkRulePassInCreateJob = {
     return "";
   },
   description: (description: string): boolean => {
+    if (description.trim().length === 0) return false; // 공백 문자로만 이루어진 경우
     return 15 <= getLength(description) && getLength(description) <= 2000;
   },
   ...checkRulePassCommon,
