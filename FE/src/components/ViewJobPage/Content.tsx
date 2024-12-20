@@ -4,16 +4,16 @@ import Profile from "./Profile.tsx";
 import BasicInfo from "./BasicInfo.tsx";
 import Interaction from "./Interaction.tsx";
 import { ContentContainer } from "../../styles/ViewJobPage.styles";
-import { JobPost } from "../../pages/ViewJobPage.tsx";
+import { JobPostEdge } from "../../pages/ViewJobPage.tsx";
 import defaultImage from "../../assets/images/jobDefault.png";
 
 type ContentProps = {
-  jobPost: JobPost;
+  jobPostEdge: JobPostEdge;
   displayApplicationModal: () => void;
 };
 
 const Content: React.FC<ContentProps> = (props) => {
-  const { jobPost, displayApplicationModal } = props;
+  const { jobPostEdge, displayApplicationModal } = props;
   const {
     workPeriod,
     workTime,
@@ -22,7 +22,7 @@ const Content: React.FC<ContentProps> = (props) => {
     detailedDescription,
     addressName,
     publisher,
-  } = jobPost;
+  } = jobPostEdge.node;
 
   return (
     <ContentContainer>
@@ -49,7 +49,7 @@ const Content: React.FC<ContentProps> = (props) => {
           </div>
         </div>
         <Interaction
-          alreadyApplied={false}
+          alreadyApplied={!!jobPostEdge.myJobApplication}
           displayApplicationModal={displayApplicationModal}
         />
       </div>

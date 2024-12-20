@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery, useMutation, FetchResult } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import Header from "../components/ViewJobPage/Header.tsx";
 import Content from "../components/ViewJobPage/Content.tsx";
@@ -12,8 +12,15 @@ import { MainBackgroundColor } from "../styles/global";
 import { GET_JOB_POST } from "../graphql/queries";
 import { INCREMENT_JOB_POST_VIEWS } from "../graphql/mutations.js";
 
+export type JobPostEdge = {
+  myJobApplication: {
+    id: string;
+  };
+  node: JobPost;
+};
+
 // TODO: ExploreJobsPage의 JobPost 타입과 어느 정도 반복되는 타입임
-export type JobPost = {
+type JobPost = {
   id: string;
   title: string;
   jobDescription: string[];
@@ -26,6 +33,7 @@ export type JobPost = {
   createdAt: string;
   views: number;
   publisher: { nickname: string; createdAt: string };
+  applicationCount: number;
 };
 
 const ViewJobPage = () => {
@@ -33,19 +41,23 @@ const ViewJobPage = () => {
 
   const [isApplicationModalVisible, setIsApplicationModalVisible] =
     useState(false);
-  const [jobPost, setJobPost] = useState<JobPost>({
-    id: "",
-    title: "",
-    jobDescription: [],
-    workPeriod: { type: "", dates: [], days: [] },
-    workTime: { type: "", startTime: "", endTime: "" },
-    salary: { salaryType: "", salaryAmount: 0 },
-    photos: [],
-    detailedDescription: "",
-    addressName: "",
-    createdAt: "",
-    views: 0,
-    publisher: { nickname: "", createdAt: "" },
+  const [jobPostEdge, setJobPostEdge] = useState<JobPostEdge>({
+    myJobApplication: { id: "" },
+    node: {
+      id: "",
+      title: "",
+      jobDescription: [],
+      workPeriod: { type: "", dates: [], days: [] },
+      workTime: { type: "", startTime: "", endTime: "" },
+      salary: { salaryType: "", salaryAmount: 0 },
+      photos: [],
+      detailedDescription: "",
+      addressName: "",
+      createdAt: "",
+      views: 0,
+      publisher: { nickname: "", createdAt: "" },
+      applicationCount: 0,
+    },
   });
 
   const { id = "" } = useParams();
@@ -54,20 +66,24 @@ const ViewJobPage = () => {
     loading: getJobPostLoading,
     error: getJobPostError,
     data: jobPostData,
-  } = useQuery<{ getJobPost: JobPost }, { id: string }>(GET_JOB_POST, {
+  } = useQuery<{ getJobPost: JobPostEdge }, { id: string }>(GET_JOB_POST, {
     variables: { id },
   });
   useEffect(() => {
     if (!jobPostData) return;
-    setJobPost({
-      ...jobPostData.getJobPost,
-      createdAt: formatTimeAgo(jobPostData.getJobPost.createdAt),
-      publisher: {
-        ...jobPostData.getJobPost.publisher,
-        createdAt: formatTimeAgo(jobPostData.getJobPost.publisher.createdAt),
+    const data = jobPostData.getJobPost;
+    setJobPostEdge({
+      ...data,
+      node: {
+        ...data.node,
+        createdAt: formatTimeAgo(data.node.createdAt),
+        publisher: {
+          ...data.node.publisher,
+          createdAt: formatTimeAgo(data.node.publisher.createdAt),
+        },
       },
     });
-  }, [jobPostData, setJobPost]);
+  }, [jobPostData, setJobPostEdge, isApplicationModalVisible]);
 
   const [
     incrementViews,
@@ -79,9 +95,12 @@ const ViewJobPage = () => {
       const response = await incrementViews({
         variables: { id },
       });
-      setJobPost((state) => ({
+      setJobPostEdge((state) => ({
         ...state,
-        views: response.data.incrementJobPostViews,
+        node: {
+          ...state.node,
+          views: response.data.incrementJobPostViews,
+        },
       }));
     };
     setupViews();
@@ -92,14 +111,15 @@ const ViewJobPage = () => {
       {getJobPostLoading && incrementViewsLoading && <LoadingOverlay />}
       <Container>
         <Header
-          jobTypes={jobPost.jobDescription}
-          title={jobPost.title}
-          postTime={jobPost.createdAt}
-          viewCount={jobPost.views}
-          interestCount={8} // TODO : 교체하기
+          jobTypes={jobPostEdge.node.jobDescription}
+          title={jobPostEdge.node.title}
+          postTime={jobPostEdge.node.createdAt}
+          viewCount={jobPostEdge.node.views}
+          interestCount={8}
+          // interestCount={jobPostEdge.node.applicationCount}
         />
         <Content
-          jobPost={jobPost}
+          jobPostEdge={jobPostEdge}
           displayApplicationModal={() => {
             setIsApplicationModalVisible(true);
           }}
@@ -107,6 +127,7 @@ const ViewJobPage = () => {
       </Container>
       {isApplicationModalVisible && (
         <ApplicationModal
+          jobPostId={id}
           onXClick={() => {
             setIsApplicationModalVisible(false);
           }}

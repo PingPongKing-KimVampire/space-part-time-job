@@ -24,3 +24,11 @@ export const INCREMENT_JOB_POST_VIEWS = gql`
     incrementJobPostViews(id: $id)
   }
 `;
+
+export const APPLY_TO_JOB_POST = gql`
+  mutation ApplyToJobPost($input: ApplyJobPostInput!) {
+    applyToJobPost(input: $input) {
+      id
+    }
+  }
+`;

@@ -9,6 +9,7 @@ type InteractionProps = {
 
 const Interaction: React.FC<InteractionProps> = (props) => {
   const { alreadyApplied, displayApplicationModal } = props;
+
   return (
     <InteractionContainer>
       <div className="interaction">

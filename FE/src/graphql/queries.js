@@ -89,3 +89,41 @@ export const GET_JOB_POST = gql`
     }
   }
 `;
+
+// export const GET_JOB_POST = gql`
+//   query GetJobPost($id: ID!) {
+//     getJobPost(id: $id) {
+//       myJobApplication {
+//         id
+//       }
+//       node {
+//         title
+//         jobDescription
+//         workPeriod {
+//           type
+//           dates
+//           days
+//         }
+//         workTime {
+//           type
+//           startTime
+//           endTime
+//         }
+//         salary {
+//           salaryType
+//           salaryAmount
+//         }
+//         photos
+//         detailedDescription
+//         addressName
+//         createdAt
+//         views
+//         publisher {
+//           nickname
+//           createdAt
+//         }
+//         applicationCount
+//       }
+//     }
+//   }
+// `;
