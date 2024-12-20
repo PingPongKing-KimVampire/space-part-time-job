@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { fetchDistrictBoundary } from "../utils/fetchData";
 import { MainBackgroundColor } from "../styles/global";
@@ -141,39 +141,68 @@ const ExploreJobsPage = () => {
     setSelectedNeighborID(ids[0]);
   }, [neighbors]);
 
-  const fetchJobPosts = (cursor) => {
-    if (Object.keys(neighbors).length === 0 || !selectedNeighborID) return;
-    const selectedNeighbor = neighbors[selectedNeighborID];
-    const days = filter.weekDays.map((day) => DAYS_KEY[day]);
-    const filters = {
-      neighborhoodIds: selectedNeighbor.districts.map(
-        (district) => district.id
-      ),
-      keyword: debouncedSearchValue || null,
-      workPeriodType: filter.term ? TERM_KEY[filter.term] : null,
-      jobCategories: filter.jobTypes.map((type) => JOB_TYPES_KEY[type]),
-      startTime: filter.time.start === TIME_NOT_SET ? null : filter.time.start,
-      endTime: filter.time.end === TIME_NOT_SET ? null : filter.time.end,
-      ...(filter.term === TERM.LONG_TERM && { days }),
-    };
-    const pagination = { afterCursor: cursor, first: 20 };
-    searchJobPosts({ variables: { filters, pagination } });
-  };
+  const fetchJobPosts = useCallback(
+    (cursor) => {
+      const getProcessedTime = () => {
+        if (
+          filter.time.start === TIME_NOT_SET ||
+          filter.time.end === TIME_NOT_SET
+        ) {
+          // 하나라도 세팅이 안 되어 있으면 둘 다 null로 전송
+          return { startTime: null, endTime: null };
+        }
+        if (filter.time.end === "24:00") {
+          if (filter.time.start === "00:00") {
+            return { startTime: null, endTime: null };
+          } else {
+            return { startTime: filter.time.start, endTime: "00:00" };
+          }
+        }
+        return { startTime: filter.time.start, endTime: filter.time.end };
+      };
+      if (Object.keys(neighbors).length === 0 || !selectedNeighborID) return;
+      const selectedNeighbor = neighbors[selectedNeighborID];
+      const days = filter.weekDays.map((day) => DAYS_KEY[day]);
+      const { startTime, endTime } = getProcessedTime();
+
+      const filters = {
+        neighborhoodIds: selectedNeighbor.districts.map(
+          (district) => district.id
+        ),
+        keyword: debouncedSearchValue || null,
+        workPeriodType: filter.term ? TERM_KEY[filter.term] : null,
+        jobCategories: filter.jobTypes.map((type) => JOB_TYPES_KEY[type]),
+        startTime,
+        endTime,
+        ...(filter.term === TERM.LONG_TERM && { days }),
+      };
+      const pagination = { afterCursor: cursor, first: 20 };
+      searchJobPosts({ variables: { filters, pagination } });
+    },
+    [
+      debouncedSearchValue,
+      filter,
+      neighbors,
+      selectedNeighborID,
+      searchJobPosts,
+    ]
+  );
 
   useEffect(() => {
     // 검색 조건이 변경된 후 패치
     isChangedSearchConditionRef.current = true;
     fetchJobPosts(null);
-  }, [selectedNeighborID, debouncedSearchValue, filter]);
+  }, [fetchJobPosts]);
 
-  const fetchMoreJobPosts = () => {
+  const fetchMoreJobPosts = useCallback(() => {
     // 스크롤 영역이 바닥에 다다랐을 때 패치
     if (pageInfo.hasNextPage) fetchJobPosts(pageInfo.endCursor);
-  };
+  }, [fetchJobPosts, pageInfo]);
 
   return (
     <Background>
-      {(getResidentNeighborhoodLoading || searchJobPostsLoading) && (
+      {(getResidentNeighborhoodLoading ||
+        (searchJobPostsLoading && !isChangedSearchConditionRef.current)) && (
         <LoadingOverlay />
       )}
       <Container>

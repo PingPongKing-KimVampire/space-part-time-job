@@ -112,8 +112,7 @@ export const WORKTIME_TYPES_KEY = reverseKeyValue(WORKTIME_TYPES);
 
 export const SEND_AUTHNUMBER_COUNTDOWN_SEC = 300;
 
-export const TIMES = [
-  "00:00",
+const TIMES = [
   "00:30",
   "01:00",
   "01:30",
@@ -162,6 +161,8 @@ export const TIMES = [
   "23:00",
   "23:30",
 ];
+export const START_TIMES = ["00:00", ...TIMES];
+export const END_TIMES = [...TIMES, "24:00"];
 
 export const TIME_NOT_SET = "-";
 

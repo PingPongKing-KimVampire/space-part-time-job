@@ -27,7 +27,7 @@ const JobList: React.FC<JobListProps> = (props) => {
     return () => {
       if (bottomRef.current) observer.unobserve(bottomRef.current);
     };
-  });
+  }, [fetchMoreJobPosts]);
 
   return (
     <>

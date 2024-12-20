@@ -5,7 +5,7 @@ import {
   ArrowDownIcon,
   SelectBox,
 } from "../styles/TimeRangeSelection.styles";
-import { TIMES, TIME_NOT_SET } from "../constants/constants";
+import { START_TIMES, END_TIMES, TIME_NOT_SET } from "../constants/constants";
 
 const TimeRangeSelection = ({
   time,
@@ -66,6 +66,7 @@ const TimeSelection = (props) => {
     isMini,
     notSetPossible,
   } = props;
+  const TIMES = label === "시작" ? START_TIMES : END_TIMES;
 
   const onTimeInputClick = () => {
     setIsSelecting(!isSelecting);
