@@ -107,6 +107,7 @@ export class CreateJobPostInput {
   @IsString()
   @MinLength(6, { message: '제목은 6자 이상이여야 합니다.' })
   @MaxLength(30, { message: '제목은 30자 이하이여야 합니다.' })
+  @Matches(/\S/, { message: '제목에 공백이 아닌 문자가 포함되어야 합니다.' })
   title: string;
 
   @IsArray()
@@ -143,6 +144,7 @@ export class CreateJobPostInput {
   @IsString()
   @MinLength(15, { message: '상세 설명은 최소 15자 이상이어야 합니다.' })
   @MaxLength(2000, { message: '상세 설명은 최대 2000자 이하이어야 합니다.' })
+  @Matches(/\S/, { message: '상세 설명에 공백이 아닌 문자가 포함되어야 합니다.' })
   detailedDescription: string;
 
   @IsString()

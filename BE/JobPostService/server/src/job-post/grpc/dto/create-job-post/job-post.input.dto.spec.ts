@@ -72,6 +72,14 @@ describe('CreateJobPostInput 유효성 검사', () => {
     expect(errors.length).toBeGreaterThan(0);
   });
 
+  it('제목이 빈 공백으로 이루어져 있을 때 실패', async () => {
+    const input = getValidInput();
+    input.title = '      ';
+    const transformedInput = plainToClass(CreateJobPostInput, input);
+    const errors = await validate(transformedInput);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
   it('제목이 30자를 초과할 때 실패', async () => {
     const input = getValidInput();
     input.title = 'a'.repeat(31);
@@ -229,6 +237,14 @@ describe('CreateJobPostInput 유효성 검사', () => {
   it('상세 설명이 2000자를 초과할 때 실패', async () => {
     const input = getValidInput();
     input.detailedDescription = 'a'.repeat(2001);
+    const transformedInput = plainToClass(CreateJobPostInput, input);
+    const errors = await validate(transformedInput);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it('상세 설명이 빈 공백으로 이루어져 있을 때 실패', async () => {
+    const input = getValidInput();
+    input.detailedDescription = ' '.repeat(15);
     const transformedInput = plainToClass(CreateJobPostInput, input);
     const errors = await validate(transformedInput);
     expect(errors.length).toBeGreaterThan(0);
