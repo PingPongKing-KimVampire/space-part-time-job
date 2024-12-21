@@ -1,5 +1,9 @@
 import { createStitches } from "@stitches/react";
-import { MainColor, MainButtonStyle } from "../styles/global";
+import {
+  MainColor,
+  MainButtonStyle,
+  NavigationBarHeight,
+} from "../styles/global";
 
 const { styled } = createStitches();
 
@@ -9,17 +13,8 @@ export const Background = styled("div", {
   position: "relative",
   display: "flex",
   justifyContent: "center",
+  paddingTop: NavigationBarHeight,
 });
-
-const TopButtonStyle = {
-  border: "none",
-  background: "none",
-  color: MainColor,
-  cursor: "pointer",
-  fontSize: "18px",
-  position: "fixed",
-  top: "20px",
-};
 
 export const Container = styled("div", {
   width: "1000px",

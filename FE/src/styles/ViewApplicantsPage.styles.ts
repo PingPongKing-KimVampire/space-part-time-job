@@ -1,5 +1,9 @@
 import { createStitches } from "@stitches/react";
-import { MainButtonStyle, MainColor } from "../styles/global";
+import {
+  MainButtonStyle,
+  MainColor,
+  NavigationBarHeight,
+} from "../styles/global";
 
 const { styled } = createStitches();
 
@@ -10,7 +14,7 @@ export const Container = styled("div", {
   flexDirection: "column",
   alignItems: "center",
   gap: "12px",
-  paddingTop: "24px",
+  paddingTop: `calc(${NavigationBarHeight} + 24px)`,
   paddingBottom: "30px",
 });
 

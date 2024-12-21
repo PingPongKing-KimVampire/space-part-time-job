@@ -4,6 +4,7 @@ import {
   MainColor,
   MainHoverColor,
   OptionHoverColor,
+  NavigationBarHeight,
 } from "./global";
 
 const { styled } = createStitches();
@@ -13,6 +14,7 @@ export const Background = styled("div", {
   height: "100%",
   display: "flex",
   flexDirection: "column",
+  paddingTop: NavigationBarHeight,
 });
 
 export const TopArea = styled("div", {

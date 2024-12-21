@@ -24,11 +24,10 @@ import { IP_ADDRESS } from "./constants/constants";
 const { styled } = createStitches();
 
 const Background = styled("div", {
-  minWidth: "100vw",
+  minWidth: "calc(100vw - 15px)",
   minHeight: "100vh",
-  display: "flex",
-  flexDirection: "column",
   position: "relative",
+  display: "flex",
 });
 
 const httpLink = new HttpLink({

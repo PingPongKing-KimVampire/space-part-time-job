@@ -3,7 +3,7 @@ import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { ReactComponent as WriteIcon } from "../assets/icons/write.svg";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { ReactComponent as BackIcon } from "../assets/icons/arrow-left.svg";
-import { Container } from "../styles/NavigationBar.styles.ts";
+import { Container, Content } from "../styles/NavigationBar.styles.ts";
 
 const BAR = {
   MAIN: "main",
@@ -31,38 +31,42 @@ const NavigationBar = () => {
   }, [location, isViewJobPage, isViewApplicantsPage]);
 
   const mainBarElement = (
-    <Container type="main">
-      <div
-        className="logo"
-        onClick={() => {
-          navigate("/explore-jobs");
-        }}
-      >
-        우주 알바
-      </div>
-      <div className="buttons">
-        <WriteIcon
+    <Container>
+      <Content type="main">
+        <div
+          className="logo"
           onClick={() => {
-            navigate("/create-job");
+            navigate("/explore-jobs");
           }}
-        />
-        <ProfileIcon
-          onClick={() => {
-            navigate("/mypage");
-          }}
-        />
-      </div>
+        >
+          우주 알바
+        </div>
+        <div className="buttons">
+          <WriteIcon
+            onClick={() => {
+              navigate("/create-job");
+            }}
+          />
+          <ProfileIcon
+            onClick={() => {
+              navigate("/mypage");
+            }}
+          />
+        </div>
+      </Content>
     </Container>
   );
 
   const localBarElement = (title) => (
-    <Container type="local">
-      <div className="title">{title}</div>
-      <BackIcon
-        onClick={() => {
-          window.history.back();
-        }}
-      />
+    <Container>
+      <Content type="local">
+        <div className="title">{title}</div>
+        <BackIcon
+          onClick={() => {
+            window.history.back();
+          }}
+        />
+      </Content>
     </Container>
   );
 

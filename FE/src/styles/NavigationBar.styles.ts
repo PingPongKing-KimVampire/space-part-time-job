@@ -1,15 +1,28 @@
 import { createStitches } from "@stitches/react";
-import { MainColor, OptionHoverColor } from "../styles/global.ts";
+import {
+  MainColor,
+  OptionHoverColor,
+  NavigationBarHeight,
+} from "../styles/global.ts";
 
 const { styled } = createStitches();
 
 export const Container = styled("div", {
   background: MainColor,
-  height: "65px",
+  height: NavigationBarHeight,
+  width: "100%",
+  zIndex: "1",
   boxShadow: "0 0 3px 1px #9FB0FF",
   display: "flex",
+  justifyContent: "center",
+  position: "fixed",
+});
+
+export const Content = styled("div", {
+  height: "100%",
+  width: "1000px",
+  display: "flex",
   alignItems: "center",
-  padding: "0 20px",
   color: "white",
   position: "relative",
   variants: {

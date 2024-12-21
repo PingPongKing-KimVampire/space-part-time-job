@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { OptionHoverColor } from "./global";
+import { OptionHoverColor, NavigationBarHeight } from "./global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../assets/icons/location.svg";
 
@@ -7,10 +7,10 @@ const { styled } = createStitches();
 
 export const Background = styled("div", {
   width: "100%",
-  // flex: "1",
   display: "flex",
   justifyContent: "center",
-  // background: "red",
+  paddingTop: NavigationBarHeight,
+  boxSizing: "border-box",
 });
 
 export const Container = styled("div", {
