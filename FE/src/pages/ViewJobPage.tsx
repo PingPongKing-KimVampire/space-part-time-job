@@ -20,7 +20,7 @@ export type JobPostEdge = {
 };
 
 // TODO: ExploreJobsPage의 JobPost 타입과 어느 정도 반복되는 타입임
-type JobPost = {
+export type JobPost = {
   id: string;
   title: string;
   jobDescription: string[];
@@ -110,14 +110,7 @@ const ViewJobPage = () => {
     <Background>
       {getJobPostLoading && incrementViewsLoading && <LoadingOverlay />}
       <Container>
-        <Header
-          jobTypes={jobPostEdge.node.jobDescription}
-          title={jobPostEdge.node.title}
-          postTime={jobPostEdge.node.createdAt}
-          viewCount={jobPostEdge.node.views}
-          interestCount={8}
-          // interestCount={jobPostEdge.node.applicationCount}
-        />
+        <Header jobPost={jobPostEdge.node} />
         <Content
           jobPostEdge={jobPostEdge}
           displayApplicationModal={() => {

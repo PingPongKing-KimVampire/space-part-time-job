@@ -1,21 +1,21 @@
 import React from "react";
 import { HeaderContainer } from "../../styles/ViewJobPage.styles";
 import { JOB_TYPES } from "../../constants/constants";
+import { JobPost } from "../../pages/ViewJobPage.tsx";
 
 type HeaderProps = {
-  jobTypes: string[];
-  title: string;
-  postTime: string;
-  viewCount: number;
-  interestCount: number;
+  jobPost: JobPost;
 };
 
-const Header: React.FC<HeaderProps> = (props) => {
-  const { jobTypes, title, postTime, viewCount, interestCount } = props;
+const Header: React.FC<HeaderProps> = ({ jobPost }) => {
+  const { jobDescription, title, createdAt, views, applicationCount } = jobPost;
+
+  const interestCount = 8; // TODO : 임시 하드 코딩
+
   return (
     <HeaderContainer>
       <div className="jobTypesContainer">
-        {jobTypes.map((type) => (
+        {jobDescription.map((type) => (
           <div key={type} className="jobType">
             {JOB_TYPES[type]}
           </div>
@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = (props) => {
       </div>
       <div className="title">{title}</div>
       <div className="subInfo">
-        {`${postTime} 전  ·  조회 ${viewCount}  ·  관심 ${interestCount}`}
+        {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestCount} · 지원 ${applicationCount}`}
       </div>
     </HeaderContainer>
   );
