@@ -87,6 +87,7 @@ const ViewApplicantsPage = () => {
   ] = useMutation(DECIDE_JOB_APPLICATION);
   const onDecideButtonClick = async (e, status) => {
     const applicationId = e.target.closest(".item")?.getAttribute("data-id");
+    if (!applicationId) return;
     await decideJobApplication({
       variables: {
         input: { id: applicationId, status },

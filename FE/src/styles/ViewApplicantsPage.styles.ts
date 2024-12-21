@@ -29,7 +29,7 @@ export const Container = styled("div", {
       fontWeight: "400",
       lineHeight: "24px",
     },
-    "& .changeStatusButtons": {
+    "& .decideButtons": {
       width: "100%",
       display: "flex",
       justifyContent: "space-between",

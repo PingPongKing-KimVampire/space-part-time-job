@@ -40,3 +40,11 @@ export const DECIDE_JOB_APPLICATION = gql`
     }
   }
 `;
+
+export const CLOSE_JOB_POST = gql`
+  mutation CloseJobPost($id: ID!) {
+    closeJobPost(id: $id) {
+      id
+    }
+  }
+`;

@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { ListItem } from "../../styles/MyPage.styles";
 import { GET_MY_JOB_POSTS } from "../../graphql/queries.js";
+import { CLOSE_JOB_POST } from "../../graphql/mutations.js";
 import { PageInfo } from "../../pages/ExploreJobsPage.tsx";
 import { JOB_POST_STATUS } from "../../constants/constants.ts";
 
@@ -104,6 +105,20 @@ const PostList = ({ tab }) => {
     e.currentTarget.parentElement!.parentElement!.classList.add("isHovering");
   };
 
+  const [closeJobPost, { loading: closeLoading, error: closeError }] =
+    useMutation(CLOSE_JOB_POST);
+  const onCloseButtonClick = async (e) => {
+    const postId = e.target.closest(".item")?.getAttribute("data-id");
+    if (!postId) return;
+    await closeJobPost({ variables: { id: postId } });
+    // setMyJobPosts((state) =>
+    //   state.map((post) => {
+    //     if (post.id !== postId) return post;
+    //     return { ...post, status: JOB_POST_STATUS.CLOSE };
+    //   })
+    // );
+  };
+
   const onApplicantButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const postId = e.currentTarget.getAttribute("data-id") || "";
     navigate(`/view-applicants/${postId}`);
@@ -113,6 +128,7 @@ const PostList = ({ tab }) => {
     <>
       {myJobPosts.map(({ id, status, title, applicantCount }) => (
         <ListItem
+          className="item"
           onMouseEnter={onItemMouseEnter}
           onMouseLeave={onItemMouseLeave}
           key={id}
@@ -130,6 +146,7 @@ const PostList = ({ tab }) => {
                 className="closeButton"
                 onMouseEnter={onButtonMouseEnter}
                 onMouseLeave={onButtonMouseLeave}
+                onClick={onCloseButtonClick}
               >
                 마감
               </button>
