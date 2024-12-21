@@ -13,7 +13,7 @@ export const GET_RESIDENT_NEIGHBORHOOD = gql`
 `;
 
 export const GET_MY_ID = gql`
-  query GetResidentNeighborhood {
+  query GetMyId {
     me {
       id
     }
@@ -61,69 +61,37 @@ export const SEARCH_JOB_POSTS = gql`
 export const GET_JOB_POST = gql`
   query GetJobPost($id: ID!) {
     getJobPost(id: $id) {
-      title
-      jobDescription
-      workPeriod {
-        type
-        dates
-        days
+      myJobApplication {
+        id
       }
-      workTime {
-        type
-        startTime
-        endTime
-      }
-      salary {
-        salaryType
-        salaryAmount
-      }
-      photos
-      detailedDescription
-      addressName
-      createdAt
-      views
-      publisher {
-        nickname
+      node {
+        title
+        jobDescription
+        workPeriod {
+          type
+          dates
+          days
+        }
+        workTime {
+          type
+          startTime
+          endTime
+        }
+        salary {
+          salaryType
+          salaryAmount
+        }
+        photos
+        detailedDescription
+        addressName
         createdAt
+        views
+        publisher {
+          nickname
+          createdAt
+        }
+        applicationCount
       }
     }
   }
 `;
-
-// export const GET_JOB_POST = gql`
-//   query GetJobPost($id: ID!) {
-//     getJobPost(id: $id) {
-//       myJobApplication {
-//         id
-//       }
-//       node {
-//         title
-//         jobDescription
-//         workPeriod {
-//           type
-//           dates
-//           days
-//         }
-//         workTime {
-//           type
-//           startTime
-//           endTime
-//         }
-//         salary {
-//           salaryType
-//           salaryAmount
-//         }
-//         photos
-//         detailedDescription
-//         addressName
-//         createdAt
-//         views
-//         publisher {
-//           nickname
-//           createdAt
-//         }
-//         applicationCount
-//       }
-//     }
-//   }
-// `;

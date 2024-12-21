@@ -167,3 +167,10 @@ export const END_TIMES = [...TIMES, "24:00"];
 export const TIME_NOT_SET = "-";
 
 export const MINIMUM_HOURLY_PAY = 9860;
+
+export const APPLICATION_STATUS = {
+  PENDING: "대기 중",
+  ACCEPTED: "채용 확정",
+  REJECTED: "채용 거절",
+  CANCELED: "사용자 취소",
+};

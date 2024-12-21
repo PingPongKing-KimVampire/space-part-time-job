@@ -5,7 +5,6 @@ const { styled } = createStitches();
 
 export const Background = styled("div", {
   width: "100%",
-  // height: "100vh",
   flex: "1",
   display: "flex",
   justifyContent: "center",
