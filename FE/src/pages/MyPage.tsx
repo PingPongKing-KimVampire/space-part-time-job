@@ -30,7 +30,7 @@ const MyPage = () => {
         </div>
       </TopArea>
       <BottomArea>
-        <PostList />
+        <PostList tab={selectedTab} />
       </BottomArea>
     </Background>
   );

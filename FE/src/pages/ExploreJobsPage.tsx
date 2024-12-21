@@ -56,6 +56,11 @@ export type JobPost = {
   createdAt: string;
 };
 
+export type PageInfo = {
+  hasNextPage: boolean;
+  endCursor: string | null;
+};
+
 const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);
 
@@ -71,10 +76,7 @@ const ExploreJobsPage = () => {
     time: { start: TIME_NOT_SET, end: TIME_NOT_SET },
     weekDays: [],
   });
-  const [pageInfo, setPageInfo] = useState<{
-    hasNextPage: boolean;
-    endCursor: string | null;
-  }>({
+  const [pageInfo, setPageInfo] = useState<PageInfo>({
     hasNextPage: false,
     endCursor: null,
   });

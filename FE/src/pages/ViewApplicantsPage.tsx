@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import { MainBackgroundColor } from "../styles/global";
 import {
   Container,
-  Item,
   Badge,
   UserInfo,
 } from "../styles/ViewApplicantsPage.styles";
 import { ReactComponent as CheckBadgeIcon } from "../assets/icons/check-badge.svg";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { APPLICATION_STATUS } from "../constants/constants.ts";
+import { GET_JOB_POST_APPLICATIONS } from "../graphql/queries.js";
+import formatTimeAgo from "../utils/formatTimeAgo.ts";
 
 const APPLICANTS = [
   {
@@ -50,9 +53,29 @@ const APPLICANTS = [
 const ViewApplicantsPage = () => {
   useBackgroundColor(MainBackgroundColor);
 
+  const [applications, setApplications] = useState([]);
+
+  const { id = "" } = useParams();
+
+  // const {
+  //   data: applicationsData,
+  //   error: getApplicationsError,
+  //   loading: getApplicationsLoading,
+  // } = useQuery(GET_JOB_POST_APPLICATIONS);
+  // useEffect(() => {
+  //   const data = applicationsData.getJobPost.node.applications;
+  //   setApplications(
+  //     data.map((application) => ({
+  //       ...application,
+  //       createdAt: formatTimeAgo(application.createdAt),
+  //     }))
+  //   );
+  // }, [applicationsData]);
+
   return (
     <Container>
       {APPLICANTS.filter(
+        // TODO : applications로 교체하기
         ({ status }) => status !== APPLICATION_STATUS.CANCELED
       ).map(({ id, coverLetter, applicant, status, createdAt }) => (
         <div className="item" key={id}>

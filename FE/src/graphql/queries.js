@@ -58,6 +58,28 @@ export const SEARCH_JOB_POSTS = gql`
   }
 `;
 
+export const GET_MY_JOB_POSTS = gql`
+  query GetMyJobPosts(
+    $filters: JobPostSearchFilter!
+    $pagination: JobPostCursorInput!
+  ) {
+    searchJobPosts(filters: $filters, pagination: $pagination) {
+      edges {
+        node {
+          id
+          status
+          title
+          applicationCount
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`;
+
 export const GET_JOB_POST = gql`
   query GetJobPost($id: ID!) {
     getJobPost(id: $id) {
@@ -91,6 +113,24 @@ export const GET_JOB_POST = gql`
           createdAt
         }
         applicationCount
+      }
+    }
+  }
+`;
+
+export const GET_JOB_POST_APPLICATIONS = gql`
+  query GetJobPostApplications($id: ID!) {
+    getJobPost(id: $id) {
+      node {
+        applications {
+          id
+          coverLetter
+          applicant {
+            nickname
+          }
+          status
+          createdAt
+        }
       }
     }
   }

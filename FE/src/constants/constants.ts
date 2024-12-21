@@ -174,3 +174,8 @@ export const APPLICATION_STATUS = {
   REJECTED: "채용 거절",
   CANCELED: "사용자 취소",
 };
+
+export enum JOB_POST_STATUS {
+  OPEN = "OPEN",
+  CLOSE = "CLOSE",
+}

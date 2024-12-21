@@ -1,30 +1,91 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { ListItem } from "../../styles/MyPage.styles";
+import { GET_MY_JOB_POSTS } from "../../graphql/queries.js";
+import { PageInfo } from "../../pages/ExploreJobsPage.tsx";
+import { JOB_POST_STATUS } from "../../constants/constants.ts";
 
-const POSTS = [
+const myJobPosts = [
   {
     id: "1",
     title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-    isClosed: false,
+    status: "OPEN",
     applicantCount: 0,
   },
   {
     id: "2",
     title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-    isClosed: false,
+    status: "OPEN",
     applicantCount: 1,
   },
   {
     id: "3",
     title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-    isClosed: true,
+    status: "CLOSE",
     applicantCount: 5,
   },
 ];
 
-const PostList = () => {
+const PostList = ({ tab }) => {
   const navigate = useNavigate();
+
+  // const [myJobPosts, setMyJobPosts] = useState([]);
+  const [myJobPostsPageInfo, setMyJobPostsPageInfo] = useState<PageInfo>({
+    hasNextPage: false,
+    endCursor: null,
+  });
+  const isChangedTabRef = useRef<boolean>(false);
+  const bottomRef = useRef(null);
+
+  // const [
+  //   getMyJobPosts,
+  //   { loading: getMyJobPostsLoading, error: getMyJobPostsError },
+  // ] = useLazyQuery(GET_MY_JOB_POSTS, {
+  //   onCompleted: (data) => {
+  //     const nodes = data.searchJobPosts.edges.map((edge) => edge.node);
+  //     if (isChangedTabRef.current) {
+  //       // 탭이 바뀐 후 패치 -> 기존 데이터 날리고 세로 저장
+  //       setMyJobPosts(nodes);
+  //       isChangedTabRef.current = false;
+  //     } else {
+  //       // 스크롤 다운 후 패치 -> 기존 데이터에 추가
+  //       setMyJobPosts(nodes);
+  //     }
+  //     setMyJobPostsPageInfo(data.searchJobPosts.pageInfo);
+  //   },
+  // });
+
+  // const fetchMyJobPosts = (cursor) => {
+  //   getMyJobPosts({
+  //     variables: {
+  //       filters: { onlyMyPosts: true },
+  //       pagination: { afterCursor: cursor, first: 20 },
+  //     },
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   // 탭 바뀐 후 패치
+  //   isChangedTabRef.current = true;
+  //   fetchMyJobPosts(null);
+  // }, [tab]);
+
+  // // TODO : ExploreJobsPage/JobList와 중복됨 -> 커스텀 훅으로 만들자.
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     ([entry]) => {
+  //       if (entry.isIntersecting && myJobPostsPageInfo.hasNextPage) {
+  //         fetchMyJobPosts(myJobPostsPageInfo.endCursor);
+  //       }
+  //     },
+  //     { root: null, rootMargin: "0px", threshold: 1.0 }
+  //   );
+  //   if (bottomRef.current) observer.observe(bottomRef.current);
+  //   return () => {
+  //     if (bottomRef.current) observer.unobserve(bottomRef.current);
+  //   };
+  // }, [fetchMyJobPosts]);
 
   const onItemMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.classList.add("isHovering");
@@ -44,28 +105,27 @@ const PostList = () => {
   };
 
   const onApplicantButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // 지원자가 0명인 경우, 지원자 조회 페이지로 이동 불가능
-    const applicantCount = parseInt(
-      e.currentTarget.getAttribute("data-applicant-count") || ""
-    );
-    if (isNaN(applicantCount) || applicantCount === 0) return;
-    navigate(`/view-applicants/${1}`); // TODO: 1 자리에 공고 ID를 넣어야 함
+    const postId = e.currentTarget.getAttribute("data-id") || "";
+    navigate(`/view-applicants/${postId}`);
   };
 
   return (
     <>
-      {POSTS.map(({ title, isClosed, applicantCount, id }) => (
+      {myJobPosts.map(({ id, status, title, applicantCount }) => (
         <ListItem
           onMouseEnter={onItemMouseEnter}
           onMouseLeave={onItemMouseLeave}
           key={id}
+          data-id={id}
         >
           <div className="title">
-            {isClosed && <div className="closeTag">마감</div>}
+            {status === JOB_POST_STATUS.CLOSE && (
+              <div className="closeTag">마감</div>
+            )}
             {title}
           </div>
           <div className="interaction">
-            {!isClosed && ( // 마감되지 않은 공고에만 마감 버튼 표시
+            {status === JOB_POST_STATUS.OPEN && ( // 마감되지 않은 공고에만 마감 버튼 표시
               <button
                 className="closeButton"
                 onMouseEnter={onButtonMouseEnter}
@@ -81,13 +141,15 @@ const PostList = () => {
               onMouseEnter={onButtonMouseEnter}
               onMouseLeave={onButtonMouseLeave}
               onClick={onApplicantButtonClick}
-              data-applicant-count={applicantCount}
+              data-id={id}
+              disabled={applicantCount === 0}
             >
               지원자 확인<span className="count">({applicantCount}명)</span>
             </button>
           </div>
         </ListItem>
       ))}
+      <div ref={bottomRef} style={{ height: "10px", background: "red" }} />
     </>
   );
 };
