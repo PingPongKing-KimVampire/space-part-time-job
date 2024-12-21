@@ -32,3 +32,11 @@ export const APPLY_TO_JOB_POST = gql`
     }
   }
 `;
+
+export const DECIDE_JOB_APPLICATION = gql`
+  mutation DecideJobApplication($input: DecideJobApplicationInput!) {
+    decideJobApplication(input: $input) {
+      id
+    }
+  }
+`;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import { MainBackgroundColor } from "../styles/global";
 import {
@@ -12,7 +12,16 @@ import { ReactComponent as CheckBadgeIcon } from "../assets/icons/check-badge.sv
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { APPLICATION_STATUS } from "../constants/constants.ts";
 import { GET_JOB_POST_APPLICATIONS } from "../graphql/queries.js";
+import { DECIDE_JOB_APPLICATION } from "../graphql/mutations.js";
 import formatTimeAgo from "../utils/formatTimeAgo.ts";
+
+type Application = {
+  id: string;
+  coverLetter: string;
+  applicant: { nickname: string };
+  status: APPLICATION_STATUS;
+  createdAt: string;
+};
 
 const APPLICANTS = [
   {
@@ -53,7 +62,7 @@ const APPLICANTS = [
 const ViewApplicantsPage = () => {
   useBackgroundColor(MainBackgroundColor);
 
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState<Application[]>([]);
 
   const { id = "" } = useParams();
 
@@ -72,23 +81,43 @@ const ViewApplicantsPage = () => {
   //   );
   // }, [applicationsData]);
 
+  const [
+    decideJobApplication,
+    { error: decideApplicationError, loading: decideApplicationLoading },
+  ] = useMutation(DECIDE_JOB_APPLICATION);
+  const onDecideButtonClick = async (e, status) => {
+    const applicationId = e.target.closest(".item")?.getAttribute("data-id");
+    await decideJobApplication({
+      variables: {
+        input: { id: applicationId, status },
+      },
+    });
+    // 결정 사항에 따라 applications 직접 업데이트
+    setApplications((state) =>
+      state.map((application) => {
+        if (application.id !== applicationId) return application;
+        return { ...application, status };
+      })
+    );
+  };
+
   return (
     <Container>
       {APPLICANTS.filter(
         // TODO : applications로 교체하기
         ({ status }) => status !== APPLICATION_STATUS.CANCELED
       ).map(({ id, coverLetter, applicant, status, createdAt }) => (
-        <div className="item" key={id}>
+        <div className="item" key={id} data-id={id}>
           {status === APPLICATION_STATUS.ACCEPTED && (
             <Badge className="accepted">
               <CheckBadgeIcon />
-              {status}
+              채용
             </Badge>
           )}
           {status === APPLICATION_STATUS.REJECTED && (
             <Badge className="rejected">
               <CheckBadgeIcon />
-              {status}
+              채용 거절
             </Badge>
           )}
           <UserInfo>
@@ -98,9 +127,23 @@ const ViewApplicantsPage = () => {
           </UserInfo>
           <div className="coverLetter">{coverLetter}</div>
           {status === APPLICATION_STATUS.PENDING && (
-            <div className="changeStatusButtons">
-              <button className="acceptButton">채용</button>
-              <button className="rejectButton">채용 거절</button>
+            <div className="decideButtons">
+              <button
+                className="acceptButton"
+                onClick={(e) => {
+                  onDecideButtonClick(e, APPLICATION_STATUS.ACCEPTED);
+                }}
+              >
+                채용
+              </button>
+              <button
+                className="rejectButton"
+                onClick={(e) => {
+                  onDecideButtonClick(e, APPLICATION_STATUS.REJECTED);
+                }}
+              >
+                채용 거절
+              </button>
             </div>
           )}
         </div>
