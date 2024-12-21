@@ -238,6 +238,37 @@ services:
       - be-network
     restart: on-failure
 
+  jobapplyservice:
+    build:
+      context: ./JobApplyService/server
+      dockerfile: Dockerfile
+    container_name: jobapplyservice
+    ports:
+      - "12000:3000"
+      - "12500:2500"
+    environment:
+      - MONGO_HOST=jobapplymongodb
+      - MONGO_PORT=27017
+      - MONGO_DB=jobapplyDB
+      - PORT=3000
+      - gRPCPort=2500
+    depends_on:
+      - jobapplymongodb
+    networks:
+      - be-network
+    restart: on-failure
+
+  jobapplymongodb:
+    image: mongo:latest
+    container_name: jobapplymongodb
+    ports:
+      - "13000:27017"
+    volumes:
+      - jobapplymongodb_data:/data/db
+    networks:
+      - be-network
+    restart: on-failure
+
 networks:
   be-network:
     driver: bridge
@@ -250,4 +281,6 @@ volumes:
   imageuploadmongodb_data:
     driver: local
   jobpostmongodb_data:
+    driver: local
+  jobapplymongodb_data:
     driver: local
