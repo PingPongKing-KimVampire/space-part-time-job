@@ -251,6 +251,7 @@ services:
       - MONGO_PORT=27017
       - MONGO_DB=jobapplyDB
       - GRPC_PORT=2500
+      - GRPC_JOB_POST_SERVER_URL=jobpostservice:2500
     depends_on:
       - jobapplymongodb
     networks:

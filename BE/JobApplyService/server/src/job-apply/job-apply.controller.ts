@@ -8,31 +8,41 @@ import {
 import { JobApplyService } from './job-apply.service';
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
+import { JobPostService } from 'src/job-post/grpc/job-post.service';
 
 @Controller()
 export class JobApplyController {
-  constructor(private readonly jobApplyService: JobApplyService) {}
+  constructor(
+    private readonly jobApplyService: JobApplyService,
+    private readonly jobPostService: JobPostService,
+  ) {}
   @GrpcMethod('JobApplyService', 'applyToJobPost')
   async applyToJobPost(
     request: ApplyToJobPostRequest,
   ): Promise<ApplyToJobPostResponse> {
     request = plainToInstance(ApplyToJobPostRequest, request);
     await this.validateFormat(request);
-    const jobApplication = await this.jobApplyService.applyToJobPost({
-      userId: request.userId,
-      jobPostId: request.jobPostId,
-      coverLetter: request.coverLetter,
-    });
-    return {
-      jobApplication: {
-        id: jobApplication._id,
-        userId: jobApplication.userId,
-        jobPostId: jobApplication.jobPostId,
-        coverLetter: jobApplication.coverLetter,
-        createdAt: jobApplication.createdAt.toISOString(),
-        status: ApplyToJobPostResponseStatus[jobApplication.status],
-      },
-    };
+    try {
+      await this.validateJobPostId(request.jobPostId);
+      const jobApplication = await this.jobApplyService.applyToJobPost({
+        userId: request.userId,
+        jobPostId: request.jobPostId,
+        coverLetter: request.coverLetter,
+      });
+      return {
+        jobApplication: {
+          id: jobApplication._id,
+          userId: jobApplication.userId,
+          jobPostId: jobApplication.jobPostId,
+          coverLetter: jobApplication.coverLetter,
+          createdAt: jobApplication.createdAt.toISOString(),
+          status: ApplyToJobPostResponseStatus[jobApplication.status],
+        },
+      };
+    } catch (e) {
+      console.error('에러 발생: ', e);
+      throw new RpcException(e);
+    }
   }
 
   private async validateFormat<T extends object>(input: T): Promise<void> {
@@ -58,5 +68,9 @@ export class JobApplyController {
       )
       .join('; ');
     return errorMessage;
+  }
+
+  private validateJobPostId(jobPostId: string) {
+    return this.jobPostService.getJobPost(jobPostId);
   }
 }

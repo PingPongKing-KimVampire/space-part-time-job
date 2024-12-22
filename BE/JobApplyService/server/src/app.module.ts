@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JobApplyModule } from './job-apply/job-apply.module';
+import { JobPostModule } from './job-post/job-post.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JobApplyModule } from './job-apply/job-apply.module';
       inject: [ConfigService],
     }),
     JobApplyModule,
+    JobPostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

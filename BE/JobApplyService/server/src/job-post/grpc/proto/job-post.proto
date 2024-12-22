@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package jobPost;
+import "create-job-post.proto";
+import "search-job-posts.proto";
+import "get-job-post.proto";
+import "increment-job-post-views.proto";
+
+service JobPostService {
+  rpc CreateJobPost(CreateJobPostInput) returns (CreateJobPostResponse);
+  rpc SearchJobPosts(SearchJobPostsRequest) returns (SearchJobPostsResponse);
+  rpc GetJobPost(GetJobPostRequest) returns (GetJobPostResponse);
+  rpc IncrementJobPostViews(IncrementJobPostViewsRequest)
+      returns (IncrementJobPostViewsResponse);
+}
