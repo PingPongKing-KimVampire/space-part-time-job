@@ -9,7 +9,7 @@ extend type Query {
 # 시작시간 ~ 종료시간 사이에 시작시간, 종료시간이 있는 알바를 모두 보낸다., 협의가능 알바도 보낸다.
 # **검색 조건 입력 타입** (각 필드에서 조건을 걸지 않고 모두 조회하려면 null로 보냄)
 input JobPostSearchFilter {
-  neighborhoodIds: [ID!]!         # 검색하려는 동네 ID 리스트(null로 보낼 수 없음)
+  neighborhoodIds: [ID!]          # 검색하려는 동네 ID 리스트(null로 보낼 수 없음)
   workPeriodType: WorkPeriodType  # 단기/장기 여부 필터
   days: [DayOfWeek!]              # (장기 근무일 시) 요일 필터
   jobCategories: [JobCategory!]   # 하는 일 카테고리 필터

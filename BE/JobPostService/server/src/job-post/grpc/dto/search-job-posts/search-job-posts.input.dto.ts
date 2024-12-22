@@ -6,7 +6,6 @@ import {
   Matches,
   Min,
   ValidateNested,
-  ArrayMinSize,
   IsNumber,
   Max,
 } from 'class-validator';
@@ -24,8 +23,7 @@ import {
 
 export class JobPostSearchFilter {
   @IsArray()
-  @ArrayMinSize(1, { message: 'neighborhoodIds는 최소 1개 이상이어야 합니다.' })
-  neighborhoodIds: string[];
+  neighborhoodIds?: string[];
 
   @IsOptional()
   @IsEnum(WorkPeriodType)

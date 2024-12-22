@@ -96,7 +96,7 @@ export interface SalaryInput {
 }
 
 export interface JobPostSearchFilter {
-    neighborhoodIds: string[];
+    neighborhoodIds?: Nullable<string[]>;
     workPeriodType?: Nullable<WorkPeriodType>;
     days?: Nullable<DayOfWeek[]>;
     jobCategories?: Nullable<JobCategory[]>;
