@@ -1,11 +1,15 @@
 import { ERROR, IP_ADDRESS } from "../constants/constants";
 
-// TODO : 모든 데이터 패치 함수를 여기에 구현하기 (graphql 제외)
+// TODO : 모든 api 요청 함수를 여기에 구현하기 (graphql 제외)
 
-const apiRequest = async (requestUrl, headers, processData?) => {
+const apiRequest = async (
+  requestUrl: string,
+  requestInit: RequestInit,
+  processData?: (data: any) => any
+) => {
   let response: Response, data;
   try {
-    response = await fetch(requestUrl, { headers });
+    response = await fetch(requestUrl, requestInit);
   } catch {
     throw new Error(ERROR.NETWORK);
   }
@@ -32,7 +36,9 @@ export const fetchCoordinateByAddress = async (address) => {
       address
     )}`,
     {
-      Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+      headers: {
+        Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+      },
     },
     (data) => {
       if (!data?.documents?.length) return null;
@@ -45,7 +51,9 @@ export const fetchNeighborInfoByCoordinate = async ({ x, y }) => {
   return await apiRequest(
     `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${x}&y=${y}`,
     {
-      Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+      headers: {
+        Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+      },
     },
     (data) => {
       const neighbor = data.documents.find(
@@ -60,5 +68,5 @@ export const requestLogout = async () => {
   await apiRequest(`http://${IP_ADDRESS}/api/users/logout`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-  }),
+  });
 };
