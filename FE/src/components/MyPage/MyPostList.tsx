@@ -6,6 +6,7 @@ import { GET_MY_JOB_POSTS } from "../../graphql/queries.js";
 import { CLOSE_JOB_POST } from "../../graphql/mutations.js";
 import { JOB_POST_STATUS } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles";
+import { CloseTag } from "../../styles/global.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 
 const MY_JOB_POSTS = [
@@ -145,9 +146,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
           data-id={id}
         >
           <div className="title">
-            {status === JOB_POST_STATUS.CLOSE && (
-              <div className="closeTag">마감</div>
-            )}
+            {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
             {title}
           </div>
           <div className="interaction">

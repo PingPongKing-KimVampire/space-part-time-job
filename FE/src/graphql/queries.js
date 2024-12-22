@@ -87,6 +87,8 @@ export const GET_JOB_POST = gql`
         id
       }
       node {
+        id
+        status
         title
         jobDescription
         workPeriod {

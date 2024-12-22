@@ -154,14 +154,6 @@ export const ListItem = styled("button", {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    "& .closeTag": {
-      fontSize: "15px",
-      padding: "6px 11px",
-      borderRadius: "9px",
-      background: "#E4E4E4",
-      color: "#7C7C7C",
-      fontWeight: "bold",
-    },
   },
   "& .interaction": {
     display: "flex",

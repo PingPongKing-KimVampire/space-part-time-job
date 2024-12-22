@@ -15,6 +15,7 @@ type ContentProps = {
 const Content: React.FC<ContentProps> = (props) => {
   const { jobPostEdge, displayApplicationModal } = props;
   const {
+    status,
     workPeriod,
     workTime,
     salary,
@@ -49,6 +50,7 @@ const Content: React.FC<ContentProps> = (props) => {
           </div>
         </div>
         <Interaction
+          postStatus={status}
           alreadyApplied={!!jobPostEdge.myJobApplication}
           displayApplicationModal={displayApplicationModal}
         />

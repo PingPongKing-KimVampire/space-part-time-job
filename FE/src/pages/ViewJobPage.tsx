@@ -21,7 +21,7 @@ export type JobPostEdge = {
 
 // TODO: ExploreJobsPage의 JobPost 타입과 어느 정도 반복되는 타입임
 export type JobPost = {
-  id: string;
+  status: string;
   title: string;
   jobDescription: string[];
   workPeriod: { type: string; dates: string[]; days: string[] };
@@ -44,7 +44,7 @@ const ViewJobPage = () => {
   const [jobPostEdge, setJobPostEdge] = useState<JobPostEdge>({
     myJobApplication: { id: "" },
     node: {
-      id: "",
+      status: "",
       title: "",
       jobDescription: [],
       workPeriod: { type: "", dates: [], days: [] },

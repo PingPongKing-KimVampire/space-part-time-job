@@ -1,6 +1,7 @@
 import React from "react";
 import { HeaderContainer } from "../../styles/ViewJobPage.styles";
-import { JOB_TYPES } from "../../constants/constants";
+import { CloseTag } from "../../styles/global.ts";
+import { JOB_POST_STATUS, JOB_TYPES } from "../../constants/constants";
 import { JobPost } from "../../pages/ViewJobPage.tsx";
 
 type HeaderProps = {
@@ -8,7 +9,8 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ jobPost }) => {
-  const { jobDescription, title, createdAt, views, applicationCount } = jobPost;
+  const { jobDescription, status, title, createdAt, views, applicationCount } =
+    jobPost;
 
   const interestCount = 8; // TODO : 임시 하드 코딩
 
@@ -21,7 +23,10 @@ const Header: React.FC<HeaderProps> = ({ jobPost }) => {
           </div>
         ))}
       </div>
-      <div className="title">{title}</div>
+      <div className="title">
+        {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
+        {title}
+      </div>
       <div className="subInfo">
         {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestCount} · 지원 ${applicationCount}`}
       </div>

@@ -75,3 +75,12 @@ export const WarningText = styled("div", {
   color: "#FF4043",
   fontSize: "14px",
 });
+
+export const CloseTag = styled("div", {
+  fontSize: "15px",
+  padding: "6px 11px",
+  borderRadius: "9px",
+  background: "#E4E4E4",
+  color: "#7C7C7C",
+  fontWeight: "bold",
+});

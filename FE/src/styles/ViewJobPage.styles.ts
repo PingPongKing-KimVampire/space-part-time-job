@@ -37,6 +37,9 @@ export const HeaderContainer = styled("div", {
   "& .title": {
     fontSize: "24px",
     fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
   },
   "& .subInfo": {
     color: "#828282",
