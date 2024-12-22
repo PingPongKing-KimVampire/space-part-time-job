@@ -34,7 +34,7 @@ type GrpcSearchJobPostsRequest = {
     afterCursor?: string;
     first: number;
   };
-};
+} & { userId: string };
 
 type grpcJobPost = JobPost & { userId: string };
 
@@ -114,10 +114,11 @@ export class JobPostService implements OnModuleInit {
   async searchJobPosts(
     filters: GrpcSearchJobPostsRequest['filters'],
     pagination: GrpcSearchJobPostsRequest['pagination'],
+    userId: string,
   ): Promise<GrpcSearchJobPostsResponse['result']> {
     try {
       const response = await lastValueFrom(
-        this.jobPostService.searchJobPosts({ filters, pagination }),
+        this.jobPostService.searchJobPosts({ filters, pagination, userId }),
       );
       response.result = await this.transformGrpcJobPostsResponse(
         response.result,

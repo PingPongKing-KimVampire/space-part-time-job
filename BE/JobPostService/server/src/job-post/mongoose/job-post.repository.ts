@@ -27,12 +27,13 @@ export class JobPostRepository {
   async searchJobPosts(
     filters: SearchJobPostsInput['filters'],
     pagination: SearchJobPostsInput['pagination'],
+    userId: string,
   ): Promise<{
     totalCount: number;
     edges: { cursor: string; node: JobPost }[];
     pageInfo: { hasNextPage: boolean; endCursor: string };
   }> {
-    const query = this.getQueryByFilter(filters);
+    const query = this.getQueryByFilter(filters, userId);
     const results = await this.getResultsByQueryAndPagination(
       query,
       pagination,
@@ -59,7 +60,10 @@ export class JobPostRepository {
     return { totalCount, edges, pageInfo: { hasNextPage, endCursor } };
   }
 
-  private getQueryByFilter(filters: SearchJobPostsInput['filters']) {
+  private getQueryByFilter(
+    filters: SearchJobPostsInput['filters'],
+    userId: string,
+  ) {
     const query: any = {};
     if (filters.neighborhoodIds) {
       query.neighborhoodId = { $in: filters.neighborhoodIds };
@@ -122,6 +126,9 @@ export class JobPostRepository {
         query.$or = [];
       }
       query.$or = query.$or.concat(condition);
+    }
+    if (filters.onlyMyPosts) {
+      query.userId = userId;
     }
     return query;
   }

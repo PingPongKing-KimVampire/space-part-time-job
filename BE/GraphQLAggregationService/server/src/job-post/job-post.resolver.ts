@@ -65,15 +65,21 @@ export class JobPostResolver {
   async searchJobPosts(
     @Args('filters') filters: JobPostSearchFilter,
     @Args('pagination') pagination: { afterCursor: string; first: number },
+    @Context('req') req: Request,
   ): Promise<JobPostConnection> {
+    const { id: userId } = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+
     const grpcFilters = {
-      neighborhoodIds: filters.neighborhoodIds,
+      neighborhoodIds: filters.neighborhoodIds || undefined,
       workPeriodType: filters.workPeriodType || undefined,
       days: filters.days || undefined,
       jobCategories: filters.jobCategories || undefined,
       startTime: filters.startTime || undefined,
       endTime: filters.endTime || undefined,
       keyword: filters.keyword || undefined,
+      onlyMyPosts: filters.onlyMyPosts || false,
     };
 
     const grpcPagination = {
@@ -84,6 +90,7 @@ export class JobPostResolver {
     const result = await this.jobPostService.searchJobPosts(
       grpcFilters,
       grpcPagination,
+      userId,
     );
 
     return result;

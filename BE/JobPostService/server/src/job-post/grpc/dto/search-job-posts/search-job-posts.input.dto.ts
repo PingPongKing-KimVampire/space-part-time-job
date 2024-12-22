@@ -8,6 +8,9 @@ import {
   ValidateNested,
   IsNumber,
   Max,
+  isNotEmpty,
+  IsNotEmpty,
+  IsBoolean,
 } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
 import {
@@ -59,6 +62,10 @@ export class JobPostSearchFilter {
   @IsOptional()
   @IsString()
   keyword?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  onlyMyPosts?: boolean;
 }
 
 export class JobPostCursorInput {
@@ -80,4 +87,8 @@ export class SearchJobPostsInput {
   @ValidateNested()
   @Type(() => JobPostCursorInput)
   pagination: JobPostCursorInput;
+
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 }

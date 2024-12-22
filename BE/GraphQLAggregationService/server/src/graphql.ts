@@ -103,6 +103,7 @@ export interface JobPostSearchFilter {
     startTime?: Nullable<string>;
     endTime?: Nullable<string>;
     keyword?: Nullable<string>;
+    onlyMyPosts?: Nullable<boolean>;
 }
 
 export interface JobPostCursorInput {

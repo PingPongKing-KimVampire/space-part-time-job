@@ -13,6 +13,7 @@ message JobPostSearchFilter {
   string startTime = 5;                 // Filter by start time (HH:mm)
   string endTime = 6;                   // Filter by end time (HH:mm)
   string keyword = 7;
+  bool onlyMyPosts = 8;
 }
 
 // Pagination input
@@ -43,6 +44,7 @@ message PageInfo {
 message SearchJobPostsRequest {
   JobPostSearchFilter filters = 1;  // Search filters
   JobPostCursorInput pagination = 2; // Pagination input
+  string userId = 3;
 }
 
 message SearchJobPostsResponse {

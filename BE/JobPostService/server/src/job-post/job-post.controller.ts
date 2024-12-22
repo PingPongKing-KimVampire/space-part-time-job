@@ -166,10 +166,10 @@ export class JobPostController {
   @GrpcMethod('JobPostService', 'SearchJobPosts')
   async searchJobPosts(input: SearchJobPostsInput) {
     input = plainToInstance(SearchJobPostsInput, input);
-    const { filters, pagination } = input;
+    const { filters, pagination, userId } = input;
     try {
       const { totalCount, edges, pageInfo } =
-        await this.jobPostRepository.searchJobPosts(filters, pagination);
+        await this.jobPostRepository.searchJobPosts(filters, pagination, userId);
       const formattedEdges = edges.map((edge) => ({
         ...edge,
         node: {
