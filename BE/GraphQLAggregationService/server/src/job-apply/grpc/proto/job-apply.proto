@@ -3,7 +3,10 @@ syntax = "proto3";
 package jobApply;
 
 import "apply-to-job-post.proto";
+import "get-job-application.proto";
 
 service JobApplyService {
   rpc ApplyToJobPost(ApplyToJobPostRequest) returns (ApplyToJobPostResponse);
+  rpc ListJobApplicationByUserAndPost(ListJobApplicationByUserAndPostRequest)
+      returns (ListJobApplicationByUserAndPostResponse);
 }

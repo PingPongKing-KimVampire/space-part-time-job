@@ -1,17 +1,19 @@
-export enum ApplyToJobPostResponseStatus {
+export enum ApplicationStatusGrpcType {
   PENDING = 0,
   APPROVED = 1,
   REJECTED = 2,
   CANCELED = 3,
 }
 
+export class JobApplicationGrpc {
+  id: string;
+  userId: string;
+  jobPostId: string;
+  coverLetter: string;
+  createdAt: string;
+  status: ApplicationStatusGrpcType;
+}
+
 export class ApplyToJobPostResponse {
-  jobApplication: {
-    id: string;
-    userId: string;
-    jobPostId: string;
-    coverLetter: string;
-    createdAt: string;
-    status: ApplyToJobPostResponseStatus;
-  };
+  jobApplication: JobApplicationGrpc;
 }

@@ -11,6 +11,7 @@ type JobPost {
   createdAt: String!
   views: Int!
   publisher: UserPublicInfo!
+  myJobApplication: [JobApplication]
 }
 
 type WorkPeriod {

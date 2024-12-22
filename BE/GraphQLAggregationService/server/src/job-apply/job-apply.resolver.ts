@@ -1,11 +1,18 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  Mutation,
+  Parent,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { ApplyJobPostInput } from 'src/graphql';
 import { JobApplyService } from './grpc/job-apply.service';
-import { ApplyToJobPostResponseStatus } from './grpc/dto/apply-to-job-post/response.dto';
+import { ApplicationStatusGrpcType } from './grpc/dto/apply-to-job-post/response.dto';
 import { JobPostService } from 'src/job-post/grpc/job-post.service';
 import { UserService } from 'src/user/user.service';
 
-@Resolver()
+@Resolver('JobApplication')
 export class JobApplyResolver {
   constructor(
     private readonly jobApplyService: JobApplyService,
@@ -25,23 +32,27 @@ export class JobApplyResolver {
       userId: user.id,
     });
     const status = this.getEnumKeyByValue(
-      ApplyToJobPostResponseStatus,
+      ApplicationStatusGrpcType,
       jobApplicationResponse.jobApplication.status,
-    );
-    const jobPost = await this.jobPostService.getJobPost(
-      jobApplicationResponse.jobApplication.jobPostId,
-    );
-    const applicant = await this.userService.getUserPublicInfo(
-      jobApplicationResponse.jobApplication.userId,
     );
     return {
       id: jobApplicationResponse.jobApplication.id,
       coverLetter: jobApplicationResponse.jobApplication.coverLetter,
       createdAt: jobApplicationResponse.jobApplication.createdAt,
-      jobPost,
-      applicant,
+      jobPostId: jobApplicationResponse.jobApplication.jobPostId,
+      userId: jobApplicationResponse.jobApplication.userId,
       status,
     };
+  }
+
+  @ResolveField('jobPost')
+  async resolveJobPost(@Parent() jobApplication) {
+    return this.jobPostService.getJobPost(jobApplication.jobPostId);
+  }
+
+  @ResolveField('applicant')
+  async resolveApplicant(@Parent() jobApplication) {
+    return this.userService.getUserPublicInfo(jobApplication.userId);
   }
 
   private getEnumKeyByValue<T extends object>(

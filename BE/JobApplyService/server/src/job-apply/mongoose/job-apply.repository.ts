@@ -19,4 +19,17 @@ export class JobApplyRepository {
     const savedJobApplication = await jobApplication.save();
     return savedJobApplication.toObject();
   }
+
+  async listJobApplicationByUserAndPost(
+    userId: string,
+    jobPostId: string,
+  ): Promise<JobApplication[]> {
+    const filter = {
+      userId,
+      jobPostId,
+    };
+
+    const jobApplications = await this.jobApplicationModel.find(filter).exec();
+    return jobApplications.map((doc) => doc.toObject());
+  }
 }

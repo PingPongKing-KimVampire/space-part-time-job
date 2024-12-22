@@ -3,17 +3,21 @@ import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { ApplyToJobPostRequest } from './grpc/dto/apply-to-job-post/request.dto';
 import {
   ApplyToJobPostResponse,
-  ApplyToJobPostResponseStatus,
+  ApplicationStatusGrpcType,
 } from './grpc/dto/apply-to-job-post/response.dto';
 import { JobApplyService } from './job-apply.service';
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { JobPostService } from 'src/job-post/grpc/job-post.service';
+import { ListJobApplicationByUserAndPostResponse } from './grpc/dto/list-job-application-by-user-and-post/response.dto';
+import { ListJobApplicationByUserAndPostRequest } from './grpc/dto/list-job-application-by-user-and-post/request.dto';
+import { JobApplyRepository } from './mongoose/job-apply.repository';
 
 @Controller()
 export class JobApplyController {
   constructor(
     private readonly jobApplyService: JobApplyService,
+    private readonly jobApplyRepository: JobApplyRepository,
     private readonly jobPostService: JobPostService,
   ) {}
   @GrpcMethod('JobApplyService', 'applyToJobPost')
@@ -36,7 +40,7 @@ export class JobApplyController {
           jobPostId: jobApplication.jobPostId,
           coverLetter: jobApplication.coverLetter,
           createdAt: jobApplication.createdAt.toISOString(),
-          status: ApplyToJobPostResponseStatus[jobApplication.status],
+          status: ApplicationStatusGrpcType[jobApplication.status],
         },
       };
     } catch (e) {
@@ -72,5 +76,26 @@ export class JobApplyController {
 
   private validateJobPostId(jobPostId: string) {
     return this.jobPostService.getJobPost(jobPostId);
+  }
+
+  @GrpcMethod('JobApplyService', 'ListJobApplicationByUserAndPost')
+  async listJobApplicationByUserAndPost(
+    request: ListJobApplicationByUserAndPostRequest,
+  ): Promise<ListJobApplicationByUserAndPostResponse> {
+    const jobApplicationList =
+      await this.jobApplyRepository.listJobApplicationByUserAndPost(
+        request.userId,
+        request.jobPostId,
+      );
+    return {
+      jobApplicationList: jobApplicationList.map((jobApplication) => ({
+        id: jobApplication._id,
+        userId: jobApplication.userId,
+        jobPostId: jobApplication.jobPostId,
+        coverLetter: jobApplication.coverLetter,
+        createdAt: jobApplication.createdAt.toISOString(),
+        status: ApplicationStatusGrpcType[jobApplication.status],
+      })),
+    };
   }
 }

@@ -149,6 +149,7 @@ export interface JobPost {
     createdAt: string;
     views: number;
     publisher: UserPublicInfo;
+    myJobApplication?: Nullable<Nullable<JobApplication>[]>;
 }
 
 export interface WorkPeriod {
