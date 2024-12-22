@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import formatTimeAgo from "../../utils/formatTimeAgo.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import {
   APPLICATION_STATUS,
@@ -11,10 +13,11 @@ import {
   ArrowDownIcon,
 } from "../../styles/MyPage.styles.ts";
 import { AcceptedBadge, RejectedBadge } from "../Badges.tsx";
+import { LIST_MY_JOB_APPLICATIONS } from "../../graphql/queries.js";
 
 type Application = {
   id: string;
-  jobPost: { title: string; status: string };
+  jobPost: { id: string; title: string; status: string };
   coverLetter: string;
   status: string;
   createdAt: string;
@@ -149,6 +152,22 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     onButtonMouseLeave,
   } = mouseEventHandlers;
 
+  //   const [myApplications, setMyApplications] = useState<Application[]>([]);
+  //   const {
+  //     data: myApplicationsData,
+  //     loading: getMyApplicationsLoading,
+  //     error: getMyApplicationsError,
+  //   } = useQuery(LIST_MY_JOB_APPLICATIONS);
+  //   useEffect(() => {
+  //     if (!myApplications || !myApplicationsData.listMyJobApplications) return;
+  //     setMyApplications(
+  //       myApplicationsData.listMyJobApplications.map((application) => ({
+  //         ...application,
+  //         createdAt: formatTimeAgo(application.createdAt),
+  //       }))
+  //     );
+  //   }, [myApplications]);
+
   const [isSelected, setIsSelected] = useState<Record<string, boolean>>({});
   useEffect(() => {
     setIsSelected(
@@ -169,55 +188,60 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     }));
   };
 
-  return APPLICATIONS.filter(
-    ({ status }) => status !== APPLICATION_STATUS.CANCELED
-  ).map(({ id, jobPost, coverLetter, status, createdAt }) => (
-    <ListItem
-      className="item"
-      onMouseEnter={onItemMouseEnter}
-      onMouseLeave={onItemMouseLeave}
-      onClick={onItemClick}
-      key={id}
-      data-id={id}
-      style={{ flexDirection: "column" }}
-    >
-      <MainPanel>
-        <div className="title">
-          {jobPost.status === JOB_POST_STATUS.CLOSE && (
-            <div className="closeTag">마감</div>
-          )}
-          {jobPost.title}
-        </div>
-        <div className="interaction">
-          {status === APPLICATION_STATUS.ACCEPTED && (
-            <AcceptedBadge style={{ padding: "5px 0" }} />
-          )}
-          {status === APPLICATION_STATUS.REJECTED && (
-            <RejectedBadge style={{ padding: "5px 0" }} />
-          )}
-          {status === APPLICATION_STATUS.PENDING && (
-            <button
-              className="cancelButton"
-              onMouseEnter={onButtonMouseEnter}
-              onMouseLeave={onButtonMouseLeave}
-            >
-              지원 취소
-            </button>
-          )}
-          <ArrowDownIcon
-            isSelected={isSelected[id]}
-            onMouseEnter={onButtonMouseEnter}
-            onMouseLeave={onButtonMouseLeave}
-            onClick={onArrowDownClick}
-          />
-        </div>
-      </MainPanel>
-      <TogglePanel className={isSelected[id] ? "visible" : ""}>
-        <div className="coverLetter">{coverLetter}</div>
-        <div className="createdAt">{createdAt}</div>
-      </TogglePanel>
-    </ListItem>
-  ));
+  // TODO : myApplications로 교체
+  return (
+    <>
+      {APPLICATIONS.filter(
+        ({ status }) => status !== APPLICATION_STATUS.CANCELED
+      ).map(({ id, jobPost, coverLetter, status, createdAt }) => (
+        <ListItem
+          className="item"
+          onMouseEnter={onItemMouseEnter}
+          onMouseLeave={onItemMouseLeave}
+          onClick={onItemClick}
+          key={id}
+          data-id={jobPost.id}
+          style={{ flexDirection: "column" }}
+        >
+          <MainPanel>
+            <div className="title">
+              {jobPost.status === JOB_POST_STATUS.CLOSE && (
+                <div className="closeTag">마감</div>
+              )}
+              {jobPost.title}
+            </div>
+            <div className="interaction">
+              {status === APPLICATION_STATUS.ACCEPTED && (
+                <AcceptedBadge style={{ padding: "5px 0" }} />
+              )}
+              {status === APPLICATION_STATUS.REJECTED && (
+                <RejectedBadge style={{ padding: "5px 0" }} />
+              )}
+              {status === APPLICATION_STATUS.PENDING && (
+                <button
+                  className="cancelButton"
+                  onMouseEnter={onButtonMouseEnter}
+                  onMouseLeave={onButtonMouseLeave}
+                >
+                  지원 취소
+                </button>
+              )}
+              <ArrowDownIcon
+                isSelected={isSelected[id]}
+                onMouseEnter={onButtonMouseEnter}
+                onMouseLeave={onButtonMouseLeave}
+                onClick={onArrowDownClick}
+              />
+            </div>
+          </MainPanel>
+          <TogglePanel className={isSelected[id] ? "visible" : ""}>
+            <div className="coverLetter">{coverLetter}</div>
+            <div className="createdAt">{createdAt}</div>
+          </TogglePanel>
+        </ListItem>
+      ))}
+    </>
+  );
 };
 
 export default MyAppliedPostList;

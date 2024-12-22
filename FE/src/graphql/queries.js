@@ -135,3 +135,19 @@ export const GET_JOB_POST_APPLICATIONS = gql`
     }
   }
 `;
+
+export const LIST_MY_JOB_APPLICATIONS = gql`
+  query ListMyJobApplications {
+    listMyJobApplications {
+      id
+      jobPost {
+        id
+        title
+        status
+      }
+      coverLetter
+      status
+      createdAt
+    }
+  }
+`;
