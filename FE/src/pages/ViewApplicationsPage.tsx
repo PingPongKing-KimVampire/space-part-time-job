@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-import useBackgroundColor from "../utils/useBackgroundColor";
-import { MainBackgroundColor } from "../styles/global";
-import {
-  Container,
-  Badge,
-  UserInfo,
-} from "../styles/ViewApplicantsPage.styles";
-import { ReactComponent as CheckBadgeIcon } from "../assets/icons/check-badge.svg";
+import useBackgroundColor from "../utils/useBackgroundColor.ts";
+import { MainBackgroundColor } from "../styles/global.ts";
+import { Container, UserInfo } from "../styles/ViewApplicationsPage.styles.ts";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
+import { AcceptedBadge, RejectedBadge } from "../components/Badges.tsx";
 import { APPLICATION_STATUS } from "../constants/constants.ts";
 import { GET_JOB_POST_APPLICATIONS } from "../graphql/queries.js";
 import { DECIDE_JOB_APPLICATION } from "../graphql/mutations.js";
@@ -109,18 +105,8 @@ const ViewApplicantsPage = () => {
         ({ status }) => status !== APPLICATION_STATUS.CANCELED
       ).map(({ id, coverLetter, applicant, status, createdAt }) => (
         <div className="item" key={id} data-id={id}>
-          {status === APPLICATION_STATUS.ACCEPTED && (
-            <Badge className="accepted">
-              <CheckBadgeIcon />
-              채용
-            </Badge>
-          )}
-          {status === APPLICATION_STATUS.REJECTED && (
-            <Badge className="rejected">
-              <CheckBadgeIcon />
-              채용 거절
-            </Badge>
-          )}
+          {status === APPLICATION_STATUS.ACCEPTED && <AcceptedBadge />}
+          {status === APPLICATION_STATUS.REJECTED && <RejectedBadge />}
           <UserInfo>
             <ProfileIcon />
             <div className="nickname">{applicant.nickname}</div>

@@ -8,7 +8,7 @@ import { Container, Content } from "../styles/NavigationBar.styles.ts";
 const BAR = {
   MAIN: "main",
   NONE: "none",
-  VIEW_APPLICANTS: "view-applicants",
+  VIEW_APPLICATIONS: "view-applications",
   CREATE_JOB: "create-job",
 };
 
@@ -16,7 +16,7 @@ const NavigationBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isViewJobPage = useMatch("/view-job/*");
-  const isViewApplicantsPage = useMatch("/view-applicants/*");
+  const isViewApplicationsPage = useMatch("/view-applications/*");
 
   const bar = useMemo(() => {
     if (!location.pathname) return BAR.NONE;
@@ -26,9 +26,9 @@ const NavigationBar = () => {
     )
       return BAR.MAIN;
     if (location.pathname === "/create-job") return BAR.CREATE_JOB;
-    if (isViewApplicantsPage) return BAR.VIEW_APPLICANTS;
+    if (isViewApplicationsPage) return BAR.VIEW_APPLICATIONS;
     return BAR.NONE;
-  }, [location, isViewJobPage, isViewApplicantsPage]);
+  }, [location, isViewJobPage, isViewApplicationsPage]);
 
   const mainBarElement = (
     <Container>
@@ -74,7 +74,7 @@ const NavigationBar = () => {
     <>
       {bar === BAR.MAIN && mainBarElement}
       {bar === BAR.CREATE_JOB && localBarElement("알바 공고 작성")}
-      {bar === BAR.VIEW_APPLICANTS && localBarElement("지원자 확인")}
+      {bar === BAR.VIEW_APPLICATIONS && localBarElement("지원자 확인")}
       <Outlet />
     </>
   );

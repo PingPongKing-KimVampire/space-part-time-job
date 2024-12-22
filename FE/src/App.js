@@ -14,7 +14,7 @@ import SetNeighborScopePage from "./pages/SetNeighborScopePage.tsx";
 import ExploreJobsPage from "./pages/ExploreJobsPage.tsx";
 import ViewJobPage from "./pages/ViewJobPage.tsx";
 import MyPage from "./pages/MyPage.tsx";
-import ViewApplicantsPage from "./pages/ViewApplicantsPage.tsx";
+import ViewApplications from "./pages/ViewApplicationsPage.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 import NavigationBar from "./components/NavigationBar.tsx";
 import AuthRoute from "./routes/AuthRoute.tsx";
@@ -25,7 +25,8 @@ const { styled } = createStitches();
 
 const Background = styled("div", {
   minWidth: "calc(100vw - 15px)",
-  minHeight: "100vh",
+  // minHeight: "100vh",
+  height: "100vh",
   position: "relative",
   display: "flex",
 });
@@ -61,8 +62,8 @@ function App() {
                 <Route path="/view-job/:id" element={<ViewJobPage />} />
                 <Route path="/mypage" element={<MyPage />} />
                 <Route
-                  path="/view-applicants/:id"
-                  element={<ViewApplicantsPage />}
+                  path="/view-applications/:id"
+                  element={<ViewApplications />}
                 />
               </Route>
               <Route path="*" element={<NotFoundRoute />} />

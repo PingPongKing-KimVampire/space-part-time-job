@@ -6,6 +6,7 @@ import {
   OptionHoverColor,
   NavigationBarHeight,
 } from "./global";
+import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 
 const { styled } = createStitches();
 
@@ -15,6 +16,7 @@ export const Background = styled("div", {
   display: "flex",
   flexDirection: "column",
   paddingTop: NavigationBarHeight,
+  boxSizing: "border-box",
 });
 
 export const TopArea = styled("div", {
@@ -128,7 +130,7 @@ export const BottomArea = styled("div", {
   gap: "12px",
   paddingTop: "24px",
   paddingBottom: "30px",
-  overflow: "auto",
+  overflow: "scroll",
 });
 
 export const ListItem = styled("button", {
@@ -163,7 +165,8 @@ export const ListItem = styled("button", {
   },
   "& .interaction": {
     display: "flex",
-    gap: "6px",
+    alignItems: "center",
+    gap: "12px",
     "& button": {
       ...MainButtonStyle,
       fontSize: "15px",
@@ -175,6 +178,60 @@ export const ListItem = styled("button", {
       },
       "& span": {
         fontWeight: "400",
+      },
+    },
+  },
+});
+
+export const MainPanel = styled("div", {
+  width: "100%",
+  display: "flex",
+  justifyContent: "space-between",
+});
+
+export const TogglePanel = styled("div", {
+  width: "100%",
+  height: "0",
+  opacity: "0",
+  transition: "all 0.2s",
+  pointerEvents: "none",
+  overflow: "hidden",
+  "&.visible": {
+    height: "auto",
+    opacity: "1",
+    marginTop: "10px",
+    pointerEvents: "auto",
+    overflow: "visible",
+  },
+  "& .coverLetter": {
+    fontSize: "15px",
+    lineHeight: "23px",
+    textAlign: "left",
+  },
+  "& .createdAt": {
+    fontSize: "13px",
+    color: "#828282",
+    textAlign: "right",
+  },
+});
+
+export const ArrowDownIcon = styled(ArrowDown, {
+  width: "26px",
+  height: "26px",
+  strokeWidth: "1.6",
+  color: MainColor,
+  transition: "transform 0.2s",
+  "&.isHovering": {
+    strokeWidth: "2.2",
+    color: MainHoverColor,
+  },
+  variants: {
+    isSelected: {
+      true: {
+        transform: "rotate(180deg)",
+      },
+      false: {
+        transform: "none",
       },
     },
   },

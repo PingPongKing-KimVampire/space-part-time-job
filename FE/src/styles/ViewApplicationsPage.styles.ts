@@ -5,7 +5,7 @@ import {
   NavigationBarHeight,
   NegativeColor,
   NegativeHoverColor,
-} from "../styles/global";
+} from "./global";
 
 const { styled } = createStitches();
 
@@ -19,6 +19,9 @@ export const Container = styled("div", {
   paddingTop: `calc(${NavigationBarHeight} + 24px)`,
   paddingBottom: "30px",
   "& .item": {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
     width: "700px",
     padding: "15px 20px",
     background: "white",
@@ -51,29 +54,10 @@ export const Container = styled("div", {
   },
 });
 
-export const Badge = styled("div", {
-  display: "flex",
-  gap: "3px",
-  fontWeight: "bold",
-  marginBottom: "6px",
-  "&.accepted": {
-    color: MainColor,
-  },
-  "&.rejected": {
-    color: NegativeColor,
-  },
-  "& svg": {
-    width: "20px",
-    height: "20px",
-    strokeWidth: "2",
-  },
-});
-
 export const UserInfo = styled("div", {
   display: "flex",
   alignItems: "center",
   gap: "8px",
-  marginBottom: "8px",
   "& svg": {
     width: "42px",
     height: "42px",
