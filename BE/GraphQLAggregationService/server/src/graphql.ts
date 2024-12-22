@@ -8,6 +8,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum ApplicationStatus {
+    PENDING = "PENDING",
+    ACCEPTED = "ACCEPTED",
+    REJECTED = "REJECTED",
+    CANCELED = "CANCELED"
+}
+
 export enum JobCategory {
     SERVING = "SERVING",
     KITCHEN_ASSISTANT = "KITCHEN_ASSISTANT",
@@ -53,6 +60,11 @@ export enum SalaryType {
     HOURLY = "HOURLY",
     PER_TASK = "PER_TASK",
     MONTHLY = "MONTHLY"
+}
+
+export interface ApplyJobPostInput {
+    jobPostId: string;
+    coverLetter: string;
 }
 
 export interface CreateJobPostInput {
@@ -107,6 +119,23 @@ export interface NeighborhoodInput {
     level: number;
 }
 
+export interface JobApplication {
+    id: string;
+    jobPost: JobPost;
+    coverLetter: string;
+    applicant: UserPublicInfo;
+    status: ApplicationStatus;
+    createdAt: string;
+}
+
+export interface IMutation {
+    applyToJobPost(input: ApplyJobPostInput): JobApplication | Promise<JobApplication>;
+    createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
+    incrementJobPostViews(id: string): number | Promise<number>;
+    setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
+    _empty(): Nullable<string> | Promise<Nullable<string>>;
+}
+
 export interface JobPost {
     id: string;
     title: string;
@@ -137,13 +166,6 @@ export interface WorkTime {
 export interface Salary {
     salaryType: SalaryType;
     salaryAmount: number;
-}
-
-export interface IMutation {
-    createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
-    incrementJobPostViews(id: string): number | Promise<number>;
-    setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
-    _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export interface IQuery {

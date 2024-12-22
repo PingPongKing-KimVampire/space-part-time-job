@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package jobApply;
+
+import "apply-to-job-post.proto";
+
+service JobApplyService {
+  rpc ApplyToJobPost(ApplyToJobPostRequest) returns (ApplyToJobPostResponse);
+}

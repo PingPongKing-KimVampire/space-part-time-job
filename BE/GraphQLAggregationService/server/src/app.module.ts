@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { JobPostModule } from './job-post/job-post.module';
 import { DistrictModule } from './district/district.module';
+import { JobApplyModule } from './job-apply/job-apply.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DistrictModule } from './district/district.module';
     ConfigModule.forRoot(),
     UserModule,
     JobPostModule,
+    JobApplyModule,
     DistrictModule,
   ],
   controllers: [AppController],

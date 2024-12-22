@@ -1,0 +1,15 @@
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELED
+}
+
+type JobApplication {
+  id: ID!
+  jobPost: JobPost!
+  coverLetter: String!
+  applicant: UserPublicInfo!
+  status: ApplicationStatus!
+  createdAt: String!
+}

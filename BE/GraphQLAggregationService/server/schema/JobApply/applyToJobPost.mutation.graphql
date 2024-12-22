@@ -1,0 +1,8 @@
+extend type Mutation {
+  applyToJobPost(input: ApplyJobPostInput!): JobApplication!
+}
+
+input ApplyJobPostInput {
+  jobPostId: ID!
+  coverLetter: String!
+}
