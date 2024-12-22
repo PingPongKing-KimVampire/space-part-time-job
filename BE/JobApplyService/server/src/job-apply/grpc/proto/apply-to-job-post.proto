@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package jobApply;
+import "common.proto";
+
+message ApplyToJobPostRequest {
+  string userId = 1;
+  string jobPostId = 2;
+  string coverLetter = 3;
+}
+
+message ApplyToJobPostResponse { JobApplication jobApplication = 1; }

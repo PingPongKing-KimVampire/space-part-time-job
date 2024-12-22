@@ -244,14 +244,12 @@ services:
       dockerfile: Dockerfile
     container_name: jobapplyservice
     ports:
-      - "12000:3000"
       - "12500:2500"
     environment:
       - MONGO_HOST=jobapplymongodb
       - MONGO_PORT=27017
       - MONGO_DB=jobapplyDB
-      - PORT=3000
-      - gRPCPort=2500
+      - GRPC_PORT=2500
     depends_on:
       - jobapplymongodb
     networks:

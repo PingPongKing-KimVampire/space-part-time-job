@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package jobApply;
+
+enum Status {
+  PENDING = 0;
+  APPROVED = 1;
+  REJECTED = 2;
+  CANCELED = 3;
+}
+
+message JobApplication {
+  string id = 1;
+  string userId = 2;
+  string jobPostId = 3;
+  string coverLetter = 4;
+  string createdAt = 5;
+  Status status = 6;
+}

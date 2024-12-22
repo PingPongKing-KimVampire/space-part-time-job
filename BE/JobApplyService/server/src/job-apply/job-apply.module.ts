@@ -5,6 +5,8 @@ import {
   JobApplicationSchema,
 } from './mongoose/job-application.schema';
 import { JobApplyController } from './job-apply.controller';
+import { JobApplyRepository } from './mongoose/job-apply.repository';
+import { JobApplyService } from './job-apply.service';
 
 @Module({
   imports: [
@@ -16,5 +18,6 @@ import { JobApplyController } from './job-apply.controller';
     ]),
   ],
   controllers: [JobApplyController],
+  providers: [JobApplyRepository, JobApplyService],
 })
 export class JobApplyModule {}
