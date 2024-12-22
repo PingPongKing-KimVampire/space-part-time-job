@@ -12,6 +12,9 @@ import { JobPostService } from 'src/job-post/grpc/job-post.service';
 import { ListJobApplicationByUserAndPostResponse } from './grpc/dto/list-job-application-by-user-and-post/response.dto';
 import { ListJobApplicationByUserAndPostRequest } from './grpc/dto/list-job-application-by-user-and-post/request.dto';
 import { JobApplyRepository } from './mongoose/job-apply.repository';
+import { CancelJobApplicationRequest } from './grpc/dto/cancel-job-application/request.dto';
+import { CancelJobApplicationResponse } from './grpc/dto/cancel-job-application/response.dto';
+import { JobApplication } from './mongoose/job-application.schema';
 
 @Controller()
 export class JobApplyController {
@@ -34,14 +37,8 @@ export class JobApplyController {
         coverLetter: request.coverLetter,
       });
       return {
-        jobApplication: {
-          id: jobApplication._id,
-          userId: jobApplication.userId,
-          jobPostId: jobApplication.jobPostId,
-          coverLetter: jobApplication.coverLetter,
-          createdAt: jobApplication.createdAt.toISOString(),
-          status: ApplicationStatusGrpcType[jobApplication.status],
-        },
+        jobApplication:
+          this.transformJobApplicationToGrpcResponse(jobApplication),
       };
     } catch (e) {
       console.error('에러 발생: ', e);
@@ -82,20 +79,53 @@ export class JobApplyController {
   async listJobApplicationByUserAndPost(
     request: ListJobApplicationByUserAndPostRequest,
   ): Promise<ListJobApplicationByUserAndPostResponse> {
+    request = plainToInstance(ListJobApplicationByUserAndPostRequest, request);
+    await this.validateFormat(request);
+
     const jobApplicationList =
       await this.jobApplyRepository.listJobApplicationByUserAndPost(
         request.userId,
         request.jobPostId,
       );
     return {
-      jobApplicationList: jobApplicationList.map((jobApplication) => ({
-        id: jobApplication._id,
-        userId: jobApplication.userId,
-        jobPostId: jobApplication.jobPostId,
-        coverLetter: jobApplication.coverLetter,
-        createdAt: jobApplication.createdAt.toISOString(),
-        status: ApplicationStatusGrpcType[jobApplication.status],
-      })),
+      jobApplicationList: jobApplicationList.map((jobApplication) =>
+        this.transformJobApplicationToGrpcResponse(jobApplication),
+      ),
+    };
+  }
+
+  @GrpcMethod('JobApplyService', 'CancelJobApplication')
+  async cancelJobApplication(
+    request: CancelJobApplicationRequest,
+  ): Promise<CancelJobApplicationResponse> {
+    request = plainToInstance(CancelJobApplicationRequest, request);
+    await this.validateFormat(request);
+
+    try {
+      const jobApplication = await this.jobApplyService.cancelJobApplication(
+        request.userId,
+        request.jobApplicationId,
+      );
+      return {
+        jobApplication:
+          this.transformJobApplicationToGrpcResponse(jobApplication),
+      };
+    } catch (e) {
+      console.error('에러 발생', e);
+      throw new RpcException(e);
+    }
+  }
+
+  private transformJobApplicationToGrpcResponse(
+    jobApplication: JobApplication,
+  ) {
+    return {
+      id: jobApplication._id,
+      userId: jobApplication.userId,
+      jobPostId: jobApplication.jobPostId,
+      coverLetter: jobApplication.coverLetter,
+      createdAt: jobApplication.createdAt.toISOString(),
+      status: ApplicationStatusGrpcType[jobApplication.status],
     };
   }
 }

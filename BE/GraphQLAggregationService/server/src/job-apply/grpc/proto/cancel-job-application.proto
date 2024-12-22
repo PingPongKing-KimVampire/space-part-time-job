@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package jobApply;
+import "common.proto";
+
+message CancelJobApplicationRequest {
+  string userId = 1;
+  string jobApplicationId = 2;
+}
+
+message CancelJobApplicationResponse { JobApplication jobApplication = 1; }

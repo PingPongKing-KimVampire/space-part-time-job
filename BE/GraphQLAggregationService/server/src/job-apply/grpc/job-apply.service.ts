@@ -12,6 +12,8 @@ import { ApplyToJobPostRequest } from './dto/apply-to-job-post/request.dto';
 import { ApplyToJobPostResponse } from './dto/apply-to-job-post/response.dto';
 import { ListJobApplicationByUserAndPostRequest } from './dto/list-job-application-by-user-and-post/request.dto';
 import { ListJobApplicationByUserAndPostResponse } from './dto/list-job-application-by-user-and-post/response.dto';
+import { CancelJobApplicationRequest } from './dto/cancel-job-application/request.dto';
+import { CancelJobApplicationResponse } from './dto/cancel-job-application/response.dto';
 
 interface JobApplyServiceGrpc {
   applyToJobPost(
@@ -21,6 +23,10 @@ interface JobApplyServiceGrpc {
   listJobApplicationByUserAndPost(
     request: ListJobApplicationByUserAndPostRequest,
   ): Observable<ListJobApplicationByUserAndPostResponse>;
+
+  cancelJobApplication(
+    request: CancelJobApplicationRequest,
+  ): Observable<CancelJobApplicationResponse>;
 }
 
 @Injectable()
@@ -79,6 +85,21 @@ export class JobApplyService implements OnModuleInit {
       return response;
     } catch (e) {
       console.error('listJobApplicationByUserAndPost grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async cancelJobApplication(request: {
+    userId: string;
+    jobApplicationId: string;
+  }): Promise<CancelJobApplicationResponse> {
+    try {
+      const response = await lastValueFrom(
+        this.jobApplyService.cancelJobApplication(request),
+      );
+      return response;
+    } catch (e) {
+      console.error('cancelJobApplication grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

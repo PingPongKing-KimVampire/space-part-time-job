@@ -130,6 +130,7 @@ export interface JobApplication {
 
 export interface IMutation {
     applyToJobPost(input: ApplyJobPostInput): JobApplication | Promise<JobApplication>;
+    cancelJobApplication(id: string): JobApplication | Promise<JobApplication>;
     createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
     incrementJobPostViews(id: string): number | Promise<number>;
     setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;

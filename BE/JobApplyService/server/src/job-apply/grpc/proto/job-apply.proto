@@ -3,10 +3,15 @@ syntax = "proto3";
 package jobApply;
 
 import "apply-to-job-post.proto";
-import "get-job-application.proto";
+import "list-job-application-by-user-and-post.proto";
+import "cancel-job-application.proto";
 
 service JobApplyService {
   rpc ApplyToJobPost(ApplyToJobPostRequest) returns (ApplyToJobPostResponse);
+
   rpc ListJobApplicationByUserAndPost(ListJobApplicationByUserAndPostRequest)
       returns (ListJobApplicationByUserAndPostResponse);
+
+  rpc CancelJobApplication(CancelJobApplicationRequest)
+      returns (CancelJobApplicationResponse);
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  ApplicationStatus,
   JobApplication,
   JobApplicationDocument,
 } from './job-application.schema';
@@ -31,5 +32,22 @@ export class JobApplyRepository {
 
     const jobApplications = await this.jobApplicationModel.find(filter).exec();
     return jobApplications.map((doc) => doc.toObject());
+  }
+
+  async getJobApplication(id: string): Promise<JobApplication> {
+    const jobApplication = await this.jobApplicationModel.findById(id).exec();
+    return jobApplication.toObject();
+  }
+
+  async updateStatus(
+    id: string,
+    newStatus: ApplicationStatus,
+  ): Promise<JobApplication | null> {
+    const updatedApplication = await this.jobApplicationModel.findByIdAndUpdate(
+      id,
+      { status: newStatus },
+      { new: true },
+    );
+    return updatedApplication ? updatedApplication.toObject() : null;
   }
 }

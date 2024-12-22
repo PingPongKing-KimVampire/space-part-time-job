@@ -8,7 +8,10 @@ import {
 } from '@nestjs/graphql';
 import { ApplyJobPostInput } from 'src/graphql';
 import { JobApplyService } from './grpc/job-apply.service';
-import { ApplicationStatusGrpcType } from './grpc/dto/apply-to-job-post/response.dto';
+import {
+  ApplicationStatusGrpcType,
+  JobApplicationGrpc,
+} from './grpc/dto/apply-to-job-post/response.dto';
 import { JobPostService } from 'src/job-post/grpc/job-post.service';
 import { UserService } from 'src/user/user.service';
 
@@ -31,18 +34,28 @@ export class JobApplyResolver {
       ...applyJobPostInput,
       userId: user.id,
     });
-    const status = this.getEnumKeyByValue(
-      ApplicationStatusGrpcType,
-      jobApplicationResponse.jobApplication.status,
+    return this.transformJobApplicationResponse(
+      jobApplicationResponse.jobApplication,
     );
-    return {
-      id: jobApplicationResponse.jobApplication.id,
-      coverLetter: jobApplicationResponse.jobApplication.coverLetter,
-      createdAt: jobApplicationResponse.jobApplication.createdAt,
-      jobPostId: jobApplicationResponse.jobApplication.jobPostId,
-      userId: jobApplicationResponse.jobApplication.userId,
-      status,
-    };
+  }
+
+  @Mutation('cancelJobApplication')
+  async cancelJobApplication(
+    @Args('id') jobApplicationId: string,
+    @Context('req') req: Request,
+  ) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    const jobApplicationResponse =
+      await this.jobApplyService.cancelJobApplication({
+        jobApplicationId,
+        userId: user.id,
+      });
+
+    return this.transformJobApplicationResponse(
+      jobApplicationResponse.jobApplication,
+    );
   }
 
   @ResolveField('jobPost')
@@ -74,5 +87,19 @@ export class JobApplyResolver {
       console.error(e);
       throw new Error('유효하지 않은 유저 데이터 헤더');
     }
+  }
+  private transformJobApplicationResponse(jobApplication: JobApplicationGrpc) {
+    const status = this.getEnumKeyByValue(
+      ApplicationStatusGrpcType,
+      jobApplication.status,
+    );
+    return {
+      id: jobApplication.id,
+      coverLetter: jobApplication.coverLetter,
+      createdAt: jobApplication.createdAt,
+      jobPostId: jobApplication.jobPostId,
+      userId: jobApplication.userId,
+      status,
+    };
   }
 }
