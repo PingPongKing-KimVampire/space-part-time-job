@@ -2,7 +2,7 @@ import { ERROR, IP_ADDRESS } from "../constants/constants";
 
 // TODO : 모든 데이터 패치 함수를 여기에 구현하기 (graphql 제외)
 
-const fetchData = async (requestUrl, headers, processData) => {
+const apiRequest = async (requestUrl, headers, processData?) => {
   let response: Response, data;
   try {
     response = await fetch(requestUrl, { headers });
@@ -15,11 +15,11 @@ const fetchData = async (requestUrl, headers, processData) => {
   } catch {
     throw new Error(ERROR.SERVER);
   }
-  return processData(data);
+  return processData ? processData(data) : null;
 };
 
 export const fetchDistrictBoundary = async (id) => {
-  return await fetchData(
+  return await apiRequest(
     `https://${IP_ADDRESS}/district/${id}/neighbors`,
     {},
     (data) => data.levels
@@ -27,7 +27,7 @@ export const fetchDistrictBoundary = async (id) => {
 };
 
 export const fetchCoordinateByAddress = async (address) => {
-  return await fetchData(
+  return await apiRequest(
     `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
       address
     )}`,
@@ -42,7 +42,7 @@ export const fetchCoordinateByAddress = async (address) => {
 };
 
 export const fetchNeighborInfoByCoordinate = async ({ x, y }) => {
-  return await fetchData(
+  return await apiRequest(
     `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${x}&y=${y}`,
     {
       Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
@@ -54,4 +54,11 @@ export const fetchNeighborInfoByCoordinate = async ({ x, y }) => {
       return { id: neighbor.code, name: neighbor.region_3depth_name };
     }
   );
+};
+
+export const requestLogout = async () => {
+  await apiRequest(`http://${IP_ADDRESS}/api/users/logout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  }),
 };

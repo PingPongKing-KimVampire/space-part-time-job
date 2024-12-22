@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { fetchDistrictBoundary } from "../utils/fetchData";
+import { fetchDistrictBoundary } from "../utils/apiRequest.ts";
 import { MainBackgroundColor } from "../styles/global";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import useBackgroundColor from "../utils/useBackgroundColor";
