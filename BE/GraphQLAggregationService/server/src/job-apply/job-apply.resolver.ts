@@ -2,10 +2,16 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { ApplyJobPostInput } from 'src/graphql';
 import { JobApplyService } from './grpc/job-apply.service';
 import { ApplyToJobPostResponseStatus } from './grpc/dto/apply-to-job-post/response.dto';
+import { JobPostService } from 'src/job-post/grpc/job-post.service';
+import { UserService } from 'src/user/user.service';
 
 @Resolver()
 export class JobApplyResolver {
-  constructor(private readonly jobApplyService: JobApplyService) {}
+  constructor(
+    private readonly jobApplyService: JobApplyService,
+    private readonly jobPostService: JobPostService,
+    private readonly userService: UserService,
+  ) {}
   @Mutation('applyToJobPost')
   async applyToJobPost(
     @Args('input') applyJobPostInput: ApplyJobPostInput,
@@ -22,10 +28,18 @@ export class JobApplyResolver {
       ApplyToJobPostResponseStatus,
       jobApplicationResponse.jobApplication.status,
     );
+    const jobPost = await this.jobPostService.getJobPost(
+      jobApplicationResponse.jobApplication.jobPostId,
+    );
+    const applicant = await this.userService.getUserPublicInfo(
+      jobApplicationResponse.jobApplication.userId,
+    );
     return {
       id: jobApplicationResponse.jobApplication.id,
       coverLetter: jobApplicationResponse.jobApplication.coverLetter,
       createdAt: jobApplicationResponse.jobApplication.createdAt,
+      jobPost,
+      applicant,
       status,
     };
   }

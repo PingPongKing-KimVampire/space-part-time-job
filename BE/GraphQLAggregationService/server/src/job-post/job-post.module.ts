@@ -7,5 +7,6 @@ import { UserModule } from 'src/user/user.module';
 @Module({
   imports: [ConfigModule, UserModule],
   providers: [JobPostResolver, JobPostService],
+  exports: [JobPostService]
 })
 export class JobPostModule {}
