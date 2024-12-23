@@ -31,6 +31,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "1",
     jobPost: {
+      id: "1",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },
@@ -42,6 +43,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "2",
     jobPost: {
+      id: "2",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },
@@ -53,6 +55,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "3",
     jobPost: {
+      id: "3",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "CLOSE",
     },
@@ -66,6 +69,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "4",
     jobPost: {
+      id: "4",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "CLOSE",
     },
@@ -76,6 +80,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "5",
     jobPost: {
+      id: "5",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },
@@ -87,6 +92,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "6",
     jobPost: {
+      id: "6",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },
@@ -98,6 +104,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "7",
     jobPost: {
+      id: "7",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },
@@ -109,6 +116,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "8",
     jobPost: {
+      id: "8",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },
@@ -120,6 +128,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "9",
     jobPost: {
+      id: "9",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },
@@ -131,6 +140,7 @@ const APPLICATIONS: Application[] = [
   {
     id: "10",
     jobPost: {
+      id: "10",
       title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
       status: "OPEN",
     },

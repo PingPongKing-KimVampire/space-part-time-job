@@ -67,7 +67,6 @@ export const GET_MY_JOB_POSTS = gql`
       edges {
         node {
           id
-          status
           title
           applicationCount
         }
@@ -83,38 +82,36 @@ export const GET_MY_JOB_POSTS = gql`
 export const GET_JOB_POST = gql`
   query GetJobPost($id: ID!) {
     getJobPost(id: $id) {
+      id
+      status
+      title
+      jobDescription
+      workPeriod {
+        type
+        dates
+        days
+      }
+      workTime {
+        type
+        startTime
+        endTime
+      }
+      salary {
+        salaryType
+        salaryAmount
+      }
+      photos
+      detailedDescription
+      addressName
+      createdAt
+      views
+      publisher {
+        nickname
+        createdAt
+      }
+      applicationCount
       myJobApplication {
         id
-      }
-      node {
-        id
-        status
-        title
-        jobDescription
-        workPeriod {
-          type
-          dates
-          days
-        }
-        workTime {
-          type
-          startTime
-          endTime
-        }
-        salary {
-          salaryType
-          salaryAmount
-        }
-        photos
-        detailedDescription
-        addressName
-        createdAt
-        views
-        publisher {
-          nickname
-          createdAt
-        }
-        applicationCount
       }
     }
   }

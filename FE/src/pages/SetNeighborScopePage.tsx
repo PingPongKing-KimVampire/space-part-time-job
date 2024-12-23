@@ -42,7 +42,7 @@ const SetNeighborScopePage = () => {
   );
   const [scopeValues, setScopeValues] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
   const [districtBoundaries, setDistrictBoundaries] = useState<
-    Record<string, Level>
+    Record<string, Record<string, Level>>
   >({});
   const [polygonLine, setPolygonLine] = useState<Coordinate[]>([]);
   const [warning, setWarning] = useState<string>("");
