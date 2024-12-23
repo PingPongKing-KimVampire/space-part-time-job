@@ -59,4 +59,13 @@ export class JobApplyRepository {
     );
     return updatedApplication ? updatedApplication.toObject() : null;
   }
+
+  async countUnCancelJobApplicationByPost(jobPostId: string): Promise<number> {
+    return this.jobApplicationModel
+      .countDocuments({
+        jobPostId,
+        status: { $ne: ApplicationStatus.CANCELED },
+      })
+      .exec();
+  }
 }

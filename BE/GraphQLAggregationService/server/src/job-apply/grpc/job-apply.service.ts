@@ -16,6 +16,8 @@ import { CancelJobApplicationRequest } from './dto/cancel-job-application/reques
 import { CancelJobApplicationResponse } from './dto/cancel-job-application/response.dto';
 import { listJobApplicationsByPostForPublisherRequest } from './dto/list-job-application-by-user-and-post copy/request.dto';
 import { listJobApplicationsByPostForPublisherResponse } from './dto/list-job-application-by-user-and-post copy/response.dto';
+import { CountJobApplicationByPostRequest } from './dto/count-job-application-by-post/request.dto';
+import { CountJobApplicationByPostResponse } from './dto/count-job-application-by-post/response.dto';
 
 interface JobApplyServiceGrpc {
   applyToJobPost(
@@ -33,6 +35,10 @@ interface JobApplyServiceGrpc {
   listJobApplicationsByPostForPublisher(
     request: listJobApplicationsByPostForPublisherRequest,
   ): Observable<listJobApplicationsByPostForPublisherResponse>;
+
+  countJobApplicationByPost(
+    request: CountJobApplicationByPostRequest,
+  ): Observable<CountJobApplicationByPostResponse>;
 }
 
 @Injectable()
@@ -121,6 +127,20 @@ export class JobApplyService implements OnModuleInit {
       return response;
     } catch (e) {
       console.error('listJobApplicationsByPostForPublisher grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async countJobApplicationByPost(request: {
+    jobPostId: string;
+  }): Promise<CountJobApplicationByPostResponse> {
+    try {
+      const response = await lastValueFrom(
+        this.jobApplyService.countJobApplicationByPost(request),
+      );
+      return response;
+    } catch (e) {
+      console.error('countJobApplicationByPost grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

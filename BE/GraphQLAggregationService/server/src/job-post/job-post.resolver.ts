@@ -51,6 +51,7 @@ export class JobPostResolver {
       id,
       addressName: realAddressName,
       views: 0,
+      applicationCount: 0,
       applications: [],
       publisher: {
         id: user.id,
@@ -155,6 +156,14 @@ export class JobPostResolver {
         jobApplication.status,
       ),
     }));
+  }
+
+  @ResolveField('applicationCount')
+  async resolveApplicationCount(@Parent() jobPost: JobPost): Promise<number> {
+    const response = await this.jobApplyService.countJobApplicationByPost({
+      jobPostId: jobPost.id,
+    });
+    return response.jobApplicationCount;
   }
 
   @ResolveField('applications')

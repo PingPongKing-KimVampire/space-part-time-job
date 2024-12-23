@@ -17,6 +17,8 @@ import { CancelJobApplicationResponse } from './grpc/dto/cancel-job-application/
 import { JobApplication } from './mongoose/job-application.schema';
 import { ListJobApplicationByUserAndPostRequest } from './grpc/dto/list-job-application-by-user-and-post copy/request.dto';
 import { ListJobApplicationByUserAndPostResponse } from './grpc/dto/list-job-application-by-user-and-post copy/response.dto';
+import { CountJobApplicationByPostRequest } from './grpc/dto/count-job-application-by-post/request.dto';
+import { CountJobApplicationByPostResponse } from './grpc/dto/count-job-application-by-post/response.dto';
 
 @Controller()
 export class JobApplyController {
@@ -150,6 +152,22 @@ export class JobApplyController {
       coverLetter: jobApplication.coverLetter,
       createdAt: jobApplication.createdAt.toISOString(),
       status: ApplicationStatusGrpcType[jobApplication.status],
+    };
+  }
+
+  @GrpcMethod('JobApplyService', 'CountJobApplicationByPost')
+  async countCancelJobApplicationByPost(
+    request: CountJobApplicationByPostRequest,
+  ): Promise<CountJobApplicationByPostResponse> {
+    request = plainToInstance(CountJobApplicationByPostRequest, request);
+    await this.validateFormat(request);
+
+    const jobApplicationCount =
+      await this.jobApplyRepository.countUnCancelJobApplicationByPost(
+        request.jobPostId,
+      );
+    return {
+      jobApplicationCount,
     };
   }
 }
