@@ -11,9 +11,8 @@ type PostListProp = {
 export type MouseEventHandlers = {
   onItemMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onItemMouseLeave: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onItemClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onButtonMouseEnter: (e: React.MouseEvent<HTMLElement>) => void;
-  onButtonMouseLeave: (e: React.MouseEvent<HTMLElement>) => void;
+  onInnerClickableMouseEnter: (e: React.MouseEvent<HTMLElement>) => void;
+  onInnerClickableMouseLeave: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
 const PostList: React.FC<PostListProp> = ({ tab }) => {
@@ -31,36 +30,31 @@ const PostList: React.FC<PostListProp> = ({ tab }) => {
     },
     []
   );
-  const onItemClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      const postId = e.currentTarget.getAttribute("data-post-id");
-      navigate(`/view-job/${postId}`);
+  const onInnerClickableMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      (e.target as Element).closest(".item")?.classList.remove("isHovering");
     },
-    [navigate]
+    []
   );
-  const onButtonMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    e.currentTarget.classList.add("isHovering");
-    (e.target as Element).closest(".item")?.classList.remove("isHovering");
-  }, []);
-  const onButtonMouseLeave = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    e.currentTarget.classList.remove("isHovering");
-    (e.target as Element).closest(".item")?.classList.add("isHovering");
-  }, []);
+  const onInnerClickableMouseLeave = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      (e.target as Element).closest(".item")?.classList.add("isHovering");
+    },
+    []
+  );
 
   const mouseEventHandlers: MouseEventHandlers = useMemo(() => {
     return {
       onItemMouseEnter,
       onItemMouseLeave,
-      onItemClick,
-      onButtonMouseEnter,
-      onButtonMouseLeave,
+      onInnerClickableMouseEnter,
+      onInnerClickableMouseLeave,
     };
   }, [
     onItemMouseEnter,
     onItemMouseLeave,
-    onItemClick,
-    onButtonMouseEnter,
-    onButtonMouseLeave,
+    onInnerClickableMouseEnter,
+    onInnerClickableMouseLeave,
   ]);
 
   if (tab.label === TAB_INFO.POST.label) {

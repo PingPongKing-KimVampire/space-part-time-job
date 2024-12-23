@@ -46,9 +46,8 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
   const {
     onItemMouseEnter,
     onItemMouseLeave,
-    onItemClick,
-    onButtonMouseEnter,
-    onButtonMouseLeave,
+    onInnerClickableMouseEnter,
+    onInnerClickableMouseLeave,
   } = mouseEventHandlers;
 
   const [myJobPosts, setMyJobPosts] = useState<JobPost[]>([]);
@@ -138,6 +137,12 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
     navigate(`/view-applications/${postId}`);
   };
 
+  const onItemClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const postId = e.currentTarget.getAttribute("data-post-id");
+    if (!postId) return;
+    navigate(`/view-job/${postId}`);
+  };
+
   return (
     <>
       {/* TODO : myJobPosts로 교체하기 */}
@@ -152,25 +157,25 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
         >
           <div className="title">
             {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
-            {title}
+            <a className="withItemHover">{title}</a>
           </div>
           <div className="interaction">
             {status === JOB_POST_STATUS.OPEN && ( // 마감되지 않은 공고에만 마감 버튼 표시
               <button
                 className="closeButton"
-                onMouseEnter={onButtonMouseEnter}
-                onMouseLeave={onButtonMouseLeave}
+                onMouseEnter={onInnerClickableMouseEnter}
+                onMouseLeave={onInnerClickableMouseLeave}
                 onClick={onCloseButtonClick}
               >
                 마감
               </button>
             )}
             <button
-              className={`applicantButton ${
+              className={`applicationButton ${
                 applicantCount === 0 ? "inactivated" : ""
               }`}
-              onMouseEnter={onButtonMouseEnter}
-              onMouseLeave={onButtonMouseLeave}
+              onMouseEnter={onInnerClickableMouseEnter}
+              onMouseLeave={onInnerClickableMouseLeave}
               onClick={onApplicationButtonClick}
               disabled={applicantCount === 0}
             >

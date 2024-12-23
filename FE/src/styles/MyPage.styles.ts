@@ -147,6 +147,13 @@ export const ListItem = styled("button", {
   cursor: "pointer",
   "&.isHovering": {
     background: OptionHoverColor,
+    "& .arrowDownIcon": {
+      strokeWidth: "2.2",
+      color: MainHoverColor,
+    },
+    "& .withItemHover": {
+      textDecoration: "underline !important",
+    },
   },
   "& .title": {
     fontWeight: "600",
@@ -154,6 +161,13 @@ export const ListItem = styled("button", {
     display: "flex",
     alignItems: "center",
     gap: "8px",
+    "& a": {
+      textDecoration: "none",
+      color: "black",
+      "&:hover": {
+        textDecoration: "underline",
+      },
+    },
   },
   "& .interaction": {
     display: "flex",
@@ -165,7 +179,7 @@ export const ListItem = styled("button", {
       padding: "6px 11px",
       borderRadius: "9px",
       cursor: "pointer",
-      "&:not(.inactivated).isHovering": {
+      "&:not(.inactivated):hover": {
         background: MainHoverColor,
       },
       "& span": {
@@ -213,10 +227,6 @@ export const ArrowDownIcon = styled(ArrowDown, {
   strokeWidth: "1.6",
   color: MainColor,
   transition: "transform 0.2s",
-  "&.isHovering": {
-    strokeWidth: "2.2",
-    color: MainHoverColor,
-  },
   variants: {
     isSelected: {
       true: {

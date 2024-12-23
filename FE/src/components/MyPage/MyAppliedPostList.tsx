@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import formatTimeAgo from "../../utils/formatTimeAgo.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import {
@@ -12,6 +13,7 @@ import {
   TogglePanel,
   ArrowDownIcon,
 } from "../../styles/MyPage.styles.ts";
+import { CloseTag } from "../../styles/global.ts";
 import { AcceptedBadge, RejectedBadge } from "../Badges.tsx";
 import { LIST_MY_JOB_APPLICATIONS } from "../../graphql/queries.js";
 import { CANCEL_JOB_APPLICATION } from "../../graphql/mutations.js";
@@ -158,10 +160,10 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
   const {
     onItemMouseEnter,
     onItemMouseLeave,
-    onItemClick,
-    onButtonMouseEnter,
-    onButtonMouseLeave,
+    onInnerClickableMouseEnter,
+    onInnerClickableMouseLeave,
   } = mouseEventHandlers;
+  const navigate = useNavigate();
 
   const [myApplications, setMyApplications] = useState<Application[]>([]);
   //   const {
@@ -189,7 +191,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     );
   }, []);
 
-  const onArrowDownClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     const applicationId = (e.target as HTMLElement)
       .closest(".item")
@@ -225,7 +227,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
           className="item"
           onMouseEnter={onItemMouseEnter}
           onMouseLeave={onItemMouseLeave}
-          onClick={onItemClick}
+          onClick={onToggle}
           key={id}
           data-application-id={id}
           data-post-id={jobPost.id}
@@ -234,9 +236,18 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
           <MainPanel>
             <div className="title">
               {jobPost.status === JOB_POST_STATUS.CLOSE && (
-                <div className="closeTag">마감</div>
+                <CloseTag>마감</CloseTag>
               )}
-              {jobPost.title}
+              <a
+                onMouseEnter={onInnerClickableMouseEnter}
+                onMouseLeave={onInnerClickableMouseLeave}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/view-job/${jobPost.id}`);
+                }}
+              >
+                {jobPost.title}
+              </a>
             </div>
             <div className="interaction">
               {status === APPLICATION_STATUS.ACCEPTED && (
@@ -248,18 +259,17 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
               {status === APPLICATION_STATUS.PENDING && (
                 <button
                   className="cancelButton"
-                  onMouseEnter={onButtonMouseEnter}
-                  onMouseLeave={onButtonMouseLeave}
+                  onMouseEnter={onInnerClickableMouseEnter}
+                  onMouseLeave={onInnerClickableMouseLeave}
                   onClick={onCancelClick}
                 >
                   지원 취소
                 </button>
               )}
               <ArrowDownIcon
+                className="arrowDownIcon"
                 isSelected={isSelected[id]}
-                onMouseEnter={onButtonMouseEnter}
-                onMouseLeave={onButtonMouseLeave}
-                onClick={onArrowDownClick}
+                onClick={onToggle}
               />
             </div>
           </MainPanel>
