@@ -114,9 +114,11 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
 
   const [closeJobPost, { loading: closeLoading, error: closeError }] =
     useMutation(CLOSE_JOB_POST);
-  const onCloseButtonClick = async (e) => {
+  const onCloseButtonClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const postId = e.target.closest(".item")?.getAttribute("data-id");
+    const postId = (e.target as HTMLElement)
+      .closest(".item")
+      ?.getAttribute("data-post-id");
     if (!postId) return;
     await closeJobPost({ variables: { id: postId } });
     setMyJobPosts((state) =>
@@ -129,7 +131,10 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
 
   const onApplicationButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const postId = e.currentTarget.getAttribute("data-id") || "";
+    const postId = (e.target as HTMLElement)
+      .closest(".item")
+      ?.getAttribute("data-post-id");
+    if (!postId) return;
     navigate(`/view-applications/${postId}`);
   };
 
@@ -143,7 +148,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
           onMouseLeave={onItemMouseLeave}
           onClick={onItemClick}
           key={id}
-          data-id={id}
+          data-post-id={id}
         >
           <div className="title">
             {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
@@ -167,7 +172,6 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
               onMouseEnter={onButtonMouseEnter}
               onMouseLeave={onButtonMouseLeave}
               onClick={onApplicationButtonClick}
-              data-id={id}
               disabled={applicantCount === 0}
             >
               지원자 확인<span className="count">({applicantCount}명)</span>

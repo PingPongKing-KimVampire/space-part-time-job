@@ -33,9 +33,8 @@ const PostList: React.FC<PostListProp> = ({ tab }) => {
   );
   const onItemClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      console.log("e", e);
-      const id = e.currentTarget.getAttribute("data-id");
-      navigate(`/view-job/${id}`);
+      const postId = e.currentTarget.getAttribute("data-post-id");
+      navigate(`/view-job/${postId}`);
     },
     [navigate]
   );

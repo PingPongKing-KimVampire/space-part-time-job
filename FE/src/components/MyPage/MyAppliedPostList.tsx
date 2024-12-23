@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../../utils/formatTimeAgo.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import {
@@ -14,6 +14,7 @@ import {
 } from "../../styles/MyPage.styles.ts";
 import { AcceptedBadge, RejectedBadge } from "../Badges.tsx";
 import { LIST_MY_JOB_APPLICATIONS } from "../../graphql/queries.js";
+import { CANCEL_JOB_APPLICATION } from "../../graphql/mutations.js";
 
 type Application = {
   id: string;
@@ -162,7 +163,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     onButtonMouseLeave,
   } = mouseEventHandlers;
 
-  //   const [myApplications, setMyApplications] = useState<Application[]>([]);
+  const [myApplications, setMyApplications] = useState<Application[]>([]);
   //   const {
   //     data: myApplicationsData,
   //     loading: getMyApplicationsLoading,
@@ -188,14 +189,30 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     );
   }, []);
 
-  const onArrowDownClick = (e) => {
+  const onArrowDownClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const applicationId = e.target.closest(".item")?.getAttribute("data-id");
+    const applicationId = (e.target as HTMLElement)
+      .closest(".item")
+      ?.getAttribute("data-application-id");
     if (!applicationId) return;
     setIsSelected((state) => ({
       ...state,
       [applicationId]: !state[applicationId],
     }));
+  };
+
+  const [
+    cancelApplication,
+    { loading: cancelApplicationLoading, error: cancelApplicationError },
+  ] = useMutation(CANCEL_JOB_APPLICATION);
+  const onCancelClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const applicationId = (e.target as HTMLElement)
+      .closest(".item")
+      ?.getAttribute("data-application-id");
+    await cancelApplication({ variables: { id: applicationId } });
+    setMyApplications((state) =>
+      state.filter((application) => application.id !== applicationId)
+    );
   };
 
   // TODO : myApplications로 교체
@@ -210,7 +227,8 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
           onMouseLeave={onItemMouseLeave}
           onClick={onItemClick}
           key={id}
-          data-id={jobPost.id}
+          data-application-id={id}
+          data-post-id={jobPost.id}
           style={{ flexDirection: "column" }}
         >
           <MainPanel>
@@ -232,6 +250,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
                   className="cancelButton"
                   onMouseEnter={onButtonMouseEnter}
                   onMouseLeave={onButtonMouseLeave}
+                  onClick={onCancelClick}
                 >
                   지원 취소
                 </button>

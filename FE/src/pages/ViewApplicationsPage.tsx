@@ -68,7 +68,7 @@ const ViewApplicantsPage = () => {
   //   loading: getApplicationsLoading,
   // } = useQuery(GET_JOB_POST_APPLICATIONS);
   // useEffect(() => {
-  //   const data = applicationsData.getJobPost.node.applications;
+  //   const data = applicationsData.getJobPost.applications;
   //   setApplications(
   //     data.map((application) => ({
   //       ...application,
