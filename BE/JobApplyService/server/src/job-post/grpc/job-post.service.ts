@@ -10,7 +10,7 @@ import { join } from 'path';
 import { lastValueFrom, Observable } from 'rxjs';
 
 interface JobPostServiceGrpc {
-  getJobPost(data: { id: string }): Observable<any>;
+  getJobPost(data: { id: string }): Observable<{ jobPost: { userId: string } }>;
 }
 
 @Injectable()
@@ -41,9 +41,12 @@ export class JobPostService implements OnModuleInit {
       grpcClient.getService<JobPostServiceGrpc>('JobPostService');
   }
 
-  async getJobPost(jobPostId: string): Promise<void> {
+  async getJobPost(jobPostId: string) {
     try {
-      await lastValueFrom(this.jobPostService.getJobPost({ id: jobPostId }));
+      const response = await lastValueFrom(
+        this.jobPostService.getJobPost({ id: jobPostId }),
+      );
+      return response.jobPost;
     } catch (e) {
       console.error('getJobPost grpc 에러 발생:', e);
       throw new Error(e.details);

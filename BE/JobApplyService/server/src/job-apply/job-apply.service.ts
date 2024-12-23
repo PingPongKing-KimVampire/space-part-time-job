@@ -4,10 +4,14 @@ import {
   ApplicationStatus,
   JobApplication,
 } from './mongoose/job-application.schema';
+import { JobPostService } from 'src/job-post/grpc/job-post.service';
 
 @Injectable()
 export class JobApplyService {
-  constructor(private readonly jobApplyRepository: JobApplyRepository) {}
+  constructor(
+    private readonly jobApplyRepository: JobApplyRepository,
+    private readonly jobPostService: JobPostService,
+  ) {}
   async applyToJobPost(input: {
     userId: string;
     jobPostId: string;
@@ -52,7 +56,9 @@ export class JobApplyService {
     publisherId: string,
     jobPostId: string,
   ): Promise<JobApplication[]> {
-    //isPublisher 구현하기 (공고 서비스와 통신해 확인)
+    const jobPost = await this.jobPostService.getJobPost(jobPostId);
+    if (jobPost.userId !== publisherId)
+      throw new Error('공고 게시자가 아니면 지원서를 조회할 수 없음');
     const applications =
       await this.jobApplyRepository.listJobApplicationByPost(jobPostId);
     return applications.filter(

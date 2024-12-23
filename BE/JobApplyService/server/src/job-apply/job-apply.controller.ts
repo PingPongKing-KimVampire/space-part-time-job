@@ -130,16 +130,21 @@ export class JobApplyController {
     );
     await this.validateFormat(request);
 
-    const jobApplicationList =
-      await this.jobApplyService.listJobApplicationsByPostForPublisher(
-        request.userId,
-        request.jobPostId,
-      );
-    return {
-      jobApplicationList: jobApplicationList.map((jobApplication) =>
-        this.transformJobApplicationToGrpcResponse(jobApplication),
-      ),
-    };
+    try {
+      const jobApplicationList =
+        await this.jobApplyService.listJobApplicationsByPostForPublisher(
+          request.userId,
+          request.jobPostId,
+        );
+      return {
+        jobApplicationList: jobApplicationList.map((jobApplication) =>
+          this.transformJobApplicationToGrpcResponse(jobApplication),
+        ),
+      };
+    } catch (e) {
+      console.error('에러 발생', e);
+      throw new RpcException(e);
+    }
   }
 
   private transformJobApplicationToGrpcResponse(
