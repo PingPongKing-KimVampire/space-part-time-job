@@ -13,6 +13,14 @@ export class JobApplyService {
     jobPostId: string;
     coverLetter: string;
   }): Promise<JobApplication> {
+    if (
+      await this.jobApplyRepository.hasUserPendingApplicationByPost(
+        input.userId,
+        input.jobPostId,
+      )
+    ) {
+      throw new Error('해당 공고에 유저가 제출한 PENDING 상태인 지원서 있음');
+    }
     const jobApplication = JobApplication.of(
       input.jobPostId,
       input.userId,

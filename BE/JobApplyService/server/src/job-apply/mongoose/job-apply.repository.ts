@@ -34,6 +34,18 @@ export class JobApplyRepository {
     return jobApplications.map((doc) => doc.toObject());
   }
 
+  async hasUserPendingApplicationByPost(
+    userId: string,
+    jobPostId: string,
+  ): Promise<boolean> {
+    const count = await this.jobApplicationModel.countDocuments({
+      userId,
+      jobPostId,
+      status: ApplicationStatus.PENDING,
+    });
+    return count > 0;
+  }
+
   async listJobApplicationByPost(jobPostId: string): Promise<JobApplication[]> {
     const filter = {
       jobPostId,
