@@ -9,12 +9,14 @@ import { JobApplyService } from './job-apply.service';
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { JobPostService } from 'src/job-post/grpc/job-post.service';
-import { ListJobApplicationByUserAndPostResponse } from './grpc/dto/list-job-application-by-user-and-post/response.dto';
-import { ListJobApplicationByUserAndPostRequest } from './grpc/dto/list-job-application-by-user-and-post/request.dto';
+import { listJobApplicationsByPostForPublisherResponse } from './grpc/dto/list-job-application-by-user-and-post/response.dto';
+import { listJobApplicationsByPostForPublisherRequest } from './grpc/dto/list-job-application-by-user-and-post/request.dto';
 import { JobApplyRepository } from './mongoose/job-apply.repository';
 import { CancelJobApplicationRequest } from './grpc/dto/cancel-job-application/request.dto';
 import { CancelJobApplicationResponse } from './grpc/dto/cancel-job-application/response.dto';
 import { JobApplication } from './mongoose/job-application.schema';
+import { ListJobApplicationByUserAndPostRequest } from './grpc/dto/list-job-application-by-user-and-post copy/request.dto';
+import { ListJobApplicationByUserAndPostResponse } from './grpc/dto/list-job-application-by-user-and-post copy/response.dto';
 
 @Controller()
 export class JobApplyController {
@@ -114,6 +116,28 @@ export class JobApplyController {
       console.error('에러 발생', e);
       throw new RpcException(e);
     }
+  }
+
+  @GrpcMethod('JobApplyService', 'ListJobApplicationsByPostForPublisher')
+  async listJobApplicationsByPostForPublisher(
+    request: listJobApplicationsByPostForPublisherRequest,
+  ): Promise<listJobApplicationsByPostForPublisherResponse> {
+    request = plainToInstance(
+      listJobApplicationsByPostForPublisherRequest,
+      request,
+    );
+    await this.validateFormat(request);
+
+    const jobApplicationList =
+      await this.jobApplyService.listJobApplicationsByPostForPublisher(
+        request.userId,
+        request.jobPostId,
+      );
+    return {
+      jobApplicationList: jobApplicationList.map((jobApplication) =>
+        this.transformJobApplicationToGrpcResponse(jobApplication),
+      ),
+    };
   }
 
   private transformJobApplicationToGrpcResponse(

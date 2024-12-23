@@ -151,6 +151,7 @@ export interface JobPost {
     createdAt: string;
     views: number;
     publisher: UserPublicInfo;
+    applications: JobApplication[];
     myJobApplication?: Nullable<Nullable<JobApplication>[]>;
 }
 

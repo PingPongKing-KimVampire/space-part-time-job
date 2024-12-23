@@ -9,13 +9,17 @@ import {
 } from '@nestjs/graphql';
 import {
   CreateJobPostInput,
+  JobApplication,
   JobPost,
   JobPostConnection,
   JobPostSearchFilter,
 } from 'src/graphql';
 import { JobPostService } from './grpc/job-post.service';
 import { JobApplyService } from 'src/job-apply/grpc/job-apply.service';
-import { ApplicationStatusGrpcType } from 'src/job-apply/grpc/dto/apply-to-job-post/response.dto';
+import {
+  ApplicationStatusGrpcType,
+  JobApplicationGrpc,
+} from 'src/job-apply/grpc/dto/apply-to-job-post/response.dto';
 
 @Resolver('JobPost')
 export class JobPostResolver {
@@ -47,6 +51,7 @@ export class JobPostResolver {
       id,
       addressName: realAddressName,
       views: 0,
+      applications: [],
       publisher: {
         id: user.id,
         nickname: user.nickname,
@@ -152,6 +157,25 @@ export class JobPostResolver {
     }));
   }
 
+  @ResolveField('applications')
+  async resolveApplications(
+    @Parent() jobPost: JobPost,
+    @Context('req') req: Request,
+  ) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    const response =
+      await this.jobApplyService.listJobApplicationsByPostForPublisher({
+        jobPostId: jobPost.id,
+        userId: user.id,
+      });
+
+    return (response.jobApplicationList ?? []).map((jobApplication) =>
+      this.transformJobApplicationResponse(jobApplication),
+    );
+  }
+
   private getEnumKeyByValue<T extends object>(
     enumObj: T,
     value: T[keyof T],
@@ -159,5 +183,20 @@ export class JobPostResolver {
     return Object.keys(enumObj).find(
       (key) => enumObj[key as keyof T] === value,
     ) as keyof T | undefined;
+  }
+
+  private transformJobApplicationResponse(jobApplication: JobApplicationGrpc) {
+    const status = this.getEnumKeyByValue(
+      ApplicationStatusGrpcType,
+      jobApplication.status,
+    );
+    return {
+      id: jobApplication.id,
+      coverLetter: jobApplication.coverLetter,
+      createdAt: jobApplication.createdAt,
+      jobPostId: jobApplication.jobPostId,
+      userId: jobApplication.userId,
+      status,
+    };
   }
 }

@@ -39,4 +39,16 @@ export class JobApplyService {
     if (!updatedJobApplication) throw new Error('예상하지 못한 에러');
     return updatedJobApplication;
   }
+
+  async listJobApplicationsByPostForPublisher(
+    publisherId: string,
+    jobPostId: string,
+  ): Promise<JobApplication[]> {
+    //isPublisher 구현하기 (공고 서비스와 통신해 확인)
+    const applications =
+      await this.jobApplyRepository.listJobApplicationByPost(jobPostId);
+    return applications.filter(
+      (application) => application.status !== ApplicationStatus.CANCELED,
+    );
+  }
 }

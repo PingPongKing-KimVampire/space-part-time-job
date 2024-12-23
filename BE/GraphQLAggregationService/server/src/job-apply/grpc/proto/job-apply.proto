@@ -5,6 +5,7 @@ package jobApply;
 import "apply-to-job-post.proto";
 import "list-job-application-by-user-and-post.proto";
 import "cancel-job-application.proto";
+import "list-job-application-by-post-for-publisher.proto";
 
 service JobApplyService {
   rpc ApplyToJobPost(ApplyToJobPostRequest) returns (ApplyToJobPostResponse);
@@ -14,4 +15,8 @@ service JobApplyService {
 
   rpc CancelJobApplication(CancelJobApplicationRequest)
       returns (CancelJobApplicationResponse);
+
+  rpc ListJobApplicationsByPostForPublisher(
+      listJobApplicationsByPostForPublisherRequest)
+      returns (listJobApplicationsByPostForPublisherResponse);
 }

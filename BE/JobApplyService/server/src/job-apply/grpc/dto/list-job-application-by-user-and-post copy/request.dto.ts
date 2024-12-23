@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class listJobApplicationsByPostForPublisherRequest {
+export class ListJobApplicationByUserAndPostRequest {
   @IsString()
   @IsNotEmpty()
   userId: string;
