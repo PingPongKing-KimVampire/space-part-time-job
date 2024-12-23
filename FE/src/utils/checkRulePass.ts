@@ -9,7 +9,7 @@ const getLength = (str: string) => {
 
 const checkRulePassCommon = {
   phoneNumber: (phoneNumber: string): boolean => {
-    phoneNumber = phoneNumber.replaceAll("-", "");
+    phoneNumber = phoneNumber.replace(/-/g, "");
     if (phoneNumber.length < 11) return false;
     if (phoneNumber.slice(0, 3) !== "010") return false;
     return /^[0-9]+$/.test(phoneNumber);
@@ -82,9 +82,7 @@ export const checkRulePassInCreateJob = {
 };
 
 export const checkRulePassInApplication = {
-  selfIntroduction: (selfIntroduction: string): boolean => {
-    return (
-      15 <= getLength(selfIntroduction) && getLength(selfIntroduction) <= 200
-    );
+  coverLetter: (coverLetter: string): boolean => {
+    return 15 <= getLength(coverLetter) && getLength(coverLetter) <= 200;
   },
 };

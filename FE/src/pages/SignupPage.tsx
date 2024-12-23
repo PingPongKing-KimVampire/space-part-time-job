@@ -163,7 +163,7 @@ const SignupPage = () => {
           id: inputValue.id,
           password: inputValue.password,
           nickname: inputValue.nickname,
-          phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
+          phoneNumber: inputValue.phoneNumber.replace(/-/g, ""),
           smsCode: inputValue.authNumber,
         }),
       });

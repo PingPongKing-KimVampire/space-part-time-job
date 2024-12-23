@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import CustomTextarea from "../CustomTextarea.tsx";
 import LoadingOverlay from "../LoadingOverlay.tsx";
@@ -26,6 +26,10 @@ const ApplicationModal = ({ jobPostId, onXClick }) => {
     onXClick();
   };
 
+  useEffect(() => {
+    setIsValid(checkRulePassInApplication.coverLetter(coverLetter));
+  }, [coverLetter]);
+
   return (
     <ApplicationModalBackground>
       {applyLoading && <LoadingOverlay />}
@@ -39,9 +43,6 @@ const ApplicationModal = ({ jobPostId, onXClick }) => {
             eventHandlers={{
               onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 setCoverLetter(e.target.value);
-                setIsValid(
-                  checkRulePassInApplication.selfIntroduction(coverLetter)
-                );
               },
             }}
           />

@@ -94,7 +94,7 @@ const PhoneNumberSection = (props) => {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({
-          phoneNumber: inputValue.phoneNumber.replaceAll("-", ""),
+          phoneNumber: inputValue.phoneNumber.replace(/-/g, ""),
         }),
       });
     } catch {

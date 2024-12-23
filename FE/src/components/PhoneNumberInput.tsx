@@ -35,7 +35,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
 
   const onBlur = () => {
     if (onBlurStart) onBlurStart();
-    const newValue = value.replaceAll("-", "");
+    const newValue = value.replace(/-/g, "");
     // 전화번호 포맷으로 가공하기
     const part1 = newValue.slice(0, 3);
     const part2 = newValue.slice(3, 7);
