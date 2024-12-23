@@ -145,7 +145,7 @@ export class JobPostResolver {
       },
     );
 
-    return response.jobApplicationList.map((jobApplication) => ({
+    return (response.jobApplicationList ?? []).map((jobApplication) => ({
       id: jobApplication.id,
       coverLetter: jobApplication.coverLetter,
       createdAt: jobApplication.createdAt,
