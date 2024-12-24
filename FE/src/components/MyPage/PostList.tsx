@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Tab, TAB_INFO } from "../../pages/MyPage.tsx";
 import MyPostList from "./MyPostList.tsx";
 import MyAppliedPostList from "./MyAppliedPostList.tsx";
+import MyInterestPostList from "./MyInterestPostList.tsx";
 
 type PostListProp = {
   tab: Tab;
@@ -61,6 +62,8 @@ const PostList: React.FC<PostListProp> = ({ tab }) => {
     return <MyPostList mouseEventHandlers={mouseEventHandlers} />;
   } else if (tab.label === TAB_INFO.APPLY.label) {
     return <MyAppliedPostList mouseEventHandlers={mouseEventHandlers} />;
+  } else {
+    return <MyInterestPostList mouseEventHandlers={mouseEventHandlers} />;
   }
   return null;
 };

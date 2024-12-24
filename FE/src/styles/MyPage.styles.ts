@@ -186,6 +186,10 @@ export const ListItem = styled("button", {
         fontWeight: "400",
       },
     },
+    "& .interestAgo": {
+      fontSize: "15px",
+      color: "#828282",
+    },
   },
 });
 
