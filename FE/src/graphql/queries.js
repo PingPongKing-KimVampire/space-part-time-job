@@ -113,6 +113,9 @@ export const GET_JOB_POST = gql`
       myJobApplication {
         id
       }
+      myInterested {
+        id
+      }
     }
   }
 `;

@@ -14,6 +14,7 @@ import { INCREMENT_JOB_POST_VIEWS } from "../graphql/mutations.js";
 
 // TODO: ExploreJobsPage의 JobPost 타입과 어느 정도 반복되는 타입임
 export type JobPost = {
+  id: string;
   status: string;
   title: string;
   jobDescription: string[];
@@ -28,6 +29,7 @@ export type JobPost = {
   publisher: { nickname: string; createdAt: string };
   applicationCount: number;
   myJobApplication: { id: string } | null;
+  myInterested: { id: string } | null;
 };
 
 const ViewJobPage = () => {
@@ -36,6 +38,7 @@ const ViewJobPage = () => {
   const [isApplicationModalVisible, setIsApplicationModalVisible] =
     useState(false);
   const [jobPost, setJobPost] = useState<JobPost>({
+    id: "",
     status: "",
     title: "",
     jobDescription: [],
@@ -50,6 +53,7 @@ const ViewJobPage = () => {
     publisher: { nickname: "", createdAt: "" },
     applicationCount: 0,
     myJobApplication: null,
+    myInterested: null,
   });
 
   const { id = "" } = useParams();
@@ -99,6 +103,7 @@ const ViewJobPage = () => {
         <Header jobPost={jobPost} />
         <Content
           jobPost={jobPost}
+          setJobPost={setJobPost}
           displayApplicationModal={() => {
             setIsApplicationModalVisible(true);
           }}

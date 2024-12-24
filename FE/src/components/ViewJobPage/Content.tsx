@@ -9,11 +9,12 @@ import defaultImage from "../../assets/images/jobDefault.png";
 
 type ContentProps = {
   jobPost: JobPost;
+  setJobPost: React.Dispatch<React.SetStateAction<JobPost>>;
   displayApplicationModal: () => void;
 };
 
 const Content: React.FC<ContentProps> = (props) => {
-  const { jobPost, displayApplicationModal } = props;
+  const { jobPost, setJobPost, displayApplicationModal } = props;
   const {
     status,
     workPeriod,
@@ -51,8 +52,8 @@ const Content: React.FC<ContentProps> = (props) => {
           </div>
         </div>
         <Interaction
-          postStatus={status}
-          alreadyApplied={myJobApplication !== null}
+          jobPost={jobPost}
+          setJobPost={setJobPost}
           displayApplicationModal={displayApplicationModal}
         />
       </div>

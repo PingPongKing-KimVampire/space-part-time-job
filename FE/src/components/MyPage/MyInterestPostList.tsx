@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { LIST_MY_INTEREST_JOB_POSTS } from "../../graphql/queries.js";
+import { useQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../../utils/formatTimeAgo.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import { JOB_POST_STATUS } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles";
 import { CloseTag } from "../../styles/global.ts";
+import { LIST_MY_INTEREST_JOB_POSTS } from "../../graphql/queries.js";
+import { UNMARK_JOB_POST_AS_INTEREST } from "../../graphql/mutations.js";
 
 type MyInterestPostListProps = {
   mouseEventHandlers: MouseEventHandlers;
@@ -75,6 +76,21 @@ const MyInterestPostList: React.FC<MyInterestPostListProps> = ({
   //     );
   //   }, [interestPostsData]);
 
+  const [
+    unmarkInterest,
+    { loading: unmarkInterestLoading, error: unmarkInterestError },
+  ] = useMutation(UNMARK_JOB_POST_AS_INTEREST);
+  const onCancelClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const postId = (e.target as HTMLElement)
+      .closest(".item")
+      ?.getAttribute("data-post-id");
+    if (!postId) return;
+    await unmarkInterest({ variables: { jobPostId: postId } });
+    setMyInterestPosts((state) =>
+      state.filter((interestedPost) => interestedPost.jobPost.id !== postId)
+    );
+  };
+
   return (
     <>
       {myInterestPosts.map(({ jobPost, createdAt }) => (
@@ -97,6 +113,7 @@ const MyInterestPostList: React.FC<MyInterestPostListProps> = ({
             <button
               onMouseEnter={onInnerClickableMouseEnter}
               onMouseLeave={onInnerClickableMouseLeave}
+              onClick={onCancelClick}
             >
               관심 취소
             </button>

@@ -1,5 +1,10 @@
 import { createStitches } from "@stitches/react";
-import { MainColor, OptionHoverColor, MainButtonStyle } from "./global";
+import {
+  MainColor,
+  MainHoverColor,
+  OptionHoverColor,
+  MainButtonStyle,
+} from "./global";
 
 const { styled } = createStitches();
 
@@ -246,6 +251,18 @@ export const InteractionContainer = styled("div", {
         fill: OptionHoverColor,
         stroke: MainColor,
         strokeWidth: "0.8",
+      },
+      // TODO: 여기부터 사용되지 않는 부분임
+      "&.selected": {
+        fill: MainColor,
+        stroke: MainColor,
+        strokeWidth: "0.8",
+        "&:hover": {
+          fill: MainHoverColor,
+        },
+      },
+      "&:not(.selected).inactivated": {
+        cursor: "not-allowed",
       },
     },
   },
