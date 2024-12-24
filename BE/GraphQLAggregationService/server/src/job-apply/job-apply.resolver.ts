@@ -6,7 +6,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { ApplyJobPostInput } from 'src/graphql';
+import { ApplyJobPostInput, DecideJobApplicationInput } from 'src/graphql';
 import { JobApplyService } from './grpc/job-apply.service';
 import {
   ApplicationStatusGrpcType,
@@ -66,6 +66,23 @@ export class JobApplyResolver {
   @ResolveField('applicant')
   async resolveApplicant(@Parent() jobApplication) {
     return this.userService.getUserPublicInfo(jobApplication.userId);
+  }
+
+  @Mutation('decideJobApplication')
+  async decideJobApplication(
+    @Args('input') input: DecideJobApplicationInput,
+    @Context('req') req: Request,
+  ) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    const { jobApplication } = await this.jobApplyService.decideJobApplication({
+      jobApplicationId: input.id,
+      userId: user.id,
+      status: ApplicationStatusGrpcType[input.status],
+    });
+
+    return this.transformJobApplicationResponse(jobApplication);
   }
 
   private getEnumKeyByValue<T extends object>(

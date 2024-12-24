@@ -9,7 +9,10 @@ import {
 import { join } from 'path';
 import { lastValueFrom, Observable } from 'rxjs';
 import { ApplyToJobPostRequest } from './dto/apply-to-job-post/request.dto';
-import { ApplyToJobPostResponse } from './dto/apply-to-job-post/response.dto';
+import {
+  ApplicationStatusGrpcType,
+  ApplyToJobPostResponse,
+} from './dto/apply-to-job-post/response.dto';
 import { ListJobApplicationByUserAndPostRequest } from './dto/list-job-application-by-user-and-post/request.dto';
 import { ListJobApplicationByUserAndPostResponse } from './dto/list-job-application-by-user-and-post/response.dto';
 import { CancelJobApplicationRequest } from './dto/cancel-job-application/request.dto';
@@ -18,6 +21,8 @@ import { listJobApplicationsByPostForPublisherRequest } from './dto/list-job-app
 import { listJobApplicationsByPostForPublisherResponse } from './dto/list-job-application-by-user-and-post copy/response.dto';
 import { CountJobApplicationByPostRequest } from './dto/count-job-application-by-post/request.dto';
 import { CountJobApplicationByPostResponse } from './dto/count-job-application-by-post/response.dto';
+import { DecideJobApplicationRequest } from './dto/decide-job-application/request.dto';
+import { DecideJobApplicationResponse } from './dto/decide-job-application/response.dto';
 
 interface JobApplyServiceGrpc {
   applyToJobPost(
@@ -39,6 +44,10 @@ interface JobApplyServiceGrpc {
   countJobApplicationByPost(
     request: CountJobApplicationByPostRequest,
   ): Observable<CountJobApplicationByPostResponse>;
+
+  decideJobApplication(
+    request: DecideJobApplicationRequest,
+  ): Observable<DecideJobApplicationResponse>;
 }
 
 @Injectable()
@@ -141,6 +150,22 @@ export class JobApplyService implements OnModuleInit {
       return response;
     } catch (e) {
       console.error('countJobApplicationByPost grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async decideJobApplication(request: {
+    jobApplicationId: string;
+    userId: string;
+    status: ApplicationStatusGrpcType;
+  }): Promise<DecideJobApplicationResponse> {
+    try {
+      const response = await lastValueFrom(
+        this.jobApplyService.decideJobApplication(request),
+      );
+      return response;
+    } catch (e) {
+      console.error('decideJobApplication grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

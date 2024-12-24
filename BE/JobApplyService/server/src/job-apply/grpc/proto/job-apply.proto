@@ -7,6 +7,7 @@ import "list-job-application-by-user-and-post.proto";
 import "cancel-job-application.proto";
 import "list-job-application-by-post-for-publisher.proto";
 import "count-job-application-by-post.proto";
+import "decide-job-application.proto";
 
 service JobApplyService {
   rpc ApplyToJobPost(ApplyToJobPostRequest) returns (ApplyToJobPostResponse);
@@ -23,4 +24,7 @@ service JobApplyService {
 
   rpc CountJobApplicationByPost(CountJobApplicationByPostRequest)
       returns (CountJobApplicationByPostResponse);
+
+  rpc DecideJobApplication(DecideJobApplicationRequest)
+      returns (DecideJobApplicationResponse);
 }

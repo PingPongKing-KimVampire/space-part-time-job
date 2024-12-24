@@ -1,6 +1,6 @@
 export enum ApplicationStatusGrpcType {
   PENDING = 0,
-  APPROVED = 1,
+  ACCEPTED = 1,
   REJECTED = 2,
   CANCELED = 3,
 }

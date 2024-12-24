@@ -1,0 +1,8 @@
+input DecideJobApplicationInput {
+  id: ID!
+  status: ApplicationStatus!
+}
+
+extend type Mutation {
+  decideJobApplication(input: DecideJobApplicationInput!): JobApplication!
+}

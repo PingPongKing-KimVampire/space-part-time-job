@@ -67,6 +67,11 @@ export interface ApplyJobPostInput {
     coverLetter: string;
 }
 
+export interface DecideJobApplicationInput {
+    id: string;
+    status: ApplicationStatus;
+}
+
 export interface CreateJobPostInput {
     title: string;
     jobDescription: JobCategory[];
@@ -132,6 +137,7 @@ export interface JobApplication {
 export interface IMutation {
     applyToJobPost(input: ApplyJobPostInput): JobApplication | Promise<JobApplication>;
     cancelJobApplication(id: string): JobApplication | Promise<JobApplication>;
+    decideJobApplication(input: DecideJobApplicationInput): JobApplication | Promise<JobApplication>;
     createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
     incrementJobPostViews(id: string): number | Promise<number>;
     setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;

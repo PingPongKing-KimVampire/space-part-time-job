@@ -65,4 +65,39 @@ export class JobApplyService {
       (application) => application.status !== ApplicationStatus.CANCELED,
     );
   }
+
+  async decideJobApplication(
+    jobApplicationId: string,
+    publisherId: string,
+    status: ApplicationStatus,
+  ): Promise<JobApplication> {
+    if (
+      status !== ApplicationStatus.ACCEPTED &&
+      status !== ApplicationStatus.REJECTED
+    ) {
+      throw new Error('지원을 수락하거나 거절해야 함');
+    }
+    const jobApplication =
+      await this.jobApplyRepository.getJobApplication(jobApplicationId);
+
+    const jobPost = await this.jobPostService.getJobPost(
+      jobApplication.jobPostId,
+    );
+    if (jobPost.userId !== publisherId)
+      throw new Error(
+        '공고 게시자가 아니면 지원서에 대해 수락하거나 거절할 수 없음',
+      );
+
+    if (jobApplication.status !== ApplicationStatus.PENDING)
+      throw new Error(
+        'PENDING 상태가 아니면 지원서에 대해 수락하거나 거절할 수 없음',
+      );
+
+    const updatedJobApplication = await this.jobApplyRepository.updateStatus(
+      jobApplicationId,
+      status,
+    );
+    if (!updatedJobApplication) throw new Error('예상하지 못한 에러');
+    return updatedJobApplication;
+  }
 }

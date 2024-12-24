@@ -14,11 +14,16 @@ import { listJobApplicationsByPostForPublisherRequest } from './grpc/dto/list-jo
 import { JobApplyRepository } from './mongoose/job-apply.repository';
 import { CancelJobApplicationRequest } from './grpc/dto/cancel-job-application/request.dto';
 import { CancelJobApplicationResponse } from './grpc/dto/cancel-job-application/response.dto';
-import { JobApplication } from './mongoose/job-application.schema';
+import {
+  ApplicationStatus,
+  JobApplication,
+} from './mongoose/job-application.schema';
 import { ListJobApplicationByUserAndPostRequest } from './grpc/dto/list-job-application-by-user-and-post copy/request.dto';
 import { ListJobApplicationByUserAndPostResponse } from './grpc/dto/list-job-application-by-user-and-post copy/response.dto';
 import { CountJobApplicationByPostRequest } from './grpc/dto/count-job-application-by-post/request.dto';
 import { CountJobApplicationByPostResponse } from './grpc/dto/count-job-application-by-post/response.dto';
+import { DecideJobApplicationRequest } from './grpc/dto/decide-job-application/request.dto';
+import { DecideJobApplicationResponse } from './grpc/dto/decide-job-application/response.dto';
 
 @Controller()
 export class JobApplyController {
@@ -174,5 +179,42 @@ export class JobApplyController {
     return {
       jobApplicationCount,
     };
+  }
+
+  @GrpcMethod('JobApplyService', 'DecideJobApplication')
+  async decideJobApplication(
+    request: DecideJobApplicationRequest,
+  ): Promise<DecideJobApplicationResponse> {
+    request = plainToInstance(DecideJobApplicationRequest, request);
+    await this.validateFormat(request);
+    try {
+      const status = this.transformGRPCStatus(request.status);
+      const jobApplication = await this.jobApplyService.decideJobApplication(
+        request.jobApplicationId,
+        request.userId,
+        status,
+      );
+      return {
+        jobApplication:
+          this.transformJobApplicationToGrpcResponse(jobApplication),
+      };
+    } catch (e) {
+      console.error('에러 발생', e);
+      throw new RpcException(e);
+    }
+  }
+
+  transformGRPCStatus(
+    applicationStatusGrpcType: ApplicationStatusGrpcType,
+  ): ApplicationStatus {
+    const grpcKey = Object.keys(ApplicationStatusGrpcType).find(
+      (key) => ApplicationStatusGrpcType[key] === applicationStatusGrpcType,
+    );
+
+    if (grpcKey && grpcKey in ApplicationStatus) {
+      return ApplicationStatus[grpcKey];
+    }
+
+    throw new Error(`타입 에러 ${applicationStatusGrpcType}`);
   }
 }
