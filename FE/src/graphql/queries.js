@@ -150,3 +150,16 @@ export const LIST_MY_JOB_APPLICATIONS = gql`
     }
   }
 `;
+
+export const LIST_MY_INTEREST_JOB_POSTS = gql`
+  query ListMyInterestJobPosts {
+    listMyInterestJobPosts {
+      jobPost {
+        id
+        status
+        title
+      }
+      createdAt
+    }
+  }
+`;
