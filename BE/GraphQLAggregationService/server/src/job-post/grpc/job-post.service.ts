@@ -12,11 +12,13 @@ import { CreateJobPostInput, JobPost, UserPublicInfo } from 'src/graphql';
 import {
   DayOfWeekMapping,
   JobCategoryMapping,
+  JobPostStatusMapping,
   SalaryTypeMapping,
   WorkPeriodTypeMapping,
   WorkTimeTypeMapping,
 } from './job-post.enum-mapping';
 import { UserService } from 'src/user/user.service';
+import { CloseJobPostRequest } from './dto/close-job-post/request.dto';
 
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
 
@@ -64,6 +66,8 @@ interface JobPostServiceGrpc {
     jobPostId: string;
     userId: string;
   }): Observable<{ views: number }>;
+
+  closeJobPost(data: CloseJobPostRequest): Observable<GrpcGetJobPostResponse>;
 }
 
 @Injectable()
@@ -150,6 +154,10 @@ export class JobPostService implements OnModuleInit {
       );
     }
 
+    if (jobPost.status) {
+      jobPost.status = JobPostStatusMapping[jobPost.status];
+    }
+
     jobPost.salary.salaryType = SalaryTypeMapping[jobPost.salary.salaryType];
     jobPost.workPeriod.type = WorkPeriodTypeMapping[jobPost.workPeriod.type];
     jobPost.workTime.type = WorkTimeTypeMapping[jobPost.workTime.type];
@@ -173,6 +181,7 @@ export class JobPostService implements OnModuleInit {
         this.jobPostService.getJobPost({ id }),
       );
       const { jobPost } = response;
+      console.log(jobPost);
       this.transformGrpcJobPost(jobPost);
       jobPost.publisher = await this.userService.getUserPublicInfo(
         jobPost.userId,
@@ -195,6 +204,23 @@ export class JobPostService implements OnModuleInit {
       return { views: response.views };
     } catch (e) {
       console.error('incrementJobPostViews grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async closeJobPost(jobPostId: string, userId: string): Promise<JobPost> {
+    try {
+      const response = await lastValueFrom(
+        this.jobPostService.closeJobPost({ userId, jobPostId }),
+      );
+      const { jobPost } = response;
+      this.transformGrpcJobPost(jobPost);
+      jobPost.publisher = await this.userService.getUserPublicInfo(
+        jobPost.userId,
+      );
+      return jobPost;
+    } catch (e) {
+      console.error('closeJobPost grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

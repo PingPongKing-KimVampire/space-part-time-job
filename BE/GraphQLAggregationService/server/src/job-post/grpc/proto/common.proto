@@ -49,6 +49,11 @@ enum DayOfWeekType {
   SUNDAY = 6;
 }
 
+enum JobPostStatus {
+  OPEN = 1;
+  CLOSE = 2;
+}
+
 message WorkPeriodInput {
   WorkPeriodType type = 1;
   repeated string dates = 2;       // Optional
@@ -79,4 +84,5 @@ message JobPost {
   string createdAt = 10;
   string userId = 11;
   int64 views = 12;
+  JobPostStatus status = 13;
 }

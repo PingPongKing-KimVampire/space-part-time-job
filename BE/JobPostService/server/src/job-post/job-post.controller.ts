@@ -8,6 +8,8 @@ import { validate, ValidationError } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { SearchJobPostsInput } from './grpc/dto/search-job-posts/search-job-posts.input.dto';
 import { JobPostService } from './job-post.service';
+import { CloseJobPostRequest } from './grpc/dto/close-job-post/request.dto';
+import { CloseJobPostResponse } from './grpc/dto/close-job-post/response.dto';
 
 @Controller()
 export class JobPostController {
@@ -169,7 +171,11 @@ export class JobPostController {
     const { filters, pagination, userId } = input;
     try {
       const { totalCount, edges, pageInfo } =
-        await this.jobPostRepository.searchJobPosts(filters, pagination, userId);
+        await this.jobPostRepository.searchJobPosts(
+          filters,
+          pagination,
+          userId,
+        );
       const formattedEdges = edges.map((edge) => ({
         ...edge,
         node: {
@@ -224,6 +230,25 @@ export class JobPostController {
     } catch (e) {
       console.error(e);
       throw new RpcException('조회수 증가 실패');
+    }
+  }
+
+  @GrpcMethod('JobPostService', 'CloseJobPost')
+  async closeJobPost(request: CloseJobPostRequest) {
+    try {
+      const jobPost = await this.jobPostService.closeJobPost(
+        request.jobPostId,
+        request.userId,
+      );
+      const jobPostDto = {
+        ...jobPost,
+        id: request.jobPostId,
+        createdAt: jobPost.createdAt.toISOString(),
+      };
+      return { jobPost: jobPostDto };
+    } catch (e) {
+      console.error(e);
+      throw new RpcException(e);
     }
   }
 }

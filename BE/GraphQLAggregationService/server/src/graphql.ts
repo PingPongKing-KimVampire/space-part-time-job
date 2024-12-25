@@ -62,6 +62,11 @@ export enum SalaryType {
     MONTHLY = "MONTHLY"
 }
 
+export enum JobPostStatus {
+    OPEN = "OPEN",
+    CLOSE = "CLOSE"
+}
+
 export interface ApplyJobPostInput {
     jobPostId: string;
     coverLetter: string;
@@ -138,6 +143,7 @@ export interface IMutation {
     applyToJobPost(input: ApplyJobPostInput): JobApplication | Promise<JobApplication>;
     cancelJobApplication(id: string): JobApplication | Promise<JobApplication>;
     decideJobApplication(input: DecideJobApplicationInput): JobApplication | Promise<JobApplication>;
+    closeJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
     createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
     incrementJobPostViews(id: string): number | Promise<number>;
     setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
@@ -146,6 +152,7 @@ export interface IMutation {
 
 export interface JobPost {
     id: string;
+    status: JobPostStatus;
     title: string;
     jobDescription: JobCategory[];
     workPeriod: WorkPeriod;

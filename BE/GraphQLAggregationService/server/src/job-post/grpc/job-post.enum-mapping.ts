@@ -1,6 +1,7 @@
 import {
   DayOfWeek,
   JobCategory,
+  JobPostStatus,
   SalaryType,
   WorkPeriodType,
   WorkTimeType,
@@ -51,4 +52,9 @@ export const SalaryTypeMapping = {
   0: SalaryType.HOURLY,
   1: SalaryType.PER_TASK,
   2: SalaryType.MONTHLY,
+};
+
+export const JobPostStatusMapping = {
+  1: JobPostStatus.OPEN,
+  2: JobPostStatus.CLOSE,
 };

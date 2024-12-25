@@ -5,6 +5,7 @@ import "create-job-post.proto";
 import "search-job-posts.proto";
 import "get-job-post.proto";
 import "increment-job-post-views.proto";
+import "close-job-post.proto";
 
 service JobPostService {
   rpc CreateJobPost(CreateJobPostInput) returns (CreateJobPostResponse);
@@ -12,4 +13,5 @@ service JobPostService {
   rpc GetJobPost(GetJobPostRequest) returns (GetJobPostResponse);
   rpc IncrementJobPostViews(IncrementJobPostViewsRequest)
       returns (IncrementJobPostViewsResponse);
+  rpc CloseJobPost(CloseJobPostRequest) returns (CloseJobPostResponse);
 }

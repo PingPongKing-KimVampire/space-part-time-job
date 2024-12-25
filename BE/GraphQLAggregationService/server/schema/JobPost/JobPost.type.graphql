@@ -1,5 +1,6 @@
 type JobPost {
   id: ID!
+  status: JobPostStatus!
   title: String!
   jobDescription: [JobCategory!]!
   workPeriod: WorkPeriod!

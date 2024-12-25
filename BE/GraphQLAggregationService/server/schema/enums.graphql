@@ -49,3 +49,8 @@ enum SalaryType {
   PER_TASK
   MONTHLY
 }
+
+enum JobPostStatus {
+  OPEN
+  CLOSE
+}

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JobPostRepository } from './mongoose/job-post.repository';
 import { RedisService } from 'src/redis/redis.service';
+import { JobPostStatus } from './mongoose/job-post.schema';
 
 @Injectable()
 export class JobPostService {
@@ -47,5 +48,14 @@ export class JobPostService {
 
   private getRedisViewedValue() {
     return 'viewed';
+  }
+
+  async closeJobPost(jobPostId: string, userId: string) {
+    const jobPost = await this.jobPostRepository.findById(jobPostId);
+    if (!jobPost) throw new Error('공고를 찾을 수 없음');
+    if (jobPost.userId !== userId) throw new Error('공고에 접근할 권한 없음');
+    if (jobPost.status === JobPostStatus.CLOSE)
+      throw new Error('이미 닫힌 공고임');
+    return this.jobPostRepository.updateStatus(jobPostId, JobPostStatus.CLOSE);
   }
 }

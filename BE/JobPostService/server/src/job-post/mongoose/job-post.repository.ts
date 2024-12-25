@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { JobPost, JobPostDocument } from './job-post.schema';
+import { JobPost, JobPostDocument, JobPostStatus } from './job-post.schema';
 import { SearchJobPostsInput } from '../grpc/dto/search-job-posts/search-job-posts.input.dto';
 import { WorkPeriodType } from './job-post.enum';
 
@@ -184,5 +184,19 @@ export class JobPostRepository {
       console.error(`조회수 증가 실패`, error);
       throw error;
     }
+  }
+
+  async updateStatus(
+    jobPostId: string,
+    status: JobPostStatus,
+  ): Promise<JobPost> {
+    const updatedJobPost = await this.jobPostModel
+      .findByIdAndUpdate(jobPostId, { status }, { new: true })
+      .lean()
+      .exec();
+    if (!updatedJobPost) {
+      throw new Error(`존재하지 않는 공고임`);
+    }
+    return updatedJobPost;
   }
 }

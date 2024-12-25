@@ -3,6 +3,11 @@ import { Document } from 'mongoose';
 
 export type JobPostDocument = JobPost & Document;
 
+export enum JobPostStatus {
+  OPEN = 'OPEN',
+  CLOSE = 'CLOSE',
+}
+
 @Schema({ timestamps: true })
 export class JobPost {
   @Prop({ required: true })
@@ -77,6 +82,9 @@ export class JobPost {
 
   @Prop({ required: true, default: 0 })
   views: number;
+
+  @Prop({ required: true, enum: JobPostStatus, default: JobPostStatus.OPEN })
+  status: JobPostStatus;
 }
 
 export const JobPostSchema = SchemaFactory.createForClass(JobPost);

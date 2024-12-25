@@ -13,6 +13,7 @@ import {
   JobPost,
   JobPostConnection,
   JobPostSearchFilter,
+  JobPostStatus,
 } from 'src/graphql';
 import { JobPostService } from './grpc/job-post.service';
 import { JobApplyService } from 'src/job-apply/grpc/job-apply.service';
@@ -46,6 +47,7 @@ export class JobPostResolver {
       createdAt,
     } = await this.jobPostService.createJobPost(grpcPayload);
     return {
+      status: JobPostStatus.OPEN,
       ...createJobPostInput,
       createdAt,
       id,
@@ -183,6 +185,18 @@ export class JobPostResolver {
     return (response.jobApplicationList ?? []).map((jobApplication) =>
       this.transformJobApplicationResponse(jobApplication),
     );
+  }
+
+  @Mutation('closeJobPost')
+  async closeJobPost(
+    @Args('id') jobPostId: string,
+    @Context('req') req: Request,
+  ): Promise<JobPost> {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    const jobPost = await this.jobPostService.closeJobPost(jobPostId, user.id);
+    return jobPost;
   }
 
   private getEnumKeyByValue<T extends object>(
