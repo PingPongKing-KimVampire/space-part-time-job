@@ -20,17 +20,26 @@ const Interaction: React.FC<InteractionProps> = (props) => {
 
   const isApplied = useMemo(() => jobPost.myJobApplication !== null, [jobPost]);
 
-  const [
-    markInterest,
-    { loading: markInterestLoading, error: markInterestError },
-  ] = useMutation(MARK_JOB_POST_AS_INTEREST);
+  const [markInterest, { loading: markLoading, error: markError }] =
+    useMutation(MARK_JOB_POST_AS_INTEREST);
+  const [unmarkInterest, { loading: unmarkLoading, error: unmarkError }] =
+    useMutation(UNMARK_JOB_POST_AS_INTEREST);
   const onHeartClick = async () => {
-    // TODO : jobPost의 myInterested 필드를 보고 mark를 할지, unmark를 할지 결정해야 함
-    const response = await markInterest({
-      variables: { jobPostId: jobPost.id },
-    });
-    if (!response || !response.data) return;
-    // TODO : 응답 받은 값으로 jobPost의 myInterested 세팅하기
+    if (!jobPost.myInterested && jobPost.status === JOB_POST_STATUS.CLOSE)
+      return; // 마감한 알바라면 mark는 불가능함
+    const mutation = jobPost.myInterested ? unmarkInterest : markInterest;
+    try {
+      const response = await mutation({ variables: { jobPostId: jobPost.id } });
+      if (!response?.data) return;
+      setJobPost((state) => ({
+        ...state,
+        myInterested: jobPost.myInterested
+          ? null
+          : response.data.markJobPostAsInterest,
+      }));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -47,7 +56,12 @@ const Interaction: React.FC<InteractionProps> = (props) => {
             ? "내가 이미 지원한 알바에요."
             : "지원하기"}
         </button>
-        <HeartIcon />
+        <HeartIcon
+          className={`${
+            jobPost.status === JOB_POST_STATUS.CLOSE ? "inactivated" : ""
+          } ${jobPost.myInterested ? "selected" : ""}`}
+          onClick={onHeartClick}
+        />
       </div>
     </InteractionContainer>
   );

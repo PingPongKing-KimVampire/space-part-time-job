@@ -57,6 +57,7 @@ export const CANCEL_JOB_APPLICATION = gql`
   }
 `;
 
+// TODO : 백엔드에서 JobPost 타입을 반환해 달라고 하기
 export const MARK_JOB_POST_AS_INTEREST = gql`
   mutation MarkJobPostAsInterest($jobPostId: ID!) {
     markJobPostAsInterest(jobPostId: $jobPostId) {

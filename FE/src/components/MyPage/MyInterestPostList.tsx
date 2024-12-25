@@ -6,7 +6,7 @@ import { MouseEventHandlers } from "./PostList.tsx";
 import { JOB_POST_STATUS } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles";
 import { CloseTag } from "../../styles/global.ts";
-import { LIST_MY_INTEREST_JOB_POSTS } from "../../graphql/queries.js";
+import { LIST_MY_INTERESTED_JOB_POSTS } from "../../graphql/queries.js";
 import { UNMARK_JOB_POST_AS_INTEREST } from "../../graphql/mutations.js";
 
 type MyInterestPostListProps = {
@@ -24,7 +24,7 @@ type InterestedJobPost = {
   createdAt: string;
 };
 
-const MyInterestPostList: React.FC<MyInterestPostListProps> = ({
+const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   mouseEventHandlers,
 }) => {
   const navigatge = useNavigate();
@@ -61,20 +61,21 @@ const MyInterestPostList: React.FC<MyInterestPostListProps> = ({
       createdAt: "2일 전",
     },
   ]);
-  //   const {
-  //     data: interestPostsData,
-  //     loading: getInterestPostsLoading,
-  //     error: getInterestPostsError,
-  //   } = useQuery(LIST_MY_INTEREST_JOB_POSTS);
-  //   useEffect(() => {
-  //     if (!interestPostsData || !interestPostsData.listMyInterestJobPosts) return;
-  //     setMyInterestPosts(
-  //       interestPostsData.listMyInterestJobPosts.map((interestedPost) => ({
-  //         ...interestedPost,
-  //         createdAt: formatTimeAgo(interestedPost.createdAt),
-  //       }))
-  //     );
-  //   }, [interestPostsData]);
+  // const {
+  //   data: interestedPostsData,
+  //   loading: getInterestedPostsLoading,
+  //   error: getInterestedPostsError,
+  // } = useQuery(LIST_MY_INTERESTED_JOB_POSTS);
+  // useEffect(() => {
+  //   if (!interestedPostsData || !interestedPostsData.listMyInterestJobPosts)
+  //     return;
+  //   setMyInterestPosts(
+  //     interestedPostsData.listMyInterestJobPosts.map((interestedPost) => ({
+  //       ...interestedPost,
+  //       createdAt: formatTimeAgo(interestedPost.createdAt),
+  //     }))
+  //   );
+  // }, [interestedPostsData]);
 
   const [
     unmarkInterest,
@@ -124,4 +125,4 @@ const MyInterestPostList: React.FC<MyInterestPostListProps> = ({
   );
 };
 
-export default MyInterestPostList;
+export default MyInterestedPostList;

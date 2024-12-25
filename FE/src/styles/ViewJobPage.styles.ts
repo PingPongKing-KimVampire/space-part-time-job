@@ -252,7 +252,6 @@ export const InteractionContainer = styled("div", {
         stroke: MainColor,
         strokeWidth: "0.8",
       },
-      // TODO: 여기부터 사용되지 않는 부분임
       "&.selected": {
         fill: MainColor,
         stroke: MainColor,
@@ -263,6 +262,8 @@ export const InteractionContainer = styled("div", {
       },
       "&:not(.selected).inactivated": {
         cursor: "not-allowed",
+        pointerEvents: "none",
+        // TODO : 비활성화 스타일로 변경
       },
     },
   },
