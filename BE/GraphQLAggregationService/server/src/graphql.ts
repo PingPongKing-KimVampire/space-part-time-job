@@ -150,6 +150,14 @@ export interface IMutation {
     _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
+export interface IQuery {
+    listMyJobApplications(): Nullable<JobApplication>[] | Promise<Nullable<JobApplication>[]>;
+    getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
+    searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;
+    me(): User | Promise<User>;
+    _empty(): Nullable<string> | Promise<Nullable<string>>;
+}
+
 export interface JobPost {
     id: string;
     status: JobPostStatus;
@@ -184,13 +192,6 @@ export interface WorkTime {
 export interface Salary {
     salaryType: SalaryType;
     salaryAmount: number;
-}
-
-export interface IQuery {
-    getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
-    searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;
-    me(): User | Promise<User>;
-    _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export interface JobPostConnection {

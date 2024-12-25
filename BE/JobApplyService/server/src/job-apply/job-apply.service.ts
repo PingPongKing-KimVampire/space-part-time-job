@@ -100,4 +100,8 @@ export class JobApplyService {
     if (!updatedJobApplication) throw new Error('예상하지 못한 에러');
     return updatedJobApplication;
   }
+
+  async listMyJobApplication(userId: string): Promise<JobApplication[]> {
+    return this.jobApplyRepository.listJobApplicationByUser(userId);
+  }
 }

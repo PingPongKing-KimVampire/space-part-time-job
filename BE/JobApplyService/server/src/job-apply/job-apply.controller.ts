@@ -24,6 +24,8 @@ import { CountJobApplicationByPostRequest } from './grpc/dto/count-job-applicati
 import { CountJobApplicationByPostResponse } from './grpc/dto/count-job-application-by-post/response.dto';
 import { DecideJobApplicationRequest } from './grpc/dto/decide-job-application/request.dto';
 import { DecideJobApplicationResponse } from './grpc/dto/decide-job-application/response.dto';
+import { ListMyJobApplicationRequest } from './grpc/dto/list-my-job-application/request.dto';
+import { ListMyJobApplicationResponse } from './grpc/dto/list-my-job-application/response.dto';
 
 @Controller()
 export class JobApplyController {
@@ -202,6 +204,22 @@ export class JobApplyController {
       console.error('에러 발생', e);
       throw new RpcException(e);
     }
+  }
+
+  @GrpcMethod('JobApplyService', 'ListMyJobApplication')
+  async listMyJobApplication(
+    request: ListMyJobApplicationRequest,
+  ): Promise<ListMyJobApplicationResponse> {
+    request = plainToInstance(ListMyJobApplicationRequest, request);
+    await this.validateFormat(request);
+
+    const jobApplicationList =
+      await this.jobApplyRepository.listJobApplicationByUser(request.userId);
+    return {
+      jobApplicationList: jobApplicationList.map((jobApplication) =>
+        this.transformJobApplicationToGrpcResponse(jobApplication),
+      ),
+    };
   }
 
   transformGRPCStatus(

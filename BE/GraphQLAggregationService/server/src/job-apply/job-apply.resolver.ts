@@ -3,6 +3,7 @@ import {
   Context,
   Mutation,
   Parent,
+  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
@@ -83,6 +84,21 @@ export class JobApplyResolver {
     });
 
     return this.transformJobApplicationResponse(jobApplication);
+  }
+
+  @Query('listMyJobApplications')
+  async listMyJobApplications(@Context('req') req: Request) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    const { jobApplicationList } =
+      await this.jobApplyService.listMyJobApplication({
+        userId: user.id,
+      });
+
+    return (jobApplicationList ?? []).map((jobApplication) =>
+      this.transformJobApplicationResponse(jobApplication),
+    );
   }
 
   private getEnumKeyByValue<T extends object>(

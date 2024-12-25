@@ -55,6 +55,15 @@ export class JobApplyRepository {
     return jobApplications.map((doc) => doc.toObject());
   }
 
+  async listJobApplicationByUser(userId: string): Promise<JobApplication[]> {
+    const filter = {
+      userId,
+    };
+
+    const jobApplications = await this.jobApplicationModel.find(filter).exec();
+    return jobApplications.map((doc) => doc.toObject());
+  }
+
   async getJobApplication(id: string): Promise<JobApplication> {
     const jobApplication = await this.jobApplicationModel.findById(id).exec();
     return jobApplication.toObject();

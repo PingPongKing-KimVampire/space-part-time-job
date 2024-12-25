@@ -8,6 +8,7 @@ import "cancel-job-application.proto";
 import "list-job-application-by-post-for-publisher.proto";
 import "count-job-application-by-post.proto";
 import "decide-job-application.proto";
+import "list-my-job-application.proto";
 
 service JobApplyService {
   rpc ApplyToJobPost(ApplyToJobPostRequest) returns (ApplyToJobPostResponse);
@@ -27,4 +28,7 @@ service JobApplyService {
 
   rpc DecideJobApplication(DecideJobApplicationRequest)
       returns (DecideJobApplicationResponse);
+
+  rpc ListMyJobApplication(ListMyJobApplicationRequest)
+      returns (ListMyJobApplicationResponse);
 }
