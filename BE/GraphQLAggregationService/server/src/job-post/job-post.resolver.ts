@@ -199,6 +199,34 @@ export class JobPostResolver {
     return jobPost;
   }
 
+  @Mutation('markJobPostAsInterest')
+  async markJobPostAsInterest(
+    @Args('jobPostId') jobPostId: string,
+    @Context('req') req: Request,
+  ) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+
+    await this.jobPostService.markJobPostAsInterest(jobPostId, user.id);
+    const jobPost = await this.getJobPost(jobPostId);
+    return jobPost;
+  }
+
+  @Mutation('unmarkJobPostAsInterest')
+  async unmarkJobPostAsInterest(
+    @Args('jobPostId') jobPostId: string,
+    @Context('req') req: Request,
+  ) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+
+    await this.jobPostService.unmarkJobPostAsInterest(jobPostId, user.id);
+    const jobPost = await this.getJobPost(jobPostId);
+    return jobPost;
+  }
+
   private getEnumKeyByValue<T extends object>(
     enumObj: T,
     value: T[keyof T],

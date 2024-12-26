@@ -58,4 +58,9 @@ export class JobPostService {
       throw new Error('이미 닫힌 공고임');
     return this.jobPostRepository.updateStatus(jobPostId, JobPostStatus.CLOSE);
   }
+
+  async isExistJobPost(jobPostId): Promise<boolean> {
+    const jobPost = await this.jobPostRepository.findById(jobPostId);
+    return !!jobPost;
+  }
 }

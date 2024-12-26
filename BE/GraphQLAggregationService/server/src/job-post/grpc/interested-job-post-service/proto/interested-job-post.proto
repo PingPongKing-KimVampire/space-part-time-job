@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package jobPost;
+
+import "mark-job-post-as-interest.proto";
+import "unmark-job-post-as-interest.proto";
+
+service InterestedJobPostService {
+  rpc MarkJobPostAsInterest(MarkJobPostAsInterestRequest)
+      returns (MarkJobPostAsInterestResponse);
+  rpc UnmarkJobPostAsInterest(UnmarkJobPostAsInterestRequest)
+      returns (UnmarkJobPostAsInterestResponse);
+}

@@ -16,5 +16,6 @@ import { RedisModule } from 'src/redis/redis.module';
   ],
   providers: [JobPostRepository, ImageUploadService, JobPostService],
   controllers: [JobPostController],
+  exports: [JobPostService],
 })
 export class JobPostModule {}

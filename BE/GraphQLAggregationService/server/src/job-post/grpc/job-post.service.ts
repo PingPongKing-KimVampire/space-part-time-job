@@ -16,9 +16,13 @@ import {
   SalaryTypeMapping,
   WorkPeriodTypeMapping,
   WorkTimeTypeMapping,
-} from './job-post.enum-mapping';
+} from './job-post-service/dto/job-post.enum-mapping';
 import { UserService } from 'src/user/user.service';
-import { CloseJobPostRequest } from './dto/close-job-post/request.dto';
+import { CloseJobPostRequest } from './job-post-service/dto/close-job-post/request.dto';
+import { MarkJobPostAsInterestRequest } from './interested-job-post-service/dto/mark-job-post-as-interested/request.dto';
+import { MarkJobPostAsInterestResponse } from './interested-job-post-service/dto/mark-job-post-as-interested/response.dto';
+import { UnmarkJobPostAsInterestRequest } from './interested-job-post-service/dto/unmark-job-post-as-interested/request.dto';
+import { UnmarkJobPostAsInterestResponse } from './interested-job-post-service/dto/unmark-job-post-as-interested/response.dto';
 
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
 
@@ -70,9 +74,20 @@ interface JobPostServiceGrpc {
   closeJobPost(data: CloseJobPostRequest): Observable<GrpcGetJobPostResponse>;
 }
 
+interface InterestedJobPostServiceGrpc {
+  MarkJobPostAsInterest(
+    data: MarkJobPostAsInterestRequest,
+  ): Observable<MarkJobPostAsInterestResponse>;
+
+  UnmarkJobPostAsInterest(
+    data: UnmarkJobPostAsInterestRequest,
+  ): Observable<UnmarkJobPostAsInterestResponse>;
+}
+
 @Injectable()
 export class JobPostService implements OnModuleInit {
   private jobPostService: JobPostServiceGrpc;
+  private InterestedJobPostService: InterestedJobPostServiceGrpc;
 
   constructor(
     private readonly configService: ConfigService,
@@ -86,7 +101,13 @@ export class JobPostService implements OnModuleInit {
       transport: Transport.GRPC,
       options: {
         package: 'jobPost',
-        protoPath: [join(__dirname, './proto/job-post.proto')],
+        protoPath: [
+          join(__dirname, './job-post-service/proto/job-post.proto'),
+          join(
+            __dirname,
+            './interested-job-post-service/proto/interested-job-post.proto',
+          ),
+        ],
         url: grpcUrl,
         loader: {
           longs: Number,
@@ -99,6 +120,11 @@ export class JobPostService implements OnModuleInit {
     ) as unknown as ClientGrpc;
     this.jobPostService =
       grpcClient.getService<JobPostServiceGrpc>('JobPostService');
+
+    this.InterestedJobPostService =
+      grpcClient.getService<InterestedJobPostServiceGrpc>(
+        'InterestedJobPostService',
+      );
   }
 
   async createJobPost(
@@ -221,6 +247,42 @@ export class JobPostService implements OnModuleInit {
       return jobPost;
     } catch (e) {
       console.error('closeJobPost grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async markJobPostAsInterest(
+    jobPostId: string,
+    userId: string,
+  ): Promise<MarkJobPostAsInterestResponse> {
+    try {
+      const { createdAt } = await lastValueFrom(
+        this.InterestedJobPostService.MarkJobPostAsInterest({
+          userId,
+          jobPostId,
+        }),
+      );
+      return { createdAt };
+    } catch (e) {
+      console.error('markJobPostAsInterest grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async unmarkJobPostAsInterest(
+    jobPostId: string,
+    userId: string,
+  ): Promise<UnmarkJobPostAsInterestResponse> {
+    try {
+      await lastValueFrom(
+        this.InterestedJobPostService.UnmarkJobPostAsInterest({
+          userId,
+          jobPostId,
+        }),
+      );
+      return {};
+    } catch (e) {
+      console.error('unmarkJobPostAsInterest grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

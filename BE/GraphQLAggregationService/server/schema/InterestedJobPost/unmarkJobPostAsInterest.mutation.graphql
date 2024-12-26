@@ -1,0 +1,3 @@
+extend type Mutation {
+  unmarkJobPostAsInterest(jobPostId: ID!): JobPost!
+}

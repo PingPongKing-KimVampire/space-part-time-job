@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package jobPost;
+
+message UnmarkJobPostAsInterestRequest {
+  string jobPostId = 1;
+  string userId = 2;
+}
+
+message UnmarkJobPostAsInterestResponse {}

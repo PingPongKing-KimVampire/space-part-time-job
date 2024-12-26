@@ -130,16 +130,9 @@ export interface NeighborhoodInput {
     level: number;
 }
 
-export interface JobApplication {
-    id: string;
-    jobPost: JobPost;
-    coverLetter: string;
-    applicant: UserPublicInfo;
-    status: ApplicationStatus;
-    createdAt: string;
-}
-
 export interface IMutation {
+    markJobPostAsInterest(jobPostId: string): JobPost | Promise<JobPost>;
+    unmarkJobPostAsInterest(jobPostId: string): JobPost | Promise<JobPost>;
     applyToJobPost(input: ApplyJobPostInput): JobApplication | Promise<JobApplication>;
     cancelJobApplication(id: string): JobApplication | Promise<JobApplication>;
     decideJobApplication(input: DecideJobApplicationInput): JobApplication | Promise<JobApplication>;
@@ -148,6 +141,15 @@ export interface IMutation {
     incrementJobPostViews(id: string): number | Promise<number>;
     setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
     _empty(): Nullable<string> | Promise<Nullable<string>>;
+}
+
+export interface JobApplication {
+    id: string;
+    jobPost: JobPost;
+    coverLetter: string;
+    applicant: UserPublicInfo;
+    status: ApplicationStatus;
+    createdAt: string;
 }
 
 export interface IQuery {
