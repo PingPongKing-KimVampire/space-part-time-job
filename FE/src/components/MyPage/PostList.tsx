@@ -1,12 +1,11 @@
 import React, { useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { Tab, TAB_INFO } from "../../pages/MyPage.tsx";
 import MyPostList from "./MyPostList.tsx";
 import MyAppliedPostList from "./MyAppliedPostList.tsx";
 import MyInterestPostList from "./MyInterestPostList.tsx";
 
 type PostListProp = {
-  tab: Tab;
+  selectedTab: Tab;
 };
 
 export type MouseEventHandlers = {
@@ -16,9 +15,7 @@ export type MouseEventHandlers = {
   onInnerClickableMouseLeave: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
-const PostList: React.FC<PostListProp> = ({ tab }) => {
-  const navigate = useNavigate();
-
+const PostList: React.FC<PostListProp> = ({ selectedTab }) => {
   const onItemMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.currentTarget.classList.add("isHovering");
@@ -58,14 +55,13 @@ const PostList: React.FC<PostListProp> = ({ tab }) => {
     onInnerClickableMouseLeave,
   ]);
 
-  if (tab.label === TAB_INFO.POST.label) {
+  if (!selectedTab || !selectedTab.label) return null;
+  if (selectedTab.label === TAB_INFO.post.label) {
     return <MyPostList mouseEventHandlers={mouseEventHandlers} />;
-  } else if (tab.label === TAB_INFO.APPLY.label) {
+  } else if (selectedTab.label === TAB_INFO.apply.label) {
     return <MyAppliedPostList mouseEventHandlers={mouseEventHandlers} />;
-  } else {
-    return <MyInterestPostList mouseEventHandlers={mouseEventHandlers} />;
   }
-  return null;
+  return <MyInterestPostList mouseEventHandlers={mouseEventHandlers} />;
 };
 
 export default PostList;

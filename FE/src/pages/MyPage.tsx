@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import Profile from "../components/MyPage/Profile.tsx";
 import Tabs from "../components/MyPage/Tabs.tsx";
@@ -12,14 +12,18 @@ export type Tab = {
 };
 
 export const TAB_INFO: Record<string, Tab> = {
-  APPLY: { label: "지원 내역", pos: "left" },
-  POST: { label: "게시한 공고", pos: "middle" },
-  INTEREST: { label: "관심 목록", pos: "right" },
+  apply: { label: "지원 내역", pos: "left" },
+  post: { label: "게시한 공고", pos: "middle" },
+  interest: { label: "관심 목록", pos: "right" },
 };
 
 const MyPage = () => {
   useBackgroundColor(MainBackgroundColor);
-  const [selectedTab, setSelectedTab] = useState<Tab>(TAB_INFO.APPLY);
+  const [selectedTab, setSelectedTab] = useState(TAB_INFO.apply);
+  useEffect(() => {
+    const tabKey = sessionStorage.getItem("tabKey");
+    if (tabKey) setSelectedTab(TAB_INFO[tabKey]);
+  }, []);
 
   return (
     <Background>
@@ -30,7 +34,7 @@ const MyPage = () => {
         </div>
       </TopArea>
       <BottomArea>
-        <PostList tab={selectedTab} />
+        <PostList selectedTab={selectedTab} />
       </BottomArea>
     </Background>
   );

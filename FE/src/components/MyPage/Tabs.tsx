@@ -10,21 +10,24 @@ type TabsProps = {
 const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
   return (
     <TabsContainer>
-      {Object.values(TAB_INFO).map((currentTab) => {
-        const { label, pos } = currentTab;
+      {Object.entries(TAB_INFO).map(([key, tab]) => {
+        const { label, pos } = tab;
         return (
           <button
-            className={`tabButton ${selectedTab.pos === pos ? "selected" : ""}`}
+            className={`tabButton ${
+              selectedTab && selectedTab.pos === pos ? "selected" : ""
+            }`}
             key={label}
             onClick={() => {
-              setSelectedTab(currentTab);
+              sessionStorage.setItem("tabKey", key);
+              setSelectedTab(TAB_INFO[key]);
             }}
           >
             {label}
           </button>
         );
       })}
-      <div className={`tabIndicator ${selectedTab.pos}`} />
+      <div className={`tabIndicator ${selectedTab ? selectedTab.pos : ""}`} />
     </TabsContainer>
   );
 };
