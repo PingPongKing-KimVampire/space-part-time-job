@@ -47,8 +47,8 @@ export const checkRulePassInAuth = {
     if (nickname.length < 1 || 10 < nickname.length) return false;
     return /^[가-힣a-zA-Z0-9]+$/.test(nickname);
   },
-  authNumber: (authNumber: string): boolean => {
-    return authNumber.length > 0;
+  smsCode: (smsCode: string): boolean => {
+    return smsCode.length > 0;
   },
   ...checkRulePassCommon,
 };

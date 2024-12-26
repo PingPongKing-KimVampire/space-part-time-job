@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { checkDuplicated, signup } from "../utils/apiRequest.ts";
 import {
   Background,
   Container,
@@ -18,7 +19,7 @@ type InputValue = {
   password: string;
   nickname: string;
   phoneNumber: string;
-  authNumber: string;
+  smsCode: string;
 };
 
 type IsValid = {
@@ -36,7 +37,7 @@ type IsValid = {
     errorMessage: string;
   };
   phoneNumber: { isRulePassed: boolean };
-  authNumber: { isRulePassed: boolean };
+  smsCode: { isRulePassed: boolean };
 };
 
 type CheckDuplicatedResponseData = {
@@ -54,7 +55,7 @@ const SignupPage = () => {
     password: "",
     nickname: "",
     phoneNumber: "",
-    authNumber: "",
+    smsCode: "",
   });
   const [isValid, setIsValid] = useState<IsValid>({
     id: {
@@ -71,7 +72,7 @@ const SignupPage = () => {
       errorMessage: "",
     },
     phoneNumber: { isRulePassed: false },
-    authNumber: { isRulePassed: false },
+    smsCode: { isRulePassed: false },
   });
   const [signupWarning, setSignupWarning] = useState({
     userInfo: "",
@@ -89,30 +90,6 @@ const SignupPage = () => {
     return true;
   };
 
-  const checkDuplicated = async (fieldName: "id" | "nickname") => {
-    let response: Response;
-    const requestUrl: string = `https://${IP_ADDRESS}/api/users/check-${fieldName}/${inputValue[fieldName]}`;
-    try {
-      response = await fetch(requestUrl);
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-
-    if (!response.ok) {
-      let data: CheckDuplicatedResponseData;
-      try {
-        data = await response.json();
-      } catch (e) {
-        throw new Error(ERROR.SERVER);
-      }
-      if (data.error === "아이디 중복")
-        throw new Error(ERROR.SIGNUP.DUPLICATED_ID); // 409
-      if (data.error === "닉네임 중복")
-        throw new Error(ERROR.SIGNUP.DUPLICATED_NICKNAME); // 409
-      throw new Error(ERROR.SERVER);
-    }
-  };
-
   const checkValidation = async (fieldName: string, value?: string) => {
     value = value !== undefined ? value : inputValue[fieldName];
     // 규칙 통과 검사
@@ -123,7 +100,7 @@ const SignupPage = () => {
     }
     // 중복 검사
     try {
-      await checkDuplicated(fieldName);
+      await checkDuplicated(fieldName, inputValue[fieldName]);
       setIsValid((state) => ({
         ...state,
         [fieldName]: { isRulePassed, hasError: false },
@@ -137,13 +114,13 @@ const SignupPage = () => {
   };
 
   const isAllValid = useMemo(() => {
-    const { id, password, nickname, phoneNumber, authNumber } = isValid;
+    const { id, password, nickname, phoneNumber, smsCode } = isValid;
     if (!id.isRulePassed || id.isDuplicated || id.hasError) return false;
     if (!password.isRulePassed) return false;
     if (!nickname.isRulePassed || nickname.isDuplicated || nickname.hasError)
       return false;
     if (!phoneNumber.isRulePassed) return false;
-    if (!authNumber.isRulePassed) return false;
+    if (!smsCode.isRulePassed) return false;
     return true;
   }, [isValid]);
 
@@ -151,55 +128,19 @@ const SignupPage = () => {
     setInputValue((state) => ({ ...state, [fieldName]: value }));
   }, []);
 
-  const signup = async () => {
-    let response: Response;
-    try {
-      response = await fetch(`https://${IP_ADDRESS}/api/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify({
-          id: inputValue.id,
-          password: inputValue.password,
-          nickname: inputValue.nickname,
-          phoneNumber: inputValue.phoneNumber.replace(/-/g, ""),
-          smsCode: inputValue.authNumber,
-        }),
-      });
-    } catch {
-      return {
-        phoneNumber: ERROR.NETWORK,
-      };
-    }
-
-    if (!response.ok) {
-      let data: SignupResponseData;
-      try {
-        data = await response.json();
-      } catch {
-        return {
-          phoneNumber: ERROR.SERVER,
-        };
-      }
-      if (data.error === "닉네임 중복")
-        return { userInfo: ERROR.SIGNUP.DUPLICATED_NICKNAME }; // 409
-      if (data.error === "아이디 중복")
-        return { userInfo: ERROR.SIGNUP.DUPLICATED_ID }; // 409
-      if (data.error === "휴대폰 번호 중복")
-        return { phoneNumber: ERROR.SIGNUP.DUPLICATED_PHONE_NUMBER }; // 409
-      if (data.error === "휴대폰 인증 실패")
-        return { phoneNumber: ERROR.INVALID_AUTH_NUMBER }; // 401
-      return {
-        phoneNumber: ERROR.SERVER,
-      }; // 400, 500
-    }
-  };
-
   const SignupButtonClicked = async () => {
-    const error = await signup();
-    if (error) {
-      setSignupWarning({ userInfo: "", phoneNumber: "", ...error });
+    try {
+      await signup(inputValue);
+    } catch (e) {
+      console.log("e", e);
+      if (
+        e.message === ERROR.SIGNUP.DUPLICATED_NICKNAME ||
+        e.message === ERROR.SIGNUP.DUPLICATED_ID
+      ) {
+        setSignupWarning({ userInfo: e.message, phoneNumber: "" });
+      } else {
+        setSignupWarning({ userInfo: "", phoneNumber: e.message });
+      }
       return;
     }
     navigate("/login");

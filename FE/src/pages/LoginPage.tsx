@@ -22,7 +22,7 @@ import useBackgroundColor from "../utils/useBackgroundColor";
 import { checkRulePassInAuth } from "../utils/checkRulePass";
 import useCountdownTimer from "../utils/useCountdownTimer";
 import {
-  SEND_AUTHNUMBER_COUNTDOWN_SEC,
+  SEND_SMSCODE_COUNTDOWN_SEC,
   IP_ADDRESS,
   ERROR,
 } from "../constants/constants";
@@ -38,7 +38,7 @@ type LoginRequestBody = {
   smsCode?: string;
 };
 
-type SendAuthNumberResponseData = {
+type SendSmsCodeResponseData = {
   error?: string;
   remainingPhoneAuthenticationCount?: number;
 };
@@ -50,7 +50,7 @@ type LoginResponseData = {
 const LoginPage = (): React.JSX.Element => {
   useBackgroundColor(MainBackgroundColor);
   const navigate = useNavigate();
-  const countdownTimer = useCountdownTimer(SEND_AUTHNUMBER_COUNTDOWN_SEC);
+  const countdownTimer = useCountdownTimer(SEND_SMSCODE_COUNTDOWN_SEC);
 
   const [selectedTab, setSelectedTab] = useState(ID_PW);
   const [notiVisible, setNotiVisible] = useState(false);
@@ -59,7 +59,7 @@ const LoginPage = (): React.JSX.Element => {
     id: "",
     password: "",
     phoneNumber: "",
-    authNumber: "",
+    smsCode: "",
   });
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [warning, setWarning] = useState("");
@@ -67,9 +67,9 @@ const LoginPage = (): React.JSX.Element => {
   const [isSent, setIsSent] = useState(false); // 인증번호를 전송한 적이 있나?
   const [recentPhoneNumber, setRecentPhoneNumber] = useState(""); // 가장 최근에 인증번호 전송을 누른 시점에 입력되어 있던 전화번호
 
-  const sendAuthNumber = async (): Promise<number> => {
+  const sendSmsCode = async (): Promise<number> => {
     let response: Response;
-    let data: SendAuthNumberResponseData;
+    let data: SendSmsCodeResponseData;
     const requestUrl = `https://${IP_ADDRESS}/api/users/login/phone-auth-code`;
     try {
       response = await fetch(requestUrl, {
@@ -112,7 +112,7 @@ const LoginPage = (): React.JSX.Element => {
     }
     // TODO : PhoneNumberSection 이랑 같은 로직..!
     try {
-      const remainingCount: number = await sendAuthNumber();
+      const remainingCount: number = await sendSmsCode();
       setRemainingCount(remainingCount);
     } catch (e) {
       setWarning(e.message);
@@ -133,7 +133,7 @@ const LoginPage = (): React.JSX.Element => {
     // 인증번호 전송 후 10초 간 전송 불가능
     if (
       countdownTimer.isActive &&
-      SEND_AUTHNUMBER_COUNTDOWN_SEC - 10 < countdownTimer.timeLeft
+      SEND_SMSCODE_COUNTDOWN_SEC - 10 < countdownTimer.timeLeft
     )
       return false;
     return true;
@@ -148,7 +148,7 @@ const LoginPage = (): React.JSX.Element => {
       requestUrl = `https://${IP_ADDRESS}/api/users/login`;
     } else if (selectedTab === PHONE_NUMBER) {
       body.phoneNumber = inputValue.phoneNumber.replace(/-/g, "");
-      body.smsCode = inputValue.authNumber;
+      body.smsCode = inputValue.smsCode;
       requestUrl = `https://${IP_ADDRESS}/api/users/login/phone`;
     }
 
@@ -212,7 +212,7 @@ const LoginPage = (): React.JSX.Element => {
         if (inputValue.phoneNumber === "")
           throw new Error(ERROR.LOGIN.ENTER_PHONE_NUMBER);
         if (!isValidPhoneNumber) throw new Error(ERROR.INVALID_PHONE_NUMBER);
-        if (inputValue.authNumber === "")
+        if (inputValue.smsCode === "")
           throw new Error(ERROR.LOGIN.ENTER_AUTH_NUMBER);
       }
     } catch (e) {
@@ -229,7 +229,7 @@ const LoginPage = (): React.JSX.Element => {
   };
 
   useEffect(() => {
-    setInputValue({ id: "", password: "", phoneNumber: "", authNumber: "" });
+    setInputValue({ id: "", password: "", phoneNumber: "", smsCode: "" });
     setWarning("");
   }, [selectedTab]);
 
@@ -352,15 +352,15 @@ const LoginPage = (): React.JSX.Element => {
                   </PhoneNumberInputChild>
                 </PhoneNumberInput>
                 <CustomInput
-                  id="authNumber"
+                  id="smsCode"
                   placeholder="인증번호"
                   borderType="multi-bottom"
-                  value={inputValue.authNumber}
+                  value={inputValue.smsCode}
                   eventHandlers={{
                     onChange: (e) => {
                       setInputValue((state) => ({
                         ...state,
-                        authNumber: e.target.value,
+                        smsCode: e.target.value,
                       }));
                     },
                   }}

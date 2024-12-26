@@ -10,12 +10,12 @@ import {
 } from "../../styles/SignupPage.styles";
 import { WarningText } from "../../styles/global";
 import {
-  SEND_AUTHNUMBER_COUNTDOWN_SEC,
+  SEND_SMSCODE_COUNTDOWN_SEC,
   IP_ADDRESS,
   ERROR,
 } from "../../constants/constants";
 
-type SendAuthNumberResponseData = {
+type SendSmsCodeResponseData = {
   error?: string;
   remainingPhoneAuthenticationCount?: number;
 };
@@ -32,7 +32,7 @@ const PhoneNumberSection = (props) => {
 
   const [isSent, setIsSent] = useState(false); // 인증번호를 전송한 적 있는가?
   const [isNotiVisible, setIsNotiVisible] = useState(false); // 남은 인증번호 전송 가능 횟수를 표시하는 노티 표시 여부
-  const countdownTimer = useCountdownTimer(SEND_AUTHNUMBER_COUNTDOWN_SEC); // 5분 카운트다운 타이머
+  const countdownTimer = useCountdownTimer(SEND_SMSCODE_COUNTDOWN_SEC); // 5분 카운트다운 타이머
   const [remainingCount, setRemainingCount] = useState<number>(0); // 일일 인증번호 전송 가능 남은 횟수
   const [warning, setWarning] = useState("");
   const [recentPhoneNumber, setRecentPhoneNumber] = useState(""); // 가장 최근에 인증번호 전송을 누른 시점에 입력되어 있던 전화번호
@@ -49,8 +49,8 @@ const PhoneNumberSection = (props) => {
 
   useEffect(() => {
     if (!countdownTimer.isActive) {
-      updateValue("authNumber", "");
-      checkValidation("authNumber", "");
+      updateValue("smsCode", "");
+      checkValidation("smsCode", "");
     }
   }, [countdownTimer.isActive, updateValue]);
 
@@ -58,7 +58,7 @@ const PhoneNumberSection = (props) => {
   const sendNumberButtonClicked = async () => {
     // 인증번호 전송
     try {
-      const remainingCount: number = await sendAuthNumber();
+      const remainingCount: number = await sendSmsCode();
       setRemainingCount(remainingCount);
     } catch (e) {
       setWarning(e.message);
@@ -79,15 +79,15 @@ const PhoneNumberSection = (props) => {
     // 인증번호 전송 후 10초 간 전송 불가능
     if (
       countdownTimer.isActive &&
-      SEND_AUTHNUMBER_COUNTDOWN_SEC - 10 < countdownTimer.timeLeft
+      SEND_SMSCODE_COUNTDOWN_SEC - 10 < countdownTimer.timeLeft
     )
       return false;
     return true;
   };
 
-  const sendAuthNumber = async (): Promise<number> => {
+  const sendSmsCode = async (): Promise<number> => {
     let response: Response;
-    let data: SendAuthNumberResponseData;
+    let data: SendSmsCodeResponseData;
     const requestUrl: string = `https://${IP_ADDRESS}/api/users/phone-auth-code`;
     try {
       response = await fetch(requestUrl, {
@@ -154,14 +154,14 @@ const PhoneNumberSection = (props) => {
         </SendNumberButton>
         {countdownTimer.isActive && (
           <CustomInput
-            id="authNumber"
+            id="smsCode"
             placeholder="인증번호"
             invalid={false}
-            value={inputValue.authNumber}
+            value={inputValue.smsCode}
             eventHandlers={{
               onChange: (e) => {
-                updateValue("authNumber", e.target.value);
-                checkValidation("authNumber", e.target.value);
+                updateValue("smsCode", e.target.value);
+                checkValidation("smsCode", e.target.value);
               },
             }}
           />

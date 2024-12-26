@@ -110,7 +110,7 @@ export const WORKTIME_TYPES = {
 };
 export const WORKTIME_TYPES_KEY = reverseKeyValue(WORKTIME_TYPES);
 
-export const SEND_AUTHNUMBER_COUNTDOWN_SEC = 300;
+export const SEND_SMSCODE_COUNTDOWN_SEC = 300;
 
 const TIMES = [
   "00:30",

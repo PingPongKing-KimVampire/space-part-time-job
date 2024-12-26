@@ -13,13 +13,14 @@ const apiRequest = async (
   } catch {
     throw new Error(ERROR.NETWORK);
   }
-  if (!response.ok) throw new Error(ERROR.SERVER);
+  if (response.status === 204) return; // No Content
   try {
     data = await response.json();
   } catch {
     throw new Error(ERROR.SERVER);
   }
-  return processData ? processData(data) : null;
+  if (!response.ok && !data.error) throw new Error(ERROR.SERVER);
+  return processData ? processData(data) : data;
 };
 
 export const fetchDistrictBoundary = async (id) => {
@@ -65,7 +66,7 @@ export const fetchNeighborInfoByCoordinate = async ({ x, y }) => {
 };
 
 export const requestLogout = async () => {
-  await apiRequest(`http://${IP_ADDRESS}/api/users/logout`, {
+  await apiRequest(`https://${IP_ADDRESS}/api/users/logout`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -105,4 +106,11 @@ export const signup = async ({
       smsCode,
     }),
   });
+  if (data?.error === "닉네임 중복")
+    throw Error(ERROR.SIGNUP.DUPLICATED_NICKNAME); // 409
+  if (data?.error === "아이디 중복") throw Error(ERROR.SIGNUP.DUPLICATED_ID); // 409
+  if (data?.error === "휴대폰 번호 중복")
+    throw Error(ERROR.SIGNUP.DUPLICATED_PHONE_NUMBER); // 409
+  if (data?.error === "휴대폰 인증 실패")
+    throw Error(ERROR.INVALID_AUTH_NUMBER); // 401
 };
