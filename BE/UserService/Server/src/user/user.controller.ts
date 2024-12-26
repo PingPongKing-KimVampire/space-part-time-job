@@ -234,6 +234,30 @@ export class UserController {
     }
   }
 
+  @Post('logout')
+  @HttpCode(204)
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const accessToken = req.cookies['access_token'];
+
+    if (!accessToken) {
+      throw new HttpException({ error: '인증되지 않은 회원' }, 401);
+    }
+
+    try {
+      this.authTokenService.verifyAccessToken(accessToken);
+
+      res.cookie('access_token', '', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 0,
+        path: '/api',
+      });
+    } catch (e) {
+      throw new HttpException({ error: '인증되지 않은 회원' }, 401);
+    }
+  }
+
   @GrpcMethod('UserService', 'SetUserResidentDistrict')
   async setUserResidentDistrict(data: {
     userId: string;
