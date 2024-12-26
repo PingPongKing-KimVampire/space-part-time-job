@@ -88,6 +88,7 @@ export class JobPostResolver {
       endTime: filters.endTime || undefined,
       keyword: filters.keyword || undefined,
       onlyMyPosts: filters.onlyMyPosts || false,
+      status: filters.status || undefined,
     };
 
     const grpcPagination = {

@@ -21,8 +21,10 @@ import {
 import {
   DayOfWeekMapping,
   JobCategoryMapping,
+  StatusMapping,
   WorkPeriodTypeMapping,
 } from 'src/job-post/grpc/job-post.enum-mapping';
+import { JobPostStatus } from 'src/job-post/mongoose/job-post.schema';
 
 export class JobPostSearchFilter {
   @IsArray()
@@ -62,6 +64,13 @@ export class JobPostSearchFilter {
   @IsOptional()
   @IsString()
   keyword?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => value.map((v: number) => StatusMapping[v]), {
+    toClassOnly: true,
+  })
+  @IsEnum(JobPostStatus, { each: true })
+  status?: JobPostStatus[];
 
   @IsOptional()
   @IsBoolean()

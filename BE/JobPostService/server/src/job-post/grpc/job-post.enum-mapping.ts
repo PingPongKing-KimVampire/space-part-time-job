@@ -5,6 +5,7 @@ import {
   WorkPeriodType,
   WorkTimeType,
 } from '../mongoose/job-post.enum';
+import { JobPostStatus } from '../mongoose/job-post.schema';
 
 export const JobCategoryMapping = {
   0: JobCategory.SERVING,
@@ -51,4 +52,9 @@ export const SalaryTypeMapping = {
   0: SalaryType.HOURLY,
   1: SalaryType.PER_TASK,
   2: SalaryType.MONTHLY,
+};
+
+export const StatusMapping = {
+  1: JobPostStatus.OPEN,
+  2: JobPostStatus.CLOSE,
 };

@@ -113,6 +113,7 @@ export interface JobPostSearchFilter {
     startTime?: Nullable<string>;
     endTime?: Nullable<string>;
     keyword?: Nullable<string>;
+    status?: Nullable<JobPostStatus[]>;
     onlyMyPosts?: Nullable<boolean>;
 }
 

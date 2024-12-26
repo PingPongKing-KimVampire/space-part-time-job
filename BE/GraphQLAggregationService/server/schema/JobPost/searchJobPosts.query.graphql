@@ -16,6 +16,7 @@ input JobPostSearchFilter {
   startTime: String               # 근무 시작 시간 필터 (HH:mm)
   endTime: String                 # 근무 종료 시간 필터 (HH:mm)
   keyword: String                 # 검색어
+  status: [JobPostStatus!]
   onlyMyPosts: Boolean
 }
 

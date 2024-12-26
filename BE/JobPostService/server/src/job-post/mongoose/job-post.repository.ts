@@ -130,6 +130,10 @@ export class JobPostRepository {
     if (filters.onlyMyPosts) {
       query.userId = userId;
     }
+    if (filters.status && filters.status.length) {
+      query.status = { $in: filters.status };
+    }
+
     return query;
   }
 
