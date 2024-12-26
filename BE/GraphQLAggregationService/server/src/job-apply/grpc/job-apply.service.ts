@@ -25,6 +25,8 @@ import { DecideJobApplicationRequest } from './dto/decide-job-application/reques
 import { DecideJobApplicationResponse } from './dto/decide-job-application/response.dto';
 import { ListMyJobApplicationRequest } from './dto/list-my-job-application/request.dto';
 import { ListMyJobApplicationResponse } from './dto/list-my-job-application/response.dto';
+import { GetMyJobApplicationRequest } from './dto/get-my-job-application/request.dto';
+import { GetMyJobApplicationResponse } from './dto/get-my-job-application/response.dto';
 
 interface JobApplyServiceGrpc {
   applyToJobPost(
@@ -54,6 +56,10 @@ interface JobApplyServiceGrpc {
   listMyJobApplication(
     request: ListMyJobApplicationRequest,
   ): Observable<ListMyJobApplicationResponse>;
+
+  getMyJobApplication(
+    request: GetMyJobApplicationRequest,
+  ): Observable<GetMyJobApplicationResponse>;
 }
 
 @Injectable()
@@ -186,6 +192,21 @@ export class JobApplyService implements OnModuleInit {
       return response;
     } catch (e) {
       console.error('listMyJobApplication grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async getMyJobApplication(request: {
+    jobApplicationId: string;
+    userId: string;
+  }): Promise<GetMyJobApplicationResponse> {
+    try {
+      const response = await lastValueFrom(
+        this.jobApplyService.getMyJobApplication(request),
+      );
+      return response;
+    } catch (e) {
+      console.error('getMyJobApplication grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

@@ -151,6 +151,7 @@ export interface IMutation {
 }
 
 export interface IQuery {
+    getMyJobApplication(id: string): JobApplication | Promise<JobApplication>;
     listMyJobApplications(): Nullable<JobApplication>[] | Promise<Nullable<JobApplication>[]>;
     getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
     searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;

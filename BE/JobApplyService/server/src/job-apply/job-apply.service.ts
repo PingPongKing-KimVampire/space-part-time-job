@@ -104,4 +104,12 @@ export class JobApplyService {
   async listMyJobApplication(userId: string): Promise<JobApplication[]> {
     return this.jobApplyRepository.listJobApplicationByUser(userId);
   }
+
+  async getJobApplication(id: string, userId: string): Promise<JobApplication> {
+    const jobApplication = await this.jobApplyRepository.getJobApplication(id);
+    if (!jobApplication) throw new Error('지원서가 없음');
+    if (jobApplication.userId !== userId)
+      throw new Error('사용자가 게시한 지원서가 아님');
+    return jobApplication;
+  }
 }

@@ -101,6 +101,21 @@ export class JobApplyResolver {
     );
   }
 
+  @Query('getMyJobApplication')
+  async getMyJobApplication(
+    @Args('id') id: string,
+    @Context('req') req: Request,
+  ) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    const { jobApplication } = await this.jobApplyService.getMyJobApplication({
+      jobApplicationId: id,
+      userId: user.id,
+    });
+    return this.transformJobApplicationResponse(jobApplication);
+  }
+
   private getEnumKeyByValue<T extends object>(
     enumObj: T,
     value: T[keyof T],
