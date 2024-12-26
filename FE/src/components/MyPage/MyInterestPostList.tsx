@@ -35,47 +35,24 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
     onInnerClickableMouseLeave,
   } = mouseEventHandlers;
 
-  const [myInterestPosts, setMyInterestPosts] = useState<InterestedJobPost[]>([
-    {
-      jobPost: {
-        id: "1",
-        title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-        status: "OPEN",
-      },
-      createdAt: "1일 전",
-    },
-    {
-      jobPost: {
-        id: "2",
-        title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-        status: "OPEN",
-      },
-      createdAt: "2일 전",
-    },
-    {
-      jobPost: {
-        id: "3",
-        title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-        status: "CLOSE",
-      },
-      createdAt: "2일 전",
-    },
-  ]);
-  // const {
-  //   data: interestedPostsData,
-  //   loading: getInterestedPostsLoading,
-  //   error: getInterestedPostsError,
-  // } = useQuery(LIST_MY_INTERESTED_JOB_POSTS);
-  // useEffect(() => {
-  //   if (!interestedPostsData || !interestedPostsData.listMyInterestJobPosts)
-  //     return;
-  //   setMyInterestPosts(
-  //     interestedPostsData.listMyInterestJobPosts.map((interestedPost) => ({
-  //       ...interestedPost,
-  //       createdAt: formatTimeAgo(interestedPost.createdAt),
-  //     }))
-  //   );
-  // }, [interestedPostsData]);
+  const [myInterestPosts, setMyInterestPosts] = useState<InterestedJobPost[]>(
+    []
+  );
+  const {
+    data: interestedPostsData,
+    loading: getInterestedPostsLoading,
+    error: getInterestedPostsError,
+  } = useQuery(LIST_MY_INTERESTED_JOB_POSTS);
+  useEffect(() => {
+    if (!interestedPostsData || !interestedPostsData.listMyInterestedJobPosts)
+      return;
+    setMyInterestPosts(
+      interestedPostsData.listMyInterestedJobPosts.map((interestedPost) => ({
+        ...interestedPost,
+        createdAt: formatTimeAgo(interestedPost.createdAt),
+      }))
+    );
+  }, [interestedPostsData]);
 
   const [
     unmarkInterest,
@@ -109,7 +86,6 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
             <a className="withItemHover">{jobPost.title}</a>
           </div>
           <div className="interaction">
-            {/* TODO : 교체하기 */}
             <div className="interestAgo">{createdAt}</div>
             <button
               onMouseEnter={onInnerClickableMouseEnter}

@@ -113,9 +113,9 @@ export const GET_JOB_POST = gql`
       myJobApplication {
         id
       }
-      myInterested {
-        id
-      }
+      # myInterested {
+      #  id
+      # }
     }
   }
 `;
@@ -123,16 +123,14 @@ export const GET_JOB_POST = gql`
 export const GET_JOB_POST_APPLICATIONS = gql`
   query GetJobPostApplications($id: ID!) {
     getJobPost(id: $id) {
-      node {
-        applications {
-          id
-          coverLetter
-          applicant {
-            nickname
-          }
-          status
-          createdAt
+      applications {
+        id
+        coverLetter
+        applicant {
+          nickname
         }
+        status
+        createdAt
       }
     }
   }

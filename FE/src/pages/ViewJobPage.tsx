@@ -28,7 +28,7 @@ export type JobPost = {
   views: number;
   publisher: { nickname: string; createdAt: string };
   applicationCount: number;
-  myJobApplication: { id: string } | null;
+  myJobApplication: { id: string }[];
   myInterested: { id: string } | null;
 };
 
@@ -52,7 +52,7 @@ const ViewJobPage = () => {
     views: 0,
     publisher: { nickname: "", createdAt: "" },
     applicationCount: 0,
-    myJobApplication: null,
+    myJobApplication: [],
     myInterested: null,
   });
 

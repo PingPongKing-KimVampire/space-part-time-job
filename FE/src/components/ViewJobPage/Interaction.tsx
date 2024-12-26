@@ -18,7 +18,10 @@ type InteractionProps = {
 const Interaction: React.FC<InteractionProps> = (props) => {
   const { jobPost, setJobPost, displayApplicationModal } = props;
 
-  const isApplied = useMemo(() => jobPost.myJobApplication !== null, [jobPost]);
+  const isApplied = useMemo(
+    () => jobPost.myJobApplication.length !== 0,
+    [jobPost]
+  );
 
   const [markInterest, { loading: markLoading, error: markError }] =
     useMutation(MARK_JOB_POST_AS_INTEREST);

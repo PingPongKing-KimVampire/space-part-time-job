@@ -9,27 +9,6 @@ import { ListItem } from "../../styles/MyPage.styles";
 import { CloseTag } from "../../styles/global.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 
-const MY_JOB_POSTS = [
-  {
-    id: "1",
-    title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-    status: "OPEN",
-    applicantCount: 0,
-  },
-  {
-    id: "2",
-    title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-    status: "OPEN",
-    applicantCount: 1,
-  },
-  {
-    id: "3",
-    title: "국밥집 주말 홀서빙 구합니다 (하루 10시간 근무)",
-    status: "CLOSE",
-    applicantCount: 5,
-  },
-];
-
 type MyPostListProp = {
   mouseEventHandlers: MouseEventHandlers;
 };
@@ -145,8 +124,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
 
   return (
     <>
-      {/* TODO : myJobPosts로 교체하기 */}
-      {MY_JOB_POSTS.map(({ id, status, title, applicantCount }) => (
+      {myJobPosts.map(({ id, status, title, applicationCount }) => (
         <ListItem
           className="item"
           onMouseEnter={onItemMouseEnter}
@@ -172,14 +150,14 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
             )}
             <button
               className={`applicationButton ${
-                applicantCount === 0 ? "inactivated" : ""
+                applicationCount === 0 ? "inactivated" : ""
               }`}
               onMouseEnter={onInnerClickableMouseEnter}
               onMouseLeave={onInnerClickableMouseLeave}
               onClick={onApplicationButtonClick}
-              disabled={applicantCount === 0}
+              disabled={applicationCount === 0}
             >
-              지원자 확인<span className="count">({applicantCount}명)</span>
+              지원자 확인<span className="count">({applicationCount}명)</span>
             </button>
           </div>
         </ListItem>

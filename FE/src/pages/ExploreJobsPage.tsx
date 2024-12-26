@@ -178,7 +178,7 @@ const ExploreJobsPage = () => {
         startTime,
         endTime,
         ...(filter.term === TERM.LONG_TERM && { days }),
-        state: JOB_POST_STATUS.OPEN,
+        status: JOB_POST_STATUS.OPEN,
       };
       const pagination = { afterCursor: cursor, first: 20 };
       searchJobPosts({ variables: { filters, pagination } });

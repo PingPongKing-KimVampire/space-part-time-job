@@ -4,7 +4,7 @@ import { ERROR, IP_ADDRESS } from "../constants/constants";
 
 const apiRequest = async (
   requestUrl: string,
-  requestInit: RequestInit,
+  requestInit: RequestInit = {},
   processData?: (data: any) => any
 ) => {
   let response: Response, data;
@@ -68,5 +68,41 @@ export const requestLogout = async () => {
   await apiRequest(`http://${IP_ADDRESS}/api/users/logout`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+};
+
+export const checkDuplicated = async (
+  fieldName: "id" | "nickname",
+  value: string
+) => {
+  const data = await apiRequest(
+    `https://${IP_ADDRESS}/api/users/check-${fieldName}/${value}`
+  );
+  if (data?.error === "아이디 중복")
+    throw new Error(ERROR.SIGNUP.DUPLICATED_ID); // 409
+  if (data?.error === "닉네임 중복")
+    throw new Error(ERROR.SIGNUP.DUPLICATED_NICKNAME); // 409
+};
+
+export const signup = async ({
+  id,
+  password,
+  nickname,
+  phoneNumber,
+  smsCode,
+}) => {
+  const data = await apiRequest(`https://${IP_ADDRESS}/api/users`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify({
+      id,
+      password,
+      nickname,
+      phoneNumber: phoneNumber.replace(/-/g, ""),
+      smsCode,
+    }),
   });
 };
