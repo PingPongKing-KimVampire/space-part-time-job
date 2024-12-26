@@ -4,10 +4,13 @@ package jobPost;
 
 import "mark-job-post-as-interest.proto";
 import "unmark-job-post-as-interest.proto";
+import "list-my-Interested-job-post.proto";
 
 service InterestedJobPostService {
   rpc MarkJobPostAsInterest(MarkJobPostAsInterestRequest)
       returns (MarkJobPostAsInterestResponse);
   rpc UnmarkJobPostAsInterest(UnmarkJobPostAsInterestRequest)
       returns (UnmarkJobPostAsInterestResponse);
+  rpc ListMyInterestedJobPost(ListMyInterestedJobPostRequest)
+      returns (ListMyInterestedJobPostResponse);
 }

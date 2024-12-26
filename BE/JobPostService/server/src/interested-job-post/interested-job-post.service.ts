@@ -50,4 +50,8 @@ export class InterestedJobPostService {
       userId,
     );
   }
+
+  listMyInterestedJobPost(userId: string) {
+    return this.interestedJobPostRepository.getByUser(userId);
+  }
 }

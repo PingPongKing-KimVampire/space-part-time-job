@@ -130,6 +130,21 @@ export interface NeighborhoodInput {
     level: number;
 }
 
+export interface InterestedJobPost {
+    jobPost: JobPost;
+    createdAt: string;
+}
+
+export interface IQuery {
+    listMyInterestedJobPost(): Nullable<InterestedJobPost>[] | Promise<Nullable<InterestedJobPost>[]>;
+    getMyJobApplication(id: string): JobApplication | Promise<JobApplication>;
+    listMyJobApplications(): Nullable<JobApplication>[] | Promise<Nullable<JobApplication>[]>;
+    getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
+    searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;
+    me(): User | Promise<User>;
+    _empty(): Nullable<string> | Promise<Nullable<string>>;
+}
+
 export interface IMutation {
     markJobPostAsInterest(jobPostId: string): JobPost | Promise<JobPost>;
     unmarkJobPostAsInterest(jobPostId: string): JobPost | Promise<JobPost>;
@@ -150,15 +165,6 @@ export interface JobApplication {
     applicant: UserPublicInfo;
     status: ApplicationStatus;
     createdAt: string;
-}
-
-export interface IQuery {
-    getMyJobApplication(id: string): JobApplication | Promise<JobApplication>;
-    listMyJobApplications(): Nullable<JobApplication>[] | Promise<Nullable<JobApplication>[]>;
-    getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
-    searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;
-    me(): User | Promise<User>;
-    _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export interface JobPost {

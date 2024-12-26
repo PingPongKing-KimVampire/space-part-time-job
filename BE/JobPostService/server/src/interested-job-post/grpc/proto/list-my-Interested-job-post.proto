@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package jobPost;
+
+message ListMyInterestedJobPostRequest { string userId = 1; }
+
+message InterestedJobPost {
+  string jobPostId = 1;
+  string createdAt = 2;
+}
+
+message ListMyInterestedJobPostResponse {
+  repeated InterestedJobPost interestedJobPosts = 1;
+}

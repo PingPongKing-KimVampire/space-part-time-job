@@ -7,6 +7,8 @@ import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { UnmarkJobPostAsInterestRequest } from './grpc/dto/unmark-job-post-as-interested/request.dto';
 import { UnmarkJobPostAsInterestResponse } from './grpc/dto/unmark-job-post-as-interested/response.dto';
+import { ListMyInterestedJobPostRequest } from './grpc/dto/list-my-Interested-job-post/request.dto';
+import { ListMyInterestedJobPostResponse } from './grpc/dto/list-my-Interested-job-post/response.dto';
 
 @Controller()
 export class InterestedJobPostController {
@@ -46,6 +48,29 @@ export class InterestedJobPostController {
         request.userId,
       );
       return {};
+    } catch (e) {
+      console.error('에러 발생', e);
+      throw new RpcException(e);
+    }
+  }
+
+  @GrpcMethod('InterestedJobPostService', 'ListMyInterestedJobPost')
+  async listMyInterestedJobPost(
+    request: ListMyInterestedJobPostRequest,
+  ): Promise<ListMyInterestedJobPostResponse> {
+    request = plainToInstance(ListMyInterestedJobPostRequest, request);
+    await this.validateFormat(request);
+    try {
+      const interestedJobPosts =
+        await this.interestedJobPostService.listMyInterestedJobPost(
+          request.userId,
+        );
+      return {
+        interestedJobPosts: interestedJobPosts.map((interestedJobPost) => ({
+          jobPostId: interestedJobPost.jobPostId,
+          createdAt: interestedJobPost.createdAt.toISOString(),
+        })),
+      };
     } catch (e) {
       console.error('에러 발생', e);
       throw new RpcException(e);

@@ -23,6 +23,8 @@ import { MarkJobPostAsInterestRequest } from './interested-job-post-service/dto/
 import { MarkJobPostAsInterestResponse } from './interested-job-post-service/dto/mark-job-post-as-interested/response.dto';
 import { UnmarkJobPostAsInterestRequest } from './interested-job-post-service/dto/unmark-job-post-as-interested/request.dto';
 import { UnmarkJobPostAsInterestResponse } from './interested-job-post-service/dto/unmark-job-post-as-interested/response.dto';
+import { ListMyInterestedJobPostRequest } from './interested-job-post-service/dto/list-my-Interested-job-post/request.dto';
+import { ListMyInterestedJobPostResponse } from './interested-job-post-service/dto/list-my-Interested-job-post/response.dto';
 
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
 
@@ -82,6 +84,10 @@ interface InterestedJobPostServiceGrpc {
   UnmarkJobPostAsInterest(
     data: UnmarkJobPostAsInterestRequest,
   ): Observable<UnmarkJobPostAsInterestResponse>;
+
+  listMyInterestedJobPost(
+    data: ListMyInterestedJobPostRequest,
+  ): Observable<ListMyInterestedJobPostResponse>;
 }
 
 @Injectable()
@@ -283,6 +289,22 @@ export class JobPostService implements OnModuleInit {
       return {};
     } catch (e) {
       console.error('unmarkJobPostAsInterest grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async listMyInterestedJobPost(
+    userId: string,
+  ): Promise<ListMyInterestedJobPostResponse> {
+    try {
+      const interestedJobPosts = await lastValueFrom(
+        this.InterestedJobPostService.listMyInterestedJobPost({
+          userId,
+        }),
+      );
+      return interestedJobPosts;
+    } catch (e) {
+      console.error('listMyInterestedJobPost grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

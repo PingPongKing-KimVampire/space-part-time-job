@@ -1,0 +1,8 @@
+type InterestedJobPost {
+  jobPost: JobPost!
+  createdAt: String!
+}
+
+extend type Query {
+  listMyInterestedJobPost: [InterestedJobPost]!
+}
