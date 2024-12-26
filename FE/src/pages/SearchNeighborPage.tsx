@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLazyQuery } from "@apollo/client";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import useDebounce from "../utils/useDebounce";
 import {
@@ -18,10 +19,15 @@ import SelectedNeighbors from "../components/SearchNeighborPage/SelectedNeighbor
 import ResultNeighbors from "../components/SearchNeighborPage/ResultNeighbors.tsx";
 import { MainBackgroundColor } from "../styles/global";
 import { IP_ADDRESS, ERROR } from "../constants/constants";
+import { GET_RESIDENT_NEIGHBORHOOD } from "../graphql/queries.js";
 
 export type Neighbor = {
   id: string;
   name: string;
+};
+
+export type SelectedNeighbor = Neighbor & {
+  scopeValue: string;
 };
 
 type SearchNeighborResponseData = {
@@ -34,22 +40,47 @@ const SearchNeighborPage = () => {
 
   const [totalNeighbors, setTotalNeighbors] = useState<Neighbor[]>([]);
   const [filteredNeighbors, setFilteredNeighbors] = useState<Neighbor[]>([]);
-  const [selectedNeighbors, setSelectedNeighbors] = useState<Neighbor[]>([]);
+  const [selectedNeighbors, setSelectedNeighbors] = useState<
+    SelectedNeighbor[]
+  >([]);
 
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue, 100);
   const searchResultBoxRef = useRef<HTMLDivElement>(null);
 
+  const convertLevelToScopeValue = (level) => {
+    return (parseInt(level) - 1) * 100;
+  };
+
+  const [
+    getResidentNeighborhood,
+    { loading: getResidentLoading, error: getResidentError },
+  ] = useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
+    onCompleted: (data) => {
+      if (!data?.me?.residentNeighborhood) return;
+      setSelectedNeighbors(
+        data.me.residentNeighborhood.map((neighborhood) => ({
+          ...neighborhood,
+          scopeValue: convertLevelToScopeValue(neighborhood.level),
+        }))
+      );
+    },
+  });
   useEffect(() => {
-    // 세션 스토리지에 place가 있으면 neighbors로 세팅
-    const placeSaved = sessionStorage.getItem("neighbors") || "";
-    if (placeSaved) setSelectedNeighbors(JSON.parse(placeSaved));
-    // 처음 모든 동 정보를 받아옴
+    const setupSelectedNeighbors = () => {
+      const placeSaved = sessionStorage.getItem("neighbors");
+      if (placeSaved) {
+        setSelectedNeighbors(JSON.parse(placeSaved));
+        return;
+      }
+      getResidentNeighborhood(); // 세션 스토리지에 없다면, 상주 지역 조회 API 호출
+    };
     const setupTotalNeighbors = async () => {
       const result = await fetchTotalNeighbors();
       setTotalNeighbors(result);
     };
-    setupTotalNeighbors();
+    setupTotalNeighbors(); // 처음 모든 동 정보를 받아옴
+    setupSelectedNeighbors(); // 디폴트로 선택될 동 정보를 받아옴 (세션 스토리지 -> 상주 지역 조회 API)
   }, []);
 
   // 행정동 조회 API 요청
@@ -94,7 +125,9 @@ const SearchNeighborPage = () => {
           state.filter((el) => el.id !== neighborClicked.id)
         );
       } else {
-        setSelectedNeighbors((state) => state.concat(neighborClicked));
+        setSelectedNeighbors((state) =>
+          state.concat({ ...neighborClicked, scopeValue: "0" })
+        );
       }
     },
     [selectedNeighbors]

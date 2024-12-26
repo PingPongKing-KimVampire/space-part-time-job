@@ -40,11 +40,11 @@ export const Content = styled("div", {
         },
         "& .buttons": {
           display: "flex",
-          gap: "14px",
+          gap: "16px",
           marginRight: "10px",
           "& svg": {
-            width: "40px",
-            height: "40px",
+            width: "36px",
+            height: "36px",
             cursor: "pointer",
             transition: "fill 0.3s",
             "&:hover": {

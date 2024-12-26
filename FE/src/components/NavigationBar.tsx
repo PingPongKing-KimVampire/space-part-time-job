@@ -3,6 +3,7 @@ import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { ReactComponent as WriteIcon } from "../assets/icons/write.svg";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { ReactComponent as BackIcon } from "../assets/icons/arrow-left.svg";
+import { ReactComponent as LocationIcon } from "../assets/icons/location.svg";
 import { Container, Content } from "../styles/NavigationBar.styles.ts";
 
 const BAR = {
@@ -42,6 +43,11 @@ const NavigationBar = () => {
           우주 알바
         </div>
         <div className="buttons">
+          <LocationIcon
+            onClick={() => {
+              navigate("/search-neighbor");
+            }}
+          />
           <WriteIcon
             onClick={() => {
               navigate("/create-job");
