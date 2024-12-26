@@ -156,7 +156,7 @@ async function getDummyData(targetPath = "../dummy-job-posts.json") {
       dummy.neighborhoodId = randomDistrict.neighborhoodId;
       dummy.createdAt = getRandomPastDate();
       dummy.views = Math.floor(Math.random() * 10000);
-      dummy.status = Math.random() > 0.5 ? "OPEN" : "CLOSE",
+      dummy.status = Math.random() > 0.5 ? "OPEN" : "CLOSE";
     });
     await fs.writeFile(
       `${targetPath}`,
