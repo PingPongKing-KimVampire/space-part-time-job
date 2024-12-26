@@ -8,8 +8,8 @@ export class InterestedJobPostResolver {
     private readonly jobPostResolver: JobPostService,
   ) {}
 
-  @Query('listMyInterestedJobPost')
-  async listMyInterestedJobPost(@Context('req') req: Request) {
+  @Query('listMyInterestedJobPosts')
+  async listMyInterestedJobPosts(@Context('req') req: Request) {
     const user = this.parseUserDataHeader(
       req.headers['space-part-time-job-user-data-base64'],
     );

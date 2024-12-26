@@ -4,5 +4,5 @@ type InterestedJobPost {
 }
 
 extend type Query {
-  listMyInterestedJobPost: [InterestedJobPost]!
+  listMyInterestedJobPosts: [InterestedJobPost]!
 }

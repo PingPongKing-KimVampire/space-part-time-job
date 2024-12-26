@@ -137,7 +137,7 @@ export interface InterestedJobPost {
 }
 
 export interface IQuery {
-    listMyInterestedJobPost(): Nullable<InterestedJobPost>[] | Promise<Nullable<InterestedJobPost>[]>;
+    listMyInterestedJobPosts(): Nullable<InterestedJobPost>[] | Promise<Nullable<InterestedJobPost>[]>;
     getMyJobApplication(id: string): JobApplication | Promise<JobApplication>;
     listMyJobApplications(): Nullable<JobApplication>[] | Promise<Nullable<JobApplication>[]>;
     getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
