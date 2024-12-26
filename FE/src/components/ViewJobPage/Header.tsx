@@ -9,10 +9,15 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ jobPost }) => {
-  const { jobDescription, status, title, createdAt, views, applicationCount } =
-    jobPost;
-
-  const interestCount = 8; // TODO : 임시 하드 코딩
+  const {
+    jobDescription,
+    status,
+    title,
+    createdAt,
+    views,
+    applicationCount,
+    interestedCount,
+  } = jobPost;
 
   return (
     <HeaderContainer>
@@ -28,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ jobPost }) => {
         {title}
       </div>
       <div className="subInfo">
-        {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestCount} · 지원 ${applicationCount}`}
+        {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestedCount} · 지원 ${applicationCount}`}
       </div>
     </HeaderContainer>
   );

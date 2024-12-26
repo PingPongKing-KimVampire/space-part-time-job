@@ -30,6 +30,7 @@ export type JobPost = {
   applicationCount: number;
   myJobApplication: { id: string }[];
   myInterested: { id: string } | null;
+  interestedCount: number;
 };
 
 const ViewJobPage = () => {
@@ -54,6 +55,7 @@ const ViewJobPage = () => {
     applicationCount: 0,
     myJobApplication: [],
     myInterested: null,
+    interestedCount: 0,
   });
 
   const { id = "" } = useParams();
@@ -75,6 +77,7 @@ const ViewJobPage = () => {
         ...data.publisher,
         createdAt: formatTimeAgo(data.publisher.createdAt),
       },
+      interestedCount: 10, // TODO : 제거하기
     });
   }, [jobPostData, setJobPost, isApplicationModalVisible]);
 

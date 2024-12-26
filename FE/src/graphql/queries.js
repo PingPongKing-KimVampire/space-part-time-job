@@ -116,6 +116,7 @@ export const GET_JOB_POST = gql`
       # myInterested {
       #  id
       # }
+      # interestedCount
     }
   }
 `;

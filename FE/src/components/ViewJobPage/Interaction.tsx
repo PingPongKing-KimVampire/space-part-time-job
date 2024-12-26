@@ -34,11 +34,12 @@ const Interaction: React.FC<InteractionProps> = (props) => {
     try {
       const response = await mutation({ variables: { jobPostId: jobPost.id } });
       if (!response?.data) return;
+      const responsePost = response.data.markJobPostAsInterest;
+      responsePost.interestedCount = 10; // TODO : 삭제하기
       setJobPost((state) => ({
         ...state,
-        myInterested: jobPost.myInterested
-          ? null
-          : response.data.markJobPostAsInterest,
+        myInterested: jobPost.myInterested ? null : responsePost.myInterested,
+        interestedCount: responsePost.interestedCount,
       }));
     } catch (e) {
       console.log(e);
