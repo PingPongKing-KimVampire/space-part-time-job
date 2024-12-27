@@ -55,7 +55,7 @@ export class InterestedJobPostRepository {
     return interestedJobPosts;
   }
 
-  async getByUserAndPost(
+  async getByPostAndUser(
     jobPostId: string,
     userId: string,
   ): Promise<InterestedJobPost | null> {

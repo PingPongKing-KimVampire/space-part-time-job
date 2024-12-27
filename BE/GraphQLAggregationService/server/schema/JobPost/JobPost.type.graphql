@@ -15,6 +15,7 @@ type JobPost {
   applicationCount: Int!
   applications: [JobApplication!]!
   myJobApplication: [JobApplication]
+  myInterested: InterestedJobPost
 }
 
 type WorkPeriod {

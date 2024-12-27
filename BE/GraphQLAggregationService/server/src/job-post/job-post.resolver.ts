@@ -9,6 +9,7 @@ import {
 } from '@nestjs/graphql';
 import {
   CreateJobPostInput,
+  InterestedJobPost,
   JobApplication,
   JobPost,
   JobPostConnection,
@@ -186,6 +187,29 @@ export class JobPostResolver {
     return (response.jobApplicationList ?? []).map((jobApplication) =>
       this.transformJobApplicationResponse(jobApplication),
     );
+  }
+
+  @ResolveField('myInterested')
+  async InterestedJobPost(
+    @Parent() jobPost: JobPost,
+    @Context('req') req: Request,
+  ) {
+    const user = this.parseUserDataHeader(
+      req.headers['space-part-time-job-user-data-base64'],
+    );
+    try {
+      const {
+        interestedJobPost: { jobPostId, createdAt },
+      } = await this.jobPostService.getMyInterestedJobPost(jobPost.id, user.id);
+      return {
+        jobPost: await this.getJobPost(jobPostId),
+        createdAt: createdAt,
+      };
+    } catch (e) {
+      //추후 gRPC의 조회 실패 오류에만 null을 반환하게 만들기
+      console.log(e);
+      return null;
+    }
   }
 
   @Mutation('closeJobPost')
