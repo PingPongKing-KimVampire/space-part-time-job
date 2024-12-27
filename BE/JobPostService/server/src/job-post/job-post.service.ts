@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { JobPostRepository } from './mongoose/job-post.repository';
 import { RedisService } from 'src/redis/redis.service';
 import { JobPostStatus } from './mongoose/job-post.schema';
+import { JobApplyService } from 'src/job-apply/grpc/job-apply.service';
 
 @Injectable()
 export class JobPostService {
   constructor(
     private readonly jobPostRepository: JobPostRepository,
     private readonly redisService: RedisService,
+    private readonly jobApplyService: JobApplyService,
   ) {}
 
   public async incrementJobPostViews(
@@ -56,6 +58,7 @@ export class JobPostService {
     if (jobPost.userId !== userId) throw new Error('공고에 접근할 권한 없음');
     if (jobPost.status === JobPostStatus.CLOSE)
       throw new Error('이미 닫힌 공고임');
+    await this.jobApplyService.rejectPendingJobApplication(jobPostId);
     return this.jobPostRepository.updateStatus(jobPostId, JobPostStatus.CLOSE);
   }
 

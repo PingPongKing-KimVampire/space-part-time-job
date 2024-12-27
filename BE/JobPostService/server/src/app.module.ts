@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { RedisModule } from './redis/redis.module';
 import { InterestedJobPostModule } from './interested-job-post/interested-job-post.module';
+import { JobApplyModule } from './job-apply/job-apply.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { InterestedJobPostModule } from './interested-job-post/interested-job-po
     JobPostModule,
     RedisModule,
     InterestedJobPostModule,
+    JobApplyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

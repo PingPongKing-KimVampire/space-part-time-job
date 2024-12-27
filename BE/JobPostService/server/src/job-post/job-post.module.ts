@@ -7,12 +7,14 @@ import { ImageUploadService } from 'src/image-upload/image-upload.service';
 import { JobPostController } from './job-post.controller';
 import { JobPostService } from './job-post.service';
 import { RedisModule } from 'src/redis/redis.module';
+import { JobApplyModule } from 'src/job-apply/job-apply.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: JobPost.name, schema: JobPostSchema }]),
     ConfigModule,
     RedisModule,
+    JobApplyModule,
   ],
   providers: [JobPostRepository, ImageUploadService, JobPostService],
   controllers: [JobPostController],

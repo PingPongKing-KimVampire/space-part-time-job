@@ -64,8 +64,9 @@ export class JobApplyRepository {
     return jobApplications.map((doc) => doc.toObject());
   }
 
-  async getJobApplication(id: string): Promise<JobApplication> {
+  async getJobApplication(id: string): Promise<JobApplication | null> {
     const jobApplication = await this.jobApplicationModel.findById(id).exec();
+    if (!jobApplication) return null;
     return jobApplication.toObject();
   }
 
@@ -88,5 +89,21 @@ export class JobApplyRepository {
         status: { $ne: ApplicationStatus.CANCELED },
       })
       .exec();
+  }
+
+  async rejectPendingApplications(jobPostId: string): Promise<number> {
+    const result = await this.jobApplicationModel
+      .updateMany(
+        {
+          jobPostId,
+          status: ApplicationStatus.PENDING,
+        },
+        {
+          $set: { status: ApplicationStatus.REJECTED },
+        },
+      )
+      .exec();
+
+    return result.modifiedCount;
   }
 }

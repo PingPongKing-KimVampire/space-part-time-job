@@ -28,6 +28,8 @@ import { ListMyJobApplicationRequest } from './grpc/dto/list-my-job-application/
 import { ListMyJobApplicationResponse } from './grpc/dto/list-my-job-application/response.dto';
 import { GetMyJobApplicationRequest } from './grpc/dto/get-my-job-application/request.dto';
 import { GetMyJobApplicationResponse } from './grpc/dto/get-my-job-application/response.dto';
+import { RejectPendingJobApplicationRequest } from './grpc/dto/reject-pending-job-application/request.dto';
+import { RejectPendingJobApplicationResponse } from './grpc/dto/reject-pending-job-application/response.dto';
 
 @Controller()
 export class JobApplyController {
@@ -223,6 +225,23 @@ export class JobApplyController {
           this.transformJobApplicationToGrpcResponse(jobApplication),
         ),
       };
+    } catch (e) {
+      console.error('에러 발생', e);
+      throw new RpcException(e);
+    }
+  }
+
+  @GrpcMethod('JobApplyService', 'RejectPendingJobApplication')
+  async rejectPendingJobApplication(
+    request: RejectPendingJobApplicationRequest,
+  ): Promise<RejectPendingJobApplicationResponse> {
+    request = plainToInstance(RejectPendingJobApplicationRequest, request);
+    await this.validateFormat(request);
+    try {
+      await this.jobApplyRepository.rejectPendingApplications(
+        request.jobPostId,
+      );
+      return;
     } catch (e) {
       console.error('에러 발생', e);
       throw new RpcException(e);

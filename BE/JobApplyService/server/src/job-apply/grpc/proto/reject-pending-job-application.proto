@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package jobApply;
+
+message RejectPendingJobApplicationRequest { string jobPostId = 1; }
+
+message RejectPendingJobApplicationResponse {}
