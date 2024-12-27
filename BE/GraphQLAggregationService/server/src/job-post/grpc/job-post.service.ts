@@ -213,7 +213,6 @@ export class JobPostService implements OnModuleInit {
         this.jobPostService.getJobPost({ id }),
       );
       const { jobPost } = response;
-      console.log(jobPost);
       this.transformGrpcJobPost(jobPost);
       jobPost.publisher = await this.userService.getUserPublicInfo(
         jobPost.userId,
