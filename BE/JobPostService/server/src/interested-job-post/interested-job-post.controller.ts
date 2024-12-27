@@ -11,11 +11,15 @@ import { ListMyInterestedJobPostRequest } from './grpc/dto/list-my-Interested-jo
 import { ListMyInterestedJobPostResponse } from './grpc/dto/list-my-Interested-job-post/response.dto';
 import { GetMyInterestedJobPostRequest } from './grpc/dto/get-my-Interested-job-post/request.dto';
 import { GetMyInterestedJobPostResponse } from './grpc/dto/get-my-Interested-job-post/response.dto';
+import { CountJobPostInterestedRequest } from './grpc/dto/count-job-post-interested/request.dto';
+import { CountJobPostInterestedResponse } from './grpc/dto/count-job-post-interested/response.dto';
+import { InterestedJobPostRepository } from './mongoose/interested-job-post.repository';
 
 @Controller()
 export class InterestedJobPostController {
   constructor(
     private readonly interestedJobPostService: InterestedJobPostService,
+    private readonly interestedJobPostRepository: InterestedJobPostRepository,
   ) {}
 
   @GrpcMethod('InterestedJobPostService', 'MarkJobPostAsInterest')
@@ -99,6 +103,24 @@ export class InterestedJobPostController {
       };
     } catch (e) {
       if (e.message !== '관심 공고 아님') console.error('에러 발생', e);
+      throw new RpcException(e);
+    }
+  }
+
+  @GrpcMethod('InterestedJobPostService', 'CountJobPostInterested')
+  async countJobPostInterested(
+    request: CountJobPostInterestedRequest,
+  ): Promise<CountJobPostInterestedResponse> {
+    request = plainToInstance(CountJobPostInterestedRequest, request);
+    await this.validateFormat(request);
+    try {
+      const interestedCount =
+        await this.interestedJobPostRepository.countByPost(request.jobPostId);
+      return {
+        interestedCount,
+      };
+    } catch (e) {
+      console.error('에러 발생', e);
       throw new RpcException(e);
     }
   }

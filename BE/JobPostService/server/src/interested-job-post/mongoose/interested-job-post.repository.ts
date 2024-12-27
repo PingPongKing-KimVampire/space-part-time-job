@@ -68,4 +68,11 @@ export class InterestedJobPostRepository {
       .exec();
     return interestedJobPost;
   }
+
+  async countByPost(jobPostId: string): Promise<number> {
+    const count = await this.interestedJobPostModel
+      .countDocuments({ jobPostId })
+      .exec();
+    return count;
+  }
 }

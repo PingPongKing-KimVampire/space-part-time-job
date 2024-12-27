@@ -27,6 +27,8 @@ import { ListMyInterestedJobPostRequest } from './interested-job-post-service/dt
 import { ListMyInterestedJobPostResponse } from './interested-job-post-service/dto/list-my-Interested-job-post/response.dto';
 import { GetMyInterestedJobPostRequest } from './interested-job-post-service/dto/get-my-Interested-job-post/request.dto';
 import { GetMyInterestedJobPostResponse } from './interested-job-post-service/dto/get-my-Interested-job-post/response.dto';
+import { CountJobPostInterestedRequest } from './interested-job-post-service/dto/count-job-post-interested/request.dto';
+import { CountJobPostInterestedResponse } from './interested-job-post-service/dto/count-job-post-interested/response.dto';
 
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
 
@@ -94,6 +96,10 @@ interface InterestedJobPostServiceGrpc {
   getMyInterestedJobPost(
     data: GetMyInterestedJobPostRequest,
   ): Observable<GetMyInterestedJobPostResponse>;
+
+  countJobPostInterested(
+    data: CountJobPostInterestedRequest,
+  ): Observable<CountJobPostInterestedResponse>;
 }
 
 @Injectable()
@@ -328,6 +334,22 @@ export class JobPostService implements OnModuleInit {
       return interestedJobPost;
     } catch (e) {
       console.error('getMyInterestedJobPost grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async countJobPostInterested(
+    jobPostId: string,
+  ): Promise<CountJobPostInterestedResponse> {
+    try {
+      const response = await lastValueFrom(
+        this.InterestedJobPostService.countJobPostInterested({
+          jobPostId,
+        }),
+      );
+      return response;
+    } catch (e) {
+      console.error('countJobPostInterested grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

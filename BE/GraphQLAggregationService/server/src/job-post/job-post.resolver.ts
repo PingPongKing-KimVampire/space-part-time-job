@@ -61,6 +61,7 @@ export class JobPostResolver {
         nickname: user.nickname,
         createdAt: user.createdAt,
       },
+      interestedCount: 0,
     };
   }
 
@@ -190,7 +191,7 @@ export class JobPostResolver {
   }
 
   @ResolveField('myInterested')
-  async InterestedJobPost(
+  async resolveMyInterested(
     @Parent() jobPost: JobPost,
     @Context('req') req: Request,
   ) {
@@ -210,6 +211,13 @@ export class JobPostResolver {
       console.log(e);
       return null;
     }
+  }
+
+  @ResolveField('interestedCount')
+  async resolveInterestedCount(@Parent() jobPost: JobPost): Promise<number> {
+    const { interestedCount } =
+      await this.jobPostService.countJobPostInterested(jobPost.id);
+    return interestedCount;
   }
 
   @Mutation('closeJobPost')
