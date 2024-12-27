@@ -161,9 +161,13 @@ export const ListItem = styled("button", {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    "& a": {
-      textDecoration: "none",
+    "& button": {
+      background: "none",
+      border: "none",
       color: "black",
+      fontSize: "18px",
+      fontWeight: "600",
+      cursor: "pointer",
       "&:hover": {
         textDecoration: "underline",
       },

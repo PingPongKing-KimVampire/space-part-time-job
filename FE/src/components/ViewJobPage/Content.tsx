@@ -16,7 +16,6 @@ type ContentProps = {
 const Content: React.FC<ContentProps> = (props) => {
   const { jobPost, setJobPost, displayApplicationModal } = props;
   const {
-    status,
     workPeriod,
     workTime,
     salary,
@@ -24,7 +23,6 @@ const Content: React.FC<ContentProps> = (props) => {
     detailedDescription,
     addressName,
     publisher,
-    myJobApplication,
   } = jobPost;
 
   return (

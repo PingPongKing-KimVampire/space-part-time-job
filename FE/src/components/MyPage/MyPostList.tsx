@@ -41,6 +41,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
     getMyJobPosts,
     { loading: getMyJobPostsLoading, error: getMyJobPostsError },
   ] = useLazyQuery(GET_MY_JOB_POSTS, {
+    fetchPolicy: "network-only",
     onCompleted: (data) => {
       const nodes = data.searchJobPosts.edges.map((edge) => edge.node);
       if (isFirstFetchRef.current) {
@@ -135,7 +136,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
         >
           <div className="title">
             {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
-            <a className="withItemHover">{title}</a>
+            <button className="withItemHover">{title}</button>
           </div>
           <div className="interaction">
             {status === JOB_POST_STATUS.OPEN && ( // 마감되지 않은 공고에만 마감 버튼 표시

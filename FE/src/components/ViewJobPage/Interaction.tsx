@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useMutation } from "@apollo/client";
 import { ReactComponent as HeartIcon } from "../../assets/icons/heart.svg";
 import { InteractionContainer } from "../../styles/ViewJobPage.styles";
-import { JOB_POST_STATUS } from "../../constants/constants";
+import { JOB_POST_STATUS, APPLICATION_STATUS } from "../../constants/constants";
 import { JobPost } from "../../pages/ViewJobPage.tsx";
 import {
   UNMARK_JOB_POST_AS_INTEREST,
@@ -19,7 +19,10 @@ const Interaction: React.FC<InteractionProps> = (props) => {
   const { jobPost, setJobPost, displayApplicationModal } = props;
 
   const isApplied = useMemo(
-    () => jobPost.myJobApplication.length !== 0,
+    () =>
+      jobPost.myJobApplication.some(
+        (application) => application.status === APPLICATION_STATUS.PENDING
+      ),
     [jobPost]
   );
 
@@ -35,11 +38,10 @@ const Interaction: React.FC<InteractionProps> = (props) => {
       const response = await mutation({ variables: { jobPostId: jobPost.id } });
       if (!response?.data) return;
       const responsePost = response.data.markJobPostAsInterest;
-      responsePost.interestedCount = 10; // TODO : 삭제하기
       setJobPost((state) => ({
         ...state,
-        myInterested: jobPost.myInterested ? null : responsePost.myInterested,
-        interestedCount: responsePost.interestedCount,
+        myInterested: jobPost.myInterested ? null : { id: "1" }, // TODO : {id: "1"}을 responsePost.myInterested로 대체하기
+        interestedCount: 10, // TODO : responsePost.interestedCount로 대체하기
       }));
     } catch (e) {
       console.log(e);

@@ -235,7 +235,7 @@ export const InteractionContainer = styled("div", {
   },
   "& .interaction": {
     display: "flex",
-    gap: "15px",
+    gap: "12px",
     "& .applyButton": {
       ...MainButtonStyle,
       fontSize: "20px",
@@ -243,14 +243,15 @@ export const InteractionContainer = styled("div", {
       width: "94%",
     },
     "& svg": {
-      width: "6%",
+      width: "8%",
       strokeWidth: "0.6",
       stroke: "#828282",
       transition: "all 0.2s",
+      cursor: "pointer",
       "&:hover": {
         fill: OptionHoverColor,
         stroke: MainColor,
-        strokeWidth: "0.8",
+        strokeWidth: "1.5",
       },
       "&.selected": {
         fill: MainColor,

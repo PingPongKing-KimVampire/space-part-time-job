@@ -27,7 +27,7 @@ type InterestedJobPost = {
 const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   mouseEventHandlers,
 }) => {
-  const navigatge = useNavigate();
+  const navigate = useNavigate();
   const {
     onItemMouseEnter,
     onItemMouseLeave,
@@ -42,7 +42,7 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
     data: interestedPostsData,
     loading: getInterestedPostsLoading,
     error: getInterestedPostsError,
-  } = useQuery(LIST_MY_INTERESTED_JOB_POSTS);
+  } = useQuery(LIST_MY_INTERESTED_JOB_POSTS, { fetchPolicy: "network-only" });
   useEffect(() => {
     if (!interestedPostsData || !interestedPostsData.listMyInterestedJobPosts)
       return;
@@ -59,6 +59,7 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
     { loading: unmarkInterestLoading, error: unmarkInterestError },
   ] = useMutation(UNMARK_JOB_POST_AS_INTEREST);
   const onCancelClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     const postId = (e.target as HTMLElement)
       .closest(".item")
       ?.getAttribute("data-post-id");
@@ -69,6 +70,12 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
     );
   };
 
+  const onItemClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const postId = e.currentTarget.getAttribute("data-post-id");
+    if (!postId) return;
+    navigate(`/view-job/${postId}`);
+  };
+
   return (
     <>
       {myInterestPosts.map(({ jobPost, createdAt }) => (
@@ -76,6 +83,7 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
           className="item"
           onMouseEnter={onItemMouseEnter}
           onMouseLeave={onItemMouseLeave}
+          onClick={onItemClick}
           key={jobPost.id}
           data-post-id={jobPost.id}
         >
@@ -83,10 +91,10 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
             {jobPost.status === JOB_POST_STATUS.CLOSE && (
               <CloseTag>마감</CloseTag>
             )}
-            <a className="withItemHover">{jobPost.title}</a>
+            <button className="withItemHover">{jobPost.title}</button>
           </div>
           <div className="interaction">
-            <div className="interestAgo">{createdAt}</div>
+            <div className="interestAgo">{createdAt} 전</div>
             <button
               onMouseEnter={onInnerClickableMouseEnter}
               onMouseLeave={onInnerClickableMouseLeave}

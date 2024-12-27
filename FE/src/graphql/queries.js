@@ -68,6 +68,7 @@ export const GET_MY_JOB_POSTS = gql`
         node {
           id
           title
+          status
           applicationCount
         }
       }
@@ -112,6 +113,7 @@ export const GET_JOB_POST = gql`
       applicationCount
       myJobApplication {
         id
+        status
       }
       # myInterested {
       #  id

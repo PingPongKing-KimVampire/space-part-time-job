@@ -46,7 +46,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     data: myApplicationsData,
     loading: getMyApplicationsLoading,
     error: getMyApplicationsError,
-  } = useQuery(LIST_MY_JOB_APPLICATIONS);
+  } = useQuery(LIST_MY_JOB_APPLICATIONS, { fetchPolicy: "network-only" });
   useEffect(() => {
     if (!myApplicationsData || !myApplicationsData.listMyJobApplications)
       return;
@@ -85,6 +85,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     { loading: cancelApplicationLoading, error: cancelApplicationError },
   ] = useMutation(CANCEL_JOB_APPLICATION);
   const onCancelClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     const applicationId = (e.target as HTMLElement)
       .closest(".item")
       ?.getAttribute("data-application-id");
@@ -114,7 +115,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
                 {jobPost.status === JOB_POST_STATUS.CLOSE && (
                   <CloseTag>마감</CloseTag>
                 )}
-                <a
+                <button
                   onMouseEnter={onInnerClickableMouseEnter}
                   onMouseLeave={onInnerClickableMouseLeave}
                   onClick={(e) => {
@@ -123,7 +124,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
                   }}
                 >
                   {jobPost.title}
-                </a>
+                </button>
               </div>
               <div className="interaction">
                 {status === APPLICATION_STATUS.ACCEPTED && (
@@ -151,7 +152,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
             </MainPanel>
             <TogglePanel className={isSelected[id] ? "visible" : ""}>
               <div className="coverLetter">{coverLetter}</div>
-              <div className="createdAt">{createdAt}</div>
+              <div className="createdAt">{createdAt} 전</div>
             </TogglePanel>
           </ListItem>
         ))}

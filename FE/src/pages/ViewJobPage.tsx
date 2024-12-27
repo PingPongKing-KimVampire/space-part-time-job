@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import Header from "../components/ViewJobPage/Header.tsx";
 import Content from "../components/ViewJobPage/Content.tsx";
@@ -28,7 +28,7 @@ export type JobPost = {
   views: number;
   publisher: { nickname: string; createdAt: string };
   applicationCount: number;
-  myJobApplication: { id: string }[];
+  myJobApplication: { id: string; status: string }[];
   myInterested: { id: string } | null;
   interestedCount: number;
 };
@@ -60,44 +60,37 @@ const ViewJobPage = () => {
 
   const { id = "" } = useParams();
 
-  const {
-    loading: getJobPostLoading,
-    error: getJobPostError,
-    data: jobPostData,
-  } = useQuery(GET_JOB_POST, {
-    variables: { id },
-  });
-  useEffect(() => {
-    if (!jobPostData) return;
-    const data = jobPostData.getJobPost;
-    setJobPost({
-      ...data,
-      createdAt: formatTimeAgo(data.createdAt),
-      publisher: {
-        ...data.publisher,
-        createdAt: formatTimeAgo(data.publisher.createdAt),
-      },
-      interestedCount: 10, // TODO : 제거하기
-    });
-  }, [jobPostData, setJobPost, isApplicationModalVisible]);
-
   const [
     incrementViews,
     { loading: incrementViewsLoading, error: incrementViewsError },
   ] = useMutation(INCREMENT_JOB_POST_VIEWS);
+
+  const [getJobPost, { loading: getJobPostLoading, error: getJobPostError }] =
+    useLazyQuery(GET_JOB_POST, {
+      variables: { id },
+      fetchPolicy: "network-only",
+      onCompleted: async (data) => {
+        const incrementViewsResponse = await incrementViews({
+          variables: { id },
+        });
+        setJobPost({
+          ...data.getJobPost,
+          createdAt: formatTimeAgo(data.getJobPost.createdAt),
+          publisher: {
+            ...data.getJobPost.publisher,
+            createdAt: formatTimeAgo(data.getJobPost.publisher.createdAt),
+          },
+          views: incrementViewsResponse.data.incrementJobPostViews,
+          interestedCount: 10, // TODO : 제거하기
+          myInterested: null, // TODO : 제거하기
+        });
+      },
+    });
+
   useEffect(() => {
-    if (!jobPostData) return;
-    const setupViews = async () => {
-      const response = await incrementViews({
-        variables: { id },
-      });
-      setJobPost((state) => ({
-        ...state,
-        views: response.data.incrementJobPostViews,
-      }));
-    };
-    setupViews();
-  }, [jobPostData]);
+    if (isApplicationModalVisible) return;
+    getJobPost();
+  }, [isApplicationModalVisible, getJobPost]);
 
   return (
     <Background>
