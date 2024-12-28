@@ -1,5 +1,3 @@
-import formatCurrency from "../utils/formatCurrency";
-
 export const IP_ADDRESS = "localhost";
 
 export const ERROR = {
@@ -97,12 +95,6 @@ export const DAYS = {
 };
 export const DAYS_KEY = reverseKeyValue(DAYS);
 
-// TODO : 왜 필요하지?
-// type PayTypes = {
-//   HOURLY: string;
-//   PER_TASK: string;
-//   MONTHLY: string;
-// };
 export const PAY_TYPES = {
   HOURLY: "시급",
   PER_TASK: "건당",
@@ -173,13 +165,6 @@ export const END_TIMES = [...TIMES, "24:00"];
 export const TIME_NOT_SET = "-";
 
 export const MINIMUM_HOURLY_PAY = 9860;
-
-// export const APPLICATION_STATUS = {
-//   PENDING: "대기 중",
-//   ACCEPTED: "채용 확정",
-//   REJECTED: "채용 거절",
-//   CANCELED: "사용자 취소",
-// };
 
 export enum APPLICATION_STATUS {
   PENDING = "PENDING",

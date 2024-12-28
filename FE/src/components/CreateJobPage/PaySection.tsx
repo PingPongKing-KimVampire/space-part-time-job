@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, forwardRef } from "react";
+import React, { useMemo, useEffect } from "react";
 import Chips from "../Chips.tsx";
 import CustomInput from "../CustomInput.tsx";
 import { PAY_TYPES, TERM, MINIMUM_HOURLY_PAY } from "../../constants/constants";
@@ -45,6 +45,12 @@ const PaySection = (props: PaySectionProps) => {
     return Object.values(PAY_TYPES);
   }, [term]);
 
+  const payAmountMaxLength = useMemo(() => {
+    if (pay.type === PAY_TYPES.PER_TASK) return 10; // 원 단위, 100억 미만
+    if (pay.type === PAY_TYPES.MONTHLY) return 5; // 만원 단위, 10억 미만
+    return 7; // PAY_TYPES.HOURLY 원 단위, 1000만원 미만
+  }, [pay.type]);
+
   useEffect(() => {
     // 일하는 기간이 '1개월 이상' 외의 항목으로 변경된 경우 && 현재 선택된 급여 타입이 '월급'인 경우
     if (term !== TERM.LONG_TERM && pay.type === PAY_TYPES.MONTHLY) {
@@ -80,7 +86,6 @@ const PaySection = (props: PaySectionProps) => {
         monthlyPay += ((weeklyHours * 8) / 40) * MINIMUM_HOURLY_PAY * 4;
       }
     }
-    monthlyPay = formatCurrency(monthlyPay);
     return { monthlyPay, weekDayCount, dailyHours };
   };
 
@@ -121,6 +126,16 @@ const PaySection = (props: PaySectionProps) => {
     setPay((state) => ({ ...state, amount: formatCurrency(pureValue) }));
   };
 
+  // TODO : 급여 제한하기
+  // - onChange시에 초과하면 더이상 입력 불가
+  // - ,을 제외한 문자의 개수가 maxLength를 넘으면, 뒤에서부터 초과한 개수만큼의 문자를 제거
+  // - 페이 타입 변경 시, maxLength 업데이트
+  const onPayAmountChange = (e) => {
+    const value = e.target.value.replace(/[^0-9,]/g, "");
+    if (payAmountMaxLength <= value.replace(/,/g, "").length) return;
+    setPay((state) => ({ ...state, amount: value }));
+  };
+
   return (
     <>
       <Container>
@@ -139,16 +154,10 @@ const PaySection = (props: PaySectionProps) => {
           }
           value={pay.amount}
           eventHandlers={{
-            onChange: (e) => {
-              setPay((state) => ({
-                ...state,
-                amount: e.target.value.replace(/[^0-9,]/g, ""),
-              }));
-            },
+            onChange: onPayAmountChange,
             onBlur: onPayAmountBlur,
             onFocus,
           }}
-          maxLength={9}
         >
           <Unit>{pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}</Unit>
         </CustomInput>
