@@ -81,8 +81,6 @@ const ViewJobPage = () => {
             createdAt: formatTimeAgo(data.getJobPost.publisher.createdAt),
           },
           views: incrementViewsResponse.data.incrementJobPostViews,
-          interestedCount: 10, // TODO : 제거하기
-          myInterested: null, // TODO : 제거하기
         });
       },
     });

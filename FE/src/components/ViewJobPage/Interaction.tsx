@@ -40,8 +40,8 @@ const Interaction: React.FC<InteractionProps> = (props) => {
       const responsePost = response.data.markJobPostAsInterest;
       setJobPost((state) => ({
         ...state,
-        myInterested: jobPost.myInterested ? null : { id: "1" }, // TODO : {id: "1"}을 responsePost.myInterested로 대체하기
-        interestedCount: 10, // TODO : responsePost.interestedCount로 대체하기
+        myInterested: jobPost.myInterested ? null : responsePost.myInterested,
+        interestedCount: responsePost.interestedCount,
       }));
     } catch (e) {
       console.log(e);

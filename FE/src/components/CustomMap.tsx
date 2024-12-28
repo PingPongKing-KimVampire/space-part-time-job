@@ -11,6 +11,7 @@ const Container = styled("div", {
   borderRadius: "16px",
   border: "1px solid #E3E9ED",
   boxShadow: "0 0 30px 10px rgba(0, 0, 0, 0.03)",
+  zIndex: "0",
 });
 
 type CustomMapProps = {

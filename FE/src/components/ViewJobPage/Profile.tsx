@@ -13,7 +13,9 @@ const Profile: React.FC<ProfileProps> = ({ nickname, timeTogether }) => {
       <UserProfileIcon />
       <div className="userInfo">
         <div className="nickname">{nickname}</div>
-        <div className="timeTogether">우주알바와 함께한지 {timeTogether}</div>
+        <div className="timeTogether">
+          우주알바와 함께한지 {timeTogether} 전
+        </div>
       </div>
     </ProfileContainer>
   );
