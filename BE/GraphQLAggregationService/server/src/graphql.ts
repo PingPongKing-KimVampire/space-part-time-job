@@ -185,6 +185,8 @@ export interface JobPost {
     applicationCount: number;
     applications: JobApplication[];
     myJobApplication?: Nullable<Nullable<JobApplication>[]>;
+    myInterested?: Nullable<InterestedJobPost>;
+    interestedCount: number;
 }
 
 export interface WorkPeriod {

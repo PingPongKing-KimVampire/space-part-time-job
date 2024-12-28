@@ -178,6 +178,7 @@ services:
       - MONGO_PORT=27017
       - MONGO_DB=jobpostDB
       - GRPC_IMAGE_UPLOAD_SERVER_URL=imageuploadservice:2500
+      - GRPC_JOB_APPLY_SERVER_URL=jobapplyservice:2500
       - PORT=3000
       - gRPCPort=2500
       - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}

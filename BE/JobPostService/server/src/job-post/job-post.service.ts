@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { JobPostRepository } from './mongoose/job-post.repository';
 import { RedisService } from 'src/redis/redis.service';
 import { JobPostStatus } from './mongoose/job-post.schema';
+import { JobApplyService } from 'src/job-apply/grpc/job-apply.service';
 
 @Injectable()
 export class JobPostService {
   constructor(
     private readonly jobPostRepository: JobPostRepository,
     private readonly redisService: RedisService,
+    private readonly jobApplyService: JobApplyService,
   ) {}
 
   public async incrementJobPostViews(
@@ -56,11 +58,29 @@ export class JobPostService {
     if (jobPost.userId !== userId) throw new Error('공고에 접근할 권한 없음');
     if (jobPost.status === JobPostStatus.CLOSE)
       throw new Error('이미 닫힌 공고임');
+    await this.jobApplyService.rejectPendingJobApplication(jobPostId);
     return this.jobPostRepository.updateStatus(jobPostId, JobPostStatus.CLOSE);
   }
 
   async isExistJobPost(jobPostId): Promise<boolean> {
     const jobPost = await this.jobPostRepository.findById(jobPostId);
     return !!jobPost;
+  }
+
+  //매일 자정에 주기적으로 실행됨
+  async closeExpiredShortTermJobPosts() {
+    const today = new Date().toLocaleDateString('en-CA', {
+      timeZone: 'Asia/Seoul',
+    });
+
+    const closedJobPosts =
+      await this.jobPostRepository.closeExpiredShortTermJobPosts(today);
+    try {
+      closedJobPosts.forEach((jobPost) => {
+        this.jobApplyService.rejectPendingJobApplication(jobPost._id);
+      });
+    } catch (e) {
+      console.log('만료 작업 중 오류발생', e);
+    }
   }
 }

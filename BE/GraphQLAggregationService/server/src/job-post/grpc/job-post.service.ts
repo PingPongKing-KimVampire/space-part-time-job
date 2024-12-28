@@ -25,6 +25,10 @@ import { UnmarkJobPostAsInterestRequest } from './interested-job-post-service/dt
 import { UnmarkJobPostAsInterestResponse } from './interested-job-post-service/dto/unmark-job-post-as-interested/response.dto';
 import { ListMyInterestedJobPostRequest } from './interested-job-post-service/dto/list-my-Interested-job-post/request.dto';
 import { ListMyInterestedJobPostResponse } from './interested-job-post-service/dto/list-my-Interested-job-post/response.dto';
+import { GetMyInterestedJobPostRequest } from './interested-job-post-service/dto/get-my-Interested-job-post/request.dto';
+import { GetMyInterestedJobPostResponse } from './interested-job-post-service/dto/get-my-Interested-job-post/response.dto';
+import { CountJobPostInterestedRequest } from './interested-job-post-service/dto/count-job-post-interested/request.dto';
+import { CountJobPostInterestedResponse } from './interested-job-post-service/dto/count-job-post-interested/response.dto';
 
 type GrpcCreateJobPostInput = CreateJobPostInput & { userId: string };
 
@@ -88,6 +92,14 @@ interface InterestedJobPostServiceGrpc {
   listMyInterestedJobPost(
     data: ListMyInterestedJobPostRequest,
   ): Observable<ListMyInterestedJobPostResponse>;
+
+  getMyInterestedJobPost(
+    data: GetMyInterestedJobPostRequest,
+  ): Observable<GetMyInterestedJobPostResponse>;
+
+  countJobPostInterested(
+    data: CountJobPostInterestedRequest,
+  ): Observable<CountJobPostInterestedResponse>;
 }
 
 @Injectable()
@@ -213,7 +225,6 @@ export class JobPostService implements OnModuleInit {
         this.jobPostService.getJobPost({ id }),
       );
       const { jobPost } = response;
-      console.log(jobPost);
       this.transformGrpcJobPost(jobPost);
       jobPost.publisher = await this.userService.getUserPublicInfo(
         jobPost.userId,
@@ -305,6 +316,40 @@ export class JobPostService implements OnModuleInit {
       return interestedJobPosts;
     } catch (e) {
       console.error('listMyInterestedJobPost grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async getMyInterestedJobPost(
+    jobPostId: string,
+    userId: string,
+  ): Promise<GetMyInterestedJobPostResponse> {
+    try {
+      const interestedJobPost = await lastValueFrom(
+        this.InterestedJobPostService.getMyInterestedJobPost({
+          jobPostId,
+          userId,
+        }),
+      );
+      return interestedJobPost;
+    } catch (e) {
+      console.error('getMyInterestedJobPost grpc 에러 발생:', e);
+      throw new Error(e.details);
+    }
+  }
+
+  async countJobPostInterested(
+    jobPostId: string,
+  ): Promise<CountJobPostInterestedResponse> {
+    try {
+      const response = await lastValueFrom(
+        this.InterestedJobPostService.countJobPostInterested({
+          jobPostId,
+        }),
+      );
+      return response;
+    } catch (e) {
+      console.error('countJobPostInterested grpc 에러 발생:', e);
       throw new Error(e.details);
     }
   }

@@ -55,7 +55,7 @@ export class InterestedJobPostRepository {
     return interestedJobPosts;
   }
 
-  async getByUserAndPost(
+  async getByPostAndUser(
     jobPostId: string,
     userId: string,
   ): Promise<InterestedJobPost | null> {
@@ -67,5 +67,12 @@ export class InterestedJobPostRepository {
       .lean()
       .exec();
     return interestedJobPost;
+  }
+
+  async countByPost(jobPostId: string): Promise<number> {
+    const count = await this.interestedJobPostModel
+      .countDocuments({ jobPostId })
+      .exec();
+    return count;
   }
 }

@@ -98,12 +98,22 @@ export class JobPostRepository {
             $and: [
               { 'workTime.startTime': { $lte: filters.endTime } },
               { 'workTime.endTime': { $lte: filters.endTime } },
+              {
+                $expr: {
+                  $lte: ['$workTime.startTime', '$workTime.endTime'],
+                },
+              },
             ],
           },
           {
             $and: [
               { 'workTime.startTime': { $gte: filters.startTime } },
               { 'workTime.endTime': { $gte: filters.startTime } },
+              {
+                $expr: {
+                  $lte: ['$workTime.startTime', '$workTime.endTime'],
+                },
+              },
             ],
           },
           {
@@ -202,5 +212,39 @@ export class JobPostRepository {
       throw new Error(`존재하지 않는 공고임`);
     }
     return updatedJobPost;
+  }
+
+  async closeExpiredShortTermJobPosts(today: string): Promise<JobPost[]> {
+    const filter = {
+      'workPeriod.type': 'SHORT_TERM',
+      status: JobPostStatus.OPEN,
+    };
+
+    const expiredCandidateJobPosts = await this.jobPostModel
+      .find(filter)
+      .lean()
+      .exec();
+
+    const jobPostsToUpdate = expiredCandidateJobPosts.filter((jobPost) => {
+      const maxDate = jobPost.workPeriod.dates.reduce((acc, date) => {
+        const ret = acc >= date ? acc : date;
+        return ret;
+      }, '0000-00-00');
+      return maxDate < today;
+    });
+
+    if (jobPostsToUpdate.length === 0) {
+      return [];
+    }
+
+    const jobPostIdsToUpdate = jobPostsToUpdate.map((jobPost) => jobPost._id);
+    await this.jobPostModel
+      .updateMany(
+        { _id: { $in: jobPostIdsToUpdate } },
+        { $set: { status: JobPostStatus.CLOSE } },
+      )
+      .exec();
+
+    return jobPostsToUpdate;
   }
 }

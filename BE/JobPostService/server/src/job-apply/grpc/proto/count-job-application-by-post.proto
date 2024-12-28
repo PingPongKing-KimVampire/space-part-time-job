@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package jobApply;
+import "common.proto";
+
+message CountJobApplicationByPostRequest { string jobPostId = 1; }
+
+message CountJobApplicationByPostResponse { int32 jobApplicationCount = 1; }

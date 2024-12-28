@@ -18,7 +18,7 @@ export class InterestedJobPostService {
       throw new Error('공고 없음');
 
     const isMarkInterestedJobPost =
-      await this.interestedJobPostRepository.getByUserAndPost(
+      await this.interestedJobPostRepository.getByPostAndUser(
         jobPostId,
         userId,
       );
@@ -36,7 +36,7 @@ export class InterestedJobPostService {
       throw new Error('공고 없음');
 
     const isMarkInterestedJobPost =
-      await this.interestedJobPostRepository.getByUserAndPost(
+      await this.interestedJobPostRepository.getByPostAndUser(
         jobPostId,
         userId,
       );
@@ -53,5 +53,15 @@ export class InterestedJobPostService {
 
   listMyInterestedJobPost(userId: string) {
     return this.interestedJobPostRepository.getByUser(userId);
+  }
+
+  async getMyInterestedJobPost(jobPostId: string, userId: string) {
+    const interestedJobPost =
+      await this.interestedJobPostRepository.getByPostAndUser(
+        jobPostId,
+        userId,
+      );
+    if (!interestedJobPost) throw new Error('관심 공고 아님');
+    return interestedJobPost;
   }
 }

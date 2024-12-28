@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package jobApply;
+import "common.proto";
+
+message ListJobApplicationByUserAndPostRequest {
+  string userId = 1;
+  string jobPostId = 2;
+}
+
+message ListJobApplicationByUserAndPostResponse {
+  repeated JobApplication jobApplicationList = 1;
+}

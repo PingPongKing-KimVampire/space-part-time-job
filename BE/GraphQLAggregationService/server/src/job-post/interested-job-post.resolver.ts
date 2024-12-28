@@ -16,7 +16,6 @@ export class InterestedJobPostResolver {
     const { interestedJobPosts } =
       await this.jobPostService.listMyInterestedJobPost(user.id);
 
-    console.log(interestedJobPosts);
     return (interestedJobPosts ?? []).map(async (interestedJobPost) => ({
       jobPost: await this.jobPostResolver.getJobPost(
         interestedJobPost.jobPostId,
