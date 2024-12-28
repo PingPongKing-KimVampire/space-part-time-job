@@ -45,7 +45,6 @@ export class JobApplyController {
     request = plainToInstance(ApplyToJobPostRequest, request);
     await this.validateFormat(request);
     try {
-      await this.validateJobPostId(request.jobPostId);
       const jobApplication = await this.jobApplyService.applyToJobPost({
         userId: request.userId,
         jobPostId: request.jobPostId,
@@ -84,10 +83,6 @@ export class JobApplyController {
       )
       .join('; ');
     return errorMessage;
-  }
-
-  private validateJobPostId(jobPostId: string) {
-    return this.jobPostService.getJobPost(jobPostId);
   }
 
   @GrpcMethod('JobApplyService', 'ListJobApplicationByUserAndPost')

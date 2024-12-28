@@ -9,8 +9,15 @@ import {
 import { join } from 'path';
 import { lastValueFrom, Observable } from 'rxjs';
 
+export enum JobPostStatusGRPC {
+  OPEN = 1,
+  CLOSE = 2,
+}
+
 interface JobPostServiceGrpc {
-  getJobPost(data: { id: string }): Observable<{ jobPost: { userId: string } }>;
+  getJobPost(data: {
+    id: string;
+  }): Observable<{ jobPost: { userId: string; status: JobPostStatusGRPC } }>;
 }
 
 @Injectable()

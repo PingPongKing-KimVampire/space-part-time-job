@@ -4,7 +4,10 @@ import {
   ApplicationStatus,
   JobApplication,
 } from './mongoose/job-application.schema';
-import { JobPostService } from 'src/job-post/grpc/job-post.service';
+import {
+  JobPostService,
+  JobPostStatusGRPC,
+} from 'src/job-post/grpc/job-post.service';
 
 @Injectable()
 export class JobApplyService {
@@ -17,6 +20,9 @@ export class JobApplyService {
     jobPostId: string;
     coverLetter: string;
   }): Promise<JobApplication> {
+    const jobPost = await this.jobPostService.getJobPost(input.jobPostId);
+    if (jobPost.status === JobPostStatusGRPC.CLOSE)
+      throw new Error('해당 공고는 마감된 공고임');
     if (
       await this.jobApplyRepository.hasUserPendingApplicationByPost(
         input.userId,
