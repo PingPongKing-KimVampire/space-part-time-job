@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { uploadImages } from "../../api/rest/post.ts";
 import { ReactComponent as CameraIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as XmarkIcon } from "../../assets/icons/x-mark.svg";
 import {
@@ -7,7 +8,6 @@ import {
   ImagesContainer,
   ImageDisplay,
 } from "../../styles/CreateJobPage/ImageSection.styles";
-import { IP_ADDRESS, ERROR } from "../../constants/constants";
 
 type UploadImagesResponseData = {
   error?: string;
@@ -18,33 +18,6 @@ const VALID_IMAGE_BYTE = 10 * 1024 * 1024;
 
 const ImageSection = ({ images, setImages, setIsValid }) => {
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const uploadImages = async (imageFiles: File[]): Promise<string[]> => {
-    const requestUrl = `https://${IP_ADDRESS}/api/image-upload`;
-    const formData = new FormData();
-    imageFiles.forEach((file) => {
-      formData.append("imageFiles", file);
-    });
-    let response: Response;
-    try {
-      response = await fetch(requestUrl, {
-        method: "POST",
-        // headers: { "Content-Type": "multipart/form-data" },
-        body: formData,
-        credentials: "include",
-      });
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-    let data: UploadImagesResponseData;
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(ERROR.SERVER);
-    }
-    if (!response.ok) throw new Error(ERROR.SERVER);
-    return data.imageUrlList || [];
-  };
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;

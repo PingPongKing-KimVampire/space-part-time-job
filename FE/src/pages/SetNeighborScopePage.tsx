@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { fetchDistrictBoundary } from "../utils/apiRequest.ts";
+import { fetchDistrictBoundary } from "../api/rest/neighbor.ts";
 import CustomMap from "../components/CustomMap.tsx";
 import { ReactComponent as XmarkIcon } from "../assets/icons/x-mark.svg";
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
@@ -16,7 +16,7 @@ import {
 import LevelSlider from "../components/SetNeighborScopePage/LevelSlider.tsx";
 import { SelectedNeighbor } from "./SearchNeighborPage.tsx";
 import { ERROR } from "../constants/constants";
-import { SET_RESIDENT_NEIGHBORHOOD } from "../graphql/mutations.js";
+import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations.js";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WarningText } from "../styles/global";
 

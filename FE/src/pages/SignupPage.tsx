@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkDuplicated, signup } from "../utils/apiRequest.ts";
+import { checkDuplicated, signup } from "../api/rest/auth.ts";
 import {
   Background,
   Container,

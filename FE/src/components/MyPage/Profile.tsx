@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { requestLogout } from "../../utils/apiRequest.ts";
+import { logout } from "../../api/rest/auth.ts";
 import { ProfileContainer } from "../../styles/MyPage.styles";
 import { ReactComponent as ProfileIcon } from "../../assets/icons/profile.svg";
 
@@ -9,7 +9,7 @@ const Profile = () => {
 
   const onLogoutClick = async () => {
     try {
-      await requestLogout();
+      await logout();
     } catch (e) {
       console.log(e);
       return;

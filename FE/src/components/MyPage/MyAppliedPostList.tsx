@@ -15,8 +15,8 @@ import {
 } from "../../styles/MyPage.styles.ts";
 import { CloseTag } from "../../styles/global.ts";
 import { AcceptedBadge, RejectedBadge } from "../Badges.tsx";
-import { LIST_MY_JOB_APPLICATIONS } from "../../graphql/queries.js";
-import { CANCEL_JOB_APPLICATION } from "../../graphql/mutations.js";
+import { LIST_MY_JOB_APPLICATIONS } from "../../api/graphql/queries.js";
+import { CANCEL_JOB_APPLICATION } from "../../api/graphql/mutations.js";
 
 type Application = {
   id: string;

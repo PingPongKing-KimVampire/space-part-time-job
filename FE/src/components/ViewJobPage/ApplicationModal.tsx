@@ -5,7 +5,7 @@ import LoadingOverlay from "../LoadingOverlay.tsx";
 import { ApplicationModalBackground } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as XIcon } from "../../assets/icons/x-mark.svg";
 import { checkRulePassInApplication } from "../../utils/checkRulePass";
-import { APPLY_TO_JOB_POST } from "../../graphql/mutations.js";
+import { APPLY_TO_JOB_POST } from "../../api/graphql/mutations.js";
 
 const ApplicationModal = ({ jobPostId, onXClick }) => {
   const [coverLetter, setCoverLetter] = useState("");

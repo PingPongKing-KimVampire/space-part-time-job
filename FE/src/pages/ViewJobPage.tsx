@@ -9,8 +9,8 @@ import useBackgroundColor from "../utils/useBackgroundColor";
 import { Background, Container } from "../styles/ViewJobPage.styles";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { MainBackgroundColor } from "../styles/global";
-import { GET_JOB_POST } from "../graphql/queries";
-import { INCREMENT_JOB_POST_VIEWS } from "../graphql/mutations.js";
+import { GET_JOB_POST } from "../api/graphql/queries";
+import { INCREMENT_JOB_POST_VIEWS } from "../api/graphql/mutations.js";
 
 // TODO: ExploreJobsPage의 JobPost 타입과 어느 정도 반복되는 타입임
 export type JobPost = {

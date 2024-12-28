@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { fetchDistrictBoundary } from "../utils/apiRequest.ts";
+import { fetchDistrictBoundary } from "../api/rest/neighbor.ts";
 import { MainBackgroundColor } from "../styles/global";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import useBackgroundColor from "../utils/useBackgroundColor";
@@ -20,7 +20,7 @@ import { Neighbor } from "./SearchNeighborPage";
 import {
   GET_RESIDENT_NEIGHBORHOOD,
   SEARCH_JOB_POSTS,
-} from "../graphql/queries.js";
+} from "../api/graphql/queries.js";
 import {
   ERROR,
   TERM,

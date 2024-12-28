@@ -7,7 +7,7 @@ import { JobPost } from "../../pages/ViewJobPage.tsx";
 import {
   UNMARK_JOB_POST_AS_INTEREST,
   MARK_JOB_POST_AS_INTEREST,
-} from "../../graphql/mutations.js";
+} from "../../api/graphql/mutations.js";
 
 type InteractionProps = {
   jobPost: JobPost;

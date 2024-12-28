@@ -3,7 +3,7 @@ import {
   fetchCoordinateByAddress,
   fetchNeighborInfoByCoordinate,
   fetchDistrictBoundary,
-} from "../../utils/apiRequest.ts";
+} from "../../api/rest/neighbor.ts";
 import CustomInput from "../CustomInput.tsx";
 import CustomMap from "../CustomMap.tsx";
 import {

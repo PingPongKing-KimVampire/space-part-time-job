@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { sendSmsCodeAtSignup } from "../../api/rest/auth.ts";
 import CustomInput from "../CustomInput.tsx";
 import PhoneNumberInput from "../PhoneNumberInput.tsx";
 import useCountdownTimer from "../../utils/useCountdownTimer";
@@ -9,16 +10,7 @@ import {
   TimeCounter,
 } from "../../styles/SignupPage.styles";
 import { WarningText } from "../../styles/global";
-import {
-  SEND_SMSCODE_COUNTDOWN_SEC,
-  IP_ADDRESS,
-  ERROR,
-} from "../../constants/constants";
-
-type SendSmsCodeResponseData = {
-  error?: string;
-  remainingPhoneAuthenticationCount?: number;
-};
+import { SEND_SMSCODE_COUNTDOWN_SEC, ERROR } from "../../constants/constants";
 
 const PhoneNumberSection = (props) => {
   const {
@@ -58,7 +50,9 @@ const PhoneNumberSection = (props) => {
   const sendNumberButtonClicked = async () => {
     // 인증번호 전송
     try {
-      const remainingCount: number = await sendSmsCode();
+      const remainingCount: number = await sendSmsCodeAtSignup(
+        inputValue.phoneNumber
+      );
       setRemainingCount(remainingCount);
     } catch (e) {
       setWarning(e.message);
@@ -83,36 +77,6 @@ const PhoneNumberSection = (props) => {
     )
       return false;
     return true;
-  };
-
-  const sendSmsCode = async (): Promise<number> => {
-    let response: Response;
-    let data: SendSmsCodeResponseData;
-    const requestUrl: string = `https://${IP_ADDRESS}/api/users/phone-auth-code`;
-    try {
-      response = await fetch(requestUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({
-          phoneNumber: inputValue.phoneNumber.replace(/-/g, ""),
-        }),
-      });
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(ERROR.SERVER);
-    }
-    if (!response.ok) {
-      if (data.error === "하루 최대요청 횟수 초과")
-        throw new Error(ERROR.AUTH_NUMBER_SEND_COUNT_EXCEED); // 409
-      if (data.error === "전화번호 중복")
-        throw new Error(ERROR.SIGNUP.DUPLICATED_PHONE_NUMBER); // 409
-      throw new Error(ERROR.SERVER); // 400, 500
-    }
-    return data.remainingPhoneAuthenticationCount || 0;
   };
 
   const onPhoneNumberInputBlurStart = () => {

@@ -6,8 +6,8 @@ import { MouseEventHandlers } from "./PostList.tsx";
 import { JOB_POST_STATUS } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles";
 import { CloseTag } from "../../styles/global.ts";
-import { LIST_MY_INTERESTED_JOB_POSTS } from "../../graphql/queries.js";
-import { UNMARK_JOB_POST_AS_INTEREST } from "../../graphql/mutations.js";
+import { LIST_MY_INTERESTED_JOB_POSTS } from "../../api/graphql/queries.js";
+import { UNMARK_JOB_POST_AS_INTEREST } from "../../api/graphql/mutations.js";
 
 type MyInterestPostListProps = {
   mouseEventHandlers: MouseEventHandlers;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { GET_MY_ID } from "../graphql/queries.js";
+import { GET_MY_ID } from "../api/graphql/queries.js";
 import { useQuery } from "@apollo/client";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 

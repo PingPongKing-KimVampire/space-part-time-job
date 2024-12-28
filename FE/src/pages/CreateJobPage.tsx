@@ -18,7 +18,7 @@ import {
   WORKTIME_TYPES_KEY,
   PAY_TYPES_KEY,
 } from "../constants/constants";
-import { CREATE_JOB_POST } from "../graphql/mutations.js";
+import { CREATE_JOB_POST } from "../api/graphql/mutations.js";
 import {
   Background,
   Container,

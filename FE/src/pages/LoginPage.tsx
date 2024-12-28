@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
+import { sendSmsCodeAtLogin, login } from "../api/rest/auth.ts";
 import CustomInput from "../components/CustomInput.tsx";
 import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import PasswordInput from "../components/PasswordInput.tsx";
@@ -23,20 +24,10 @@ import { checkRulePassInAuth } from "../utils/checkRulePass";
 import useCountdownTimer from "../utils/useCountdownTimer";
 import {
   SEND_SMSCODE_COUNTDOWN_SEC,
-  IP_ADDRESS,
   ERROR,
+  LOGIN_TAB,
 } from "../constants/constants";
-import { GET_RESIDENT_NEIGHBORHOOD } from "../graphql/queries.js";
-
-const ID_PW = "ID_PW";
-const PHONE_NUMBER = "PHONE_NUMBER";
-
-type LoginRequestBody = {
-  id?: string;
-  password?: string;
-  phoneNumber?: string;
-  smsCode?: string;
-};
+import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
 
 type SendSmsCodeResponseData = {
   error?: string;
@@ -52,8 +43,8 @@ const LoginPage = (): React.JSX.Element => {
   const navigate = useNavigate();
   const countdownTimer = useCountdownTimer(SEND_SMSCODE_COUNTDOWN_SEC);
 
-  const [selectedTab, setSelectedTab] = useState(ID_PW);
-  const [notiVisible, setNotiVisible] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<LOGIN_TAB>(LOGIN_TAB.ID_PW);
+  const [notiVisible, setNotiVisible] = useState<boolean>(false);
 
   const [inputValue, setInputValue] = useState({
     id: "",
@@ -67,38 +58,6 @@ const LoginPage = (): React.JSX.Element => {
   const [isSent, setIsSent] = useState(false); // 인증번호를 전송한 적이 있나?
   const [recentPhoneNumber, setRecentPhoneNumber] = useState(""); // 가장 최근에 인증번호 전송을 누른 시점에 입력되어 있던 전화번호
 
-  const sendSmsCode = async (): Promise<number> => {
-    let response: Response;
-    let data: SendSmsCodeResponseData;
-    const requestUrl = `https://${IP_ADDRESS}/api/users/login/phone-auth-code`;
-    try {
-      response = await fetch(requestUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({
-          phoneNumber: inputValue.phoneNumber.replace(/-/g, ""),
-        }),
-      });
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(ERROR.SERVER);
-    }
-    if (!response.ok) {
-      if (data.error === "하루 최대요청 횟수 초과")
-        throw new Error(ERROR.AUTH_NUMBER_SEND_COUNT_EXCEED); // 409
-      if (data.error === "존재하지 않는 사용자")
-        throw new Error(ERROR.LOGIN.PHONE_NUMBER_NOT_EXIST); // 409
-      throw new Error(ERROR.SERVER); // 400, 500
-    }
-    return data.remainingPhoneAuthenticationCount || 0;
-  };
-
-  // TODO : SignupPage와 중복되는 로직
-  // 이 로직을 NotificationBox 내부에 합쳐버릴까?
   const sendNumberButtonClicked = async () => {
     // 인증번호 전송 버튼 클릭
     // 전화번호 유효성 검증 및 오류 표시
@@ -110,9 +69,10 @@ const LoginPage = (): React.JSX.Element => {
       setWarning(ERROR.INVALID_PHONE_NUMBER);
       return;
     }
-    // TODO : PhoneNumberSection 이랑 같은 로직..!
     try {
-      const remainingCount: number = await sendSmsCode();
+      const remainingCount: number = await sendSmsCodeAtLogin(
+        inputValue.phoneNumber
+      );
       setRemainingCount(remainingCount);
     } catch (e) {
       setWarning(e.message);
@@ -137,46 +97,6 @@ const LoginPage = (): React.JSX.Element => {
     )
       return false;
     return true;
-  };
-
-  const login = async () => {
-    const body: LoginRequestBody = {};
-    let requestUrl: string = "";
-    if (selectedTab === ID_PW) {
-      body.id = inputValue.id;
-      body.password = inputValue.password;
-      requestUrl = `https://${IP_ADDRESS}/api/users/login`;
-    } else if (selectedTab === PHONE_NUMBER) {
-      body.phoneNumber = inputValue.phoneNumber.replace(/-/g, "");
-      body.smsCode = inputValue.smsCode;
-      requestUrl = `https://${IP_ADDRESS}/api/users/login/phone`;
-    }
-
-    let response: Response;
-    let data: LoginResponseData;
-    try {
-      response = await fetch(requestUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify(body),
-        credentials: "include",
-      });
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(ERROR.SERVER);
-    }
-
-    if (!response.ok) {
-      if (data.error === "아이디/패스워드 로그인 실패")
-        throw new Error(ERROR.LOGIN.INVALID_ID_PW); // 401
-      if (data.error === "휴대폰 인증 실패")
-        throw new Error(ERROR.INVALID_AUTH_NUMBER); // 401
-      throw new Error(ERROR.SERVER); // 400, 500
-    }
   };
 
   const [
@@ -205,10 +125,10 @@ const LoginPage = (): React.JSX.Element => {
     e.preventDefault();
     // 기본 유효성 검사
     try {
-      if (selectedTab === ID_PW) {
+      if (selectedTab === LOGIN_TAB.ID_PW) {
         if (inputValue.id === "") throw new Error(ERROR.LOGIN.ENTER_ID);
         if (inputValue.password === "") throw new Error(ERROR.LOGIN.ENTER_PW);
-      } else if (selectedTab === PHONE_NUMBER) {
+      } else if (selectedTab === LOGIN_TAB.PHONE_NUMBER) {
         if (inputValue.phoneNumber === "")
           throw new Error(ERROR.LOGIN.ENTER_PHONE_NUMBER);
         if (!isValidPhoneNumber) throw new Error(ERROR.INVALID_PHONE_NUMBER);
@@ -221,7 +141,7 @@ const LoginPage = (): React.JSX.Element => {
     }
     // 기본 유효성 검사를 통과한 경우 로그인 API 요청
     try {
-      await login();
+      await login(selectedTab, inputValue);
       getResidentNeighborhood(); // 상주 지역 설정 여부 확인 -> 결과에 따라 다른 페이지로 이동
     } catch (e) {
       setWarning(e.message);
@@ -269,26 +189,28 @@ const LoginPage = (): React.JSX.Element => {
         <LoginPanel>
           <div>
             <TabButton
-              className={`left ${selectedTab === ID_PW ? "selected" : ""}`}
+              className={`left ${
+                selectedTab === LOGIN_TAB.ID_PW ? "selected" : ""
+              }`}
               onClick={() => {
-                setSelectedTab(ID_PW);
+                setSelectedTab(LOGIN_TAB.ID_PW);
               }}
             >
               아이디/비밀번호
             </TabButton>
             <TabButton
               className={`right ${
-                selectedTab === PHONE_NUMBER ? "selected" : ""
+                selectedTab === LOGIN_TAB.PHONE_NUMBER ? "selected" : ""
               }`}
               onClick={() => {
-                setSelectedTab(PHONE_NUMBER);
+                setSelectedTab(LOGIN_TAB.PHONE_NUMBER);
               }}
             >
               휴대폰 번호
             </TabButton>
           </div>
           <LoginForm>
-            {selectedTab === ID_PW && (
+            {selectedTab === LOGIN_TAB.ID_PW && (
               <div>
                 <CustomInput
                   id="id"
@@ -320,7 +242,7 @@ const LoginPage = (): React.JSX.Element => {
                 />
               </div>
             )}
-            {selectedTab === PHONE_NUMBER && (
+            {selectedTab === LOGIN_TAB.PHONE_NUMBER && (
               <div>
                 <PhoneNumberInput
                   borderType="multi-top"

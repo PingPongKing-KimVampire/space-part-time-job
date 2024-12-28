@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
+import { fetchTotalNeighbors } from "../api/rest/neighbor.ts";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import useDebounce from "../utils/useDebounce";
 import {
@@ -18,8 +19,7 @@ import CustomInput from "../components/CustomInput.tsx";
 import SelectedNeighbors from "../components/SearchNeighborPage/SelectedNeighbors.tsx";
 import ResultNeighbors from "../components/SearchNeighborPage/ResultNeighbors.tsx";
 import { MainBackgroundColor } from "../styles/global";
-import { IP_ADDRESS, ERROR } from "../constants/constants";
-import { GET_RESIDENT_NEIGHBORHOOD } from "../graphql/queries.js";
+import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
 
 export type Neighbor = {
   id: string;
@@ -28,10 +28,6 @@ export type Neighbor = {
 
 export type SelectedNeighbor = Neighbor & {
   scopeValue: string;
-};
-
-type SearchNeighborResponseData = {
-  districts: Neighbor[];
 };
 
 const SearchNeighborPage = () => {
@@ -82,27 +78,6 @@ const SearchNeighborPage = () => {
     setupTotalNeighbors(); // 처음 모든 동 정보를 받아옴
     setupSelectedNeighbors(); // 디폴트로 선택될 동 정보를 받아옴 (세션 스토리지 -> 상주 지역 조회 API)
   }, []);
-
-  // 행정동 조회 API 요청
-  const fetchTotalNeighbors = async (): Promise<Neighbor[]> => {
-    let response: Response;
-    let data: SearchNeighborResponseData;
-    const requestUrl = `https://${IP_ADDRESS}/district`;
-    try {
-      response = await fetch(requestUrl);
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-    if (!response.ok) {
-      throw new Error(ERROR.SERVER);
-    }
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(ERROR.SERVER);
-    }
-    return data.districts;
-  };
 
   useEffect(() => {
     // 검색 키워드 바뀔 때마다 스크롤을 최상단으로 이동

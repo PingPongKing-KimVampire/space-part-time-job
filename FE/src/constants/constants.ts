@@ -44,6 +44,11 @@ export const ERROR = {
   },
 };
 
+export enum LOGIN_TAB {
+  ID_PW = "ID_PW",
+  PHONE_NUMBER = "PHONE_NUMBER",
+}
+
 const reverseKeyValue = (object: { [key: string]: string }) => {
   return Object.entries(object).reduce((acc, [key, value]) => {
     acc[value] = key;

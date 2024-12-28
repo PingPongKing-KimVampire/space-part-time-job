@@ -7,8 +7,8 @@ import { Container, UserInfo } from "../styles/ViewApplicationsPage.styles.ts";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { AcceptedBadge, RejectedBadge } from "../components/Badges.tsx";
 import { APPLICATION_STATUS } from "../constants/constants.ts";
-import { GET_JOB_POST_APPLICATIONS } from "../graphql/queries.js";
-import { DECIDE_JOB_APPLICATION } from "../graphql/mutations.js";
+import { GET_JOB_POST_APPLICATIONS } from "../api/graphql/queries.js";
+import { DECIDE_JOB_APPLICATION } from "../api/graphql/mutations.js";
 import formatTimeAgo from "../utils/formatTimeAgo.ts";
 
 type Application = {
