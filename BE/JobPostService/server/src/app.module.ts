@@ -7,6 +7,8 @@ import { AppController } from './app.controller';
 import { RedisModule } from './redis/redis.module';
 import { InterestedJobPostModule } from './interested-job-post/interested-job-post.module';
 import { JobApplyModule } from './job-apply/job-apply.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskScheduleModule } from './task-schedule/task-schedule.module';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import { JobApplyModule } from './job-apply/job-apply.module';
     RedisModule,
     InterestedJobPostModule,
     JobApplyModule,
+    TaskScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

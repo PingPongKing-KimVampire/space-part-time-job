@@ -203,4 +203,38 @@ export class JobPostRepository {
     }
     return updatedJobPost;
   }
+
+  async closeExpiredShortTermJobPosts(today: string): Promise<JobPost[]> {
+    const filter = {
+      'workPeriod.type': 'SHORT_TERM',
+      status: JobPostStatus.OPEN,
+    };
+
+    const expiredCandidateJobPosts = await this.jobPostModel
+      .find(filter)
+      .lean()
+      .exec();
+
+    const jobPostsToUpdate = expiredCandidateJobPosts.filter((jobPost) => {
+      const maxDate = jobPost.workPeriod.dates.reduce((acc, date) => {
+        const ret = acc >= date ? acc : date;
+        return ret;
+      }, '0000-00-00');
+      return maxDate < today;
+    });
+
+    if (jobPostsToUpdate.length === 0) {
+      return [];
+    }
+
+    const jobPostIdsToUpdate = jobPostsToUpdate.map((jobPost) => jobPost._id);
+    await this.jobPostModel
+      .updateMany(
+        { _id: { $in: jobPostIdsToUpdate } },
+        { $set: { status: JobPostStatus.CLOSE } },
+      )
+      .exec();
+
+    return jobPostsToUpdate;
+  }
 }

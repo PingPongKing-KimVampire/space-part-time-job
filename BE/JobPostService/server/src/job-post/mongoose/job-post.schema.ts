@@ -10,6 +10,8 @@ export enum JobPostStatus {
 
 @Schema({ timestamps: true })
 export class JobPost {
+  _id: string;
+
   @Prop({ required: true })
   userId: string;
 

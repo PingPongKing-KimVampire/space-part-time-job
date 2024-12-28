@@ -66,4 +66,21 @@ export class JobPostService {
     const jobPost = await this.jobPostRepository.findById(jobPostId);
     return !!jobPost;
   }
+
+  //매일 자정에 주기적으로 실행됨
+  async closeExpiredShortTermJobPosts() {
+    const today = new Date().toLocaleDateString('en-CA', {
+      timeZone: 'Asia/Seoul',
+    });
+
+    const closedJobPosts =
+      await this.jobPostRepository.closeExpiredShortTermJobPosts(today);
+    try {
+      closedJobPosts.forEach((jobPost) => {
+        this.jobApplyService.rejectPendingJobApplication(jobPost._id);
+      });
+    } catch (e) {
+      console.log('만료 작업 중 오류발생', e);
+    }
+  }
 }
