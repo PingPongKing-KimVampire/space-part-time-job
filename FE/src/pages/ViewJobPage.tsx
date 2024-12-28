@@ -29,9 +29,11 @@ export type JobPost = {
   publisher: { nickname: string; createdAt: string };
   applicationCount: number;
   myJobApplication: { id: string; status: string }[];
-  myInterested: { id: string } | null;
+  myInterested: { createdAt: string } | null;
   interestedCount: number;
 };
+
+// TODO : JobPost.myInterested의 필드를 id -> createdAt 으로 교체
 
 const ViewJobPage = () => {
   useBackgroundColor(MainBackgroundColor);

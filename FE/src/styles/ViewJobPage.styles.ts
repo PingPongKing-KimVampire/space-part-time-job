@@ -263,8 +263,9 @@ export const InteractionContainer = styled("div", {
       },
       "&:not(.selected).inactivated": {
         cursor: "not-allowed",
-        pointerEvents: "none",
-        // TODO : 비활성화 스타일로 변경
+        stroke: "#B0B0B0",
+        strokeWidth: "0.6",
+        fill: "#B0B0B0",
       },
     },
   },

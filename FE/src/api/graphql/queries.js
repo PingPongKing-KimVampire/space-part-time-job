@@ -116,7 +116,7 @@ export const GET_JOB_POST = gql`
         status
       }
       myInterested {
-        id
+        createdAt
       }
       interestedCount
     }

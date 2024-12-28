@@ -1,4 +1,5 @@
 import apiRequest from "./apiRequest.ts";
+import { IP_ADDRESS } from "../../constants/constants.ts";
 
 export const uploadImages = async (imageFiles: File[]): Promise<string[]> => {
   const formData = new FormData();
