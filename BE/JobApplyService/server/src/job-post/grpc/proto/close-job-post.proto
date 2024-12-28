@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package jobPost;
+import "common.proto";
+
+message CloseJobPostRequest {
+  string userId = 1;
+  string jobPostId = 2;
+}
+
+message CloseJobPostResponse { JobPost jobPost = 1; }

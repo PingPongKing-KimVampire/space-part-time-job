@@ -6,13 +6,15 @@ import "common.proto";
 
 // Search filter input
 message JobPostSearchFilter {
-  repeated string neighborhoodIds = 1;  // List of neighborhood IDs
-  WorkPeriodType workPeriodType = 2;    // SHORT_TERM or LONG_TERM
-  repeated DayOfWeekType days = 3;        // List of days (e.g., MONDAY, TUESDAY)
+  repeated string neighborhoodIds = 1; // List of neighborhood IDs
+  WorkPeriodType workPeriodType = 2;   // SHORT_TERM or LONG_TERM
+  repeated DayOfWeekType days = 3;     // List of days (e.g., MONDAY, TUESDAY)
   repeated JobCategory jobCategories = 4; // List of job categories
-  string startTime = 5;                 // Filter by start time (HH:mm)
-  string endTime = 6;                   // Filter by end time (HH:mm)
+  string startTime = 5;                   // Filter by start time (HH:mm)
+  string endTime = 6;                     // Filter by end time (HH:mm)
   string keyword = 7;
+  bool onlyMyPosts = 8;
+  repeated JobPostStatus status = 9;
 }
 
 // Pagination input
@@ -23,28 +25,28 @@ message JobPostCursorInput {
 
 // Pagination response
 message JobPostConnection {
-  int32 totalCount = 1;              // Total number of job posts
-  repeated JobPostEdge edges = 2;    // List of job post edges
-  PageInfo pageInfo = 3;             // Page information
+  int32 totalCount = 1;           // Total number of job posts
+  repeated JobPostEdge edges = 2; // List of job post edges
+  PageInfo pageInfo = 3;          // Page information
 }
 
 message JobPostEdge {
-  string cursor = 1;   // Cursor for the JobPost
-  JobPost node = 2;    // The actual JobPost data
+  string cursor = 1; // Cursor for the JobPost
+  JobPost node = 2;  // The actual JobPost data
 }
 
 message PageInfo {
-  bool hasNextPage = 1;  // Whether more pages exist
-  string endCursor = 2;  // Cursor for the last item in the current page
+  bool hasNextPage = 1; // Whether more pages exist
+  string endCursor = 2; // Cursor for the last item in the current page
 }
-
 
 // Request and response for search
 message SearchJobPostsRequest {
-  JobPostSearchFilter filters = 1;  // Search filters
+  JobPostSearchFilter filters = 1;   // Search filters
   JobPostCursorInput pagination = 2; // Pagination input
+  string userId = 3;
 }
 
 message SearchJobPostsResponse {
-  JobPostConnection result = 1;    // Paginated search results
+  JobPostConnection result = 1; // Paginated search results
 }
