@@ -97,12 +97,13 @@ export const DAYS = {
 };
 export const DAYS_KEY = reverseKeyValue(DAYS);
 
-type PayTypes = {
-  HOURLY: string;
-  PER_TASK: string;
-  MONTHLY: string;
-};
-export const PAY_TYPES: PayTypes = {
+// TODO : 왜 필요하지?
+// type PayTypes = {
+//   HOURLY: string;
+//   PER_TASK: string;
+//   MONTHLY: string;
+// };
+export const PAY_TYPES = {
   HOURLY: "시급",
   PER_TASK: "건당",
   MONTHLY: "월급",

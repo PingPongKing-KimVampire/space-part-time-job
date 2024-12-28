@@ -10,14 +10,7 @@ import { APPLICATION_STATUS } from "../constants/constants.ts";
 import { GET_JOB_POST_APPLICATIONS } from "../api/graphql/queries.js";
 import { DECIDE_JOB_APPLICATION } from "../api/graphql/mutations.js";
 import formatTimeAgo from "../utils/formatTimeAgo.ts";
-
-type Application = {
-  id: string;
-  coverLetter: string;
-  applicant: { nickname: string };
-  status: APPLICATION_STATUS;
-  createdAt: string;
-};
+import { Application } from "../types/types.ts";
 
 const ViewApplicantsPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -75,7 +68,7 @@ const ViewApplicantsPage = () => {
             {status === APPLICATION_STATUS.REJECTED && <RejectedBadge />}
             <UserInfo>
               <ProfileIcon />
-              <div className="nickname">{applicant.nickname}</div>
+              <div className="nickname">{applicant?.nickname}</div>
               <div className="createdAt">ㆍ {createdAt}</div>
             </UserInfo>
             <div className="coverLetter">{coverLetter}</div>

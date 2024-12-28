@@ -16,7 +16,7 @@ import {
   ContentContainer,
 } from "../styles/ExploreJobsPage.styles";
 import { WarningText } from "../styles/global";
-import { Neighbor } from "./SearchNeighborPage";
+import { SearchNeighbor } from "../types/types.ts";
 import {
   GET_RESIDENT_NEIGHBORHOOD,
   SEARCH_JOB_POSTS,
@@ -30,37 +30,7 @@ import {
   TIME_NOT_SET,
   JOB_POST_STATUS,
 } from "../constants/constants";
-
-export type SearchNeighbor = {
-  id: string;
-  name: string;
-  level: string;
-  districts: Neighbor[];
-};
-
-export type Filter = {
-  // TODO : 타입을 더 구체적으로 명시할 수 없을까?
-  term: string | null;
-  jobTypes: string[];
-  time: { start: string; end: string };
-  weekDays: string[];
-};
-
-export type JobPost = {
-  id: string;
-  title: string;
-  workPeriod: { type: string; dates: string[]; days: string[] };
-  workTime: { type: string; startTime: string; endTime: string };
-  salary: { salaryType: string; salaryAmount: number };
-  photos: string[];
-  addressName: string;
-  createdAt: string;
-};
-
-export type PageInfo = {
-  hasNextPage: boolean;
-  endCursor: string | null;
-};
+import { JobPost, PageInfo, Filter } from "../types/types.ts";
 
 const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);

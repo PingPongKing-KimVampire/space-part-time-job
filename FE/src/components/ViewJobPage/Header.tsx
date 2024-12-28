@@ -2,7 +2,7 @@ import React from "react";
 import { HeaderContainer } from "../../styles/ViewJobPage.styles";
 import { CloseTag } from "../../styles/global.ts";
 import { JOB_POST_STATUS, JOB_TYPES } from "../../constants/constants";
-import { JobPost } from "../../pages/ViewJobPage.tsx";
+import { JobPost } from "../../types/types.ts";
 
 type HeaderProps = {
   jobPost: JobPost;
@@ -10,7 +10,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ jobPost }) => {
   const {
-    jobDescription,
+    jobDescription = [],
     status,
     title,
     createdAt,

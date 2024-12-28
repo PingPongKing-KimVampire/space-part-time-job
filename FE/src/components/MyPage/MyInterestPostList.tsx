@@ -8,20 +8,10 @@ import { ListItem } from "../../styles/MyPage.styles";
 import { CloseTag } from "../../styles/global.ts";
 import { LIST_MY_INTERESTED_JOB_POSTS } from "../../api/graphql/queries.js";
 import { UNMARK_JOB_POST_AS_INTEREST } from "../../api/graphql/mutations.js";
+import { InterestedJobPost } from "../../types/types.ts";
 
 type MyInterestPostListProps = {
   mouseEventHandlers: MouseEventHandlers;
-};
-
-type JobPost = {
-  id: string;
-  status: string;
-  title: string;
-};
-
-type InterestedJobPost = {
-  jobPost: JobPost;
-  createdAt: string;
 };
 
 const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({

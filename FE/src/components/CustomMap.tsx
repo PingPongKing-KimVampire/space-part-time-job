@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { createStitches } from "@stitches/react";
 import { MainColor } from "../styles/global";
-import { Coordinate } from "../pages/SetNeighborScopePage";
+import { Coordinate } from "../types/types.ts";
 
 const { styled } = createStitches();
 

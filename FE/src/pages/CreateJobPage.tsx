@@ -35,6 +35,7 @@ import PlaceSection from "../components/CreateJobPage/PlaceSection.tsx";
 import { checkRulePassInCreateJob } from "../utils/checkRulePass";
 import { WarningText, MainBackgroundColor } from "../styles/global";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
+import { WorkPeriod, WorkTime } from "../types/types.ts";
 
 type Warnings = {
   title?: string;
@@ -65,18 +66,6 @@ type IsFocused = {
   dates: boolean;
   pay: boolean;
   description: boolean;
-};
-
-type WorkPeriodInput = {
-  type: "SHORT_TERM" | "LONG_TERM";
-  dates?: string[];
-  days?: string[];
-};
-
-type WorkTime = {
-  type: "FIXED" | "FLEXIBLE";
-  startTime?: string;
-  endTime?: string;
 };
 
 const CreateJobPage = () => {
@@ -249,7 +238,7 @@ const CreateJobPage = () => {
 
   const postJob = async () => {
     const tempTerm = term === TERM.LONG_TERM ? TERM.LONG_TERM : TERM.SHORT_TERM;
-    const workPeriod: WorkPeriodInput = { type: TERM_KEY[tempTerm] };
+    const workPeriod: WorkPeriod = { type: TERM_KEY[tempTerm] };
     if (term === TERM.TODAY) {
       workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
     } else if (term === TERM.TOMORROW) {

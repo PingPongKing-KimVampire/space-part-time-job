@@ -29,15 +29,6 @@ import {
 } from "../constants/constants";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
 
-type SendSmsCodeResponseData = {
-  error?: string;
-  remainingPhoneAuthenticationCount?: number;
-};
-
-type LoginResponseData = {
-  error?: string;
-};
-
 const LoginPage = (): React.JSX.Element => {
   useBackgroundColor(MainBackgroundColor);
   const navigate = useNavigate();

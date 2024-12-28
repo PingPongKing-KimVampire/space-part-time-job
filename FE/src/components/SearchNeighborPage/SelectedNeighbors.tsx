@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { SelectedContainer } from "../../styles/SearchNeighborPage.styles";
-import { Neighbor } from "../../pages/SearchNeighborPage.tsx";
+import { Neighbor } from "../../types/types.ts";
 
 type SelectedNeighborsProps = {
   neighbors: Neighbor[];

@@ -1,5 +1,6 @@
 import React, { useMemo, useCallback } from "react";
-import { Tab, TAB_INFO } from "../../pages/MyPage.tsx";
+import { TAB_INFO } from "../../pages/MyPage.tsx";
+import { Tab } from "../../types/types.ts";
 import MyPostList from "./MyPostList.tsx";
 import MyAppliedPostList from "./MyAppliedPostList.tsx";
 import MyInterestPostList from "./MyInterestPostList.tsx";

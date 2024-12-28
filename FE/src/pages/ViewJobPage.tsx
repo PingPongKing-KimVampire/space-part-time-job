@@ -11,29 +11,7 @@ import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { MainBackgroundColor } from "../styles/global";
 import { GET_JOB_POST } from "../api/graphql/queries";
 import { INCREMENT_JOB_POST_VIEWS } from "../api/graphql/mutations.js";
-
-// TODO: ExploreJobsPage의 JobPost 타입과 어느 정도 반복되는 타입임
-export type JobPost = {
-  id: string;
-  status: string;
-  title: string;
-  jobDescription: string[];
-  workPeriod: { type: string; dates: string[]; days: string[] };
-  workTime: { type: string; startTime: string; endTime: string };
-  salary: { salaryType: string; salaryAmount: number };
-  photos: string[];
-  detailedDescription: string;
-  addressName: string;
-  createdAt: string;
-  views: number;
-  publisher: { nickname: string; createdAt: string };
-  applicationCount: number;
-  myJobApplication: { id: string; status: string }[];
-  myInterested: { createdAt: string } | null;
-  interestedCount: number;
-};
-
-// TODO : JobPost.myInterested의 필드를 id -> createdAt 으로 교체
+import { JobPost } from "../types/types.ts";
 
 const ViewJobPage = () => {
   useBackgroundColor(MainBackgroundColor);

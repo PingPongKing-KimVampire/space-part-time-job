@@ -9,11 +9,6 @@ import {
   ImageDisplay,
 } from "../../styles/CreateJobPage/ImageSection.styles";
 
-type UploadImagesResponseData = {
-  error?: string;
-  imageUrlList?: string[];
-};
-
 const VALID_IMAGE_BYTE = 10 * 1024 * 1024;
 
 const ImageSection = ({ images, setImages, setIsValid }) => {

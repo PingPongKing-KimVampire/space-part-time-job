@@ -4,7 +4,7 @@ import Profile from "./Profile.tsx";
 import BasicInfo from "./BasicInfo.tsx";
 import Interaction from "./Interaction.tsx";
 import { ContentContainer } from "../../styles/ViewJobPage.styles";
-import { JobPost } from "../../pages/ViewJobPage.tsx";
+import { JobPost } from "../../types/types.ts";
 import defaultImage from "../../assets/images/jobDefault.png";
 
 type ContentProps = {
@@ -32,17 +32,24 @@ const Content: React.FC<ContentProps> = (props) => {
           imageUrls={photos && photos.length ? photos : [defaultImage]}
         />
         <Profile
-          nickname={publisher.nickname}
-          timeTogether={publisher.createdAt}
+          nickname={publisher?.nickname || ""}
+          timeTogether={publisher?.createdAt || ""}
         />
       </div>
       <div className="rightSection">
         <div className="textInfo">
           <BasicInfo
-            pay={{ type: salary.salaryType, amount: salary.salaryAmount }}
-            address={addressName}
-            period={workPeriod}
-            time={workTime}
+            pay={{
+              type: salary?.salaryType || "",
+              amount: salary?.salaryAmount || 0,
+            }}
+            address={addressName || ""}
+            period={workPeriod || { type: "" }}
+            time={{
+              type: workTime?.type || "",
+              startTime: workTime?.startTime || "",
+              endTime: workTime?.endTime || "",
+            }}
           />
           <div className="detail">
             <div className="title">상세 내용</div>

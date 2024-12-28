@@ -20,15 +20,7 @@ import SelectedNeighbors from "../components/SearchNeighborPage/SelectedNeighbor
 import ResultNeighbors from "../components/SearchNeighborPage/ResultNeighbors.tsx";
 import { MainBackgroundColor } from "../styles/global";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
-
-export type Neighbor = {
-  id: string;
-  name: string;
-};
-
-export type SelectedNeighbor = Neighbor & {
-  scopeValue: string;
-};
+import { Neighbor, SelectedNeighbor } from "../types/types.ts";
 
 const SearchNeighborPage = () => {
   useBackgroundColor(MainBackgroundColor);

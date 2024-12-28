@@ -40,14 +40,6 @@ type IsValid = {
   smsCode: { isRulePassed: boolean };
 };
 
-type CheckDuplicatedResponseData = {
-  error: string;
-};
-
-type SignupResponseData = {
-  error: string;
-};
-
 const SignupPage = () => {
   useBackgroundColor(MainBackgroundColor);
   const [inputValue, setInputValue] = useState<InputValue>({

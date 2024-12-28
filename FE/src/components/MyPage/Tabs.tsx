@@ -1,6 +1,7 @@
 import React from "react";
 import { TabsContainer } from "../../styles/MyPage.styles";
-import { TAB_INFO, Tab } from "../../pages/MyPage.tsx";
+import { TAB_INFO } from "../../pages/MyPage.tsx";
+import { Tab } from "../../types/types.ts";
 
 type TabsProps = {
   selectedTab: Tab;

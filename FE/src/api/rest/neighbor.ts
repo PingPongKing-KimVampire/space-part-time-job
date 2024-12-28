@@ -1,5 +1,5 @@
 import apiRequest from "./apiRequest.ts";
-import { Neighbor } from "../../pages/SearchNeighborPage.tsx";
+import { Neighbor } from "../../types/types.ts";
 import { IP_ADDRESS } from "../../constants/constants.ts";
 
 export const fetchTotalNeighbors = async (): Promise<Neighbor[]> => {

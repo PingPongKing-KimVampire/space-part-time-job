@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { JobListContainer } from "../../styles/ExploreJobsPage.styles";
 import JobItem from "./JobItem.tsx";
-import { JobPost } from "../../pages/ExploreJobsPage";
+import { JobPost } from "../../types/types.ts";
 
 type JobListProps = {
   jobPosts: JobPost[];
@@ -48,11 +48,18 @@ const JobList: React.FC<JobListProps> = (props) => {
               <JobItem
                 id={id}
                 title={title}
-                neighbor={addressName}
-                createdAt={createdAt}
-                pay={{ type: salary.salaryType, amount: salary.salaryAmount }}
-                period={workPeriod}
-                time={workTime}
+                neighbor={addressName || ""}
+                createdAt={createdAt || ""}
+                pay={{
+                  type: salary?.salaryType || "",
+                  amount: salary?.salaryAmount || 0,
+                }}
+                period={workPeriod || { type: "" }}
+                time={{
+                  type: workTime?.type || "",
+                  startTime: workTime?.startTime || "",
+                  endTime: workTime?.endTime || "",
+                }}
                 photos={photos}
                 key={id}
               />

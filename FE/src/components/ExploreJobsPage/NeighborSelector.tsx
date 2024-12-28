@@ -4,7 +4,7 @@ import {
   LocationIcon,
   ArrowDownIcon,
 } from "../../styles/ExploreJobsPage.styles";
-import { SearchNeighbor } from "../../pages/ExploreJobsPage";
+import { SearchNeighbor } from "../../types/types.ts";
 
 type NeighborButtonProps = {
   neighbors: Record<string, SearchNeighbor>;

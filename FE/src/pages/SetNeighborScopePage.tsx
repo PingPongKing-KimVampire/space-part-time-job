@@ -14,24 +14,11 @@ import {
   CompleteButton,
 } from "../styles/SetNeighborScopePage.styles";
 import LevelSlider from "../components/SetNeighborScopePage/LevelSlider.tsx";
-import { SelectedNeighbor } from "./SearchNeighborPage.tsx";
+import { SelectedNeighbor, Coordinate, Level } from "../types/types.ts";
 import { ERROR } from "../constants/constants";
 import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations.js";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WarningText } from "../styles/global";
-
-export type Coordinate = {
-  longitude: number;
-  latitude: number;
-};
-
-type Level = {
-  districts: string[];
-  outer_boundary: {
-    type: string;
-    coordinates: Coordinate[];
-  };
-};
 
 const SetNeighborScopePage = () => {
   const navigate = useNavigate();

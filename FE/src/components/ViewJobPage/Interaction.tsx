@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { ReactComponent as HeartIcon } from "../../assets/icons/heart.svg";
 import { InteractionContainer } from "../../styles/ViewJobPage.styles";
 import { JOB_POST_STATUS, APPLICATION_STATUS } from "../../constants/constants";
-import { JobPost } from "../../pages/ViewJobPage.tsx";
+import { JobPost } from "../../types/types.ts";
 import {
   UNMARK_JOB_POST_AS_INTEREST,
   MARK_JOB_POST_AS_INTEREST,
@@ -17,30 +17,28 @@ type InteractionProps = {
 
 const Interaction: React.FC<InteractionProps> = (props) => {
   const { jobPost, setJobPost, displayApplicationModal } = props;
+  const { id, myJobApplication = [], myInterested, status } = jobPost;
 
   const isApplied = useMemo(
     () =>
-      jobPost.myJobApplication.some(
+      myJobApplication.some(
         (application) => application.status === APPLICATION_STATUS.PENDING
       ),
     [jobPost]
   );
-  const isClosed = useMemo(
-    () => jobPost.status === JOB_POST_STATUS.CLOSE,
-    [jobPost]
-  );
+  const isClosed = useMemo(() => status === JOB_POST_STATUS.CLOSE, [jobPost]);
 
   const [markInterest, { loading: markLoading, error: markError }] =
     useMutation(MARK_JOB_POST_AS_INTEREST);
   const [unmarkInterest, { loading: unmarkLoading, error: unmarkError }] =
     useMutation(UNMARK_JOB_POST_AS_INTEREST);
   const onHeartClick = async () => {
-    if (!jobPost.myInterested && isClosed) return; // 마감한 알바라면 mark는 불가능함
-    const mutation = jobPost.myInterested ? unmarkInterest : markInterest;
+    if (!myInterested && isClosed) return; // 마감한 알바라면 mark는 불가능함
+    const mutation = myInterested ? unmarkInterest : markInterest;
     try {
-      const response = await mutation({ variables: { jobPostId: jobPost.id } });
+      const response = await mutation({ variables: { jobPostId: id } });
       if (!response?.data) return;
-      const responsePost = jobPost.myInterested
+      const responsePost = myInterested
         ? response.data.unmarkJobPostAsInterest
         : response.data.markJobPostAsInterest;
       setJobPost((state) => ({
@@ -71,7 +69,7 @@ const Interaction: React.FC<InteractionProps> = (props) => {
         </button>
         <HeartIcon
           className={`${isClosed ? "inactivated" : ""} ${
-            jobPost.myInterested ? "selected" : ""
+            myInterested ? "selected" : ""
           }`}
           onClick={onHeartClick}
         />

@@ -1,23 +1,17 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { PageInfo } from "../../pages/ExploreJobsPage.tsx";
+import { PageInfo } from "../../types/types.ts";
 import { GET_MY_JOB_POSTS } from "../../api/graphql/queries.js";
 import { CLOSE_JOB_POST } from "../../api/graphql/mutations.js";
 import { JOB_POST_STATUS } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles";
 import { CloseTag } from "../../styles/global.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
+import { JobPost } from "../../types/types.ts";
 
 type MyPostListProp = {
   mouseEventHandlers: MouseEventHandlers;
-};
-
-type JobPost = {
-  id: string;
-  status: string;
-  title: string;
-  applicationCount: number;
 };
 
 const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {

@@ -8,7 +8,7 @@ import {
 } from "../../styles/ExploreJobsPage.styles";
 import { JOB_TYPES, TERM, DAYS, TIME_NOT_SET } from "../../constants/constants";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
-import { Filter } from "../../pages/ExploreJobsPage";
+import { Filter } from "../../types/types.ts";
 
 type JobFilterProps = {
   filter: Filter;
