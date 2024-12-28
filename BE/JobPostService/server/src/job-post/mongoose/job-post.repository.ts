@@ -98,12 +98,22 @@ export class JobPostRepository {
             $and: [
               { 'workTime.startTime': { $lte: filters.endTime } },
               { 'workTime.endTime': { $lte: filters.endTime } },
+              {
+                $expr: {
+                  $lte: ['$workTime.startTime', '$workTime.endTime'],
+                },
+              },
             ],
           },
           {
             $and: [
               { 'workTime.startTime': { $gte: filters.startTime } },
               { 'workTime.endTime': { $gte: filters.startTime } },
+              {
+                $expr: {
+                  $lte: ['$workTime.startTime', '$workTime.endTime'],
+                },
+              },
             ],
           },
           {
