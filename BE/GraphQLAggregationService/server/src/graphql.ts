@@ -102,7 +102,7 @@ export interface WorkTimeInput {
 
 export interface SalaryInput {
     salaryType: SalaryType;
-    salaryAmount: number;
+    salaryAmount: BigInt;
 }
 
 export interface JobPostSearchFilter {
@@ -203,7 +203,7 @@ export interface WorkTime {
 
 export interface Salary {
     salaryType: SalaryType;
-    salaryAmount: number;
+    salaryAmount: BigInt;
 }
 
 export interface JobPostConnection {
@@ -242,4 +242,5 @@ export interface UserPublicInfo {
     createdAt: string;
 }
 
+export type BigInt = any;
 type Nullable<T> = T | null;

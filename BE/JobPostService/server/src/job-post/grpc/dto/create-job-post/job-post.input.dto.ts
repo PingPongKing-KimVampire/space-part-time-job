@@ -16,6 +16,7 @@ import {
   IsUrl,
   Validate,
   ArrayUnique,
+  Max,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import {
@@ -28,6 +29,7 @@ import {
 
 import {
   IsDateWithinOneMonth,
+  IsValidSalaryAmount,
   IsValidWorkPeriod,
   IsValidWorkTime,
 } from './job-post.input.dto.validator';
@@ -92,9 +94,7 @@ export class SalaryInput {
   @Transform(({ value }) => SalaryTypeMapping[value], { toClassOnly: true })
   salaryType: SalaryType;
 
-  @IsNumber()
-  @ValidateIf((o) => o.salaryType === SalaryType.HOURLY)
-  @Min(9860, { message: '시급은 최소 9860 이상이어야 합니다.' })
+  @Validate(IsValidSalaryAmount)
   salaryAmount: number;
 }
 
@@ -144,7 +144,9 @@ export class CreateJobPostInput {
   @IsString()
   @MinLength(15, { message: '상세 설명은 최소 15자 이상이어야 합니다.' })
   @MaxLength(2000, { message: '상세 설명은 최대 2000자 이하이어야 합니다.' })
-  @Matches(/\S/, { message: '상세 설명에 공백이 아닌 문자가 포함되어야 합니다.' })
+  @Matches(/\S/, {
+    message: '상세 설명에 공백이 아닌 문자가 포함되어야 합니다.',
+  })
   detailedDescription: string;
 
   @IsString()

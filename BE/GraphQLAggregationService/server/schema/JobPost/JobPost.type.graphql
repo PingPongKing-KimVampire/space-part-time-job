@@ -1,3 +1,5 @@
+scalar BigInt
+
 type JobPost {
   id: ID!
   status: JobPostStatus!
@@ -33,5 +35,5 @@ type WorkTime {
 
 type Salary {
   salaryType: SalaryType!
-  salaryAmount: Int!
+  salaryAmount: BigInt!
 }
