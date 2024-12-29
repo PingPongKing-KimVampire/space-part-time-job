@@ -20,6 +20,15 @@ export const GET_MY_ID = gql`
   }
 `;
 
+export const GET_MY_BASIC_INFO = gql`
+  query GetMyBasicInfo {
+    me {
+      nickname
+      createdAt
+    }
+  }
+`;
+
 export const SEARCH_JOB_POSTS = gql`
   query SearchJobPosts(
     $filters: JobPostSearchFilter!

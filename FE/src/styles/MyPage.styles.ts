@@ -54,12 +54,11 @@ export const ProfileContainer = styled("div", {
         ...ellipsisStyle,
       },
       "& .nickname": {
-        fontSize: "24px",
-        fontWeight: "900",
-        marginBottom: "7px",
+        fontSize: "26px",
+        fontWeight: "800",
+        marginBottom: "9px",
       },
-      "& .subInfo": {
-        fontSize: "15px",
+      "& .timeTogether": {
         color: "#828282",
       },
     },
