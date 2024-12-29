@@ -83,4 +83,11 @@ export const CloseTag = styled("div", {
   background: "#E4E4E4",
   color: "#7C7C7C",
   fontWeight: "bold",
+  whiteSpace: "nowrap",
 });
+
+export const ellipsisStyle = {
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+};

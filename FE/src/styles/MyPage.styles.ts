@@ -5,6 +5,7 @@ import {
   MainHoverColor,
   OptionHoverColor,
   NavigationBarHeight,
+  ellipsisStyle,
 } from "./global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 
@@ -48,10 +49,14 @@ export const ProfileContainer = styled("div", {
       aspectRatio: "1/1",
     },
     "& .textInfo": {
+      width: "400px",
+      "& *": {
+        ...ellipsisStyle,
+      },
       "& .nickname": {
         fontSize: "24px",
         fontWeight: "900",
-        marginBottom: "4px",
+        marginBottom: "7px",
       },
       "& .subInfo": {
         fontSize: "15px",
@@ -64,6 +69,7 @@ export const ProfileContainer = styled("div", {
     fontSize: "17px",
     padding: "10px 22px",
     borderRadius: "12px",
+    whiteSpace: "nowrap",
   },
 });
 
@@ -155,13 +161,16 @@ export const ListItem = styled("button", {
       textDecoration: "underline !important",
     },
   },
-  "& .title": {
+  "& .main": {
     fontWeight: "600",
     fontSize: "18px",
     display: "flex",
     alignItems: "center",
     gap: "8px",
+    width: "450px",
     "& button": {
+      ...ellipsisStyle,
+      textAlign: "left",
       background: "none",
       border: "none",
       color: "black",

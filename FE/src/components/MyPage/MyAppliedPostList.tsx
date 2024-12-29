@@ -100,12 +100,12 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
             onClick={onToggle}
             key={id}
             data-application-id={id}
-            data-post-id={jobPost.id}
+            data-post-id={jobPost?.id}
             style={{ flexDirection: "column" }}
           >
             <MainPanel>
-              <div className="title">
-                {jobPost.status === JOB_POST_STATUS.CLOSE && (
+              <div className="main">
+                {jobPost?.status === JOB_POST_STATUS.CLOSE && (
                   <CloseTag>마감</CloseTag>
                 )}
                 <button
@@ -113,10 +113,10 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
                   onMouseLeave={onInnerClickableMouseLeave}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/view-job/${jobPost.id}`);
+                    navigate(`/view-job/${jobPost?.id}`);
                   }}
                 >
-                  {jobPost.title}
+                  {jobPost?.title}
                 </button>
               </div>
               <div className="interaction">

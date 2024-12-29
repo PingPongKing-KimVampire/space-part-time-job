@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { OptionHoverColor, NavigationBarHeight } from "./global";
+import { OptionHoverColor, NavigationBarHeight, ellipsisStyle } from "./global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../assets/icons/location.svg";
 
@@ -239,21 +239,24 @@ export const JobItemContextBox = styled("div", {
   flexDirection: "column",
   justifyContent: "space-between",
   height: "100%",
+  width: "470px",
   padding: "25px 0",
   boxSizing: "border-box",
-  flexGrow: "1",
   "& .mainInfo": {
     "& .title": {
       fontSize: "18px",
       fontWeight: "bold",
+      ...ellipsisStyle,
     },
     "& .neighborhoodAndPostTime": {
-      marginTop: "3px",
+      marginTop: "5px",
       fontSize: "13px",
       color: "#828282",
+      ...ellipsisStyle,
     },
   },
   "& .subInfo": {
+    ...ellipsisStyle,
     "& .pay": {
       fontSize: "15px",
       fontWeight: "bold",

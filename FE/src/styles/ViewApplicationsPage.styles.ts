@@ -5,6 +5,7 @@ import {
   NavigationBarHeight,
   NegativeColor,
   NegativeHoverColor,
+  ellipsisStyle,
 } from "./global";
 
 const { styled } = createStitches();
@@ -66,9 +67,12 @@ export const UserInfo = styled("div", {
   "& .nickname": {
     fontSize: "20px",
     fontWeight: "600",
+    maxWidth: "500px",
+    ...ellipsisStyle,
   },
   "& .createdAt": {
     fontSize: "15px",
     color: "#828282",
+    whiteSpace: "nowrap",
   },
 });

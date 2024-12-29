@@ -77,7 +77,7 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
           key={jobPost.id}
           data-post-id={jobPost.id}
         >
-          <div className="title">
+          <div className="main">
             {jobPost.status === JOB_POST_STATUS.CLOSE && (
               <CloseTag>마감</CloseTag>
             )}

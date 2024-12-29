@@ -4,6 +4,7 @@ import {
   MainHoverColor,
   OptionHoverColor,
   MainButtonStyle,
+  ellipsisStyle,
 } from "./global";
 
 const { styled } = createStitches();
@@ -25,18 +26,18 @@ export const HeaderContainer = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "10px",
-  marginBottom: "25px",
+  marginBottom: "35px",
   "& .jobTypesContainer": {
     display: "flex",
     gap: "6px",
     "& .jobType": {
       color: MainColor,
       border: `1px solid ${MainColor}`,
-      padding: "4px 9px",
+      padding: "5px 9px",
       background: OptionHoverColor,
       borderRadius: "10px",
       fontWeight: "500",
-      fontSize: "13px",
+      fontSize: "16px",
     },
   },
   "& .title": {
@@ -45,10 +46,11 @@ export const HeaderContainer = styled("div", {
     display: "flex",
     alignItems: "center",
     gap: "8px",
+    lineHeight: "30px",
   },
   "& .subInfo": {
     color: "#828282",
-    fontSize: "13px",
+    fontSize: "14px",
     whiteSpace: "pre",
   },
 });
@@ -171,14 +173,17 @@ export const ProfileContainer = styled("div", {
   alignItems: "center",
   gap: "6px",
   "& .userInfo": {
+    width: "300px",
     "& .nickname": {
-      fontSize: "18px",
-      fontWeight: "600",
-      marginBottom: "4px",
+      fontSize: "20px",
+      fontWeight: "700",
+      marginBottom: "7px",
+      ...ellipsisStyle,
     },
     "& .timeTogether": {
-      fontSize: "12px",
+      fontSize: "14px",
       color: "#828282",
+      ...ellipsisStyle,
     },
   },
   "& svg": {

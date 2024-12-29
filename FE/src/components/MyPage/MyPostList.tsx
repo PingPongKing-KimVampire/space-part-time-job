@@ -128,7 +128,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
           key={id}
           data-post-id={id}
         >
-          <div className="title">
+          <div className="main">
             {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
             <button className="withItemHover">{title}</button>
           </div>
