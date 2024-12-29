@@ -5,10 +5,15 @@ import {
 } from 'class-validator';
 import { addMonths, isAfter, isValid, parse } from 'date-fns';
 import {
+  SalaryType,
   WorkPeriodType,
   WorkTimeType,
 } from 'src/job-post/mongoose/job-post.enum';
-import { WorkPeriodInput, WorkTimeInput } from './job-post.input.dto';
+import {
+  SalaryInput,
+  WorkPeriodInput,
+  WorkTimeInput,
+} from './job-post.input.dto';
 
 @ValidatorConstraint({ name: 'isDateWithinOneMonth', async: false })
 export class IsDateWithinOneMonth implements ValidatorConstraintInterface {
@@ -69,5 +74,41 @@ export class IsValidWorkTime implements ValidatorConstraintInterface {
 
   defaultMessage(args: ValidationArguments) {
     return 'FIXED 근무 유형일 때는 startTime과 endTime이 필수이고, FLEXIBLE 근무 유형일 때는 startTime과 endTime이 없어야 합니다.';
+  }
+}
+
+@ValidatorConstraint({ name: 'IsValidSalary', async: false })
+export class IsValidSalary implements ValidatorConstraintInterface {
+  validate(salary: SalaryInput, args: ValidationArguments): boolean {
+    const { salaryType, salaryAmount } = salary;
+
+    if (typeof salaryAmount !== 'number' || isNaN(salaryAmount)) {
+      return false;
+    }
+
+    switch (salaryType) {
+      case SalaryType.HOURLY:
+        return salaryAmount >= 9860 && salaryAmount < 10_000_000;
+      case SalaryType.MONTHLY:
+        return salaryAmount < 1_000_000_000;
+      case SalaryType.PER_TASK:
+        return salaryAmount < 10_000_000_000;
+      default:
+        return false;
+    }
+  }
+
+  defaultMessage(args: ValidationArguments): string {
+    const salary = args.value as SalaryInput;
+    switch (salary.salaryType) {
+      case SalaryType.HOURLY:
+        return '시급은 9860 이상, 1000만원 미만이어야 합니다.';
+      case SalaryType.MONTHLY:
+        return '월급은 10억원 미만이어야 합니다.';
+      case SalaryType.PER_TASK:
+        return '건당 100억원 미만이어야 합니다.';
+      default:
+        return '잘못된 급여 형태입니다.';
+    }
   }
 }

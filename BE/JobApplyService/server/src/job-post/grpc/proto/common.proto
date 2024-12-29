@@ -68,7 +68,7 @@ message WorkTimeInput {
 
 message SalaryInput {
   SalaryType salaryType = 1;
-  float salaryAmount = 2;
+  int64 salaryAmount = 2;
 }
 
 message JobPost {

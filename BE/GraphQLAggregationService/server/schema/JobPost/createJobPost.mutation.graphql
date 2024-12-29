@@ -27,6 +27,6 @@ input WorkTimeInput {
 
 input SalaryInput {
   salaryType: SalaryType!
-  salaryAmount: Int!
+  salaryAmount: BigInt!
 }
 

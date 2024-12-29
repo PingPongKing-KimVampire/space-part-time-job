@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { JobPostModule } from './job-post/job-post.module';
 import { DistrictModule } from './district/district.module';
 import { JobApplyModule } from './job-apply/job-apply.module';
+import { BigIntResolver } from 'graphql-scalars';
 
 @Module({
   imports: [
@@ -22,6 +23,9 @@ import { JobApplyModule } from './job-apply/job-apply.module';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       path: '/api/graphql',
+      resolvers: {
+        BigInt: BigIntResolver,
+      },
     }),
     ConfigModule.forRoot(),
     UserModule,

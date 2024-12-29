@@ -20,6 +20,7 @@ async function bootstrap() {
             'interested-job-post/grpc/proto/interested-job-post.proto',
           ),
         ],
+        loader: { longs: Number },
         url: `0.0.0.0:${gRPCPort}`,
       },
     },
