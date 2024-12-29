@@ -12,12 +12,7 @@ import {
 type PaySectionProps = {
   pay: { type: string; amount: string };
   term: string;
-  setPay: React.Dispatch<
-    React.SetStateAction<{
-      type: string;
-      amount: string;
-    }>
-  >;
+  setPay: (pay: { type: string; amount: string }) => void;
   weekDays: string[];
   time: { start: string; end: string };
   onFocus: () => void;

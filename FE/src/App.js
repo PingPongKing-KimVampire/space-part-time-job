@@ -20,6 +20,7 @@ import NavigationBar from "./components/NavigationBar.tsx";
 import AuthRoute from "./routes/AuthRoute.tsx";
 import NotFoundRoute from "./routes/NotFoundRoute.tsx";
 import { IP_ADDRESS } from "./constants/constants";
+import { CreateJobProvider } from "./context/CreateJobContext.tsx";
 
 const { styled } = createStitches();
 
@@ -60,7 +61,14 @@ function App() {
                 element={<SetNeighborhoodScopePage />}
               />
               <Route element={<NavigationBar />}>
-                <Route path="/create-job" element={<CreateJobPage />} />
+                <Route
+                  path="/create-job"
+                  element={
+                    <CreateJobProvider>
+                      <CreateJobPage />
+                    </CreateJobProvider>
+                  }
+                />
                 <Route path="/explore-jobs" element={<ExploreJobsPage />} />
                 <Route path="/view-job/:id" element={<ViewJobPage />} />
                 <Route path="/mypage" element={<MyPage />} />

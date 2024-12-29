@@ -13,7 +13,7 @@ import { Container, Calendar, DateItem } from "../styles/CustomCalendar.styles";
 
 type CustomCalendarProps = {
   dates: Set<string>;
-  setDates?: React.Dispatch<React.SetStateAction<Set<string>>>;
+  setDates?: (dates: Set<string>) => void;
   lastDate: Date;
   onClickStart?: () => void;
   isTitleVisible?: boolean;

@@ -61,8 +61,8 @@ export const checkRulePassInCreateJob = {
   jobTypes: (jobTypes: string[]): boolean => {
     return 1 <= jobTypes.length && jobTypes.length <= 3;
   },
-  weekDays: (weekDays: string[]): boolean => {
-    return 1 <= weekDays.length;
+  days: (days: string[]): boolean => {
+    return 1 <= days.length;
   },
   // TODO : pay만 string 반환하는 거 일관성 무슨 일..?
   pay: (type: string, amount: string): string => {

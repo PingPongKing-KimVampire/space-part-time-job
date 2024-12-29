@@ -15,7 +15,7 @@ import {
 
 type PlaceSectionProps = {
   place: string;
-  setPlace: React.Dispatch<React.SetStateAction<string>>;
+  setPlace: (place: string) => void;
   onSelect: () => void;
 };
 

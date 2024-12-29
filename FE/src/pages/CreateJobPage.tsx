@@ -37,85 +37,22 @@ import { WarningText, MainBackgroundColor } from "../styles/global";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WorkPeriod, WorkTime } from "../types/types.ts";
 import sortDays from "../utils/sortDays.ts";
-
-type Warnings = {
-  title?: string;
-  image?: string;
-  jobTypes?: string;
-  weekDays?: string;
-  dates?: string;
-  pay?: string;
-  description?: string;
-  images?: string;
-};
-
-type IsValid = {
-  title: boolean;
-  jobTypes: boolean;
-  weekDays: boolean;
-  dates: boolean;
-  pay: string;
-  description: boolean;
-  images: { size: boolean; count: boolean; response: boolean };
-  place: boolean;
-};
-
-type IsFocused = {
-  title: boolean;
-  jobTypes: boolean;
-  weekDays: boolean;
-  dates: boolean;
-  pay: boolean;
-  description: boolean;
-};
+import useCreateJobContext, { Warnings } from "../context/CreateJobContext.tsx";
 
 const CreateJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState<string>("");
-  const [jobTypes, setJobTypes] = useState<string[]>([]);
-  const [dates, setDates] = useState<Set<string>>(new Set());
-  const [weekDays, setWeekDays] = useState<string[]>([
-    "월",
-    "화",
-    "수",
-    "목",
-    "금",
-  ]);
-  const [term, setTerm] = useState<string>(TERM.TODAY);
-  const [time, setTime] = useState({
-    type: WORKTIME_TYPES.FLEXIBLE,
-    start: "09:00",
-    end: "18:00",
-  });
-  const [pay, setPay] = useState({ type: PAY_TYPES.HOURLY, amount: "" });
-  const [place, setPlace] = useState("");
-  const [images, setImages] = useState<Record<string, string>>({});
-  const [description, setDescription] = useState<string>("");
-
-  const [warnings, setWarnings] = useState<Warnings>({});
-  const [postWarning, setPostWarning] = useState<string>("");
-
-  const [isValid, setIsValid] = useState<IsValid>({
-    title: false,
-    jobTypes: false,
-    weekDays: true,
-    dates: false,
-    pay: "", // 오류 상황이 두 가지라서..(빔, 최저시급 불충족)
-    description: false,
-    images: { size: true, count: true, response: true },
-    place: false,
-  });
-  const [isFocused, setIsFocused] = useState<IsFocused>({
-    // 포커스 또는 선택된 적 있는가?
-    title: false,
-    jobTypes: false,
-    weekDays: false,
-    dates: false,
-    pay: false,
-    description: false,
-  });
+  const {
+    input,
+    isFocused,
+    isValid,
+    warnings,
+    setInput,
+    setIsFocused,
+    setIsValid,
+    setWarnings,
+  } = useCreateJobContext();
 
   const [isPayMessageVisible, setIsPayMessageVisible] = useState<boolean>(true);
   const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
@@ -126,40 +63,33 @@ const CreateJobPage = () => {
     const newWarnings: Warnings = {};
     if (isFocused.title && !isValid.title)
       newWarnings.title = ERROR.CREATE_JOB.FOLLOW_TITLE_RULE;
-
     if (isFocused.jobTypes && !isValid.jobTypes)
       newWarnings.jobTypes = ERROR.CREATE_JOB.FOLLOW_JOB_TYPES_RULE;
-
-    if (!isValid.weekDays)
-      newWarnings.weekDays = ERROR.CREATE_JOB.FOLLOW_WEEKDAYS_RULE;
-
+    if (!isValid.days) newWarnings.days = ERROR.CREATE_JOB.FOLLOW_WEEKDAYS_RULE;
     if (isFocused.dates && !isValid.dates)
       newWarnings.dates = ERROR.CREATE_JOB.FOLLOW_DATES_RULE;
-
     if (isFocused.pay) newWarnings.pay = isValid.pay;
-    setIsPayMessageVisible(!newWarnings.pay);
-
     if (isFocused.description && !isValid.description)
       newWarnings.description = ERROR.CREATE_JOB.FOLLOW_DESCRIPTION_RULE;
-
-    if (!isValid.images.response) {
-      newWarnings.images = ERROR.SERVER;
-    } else if (!isValid.images.size && !isValid.images.count) {
-      newWarnings.images = ERROR.CREATE_JOB.FOLLOW_IMAGE_SIZE_COUNT_RULE;
-    } else if (!isValid.images.size) {
-      newWarnings.images = ERROR.CREATE_JOB.FOLLOW_IMAGE_SIZE_RULE;
-    } else if (!isValid.images.count) {
-      newWarnings.images = ERROR.CREATE_JOB.FOLLOW_IMAGE_COUNT_RULE;
+    if (!isValid.photos.response) {
+      newWarnings.photos = ERROR.SERVER;
+    } else if (!isValid.photos.size && !isValid.photos.count) {
+      newWarnings.photos = ERROR.CREATE_JOB.FOLLOW_IMAGE_SIZE_COUNT_RULE;
+    } else if (!isValid.photos.size) {
+      newWarnings.photos = ERROR.CREATE_JOB.FOLLOW_IMAGE_SIZE_RULE;
+    } else if (!isValid.photos.count) {
+      newWarnings.photos = ERROR.CREATE_JOB.FOLLOW_IMAGE_COUNT_RULE;
     }
+    setIsPayMessageVisible(!newWarnings.pay);
     setWarnings(newWarnings);
   }, [isValid]);
 
   useEffect(() => {
     setIsValid((state) => ({
       ...state,
-      pay: checkRulePassInCreateJob.pay(pay.type, pay.amount),
+      pay: checkRulePassInCreateJob.pay(input.pay.type, input.pay.amount),
     }));
-  }, [pay.type]);
+  }, [input.pay.type]);
 
   const toggleSelected = (
     list: string[],
@@ -173,57 +103,60 @@ const CreateJobPage = () => {
   };
 
   const onTermClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const TermClicked = e.currentTarget.textContent || TERM.TODAY;
-    setTerm(TermClicked);
+    setInput((state) => ({
+      ...state,
+      term: e.currentTarget.textContent || TERM.TODAY,
+    }));
   };
 
   const onJobTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!isFocused.jobTypes)
       setIsFocused((state) => ({ ...state, jobTypes: true }));
-
-    const jobTypeClicked = e.currentTarget.textContent || JOB_TYPES.SERVING;
-    const newJobTypes = toggleSelected(jobTypes, jobTypeClicked);
+    const newJobTypes = toggleSelected(
+      input.jobTypes,
+      e.currentTarget.textContent || JOB_TYPES.SERVING
+    );
     setIsValid((state) => ({
       ...state,
       jobTypes: checkRulePassInCreateJob.jobTypes(newJobTypes),
     }));
-    setJobTypes(newJobTypes);
+    setInput((state) => ({ ...state, newJobTypes }));
   };
 
   const onWeekDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!isFocused.weekDays)
-      setIsFocused((state) => ({ ...state, weekDays: true }));
-
-    const dayClicked = e.currentTarget.textContent || "";
-    const newWeekDays = toggleSelected(weekDays, dayClicked, sortDays);
+    if (!isFocused.days) setIsFocused((state) => ({ ...state, days: true }));
+    const newDays = toggleSelected(
+      input.days,
+      e.currentTarget.textContent || "",
+      sortDays
+    );
     setIsValid((state) => ({
       ...state,
-      weekDays: checkRulePassInCreateJob.weekDays(newWeekDays),
+      days: checkRulePassInCreateJob.days(newDays),
     }));
-    setWeekDays(newWeekDays);
+    setInput((state) => ({ ...state, days: newDays }));
   };
 
   useEffect(() => {
     if (
-      (term === TERM.SHORT_TERM && dates.size === 0) ||
-      (term === TERM.LONG_TERM && weekDays.length === 0)
+      (input.term === TERM.SHORT_TERM && input.dates.size === 0) ||
+      (input.term === TERM.LONG_TERM && input.days.length === 0)
     ) {
       setIsValid((state) => ({ ...state, dates: false }));
     } else {
       setIsValid((state) => ({ ...state, dates: true }));
     }
-  }, [term, setIsValid, dates.size, weekDays.length]);
+  }, [input.term, input.dates, input.days, setIsValid]);
 
   const isAllValid = useMemo(() => {
-    const { title, jobTypes, weekDays, dates, pay, description, place } =
-      isValid;
+    const { title, jobTypes, days, dates, pay, description, place } = isValid;
     if (!title || !jobTypes || pay !== "" || !description || !place)
       return false;
     if (imageUploadLoading) return false;
-    if (term === TERM.LONG_TERM && !weekDays) return false;
-    if (term === TERM.SHORT_TERM && !dates) return false;
+    if (input.term === TERM.LONG_TERM && !days) return false;
+    if (input.term === TERM.SHORT_TERM && !dates) return false;
     return true;
-  }, [isValid, term, imageUploadLoading]);
+  }, [isValid, input.term, imageUploadLoading]);
 
   // useMutation 훅을 사용하여 뮤테이션 함수 생성
   const [
@@ -231,46 +164,54 @@ const CreateJobPage = () => {
     { loading: createJobPostLoading, error: createJobPostError },
   ] = useMutation(CREATE_JOB_POST);
   useEffect(() => {
-    setPostWarning(createJobPostError ? ERROR.SERVER : "");
+    setWarnings((state) => ({
+      ...state,
+      post: createJobPostError ? ERROR.SERVER : "",
+    }));
   }, [createJobPostError]);
 
   const postJob = async () => {
-    const tempTerm = term === TERM.LONG_TERM ? TERM.LONG_TERM : TERM.SHORT_TERM;
-    const workPeriod: WorkPeriod = { type: TERM_KEY[tempTerm] };
-    if (term === TERM.TODAY) {
-      workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
-    } else if (term === TERM.TOMORROW) {
-      workPeriod.dates = [format(addDays(new Date(), 1), "yyyy-MM-dd")];
-    } else if (term === TERM.SHORT_TERM) {
-      workPeriod.dates = Array.from(dates);
-    } else {
-      workPeriod.days = weekDays.map((day) => DAYS_KEY[day]);
-    }
-    const workTime: WorkTime = { type: WORKTIME_TYPES_KEY[time.type] };
-    if (time.type === WORKTIME_TYPES.FIXED) {
-      workTime.startTime = time.start;
-      workTime.endTime = time.end;
-    }
-    const payAmount = parseInt(pay.amount.replace(/,/g, ""));
-    const salary = {
-      salaryType: PAY_TYPES_KEY[pay.type],
-      salaryAmount:
-        pay.type === PAY_TYPES.MONTHLY ? payAmount * 10000 : payAmount,
+    const workPeriod: WorkPeriod = {
+      type: TERM_KEY[
+        input.term === TERM.LONG_TERM ? TERM.LONG_TERM : TERM.SHORT_TERM
+      ],
     };
-
-    const input = {
-      title,
-      jobDescription: jobTypes.map((type) => JOB_TYPES_KEY[type]),
-      workPeriod,
-      workTime,
-      salary,
-      photos: Object.values(images),
-      detailedDescription: description,
-      addressName: place,
+    if (input.term === TERM.TODAY) {
+      workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
+    } else if (input.term === TERM.TOMORROW) {
+      workPeriod.dates = [format(addDays(new Date(), 1), "yyyy-MM-dd")];
+    } else if (input.term === TERM.SHORT_TERM) {
+      workPeriod.dates = Array.from(input.dates);
+    } else {
+      workPeriod.days = input.days.map((day) => DAYS_KEY[day]);
+    }
+    const workTime: WorkTime = { type: WORKTIME_TYPES_KEY[input.time.type] };
+    if (input.time.type === WORKTIME_TYPES.FIXED) {
+      workTime.startTime = input.time.start;
+      workTime.endTime = input.time.end;
+    }
+    const payAmount = parseInt(input.pay.amount.replace(/,/g, ""));
+    const salary = {
+      salaryType: PAY_TYPES_KEY[input.pay.type],
+      salaryAmount:
+        input.pay.type === PAY_TYPES.MONTHLY ? payAmount * 10000 : payAmount,
     };
 
     try {
-      await createJobPost({ variables: { input } });
+      await createJobPost({
+        variables: {
+          input: {
+            title: input.title,
+            jobDescription: input.jobTypes.map((type) => JOB_TYPES_KEY[type]),
+            workPeriod,
+            workTime,
+            salary,
+            photos: Object.values(input.photos),
+            detailedDescription: input.description,
+            addressName: input.address,
+          },
+        },
+      });
     } catch {
       throw new Error(ERROR.NETWORK);
     }
@@ -281,7 +222,7 @@ const CreateJobPage = () => {
       await postJob();
       navigate("/explore-jobs");
     } catch (e) {
-      setPostWarning(e.message);
+      setWarnings((state) => ({ ...state, post: e.message }));
     }
   };
 
@@ -295,19 +236,19 @@ const CreateJobPage = () => {
             <CustomInput
               id="title"
               placeholder="공고 내용을 요약해주세요."
-              value={title}
+              value={input.title}
               eventHandlers={{
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                  setTitle(e.target.value);
+                  setInput((state) => ({ ...state, title: e.target.value }));
                 },
                 onFocus: () => {
                   if (!isFocused.title)
                     setIsFocused((state) => ({ ...state, title: true }));
                 },
-                onBlur: () => {
+                onBlur: (e) => {
                   setIsValid((state) => ({
                     ...state,
-                    title: checkRulePassInCreateJob.title(title),
+                    title: checkRulePassInCreateJob.title(e.target.value),
                   }));
                 },
               }}
@@ -324,7 +265,7 @@ const CreateJobPage = () => {
               id="jobTypes"
               options={Object.values(JOB_TYPES)}
               onClick={onJobTypeClick}
-              isSelected={(jobType: string) => jobTypes.includes(jobType)}
+              isSelected={(jobType: string) => input.jobTypes.includes(jobType)}
             />
           </FormField>
         </FormSection>
@@ -336,11 +277,11 @@ const CreateJobPage = () => {
               id="term"
               options={Object.values(TERM)}
               onClick={onTermClick}
-              isSelected={(t) => t === term}
+              isSelected={(term) => term === input.term}
             />
           </FormField>
 
-          {term === TERM.SHORT_TERM && (
+          {input.term === TERM.SHORT_TERM && (
             <FormField
               id="calendar"
               title=""
@@ -348,8 +289,10 @@ const CreateJobPage = () => {
               warning={warnings.dates}
             >
               <CustomCalendar
-                dates={dates}
-                setDates={setDates}
+                dates={input.dates}
+                setDates={(dates) => {
+                  setInput((state) => ({ ...state, dates }));
+                }}
                 lastDate={addMonths(new Date(), 1)}
                 onClickStart={() => {
                   if (!isFocused.dates)
@@ -359,37 +302,47 @@ const CreateJobPage = () => {
               />
             </FormField>
           )}
-          {term === TERM.LONG_TERM && (
+          {input.term === TERM.LONG_TERM && (
             <FormField
               id="weekDays"
               title="요일 선택"
-              subInfo={weekDays.length ? `(${weekDays.join(", ")})` : ""}
-              warning={warnings.weekDays}
+              subInfo={input.days.length ? `(${input.days.join(", ")})` : ""}
+              warning={warnings.days}
             >
               <Chips
                 id="weekDays"
                 options={Object.values(DAYS)}
                 onClick={onWeekDayClick}
-                isSelected={(day: string) => weekDays.includes(day)}
+                isSelected={(day: string) => input.days.includes(day)}
               />
             </FormField>
           )}
 
           <FormField id="time" title="일하는 시간" warning="">
-            <TimeSection time={time} setTime={setTime} />
+            <TimeSection
+              time={input.time}
+              setTime={(time) => {
+                setInput((state) => ({ ...state, time }));
+              }}
+            />
           </FormField>
 
           <FormField id="pay" title="급여" warning={warnings.pay}>
             <PaySection
-              pay={pay}
-              setPay={setPay}
-              term={term}
-              weekDays={weekDays}
-              time={{ start: time.start, end: time.end }}
+              pay={input.pay}
+              setPay={(pay) => {
+                setInput((state) => ({ ...state, pay }));
+              }}
+              term={input.term}
+              weekDays={input.days}
+              time={{ start: input.time.start, end: input.time.end }}
               onBlurStart={() => {
                 setIsValid((state) => ({
                   ...state,
-                  pay: checkRulePassInCreateJob.pay(pay.type, pay.amount),
+                  pay: checkRulePassInCreateJob.pay(
+                    input.pay.type,
+                    input.pay.amount
+                  ),
                 }));
               }}
               onFocus={() => {
@@ -402,8 +355,10 @@ const CreateJobPage = () => {
 
           <FormField id="place" title="일하는 장소" warning="">
             <PlaceSection
-              place={place}
-              setPlace={setPlace}
+              place={input.address}
+              setPlace={(address) => {
+                setInput((state) => ({ ...state, address }));
+              }}
               onSelect={() => {
                 setIsValid((prev) => ({ ...prev, place: true }));
               }}
@@ -418,11 +373,13 @@ const CreateJobPage = () => {
             id="pictures"
             title="사진"
             subInfo="(선택)"
-            warning={warnings.images}
+            warning={warnings.photos}
           >
             <ImageSection
-              images={images}
-              setImages={setImages}
+              images={input.photos}
+              setImages={(photos) => {
+                setInput((state) => ({ ...state, photos }));
+              }}
               setIsValid={setIsValid}
               setImageUploadLoading={setImageUploadLoading}
             />
@@ -435,14 +392,20 @@ const CreateJobPage = () => {
           >
             <CustomTextarea
               placeholder="구체적인 업무 내용, 근무 요건, 지원자가 갖추어야 할 능력 등 우대 사항에 대해 알려주세요."
-              value={description}
+              value={input.description}
               eventHandlers={{
                 onFocus: () => {
                   if (!isFocused.description)
-                    setIsFocused((state) => ({ ...state, description: true }));
+                    setIsFocused((state) => ({
+                      ...state,
+                      description: true,
+                    }));
                 },
                 onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  setDescription(e.target.value);
+                  setInput((state) => ({
+                    ...state,
+                    description: e.target.value,
+                  }));
                 },
                 onBlur: (e: React.FocusEvent<HTMLTextAreaElement>) => {
                   setIsValid((state) => ({
@@ -457,7 +420,7 @@ const CreateJobPage = () => {
             />
           </FormField>
         </FormSection>
-        <WarningText>{postWarning}</WarningText>
+        <WarningText>{warnings.post}</WarningText>
         <PostButton
           className={isAllValid ? "" : "inactivated"}
           onClick={onPostButtonClick}
