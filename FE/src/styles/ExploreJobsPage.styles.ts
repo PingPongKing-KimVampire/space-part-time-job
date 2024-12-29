@@ -190,6 +190,14 @@ export const JobListContainer = styled("div", {
   flexGrow: "1",
   display: "flex",
   flexDirection: "column",
+  "& .totalCount": {
+    textDecoration: "underline",
+    alignSelf: "flex-end",
+    "& .count": {
+      fontWeight: "bold",
+      fontSize: "18px",
+    },
+  },
   "& .jobList": {
     display: "flex",
     flexDirection: "column",

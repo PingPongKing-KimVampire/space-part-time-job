@@ -52,6 +52,7 @@ const ExploreJobsPage = () => {
     hasNextPage: false,
     endCursor: null,
   });
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const isChangedSearchConditionRef = useRef<boolean>(false);
 
@@ -82,6 +83,7 @@ const ExploreJobsPage = () => {
         setJobPosts((state) => state.concat(nodes));
       }
       setPageInfo(data.searchJobPosts.pageInfo); // 페이지 정보 저장
+      setTotalCount(data.searchJobPosts.totalCount); // 총 개수 저장
     },
   });
 
@@ -202,7 +204,11 @@ const ExploreJobsPage = () => {
         </WarningText>
         <ContentContainer>
           <JobFilter filter={filter} setFilter={setFilter} />
-          <JobList jobPosts={jobPosts} fetchMoreJobPosts={fetchMoreJobPosts} />
+          <JobList
+            totalCount={totalCount}
+            jobPosts={jobPosts}
+            fetchMoreJobPosts={fetchMoreJobPosts}
+          />
         </ContentContainer>
       </Container>
     </Background>

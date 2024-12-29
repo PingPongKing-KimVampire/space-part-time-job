@@ -4,12 +4,13 @@ import JobItem from "./JobItem.tsx";
 import { JobPost } from "../../types/types.ts";
 
 type JobListProps = {
+  totalCount: number;
   jobPosts: JobPost[];
   fetchMoreJobPosts: () => void;
 };
 
 const JobList: React.FC<JobListProps> = (props) => {
-  const { jobPosts, fetchMoreJobPosts } = props;
+  const { totalCount, jobPosts, fetchMoreJobPosts } = props;
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -32,6 +33,9 @@ const JobList: React.FC<JobListProps> = (props) => {
   return (
     <>
       <JobListContainer>
+        <p className="totalCount">
+          총 <span className="count">{totalCount}</span>개의 검색 결과
+        </p>
         <div className="jobList">
           {jobPosts.map((job) => {
             const photos = job.photos || [];
