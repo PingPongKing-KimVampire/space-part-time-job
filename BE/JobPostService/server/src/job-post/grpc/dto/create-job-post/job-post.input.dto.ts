@@ -29,7 +29,7 @@ import {
 
 import {
   IsDateWithinOneMonth,
-  IsValidSalaryAmount,
+  IsValidSalary,
   IsValidWorkPeriod,
   IsValidWorkTime,
 } from './job-post.input.dto.validator';
@@ -94,7 +94,6 @@ export class SalaryInput {
   @Transform(({ value }) => SalaryTypeMapping[value], { toClassOnly: true })
   salaryType: SalaryType;
 
-  @Validate(IsValidSalaryAmount)
   salaryAmount: number;
 }
 
@@ -132,6 +131,7 @@ export class CreateJobPostInput {
   workTime: WorkTimeInput;
 
   @ValidateNested()
+  @Validate(IsValidSalary)
   @Type(() => SalaryInput)
   salary: SalaryInput;
 

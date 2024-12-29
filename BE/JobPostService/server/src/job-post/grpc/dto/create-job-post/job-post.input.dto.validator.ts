@@ -9,7 +9,11 @@ import {
   WorkPeriodType,
   WorkTimeType,
 } from 'src/job-post/mongoose/job-post.enum';
-import { WorkPeriodInput, WorkTimeInput } from './job-post.input.dto';
+import {
+  SalaryInput,
+  WorkPeriodInput,
+  WorkTimeInput,
+} from './job-post.input.dto';
 
 @ValidatorConstraint({ name: 'isDateWithinOneMonth', async: false })
 export class IsDateWithinOneMonth implements ValidatorConstraintInterface {
@@ -73,10 +77,10 @@ export class IsValidWorkTime implements ValidatorConstraintInterface {
   }
 }
 
-@ValidatorConstraint({ name: 'IsValidSalaryAmount', async: false })
-export class IsValidSalaryAmount implements ValidatorConstraintInterface {
-  validate(salaryAmount: any, args: ValidationArguments): boolean {
-    const { salaryType } = args.object as { salaryType: SalaryType };
+@ValidatorConstraint({ name: 'IsValidSalary', async: false })
+export class IsValidSalary implements ValidatorConstraintInterface {
+  validate(salary: SalaryInput, args: ValidationArguments): boolean {
+    const { salaryType, salaryAmount } = salary;
 
     if (typeof salaryAmount !== 'number' || isNaN(salaryAmount)) {
       return false;
@@ -95,8 +99,8 @@ export class IsValidSalaryAmount implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const { salaryType } = args.object as { salaryType: SalaryType };
-    switch (salaryType) {
+    const salary = args.value as SalaryInput;
+    switch (salary.salaryType) {
       case SalaryType.HOURLY:
         return '시급은 9860 이상, 1000만원 미만이어야 합니다.';
       case SalaryType.MONTHLY:
