@@ -2,14 +2,13 @@ import {
   PAY_TYPES,
   WORKTIME_TYPES,
   DAYS,
-  DAYS_KEY,
   TERM,
-} from "../constants/constants";
-import formatCurrency from "./formatCurrency";
+} from "../constants/constants.ts";
+import formatCurrency from "./formatCurrency.ts";
 import { format, isToday, isTomorrow, min, max } from "date-fns";
 import sortDays from "./sortDays.ts";
 
-export const converPayToDisplayable = (pay: {
+export const formatPayForDisplay = (pay: {
   type: string;
   amount: number;
 }): string => {
@@ -25,7 +24,7 @@ export const converPayToDisplayable = (pay: {
   return `${PAY_TYPES[pay.type]} ${amount}${unit}`;
 };
 
-export const converTimeToDisplayable = (time: {
+export const formatTimeForDisplay = (time: {
   type: string;
   startTime?: string;
   endTime?: string;
@@ -35,12 +34,12 @@ export const converTimeToDisplayable = (time: {
   return "시간 협의 가능";
 };
 
-export const converPeriodToDisplayable = (period: {
+export const formatPeriodForDisplay = (period: {
   type: string;
   dates?: string[];
   days?: string[];
 }): string => {
-  const getDaysToDisplay = (days: string[]): string => {
+  const formatDaysForDisplay = (days: string[]): string => {
     if (days.length === 0) return "";
     if (days.length === 1) return DAYS[days[0]];
     // 요일이 모두 연속된 경우
@@ -58,7 +57,7 @@ export const converPeriodToDisplayable = (period: {
       }`;
     return sortDays(days.map((day) => DAYS[day])).join(", "); // 요일이 연속되지 않은 경우
   };
-  const getDatesToDisplay = (dates: string[]): string => {
+  const formatDatesForDisplay = (dates: string[]): string => {
     if (dates.length === 0) return "";
     if (dates.length === 1) {
       const dateObj = new Date(dates[0]);
@@ -73,7 +72,7 @@ export const converPeriodToDisplayable = (period: {
   };
   // 1개월 이상인 경우 요일 가공
   if (TERM[period.type] === TERM.LONG_TERM)
-    return getDaysToDisplay(period.days || []);
+    return formatDaysForDisplay(period.days || []);
   // 단기인 경우 날짜 가공
-  return getDatesToDisplay(period.dates || []);
+  return formatDatesForDisplay(period.dates || []);
 };

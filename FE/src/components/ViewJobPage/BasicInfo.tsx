@@ -3,10 +3,10 @@ import { max } from "date-fns";
 import CustomCalendar from "../CustomCalendar.tsx";
 import CustomMap from "../CustomMap.tsx";
 import {
-  converPayToDisplayable,
-  converTimeToDisplayable,
-  converPeriodToDisplayable,
-} from "../../utils/convertJobInfoToDisplayable";
+  formatPayForDisplay,
+  formatTimeForDisplay,
+  formatPeriodForDisplay,
+} from "../../utils/formatJobInfoForDisplay";
 import { TERM } from "../../constants/constants";
 import { BasicInfoContainer } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as WonIcon } from "../../assets/icons/won.svg";
@@ -24,10 +24,10 @@ type BasicInfoProps = {
 const BasicInfo: React.FC<BasicInfoProps> = (props) => {
   const { pay, address, period, time } = props;
 
-  const payToDisplay = useMemo(() => converPayToDisplayable(pay), [pay]);
-  const timeToDisplay = useMemo(() => converTimeToDisplayable(time), [time]);
+  const payToDisplay = useMemo(() => formatPayForDisplay(pay), [pay]);
+  const timeToDisplay = useMemo(() => formatTimeForDisplay(time), [time]);
   const periodToDisplay = useMemo(
-    () => converPeriodToDisplayable(period),
+    () => formatPeriodForDisplay(period),
     [period]
   );
 

@@ -5,10 +5,10 @@ import {
   JobItemContextBox,
 } from "../../styles/ExploreJobsPage.styles";
 import {
-  converPayToDisplayable,
-  converTimeToDisplayable,
-  converPeriodToDisplayable,
-} from "../../utils/convertJobInfoToDisplayable";
+  formatPayForDisplay,
+  formatTimeForDisplay,
+  formatPeriodForDisplay,
+} from "../../utils/formatJobInfoForDisplay";
 
 type JobItemProps = {
   id: string;
@@ -26,10 +26,10 @@ const JobItem: React.FC<JobItemProps> = (props) => {
     props;
   const navigate = useNavigate();
 
-  const payToDisplay = useMemo(() => converPayToDisplayable(pay), [pay]);
-  const timeToDisplay = useMemo(() => converTimeToDisplayable(time), [time]);
+  const payToDisplay = useMemo(() => formatPayForDisplay(pay), [pay]);
+  const timeToDisplay = useMemo(() => formatTimeForDisplay(time), [time]);
   const periodToDisplay = useMemo(
-    () => converPeriodToDisplayable(period),
+    () => formatPeriodForDisplay(period),
     [period]
   );
 
