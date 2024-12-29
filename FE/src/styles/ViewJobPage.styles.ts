@@ -152,9 +152,10 @@ export const ImageSliderContainer = styled("div", {
     width: "10%",
     height: "10%",
     stroke: "white",
-    strokeWidth: "0.8",
+    strokeWidth: "1",
     cursor: "pointer",
     transition: "opacity 0.4s",
+    filter: "drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.4))",
     "&.inactive": {
       opacity: "0",
       pointerEvents: "none",
