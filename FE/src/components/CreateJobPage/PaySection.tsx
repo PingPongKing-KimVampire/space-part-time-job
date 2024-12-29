@@ -66,7 +66,7 @@ const PaySection = (props: PaySectionProps) => {
     const [startH, startM] = time.start.split(":").map(Number);
     const [endH, endM] = time.end.split(":").map(Number);
     let dailyHours = (endM + endH * 60 - (startM + startH * 60)) / 60; // 1일 근로 시간
-    if (dailyHours <= 0) dailyHours += 24;
+    if (dailyHours < 0) dailyHours += 24;
     const weeklyHours = dailyHours * weekDayCount; // 주간 근로 시간
     const monthlyHours = weeklyHours * 4; // 월간 근로 시간
     let monthlyPay = monthlyHours * MINIMUM_HOURLY_PAY; // 주휴수당 제외 월급

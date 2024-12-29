@@ -24,15 +24,6 @@ type BasicInfoProps = {
 const BasicInfo: React.FC<BasicInfoProps> = (props) => {
   const { pay, address, period, time } = props;
 
-  const dates: Set<string> | null = useMemo(() => {
-    return TERM[period.type] === TERM.SHORT_TERM ? new Set(period.dates) : null;
-  }, [period]);
-  const lastDate: Date = useMemo(() => {
-    if (TERM[period.type] !== TERM.SHORT_TERM) return new Date();
-    const dateObjs = period.dates!.map((date) => new Date(date));
-    return max(dateObjs);
-  }, [period]);
-
   const payToDisplay = useMemo(() => converPayToDisplayable(pay), [pay]);
   const timeToDisplay = useMemo(() => converTimeToDisplayable(time), [time]);
   const periodToDisplay = useMemo(
@@ -40,17 +31,19 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
     [period]
   );
 
-  const detailCalendarElement = useMemo(
-    () => (
+  const detailCalendarElement = useMemo(() => {
+    if (TERM[period.type] !== TERM.SHORT_TERM) return null;
+    const dates = new Set(period.dates);
+    const lastDate = max(period.dates!.map((date) => new Date(date)));
+    return (
       <CustomCalendar
         dates={dates || new Set()}
         lastDate={lastDate}
         isTitleVisible={false}
         style={{ width: "70%" }}
       />
-    ),
-    [dates, lastDate]
-  );
+    );
+  }, [period]);
 
   // TODO: WonIcon outline 아이콘으로 다시 찾아보기
   return (
@@ -69,7 +62,11 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
       <InfoItem
         iconElement={<CalendarIcon />}
         text={periodToDisplay}
-        detail={{ name: "달력", element: detailCalendarElement }}
+        detail={
+          detailCalendarElement
+            ? { name: "달력", element: detailCalendarElement }
+            : undefined
+        }
       />
       <InfoItem iconElement={<ClockIcon />} text={timeToDisplay} />
     </BasicInfoContainer>

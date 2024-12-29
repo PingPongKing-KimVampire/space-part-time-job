@@ -7,6 +7,7 @@ import {
 } from "../constants/constants";
 import formatCurrency from "./formatCurrency";
 import { format, isToday, isTomorrow, min, max } from "date-fns";
+import sortDays from "./sortDays.ts";
 
 export const converPayToDisplayable = (pay: {
   type: string;
@@ -55,7 +56,7 @@ export const converPeriodToDisplayable = (period: {
       return `${daysValues[indexs[0]]}~${
         daysValues[indexs[indexs.length - 1]]
       }`;
-    return days.map((day) => DAYS[day]).join(", "); // 요일이 연속되지 않은 경우
+    return sortDays(days.map((day) => DAYS[day])).join(", "); // 요일이 연속되지 않은 경우
   };
   const getDatesToDisplay = (dates: string[]): string => {
     if (dates.length === 0) return "";

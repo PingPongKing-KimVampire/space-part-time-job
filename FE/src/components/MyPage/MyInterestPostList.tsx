@@ -84,7 +84,7 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
             <button className="withItemHover">{jobPost.title}</button>
           </div>
           <div className="interaction">
-            <div className="interestAgo">{createdAt} 전</div>
+            <div className="interestAgo">{createdAt} 전 관심</div>
             <button
               onMouseEnter={onInnerClickableMouseEnter}
               onMouseLeave={onInnerClickableMouseLeave}

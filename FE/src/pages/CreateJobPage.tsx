@@ -36,6 +36,7 @@ import { checkRulePassInCreateJob } from "../utils/checkRulePass";
 import { WarningText, MainBackgroundColor } from "../styles/global";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WorkPeriod, WorkTime } from "../types/types.ts";
+import sortDays from "../utils/sortDays.ts";
 
 type Warnings = {
   title?: string;
@@ -189,11 +190,6 @@ const CreateJobPage = () => {
   };
 
   const onWeekDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const sortDays = (days: string[]) => {
-      const daysValues = Object.values(DAYS);
-      return days.sort((a, b) => daysValues.indexOf(a) - daysValues.indexOf(b));
-    };
-
     if (!isFocused.weekDays)
       setIsFocused((state) => ({ ...state, weekDays: true }));
 

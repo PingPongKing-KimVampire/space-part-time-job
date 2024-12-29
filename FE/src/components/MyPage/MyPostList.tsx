@@ -152,7 +152,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
               onClick={onApplicationButtonClick}
               disabled={applicationCount === 0}
             >
-              지원자 확인<span className="count">({applicationCount}명)</span>
+              지원서 확인<span className="count">({applicationCount}건)</span>
             </button>
           </div>
         </ListItem>
