@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JobPost, JobPostDocument, JobPostStatus } from './job-post.schema';
 import { SearchJobPostsInput } from '../grpc/dto/search-job-posts/search-job-posts.input.dto';
-import { WorkPeriodType } from './job-post.enum';
+import { WorkPeriodType, WorkTimeType } from './job-post.enum';
 
 @Injectable()
 export class JobPostRepository {
@@ -80,6 +80,9 @@ export class JobPostRepository {
       }
     }
     if (filters.startTime && filters.endTime) {
+      const timeCondition = [];
+      timeCondition.push({ 'workTime.type': WorkTimeType.FLEXIBLE });
+
       if (filters.startTime <= filters.endTime) {
         const andCondition = [
           { 'workTime.startTime': { $gte: filters.startTime } },
@@ -90,8 +93,7 @@ export class JobPostRepository {
             },
           },
         ];
-        if (!query.$and) query.$and = [];
-        query.$and = query.$and.concat(andCondition);
+        timeCondition.push({ $and: andCondition });
       } else if (filters.startTime > filters.endTime) {
         const orCondition = [
           {
@@ -123,9 +125,10 @@ export class JobPostRepository {
             ],
           },
         ];
-        if (!query.$or) query.$or = [];
-        query.$or = query.$or.concat(orCondition);
+        timeCondition.push({ $or: orCondition });
       }
+      if (!query.$and) query.$and = [];
+      query.$and.push({ $or: timeCondition });
     }
     if (filters.keyword) {
       const condition = [
