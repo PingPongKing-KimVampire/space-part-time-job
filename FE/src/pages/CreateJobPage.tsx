@@ -118,6 +118,7 @@ const CreateJobPage = () => {
   });
 
   const [isPayMessageVisible, setIsPayMessageVisible] = useState<boolean>(true);
+  const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
 
   const placeSectionRef = useRef<HTMLDivElement>(null);
 
@@ -218,10 +219,11 @@ const CreateJobPage = () => {
       isValid;
     if (!title || !jobTypes || pay !== "" || !description || !place)
       return false;
+    if (imageUploadLoading) return false;
     if (term === TERM.LONG_TERM && !weekDays) return false;
     if (term === TERM.SHORT_TERM && !dates) return false;
     return true;
-  }, [isValid, term]);
+  }, [isValid, term, imageUploadLoading]);
 
   // useMutation 훅을 사용하여 뮤테이션 함수 생성
   const [
@@ -422,6 +424,7 @@ const CreateJobPage = () => {
               images={images}
               setImages={setImages}
               setIsValid={setIsValid}
+              setImageUploadLoading={setImageUploadLoading}
             />
           </FormField>
 

@@ -11,13 +11,19 @@ import {
 
 const VALID_IMAGE_BYTE = 10 * 1024 * 1024;
 
-const ImageSection = ({ images, setImages, setIsValid }) => {
+const ImageSection = ({
+  images,
+  setImages,
+  setIsValid,
+  setImageUploadLoading,
+}) => {
   const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const selectedImages = Array.from(e.target.files);
+    setImageUploadLoading(true); // loading start
 
+    const selectedImages = Array.from(e.target.files);
     // 이미지 크기, 개수 유효성 검사
     const validSizeImages = selectedImages.filter(
       (image) => image.size <= VALID_IMAGE_BYTE
@@ -71,6 +77,8 @@ const ImageSection = ({ images, setImages, setIsValid }) => {
         response: isResponseValid,
       },
     }));
+
+    setImageUploadLoading(false); // loading end
   };
 
   const onXmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
