@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { fetchDistrictBoundary } from "../api/rest/neighbor.ts";
+import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
 import { MainBackgroundColor } from "../styles/global";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import useDebounce from "../utils/useDebounce";
 import JobList from "../components/ExploreJobsPage/JobList.tsx";
 import JobFilter from "../components/ExploreJobsPage/JobFilter.tsx";
-import NeighborButton from "../components/ExploreJobsPage/NeighborSelector.tsx";
+import NeighborhoodButton from "../components/ExploreJobsPage/NeighborhoodSelector.tsx";
 import LoadingOverlay from "../components/LoadingOverlay";
 import {
   Background,
@@ -16,7 +16,7 @@ import {
   ContentContainer,
 } from "../styles/ExploreJobsPage.styles";
 import { WarningText } from "../styles/global";
-import { SearchNeighbor } from "../types/types.ts";
+import { SearchNeighborhood } from "../types/types.ts";
 import {
   GET_RESIDENT_NEIGHBORHOOD,
   SEARCH_JOB_POSTS,
@@ -35,10 +35,11 @@ import { JobPost, PageInfo, Filter } from "../types/types.ts";
 const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);
 
-  const [neighbors, setNeighbors] = useState<Record<string, SearchNeighbor>>(
-    {}
-  );
-  const [selectedNeighborID, setSelectedNeighborID] = useState<string>("");
+  const [neighborhoods, setNeighborhoods] = useState<
+    Record<string, SearchNeighborhood>
+  >({});
+  const [selectedNeighborhoodID, setSelectedNeighborhoodID] =
+    useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue, 100);
   const [filter, setFilter] = useState<Filter>({
@@ -85,34 +86,34 @@ const ExploreJobsPage = () => {
   });
 
   useEffect(() => {
-    // 상주 지역과 그 인접 동 데이터 불러와서 neighbors 상태로 세팅
-    const setupNeighbors = async (residentNeighbors) => {
+    // 상주 지역과 그 인접 동 데이터 불러와서 neighborhoods 상태로 세팅
+    const setupNeighborhoods = async (residentNeighborhoods) => {
       const result = {};
-      for (const neighbor of residentNeighbors) {
+      for (const neighborhood of residentNeighborhoods) {
         let boundaries;
         try {
-          boundaries = await fetchDistrictBoundary(neighbor.id);
+          boundaries = await fetchDistrictBoundary(neighborhood.id);
         } catch (e) {
           console.error(e.message);
         }
-        result[neighbor.id] = {
-          ...neighbor,
-          districts: boundaries[neighbor.level].districts,
+        result[neighborhood.id] = {
+          ...neighborhood,
+          districts: boundaries[neighborhood.level].districts,
         };
       }
-      setNeighbors(result);
+      setNeighborhoods(result);
     };
     if (!meData?.me?.residentNeighborhood) return;
-    setupNeighbors(meData?.me?.residentNeighborhood);
+    setupNeighborhoods(meData?.me?.residentNeighborhood);
   }, [meData]);
 
   useEffect(() => {
     // 선택된 동이 없을 경우, 첫 번째 상주 지역을 선택
-    if (Object.keys(neighbors).includes(selectedNeighborID)) return;
-    const ids = Object.keys(neighbors);
+    if (Object.keys(neighborhoods).includes(selectedNeighborhoodID)) return;
+    const ids = Object.keys(neighborhoods);
     if (ids.length === 0) return;
-    setSelectedNeighborID(ids[0]);
-  }, [neighbors]);
+    setSelectedNeighborhoodID(ids[0]);
+  }, [neighborhoods]);
 
   const fetchJobPosts = useCallback(
     (cursor) => {
@@ -133,13 +134,14 @@ const ExploreJobsPage = () => {
         }
         return { startTime: filter.time.start, endTime: filter.time.end };
       };
-      if (Object.keys(neighbors).length === 0 || !selectedNeighborID) return;
-      const selectedNeighbor = neighbors[selectedNeighborID];
+      if (Object.keys(neighborhoods).length === 0 || !selectedNeighborhoodID)
+        return;
+      const selectedNeighborhood = neighborhoods[selectedNeighborhoodID];
       const days = filter.weekDays.map((day) => DAYS_KEY[day]);
       const { startTime, endTime } = getProcessedTime();
 
       const filters = {
-        neighborhoodIds: selectedNeighbor.districts.map(
+        neighborhoodIds: selectedNeighborhood.districts.map(
           (district) => district.id
         ),
         keyword: debouncedSearchValue || null,
@@ -156,8 +158,8 @@ const ExploreJobsPage = () => {
     [
       debouncedSearchValue,
       filter,
-      neighbors,
-      selectedNeighborID,
+      neighborhoods,
+      selectedNeighborhoodID,
       searchJobPosts,
     ]
   );
@@ -181,10 +183,10 @@ const ExploreJobsPage = () => {
       )}
       <Container>
         <InputContainer>
-          <NeighborButton
-            neighbors={neighbors}
-            selectedNeighborID={selectedNeighborID}
-            setSelectedNeighborID={setSelectedNeighborID}
+          <NeighborhoodButton
+            neighborhoods={neighborhoods}
+            selectedNeighborhoodID={selectedNeighborhoodID}
+            setSelectedNeighborhoodID={setSelectedNeighborhoodID}
           />
           <input
             placeholder="주변 알바 검색"

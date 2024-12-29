@@ -45,7 +45,7 @@ const NavigationBar = () => {
         <div className="buttons">
           <LocationIcon
             onClick={() => {
-              navigate("/search-neighbor");
+              navigate("/search-neighborhood");
             }}
           />
           <WriteIcon

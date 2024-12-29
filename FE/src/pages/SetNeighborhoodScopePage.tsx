@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { fetchDistrictBoundary } from "../api/rest/neighbor.ts";
+import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
 import CustomMap from "../components/CustomMap.tsx";
 import { ReactComponent as XmarkIcon } from "../assets/icons/x-mark.svg";
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
@@ -9,23 +9,23 @@ import {
   Background,
   Container,
   ScopeSettingContainer,
-  NeighborsContainer,
+  NeighborhoodsContainer,
   PlusButton,
   CompleteButton,
-} from "../styles/SetNeighborScopePage.styles";
-import LevelSlider from "../components/SetNeighborScopePage/LevelSlider.tsx";
-import { SelectedNeighbor, Coordinate, Level } from "../types/types.ts";
-import { ERROR } from "../constants/constants";
+} from "../styles/SetNeighborhoodScopePage.styles";
+import LevelSlider from "../components/SetNeighborhoodScopePage/LevelSlider.tsx";
+import { SelectedNeighborhood, Coordinate, Level } from "../types/types.ts";
+import { ERROR } from "../constants/constants.ts";
 import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations.js";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
-import { WarningText } from "../styles/global";
+import { WarningText } from "../styles/global.ts";
 
-const SetNeighborScopePage = () => {
+const SetNeighborhoodScopePage = () => {
   const navigate = useNavigate();
 
-  const [neighbors, setNeighbors] = useState<Record<string, SelectedNeighbor>>(
-    {}
-  );
+  const [neighborhoods, setNeighborhoods] = useState<
+    Record<string, SelectedNeighborhood>
+  >({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
   // const [scopeValues, setScopeValues] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
   const [districtBoundaries, setDistrictBoundaries] = useState<
@@ -35,11 +35,11 @@ const SetNeighborScopePage = () => {
   const [warning, setWarning] = useState<string>("");
 
   useEffect(() => {
-    // 마운트될 때 세션 스토리지에서 neighbors 값 가져와서 neighbors 세팅
-    const placeSaved = sessionStorage.getItem("neighbors");
+    // 마운트될 때 세션 스토리지에서 neighborhoods 값 가져와서 neighborhoods 세팅
+    const placeSaved = sessionStorage.getItem("neighborhoods");
     if (!placeSaved) return;
     const placeParsed = JSON.parse(placeSaved);
-    setNeighbors(
+    setNeighborhoods(
       placeParsed.reduce((acc, current) => {
         acc[current.id] = current;
         return acc;
@@ -66,45 +66,49 @@ const SetNeighborScopePage = () => {
     if (
       !selectedId ||
       !districtBoundaries[selectedId] ||
-      !neighbors[selectedId]
+      !neighborhoods[selectedId]
     ) {
       setPolygonLine([]);
       return;
     }
-    const level = convertScopeValueToLevel(neighbors[selectedId].scopeValue);
+    const level = convertScopeValueToLevel(
+      neighborhoods[selectedId].scopeValue
+    );
     if (!districtBoundaries[selectedId][level]) return;
     setPolygonLine(
       districtBoundaries[selectedId][level].outer_boundary.coordinates
     );
-  }, [districtBoundaries, selectedId, neighbors]);
+  }, [districtBoundaries, selectedId, neighborhoods]);
 
-  const onNeighborClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const neighborId = e.currentTarget.getAttribute("data-id");
-    setSelectedId(neighborId);
+  const onNeighborhoodClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const neighborhoodId = e.currentTarget.getAttribute("data-id");
+    setSelectedId(neighborhoodId);
   };
 
   const onXClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const neighborId = e.currentTarget.parentElement!.getAttribute("data-id")!;
-    if (neighborId === selectedId) {
+    const neighborhoodId =
+      e.currentTarget.parentElement!.getAttribute("data-id")!;
+    if (neighborhoodId === selectedId) {
       setSelectedId(
-        Object.keys(neighbors).filter((id) => id !== neighborId)[0] || null
+        Object.keys(neighborhoods).filter((id) => id !== neighborhoodId)[0] ||
+          null
       );
     }
-    setNeighbors((state) => {
+    setNeighborhoods((state) => {
       const newState = { ...state };
-      delete newState[neighborId];
+      delete newState[neighborhoodId];
       return newState;
     });
   };
 
   const onPlusClick = () => {
-    // 현재 neighbors 값을 세션 스토리지에 저장하고 동 검색 페이지로 돌아가기
+    // 현재 neighborhoods 값을 세션 스토리지에 저장하고 동 검색 페이지로 돌아가기
     sessionStorage.setItem(
-      "neighbors",
-      JSON.stringify(Object.values(neighbors))
+      "neighborhoods",
+      JSON.stringify(Object.values(neighborhoods))
     );
-    navigate("/search-neighbor");
+    navigate("/search-neighborhood");
   };
 
   const [
@@ -120,9 +124,9 @@ const SetNeighborScopePage = () => {
 
   const sendResidentNeighborhood = async () => {
     const input = {
-      neighborhoods: Object.values(neighbors).map((neighbor) => ({
-        id: neighbor.id,
-        level: convertScopeValueToLevel(neighbor.scopeValue),
+      neighborhoods: Object.values(neighborhoods).map((neighborhood) => ({
+        id: neighborhood.id,
+        level: convertScopeValueToLevel(neighborhood.scopeValue),
       })),
     };
     try {
@@ -160,32 +164,32 @@ const SetNeighborScopePage = () => {
       />
       <Container>
         <ScopeSettingContainer>
-          <NeighborsContainer>
-            {Object.values(neighbors).map((neighbor) => (
+          <NeighborhoodsContainer>
+            {Object.values(neighborhoods).map((neighborhood) => (
               <button
-                className={`neighborButton ${
-                  selectedId && selectedId === neighbor.id ? "selected" : ""
+                className={`neighborhoodButton ${
+                  selectedId && selectedId === neighborhood.id ? "selected" : ""
                 }`}
-                key={neighbor.id}
-                onClick={onNeighborClick}
-                data-id={neighbor.id}
+                key={neighborhood.id}
+                onClick={onNeighborhoodClick}
+                data-id={neighborhood.id}
               >
-                {neighbor.name}
+                {neighborhood.name}
                 <XmarkIcon onClick={onXClick} />
               </button>
             ))}
-            {Object.keys(neighbors).length < 3 && (
+            {Object.keys(neighborhoods).length < 3 && (
               <PlusButton onClick={onPlusClick}>
                 <PlusIcon />
               </PlusButton>
             )}
-          </NeighborsContainer>
+          </NeighborhoodsContainer>
           <LevelSlider
             level={4}
-            value={selectedId ? neighbors[selectedId]?.scopeValue : "0"}
+            value={selectedId ? neighborhoods[selectedId]?.scopeValue : "0"}
             setValue={(value: string) => {
               if (!selectedId) return;
-              setNeighbors((state) => {
+              setNeighborhoods((state) => {
                 const newState = { ...state };
                 newState[selectedId].scopeValue = value;
                 return newState;
@@ -195,7 +199,7 @@ const SetNeighborScopePage = () => {
           <WarningText>{warning}</WarningText>
         </ScopeSettingContainer>
         <CompleteButton
-          className={!Object.keys(neighbors).length ? "inactivated" : ""}
+          className={!Object.keys(neighborhoods).length ? "inactivated" : ""}
           onClick={onCompleteButtonClick}
         >
           완료
@@ -205,4 +209,4 @@ const SetNeighborScopePage = () => {
   );
 };
 
-export default SetNeighborScopePage;
+export default SetNeighborhoodScopePage;

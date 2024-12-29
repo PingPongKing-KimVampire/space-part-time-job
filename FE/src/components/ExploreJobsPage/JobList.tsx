@@ -48,7 +48,7 @@ const JobList: React.FC<JobListProps> = (props) => {
               <JobItem
                 id={id}
                 title={title}
-                neighbor={addressName || ""}
+                neighborhood={addressName || ""}
                 createdAt={createdAt || ""}
                 pay={{
                   type: salary?.salaryType || "",

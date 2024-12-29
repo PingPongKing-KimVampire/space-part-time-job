@@ -29,14 +29,14 @@ export const ScopeSettingContainer = styled("div", {
   marginBottom: "20px",
 });
 
-export const NeighborsContainer = styled("div", {
+export const NeighborhoodsContainer = styled("div", {
   width: "100%",
   display: "flex",
   flexDirection: "row",
   gap: "7px",
   height: "55px",
   marginBottom: "28px",
-  "& .neighborButton": {
+  "& .neighborhoodButton": {
     ...OptionButtonStyle,
     textAlign: "left",
     borderRadius: "9px",

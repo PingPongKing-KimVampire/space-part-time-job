@@ -1,9 +1,9 @@
 import React, { useState, forwardRef, useEffect } from "react";
 import {
   fetchCoordinateByAddress,
-  fetchNeighborInfoByCoordinate,
+  fetchNeighborhoodInfoByCoordinate,
   fetchDistrictBoundary,
-} from "../../api/rest/neighbor.ts";
+} from "../../api/rest/neighborhood.ts";
 import CustomInput from "../CustomInput.tsx";
 import CustomMap from "../CustomMap.tsx";
 import {
@@ -25,7 +25,7 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
 
     const [isExposureDetailVisible, setIsExposureDetailVisible] =
       useState(false);
-    const [exposureNeighbors, setExposureNeighbors] = useState({
+    const [exposureNeighborhoods, setExposureNeighborhoods] = useState({
       main: "",
       sub: [],
     });
@@ -41,19 +41,21 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
     };
 
     useEffect(() => {
-      const displayExposureNeighbors = async () => {
+      const displayExposureNeighborhoods = async () => {
         const coordinate = await fetchCoordinateByAddress(place); // 주소 -> 좌표
         if (!coordinate) return;
-        const { id, name } = await fetchNeighborInfoByCoordinate(coordinate); // 좌표 -> 동 ID, 행정동
+        const { id, name } = await fetchNeighborhoodInfoByCoordinate(
+          coordinate
+        ); // 좌표 -> 동 ID, 행정동
         if (!id || !name) return;
         const boundary = await fetchDistrictBoundary(id); // 동 ID -> 동 경계 데이터
         if (!boundary) return;
-        setExposureNeighbors({
+        setExposureNeighborhoods({
           main: name,
           sub: boundary[4].districts.map((district) => district.name),
         });
       };
-      if (place) displayExposureNeighbors();
+      if (place) displayExposureNeighborhoods();
     }, [place]);
 
     return (
@@ -75,15 +77,15 @@ const PlaceSection = forwardRef<HTMLDivElement, PlaceSectionProps>(
             >
               <div className="main">
                 <span>
-                  {exposureNeighbors.main} 외 {exposureNeighbors.sub.length}개
-                  동네
+                  {exposureNeighborhoods.main} 외{" "}
+                  {exposureNeighborhoods.sub.length}개 동네
                 </span>
                 에서 노출 <ArrowDownIcon isSelected={isExposureDetailVisible} />
               </div>
               <ExposureDetailContent
                 className={isExposureDetailVisible ? "visible" : ""}
               >
-                {exposureNeighbors.sub.join(", ")}
+                {exposureNeighborhoods.sub.join(", ")}
               </ExposureDetailContent>
             </ExposurePanel>
           </>

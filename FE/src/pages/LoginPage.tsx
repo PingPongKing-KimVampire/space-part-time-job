@@ -102,7 +102,7 @@ const LoginPage = (): React.JSX.Element => {
         !data.me.residentNeighborhood ||
         data.me.residentNeighborhood.length === 0
       ) {
-        navigate("/search-neighbor");
+        navigate("/search-neighborhood");
       } else {
         navigate("/explore-jobs");
       }

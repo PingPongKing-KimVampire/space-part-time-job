@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainColor } from "../../styles/global";
+import { MainColor } from "../global";
 
 const { styled } = createStitches();
 

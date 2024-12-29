@@ -9,8 +9,8 @@ import {
 import SignupPage from "./pages/SignupPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import CreateJobPage from "./pages/CreateJobPage.tsx";
-import SearchNeighborPage from "./pages/SearchNeighborPage.tsx";
-import SetNeighborScopePage from "./pages/SetNeighborScopePage.tsx";
+import SearchNeighborhoodPage from "./pages/SearchNeighborhoodPage.tsx";
+import SetNeighborhoodScopePage from "./pages/SetNeighborhoodScopePage.tsx";
 import ExploreJobsPage from "./pages/ExploreJobsPage.tsx";
 import ViewJobPage from "./pages/ViewJobPage.tsx";
 import MyPage from "./pages/MyPage.tsx";
@@ -51,10 +51,13 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route element={<AuthRoute />}>
-              <Route path="/search-neighbor" element={<SearchNeighborPage />} />
               <Route
-                path="/set-neighbor-scope"
-                element={<SetNeighborScopePage />}
+                path="/search-neighborhood"
+                element={<SearchNeighborhoodPage />}
+              />
+              <Route
+                path="/set-neighborhood-scope"
+                element={<SetNeighborhoodScopePage />}
               />
               <Route element={<NavigationBar />}>
                 <Route path="/create-job" element={<CreateJobPage />} />

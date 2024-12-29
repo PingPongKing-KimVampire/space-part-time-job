@@ -13,7 +13,7 @@ import {
 type JobItemProps = {
   id: string;
   title: string;
-  neighbor: string;
+  neighborhood: string;
   createdAt: string;
   pay: { type: string; amount: number };
   period: { type: string; dates?: string[]; days?: string[] };
@@ -22,7 +22,8 @@ type JobItemProps = {
 };
 
 const JobItem: React.FC<JobItemProps> = (props) => {
-  const { id, title, neighbor, createdAt, pay, period, time, photos } = props;
+  const { id, title, neighborhood, createdAt, pay, period, time, photos } =
+    props;
   const navigate = useNavigate();
 
   const payToDisplay = useMemo(() => converPayToDisplayable(pay), [pay]);
@@ -41,8 +42,8 @@ const JobItem: React.FC<JobItemProps> = (props) => {
       <JobItemContextBox>
         <div className="mainInfo">
           <div className="title">{title}</div>
-          <div className="neighborAndPostTime">
-            {neighbor} ㆍ {createdAt} 전
+          <div className="neighborhoodAndPostTime">
+            {neighborhood} ㆍ {createdAt} 전
           </div>
         </div>
         <div className="subInfo">

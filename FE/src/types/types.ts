@@ -51,18 +51,18 @@ export type Tab = {
   pos: "left" | "middle" | "right";
 };
 
-export type Neighbor = {
+export type Neighborhood = {
   id: string;
   name: string;
 };
 
-export type SelectedNeighbor = Neighbor & {
+export type SelectedNeighborhood = Neighborhood & {
   scopeValue: string;
 };
 
-export type SearchNeighbor = Neighbor & {
+export type SearchNeighborhood = Neighborhood & {
   level: string;
-  districts: Neighbor[];
+  districts: Neighborhood[];
 };
 
 export type Coordinate = {

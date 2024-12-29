@@ -44,7 +44,7 @@ export const InputContainer = styled("div", {
   },
 });
 
-export const NeighborSelectorContainer = styled("div", {
+export const NeighborhoodSelectorContainer = styled("div", {
   "& .selectButton": {
     height: "100%",
     padding: "7px 10px",
@@ -239,7 +239,7 @@ export const JobItemContextBox = styled("div", {
       fontSize: "18px",
       fontWeight: "bold",
     },
-    "& .neighborAndPostTime": {
+    "& .neighborhoodAndPostTime": {
       marginTop: "3px",
       fontSize: "13px",
       color: "#828282",

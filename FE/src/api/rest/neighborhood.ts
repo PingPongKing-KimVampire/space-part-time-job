@@ -1,8 +1,8 @@
 import apiRequest from "./apiRequest.ts";
-import { Neighbor } from "../../types/types.ts";
+import { Neighborhood } from "../../types/types.ts";
 import { IP_ADDRESS } from "../../constants/constants.ts";
 
-export const fetchTotalNeighbors = async (): Promise<Neighbor[]> => {
+export const fetchTotalNeighborhoods = async (): Promise<Neighborhood[]> => {
   return await apiRequest(
     `https://${IP_ADDRESS}/district`,
     {},
@@ -35,7 +35,7 @@ export const fetchCoordinateByAddress = async (address) => {
   );
 };
 
-export const fetchNeighborInfoByCoordinate = async ({ x, y }) => {
+export const fetchNeighborhoodInfoByCoordinate = async ({ x, y }) => {
   return await apiRequest(
     `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${x}&y=${y}`,
     {
@@ -44,10 +44,10 @@ export const fetchNeighborInfoByCoordinate = async ({ x, y }) => {
       },
     },
     (data) => {
-      const neighbor = data.documents.find(
+      const neighborhood = data.documents.find(
         (document) => document.region_type === "H"
       );
-      return { id: neighbor.code, name: neighbor.region_3depth_name };
+      return { id: neighborhood.code, name: neighborhood.region_3depth_name };
     }
   );
 };
