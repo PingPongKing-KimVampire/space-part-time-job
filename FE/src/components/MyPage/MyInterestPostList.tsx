@@ -21,6 +21,7 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   const {
     onItemMouseEnter,
     onItemMouseLeave,
+    onItemClick,
     onInnerClickableMouseEnter,
     onInnerClickableMouseLeave,
   } = mouseEventHandlers;
@@ -65,12 +66,6 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
     );
   };
 
-  const onItemClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const postId = e.currentTarget.getAttribute("data-post-id");
-    if (!postId) return;
-    navigate(`/view-job/${postId}`);
-  };
-
   return (
     <>
       {myInterestPosts.map(({ jobPost, createdAt }) => (
@@ -86,10 +81,10 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
             {jobPost.status === JOB_POST_STATUS.CLOSE && (
               <CloseTag>마감</CloseTag>
             )}
-            <button className="withItemHover">{jobPost.title}</button>
+            <div className="title">{jobPost.title}</div>
           </div>
           <div className="interaction">
-            <div className="interestAgo">{createdAt} 전 관심</div>
+            <div className="createdAt">{createdAt} 전 관심</div>
             <button
               onMouseEnter={onInnerClickableMouseEnter}
               onMouseLeave={onInnerClickableMouseLeave}

@@ -19,6 +19,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
   const {
     onItemMouseEnter,
     onItemMouseLeave,
+    onItemClick,
     onInnerClickableMouseEnter,
     onInnerClickableMouseLeave,
   } = mouseEventHandlers;
@@ -111,12 +112,6 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
     navigate(`/view-applications/${postId}`);
   };
 
-  const onItemClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const postId = e.currentTarget.getAttribute("data-post-id");
-    if (!postId) return;
-    navigate(`/view-job/${postId}`);
-  };
-
   return (
     <>
       {myJobPosts.map(({ id, status, title, applicationCount }) => (
@@ -130,7 +125,7 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
         >
           <div className="main">
             {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
-            <button className="withItemHover">{title}</button>
+            <div className="title">{title}</div>
           </div>
           <div className="interaction">
             {status === JOB_POST_STATUS.OPEN && ( // 마감되지 않은 공고에만 마감 버튼 표시

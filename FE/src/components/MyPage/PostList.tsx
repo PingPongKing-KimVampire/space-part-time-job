@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { TAB_INFO } from "../../pages/MyPage.tsx";
 import { Tab } from "../../types/types.ts";
 import MyPostList from "./MyPostList.tsx";
@@ -12,11 +13,14 @@ type PostListProp = {
 export type MouseEventHandlers = {
   onItemMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onItemMouseLeave: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onItemClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onInnerClickableMouseEnter: (e: React.MouseEvent<HTMLElement>) => void;
   onInnerClickableMouseLeave: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
 const PostList: React.FC<PostListProp> = ({ selectedTab }) => {
+  const navigate = useNavigate();
+
   const onItemMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.currentTarget.classList.add("isHovering");
@@ -29,6 +33,11 @@ const PostList: React.FC<PostListProp> = ({ selectedTab }) => {
     },
     []
   );
+  const onItemClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const postId = e.currentTarget.getAttribute("data-post-id");
+    if (!postId) return;
+    navigate(`/view-job/${postId}`);
+  };
   const onInnerClickableMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
       (e.target as Element).closest(".item")?.classList.remove("isHovering");
@@ -46,12 +55,14 @@ const PostList: React.FC<PostListProp> = ({ selectedTab }) => {
     return {
       onItemMouseEnter,
       onItemMouseLeave,
+      onItemClick,
       onInnerClickableMouseEnter,
       onInnerClickableMouseLeave,
     };
   }, [
     onItemMouseEnter,
     onItemMouseLeave,
+    onItemClick,
     onInnerClickableMouseEnter,
     onInnerClickableMouseLeave,
   ]);

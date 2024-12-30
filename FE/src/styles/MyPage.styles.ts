@@ -152,33 +152,17 @@ export const ListItem = styled("button", {
   cursor: "pointer",
   "&.isHovering": {
     background: OptionHoverColor,
-    "& .arrowDownIcon": {
-      strokeWidth: "2.2",
-      color: MainHoverColor,
-    },
-    "& .withItemHover": {
-      textDecoration: "underline !important",
-    },
   },
   "& .main": {
-    fontWeight: "600",
-    fontSize: "18px",
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    width: "450px",
-    "& button": {
+    width: "400px",
+    "& .title": {
       ...ellipsisStyle,
       textAlign: "left",
-      background: "none",
-      border: "none",
-      color: "black",
       fontSize: "18px",
       fontWeight: "600",
-      cursor: "pointer",
-      "&:hover": {
-        textDecoration: "underline",
-      },
     },
   },
   "& .interaction": {
@@ -198,59 +182,9 @@ export const ListItem = styled("button", {
         fontWeight: "400",
       },
     },
-    "& .interestAgo": {
-      fontSize: "15px",
+    "& .createdAt": {
+      fontSize: "14px",
       color: "#828282",
-    },
-  },
-});
-
-export const MainPanel = styled("div", {
-  width: "100%",
-  display: "flex",
-  justifyContent: "space-between",
-});
-
-export const TogglePanel = styled("div", {
-  width: "100%",
-  height: "0",
-  opacity: "0",
-  transition: "all 0.2s",
-  pointerEvents: "none",
-  overflow: "hidden",
-  "&.visible": {
-    height: "auto",
-    opacity: "1",
-    marginTop: "10px",
-    pointerEvents: "auto",
-    overflow: "visible",
-  },
-  "& .coverLetter": {
-    fontSize: "15px",
-    lineHeight: "23px",
-    textAlign: "left",
-  },
-  "& .createdAt": {
-    fontSize: "13px",
-    color: "#828282",
-    textAlign: "right",
-  },
-});
-
-export const ArrowDownIcon = styled(ArrowDown, {
-  width: "26px",
-  height: "26px",
-  strokeWidth: "1.6",
-  color: MainColor,
-  transition: "transform 0.2s",
-  variants: {
-    isSelected: {
-      true: {
-        transform: "rotate(180deg)",
-      },
-      false: {
-        transform: "none",
-      },
     },
   },
 });

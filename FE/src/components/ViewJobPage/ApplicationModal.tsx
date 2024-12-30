@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import CustomTextarea from "../CustomTextarea.tsx";
 import LoadingOverlay from "../LoadingOverlay.tsx";
-import { ApplicationModalBackground } from "../../styles/ViewJobPage.styles";
+import { ModalBackground } from "../../styles/global.ts";
 import { ReactComponent as XIcon } from "../../assets/icons/x-mark.svg";
 import { checkRulePassInApplication } from "../../utils/checkRulePass";
 import { APPLY_TO_JOB_POST } from "../../api/graphql/mutations.js";
@@ -37,7 +37,7 @@ const ApplicationModal = () => {
   }, [coverLetter]);
 
   return (
-    <ApplicationModalBackground>
+    <ModalBackground>
       {applyLoading && <LoadingOverlay />}
       <div className="container">
         <div className="title">자기소개 작성</div>
@@ -62,7 +62,7 @@ const ApplicationModal = () => {
         </button>
         <XIcon onClick={onXClick} />
       </div>
-    </ApplicationModalBackground>
+    </ModalBackground>
   );
 };
 
