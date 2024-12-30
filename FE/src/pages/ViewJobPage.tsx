@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../utils/formatTimeAgo";
@@ -11,34 +11,12 @@ import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { MainBackgroundColor } from "../styles/global";
 import { GET_JOB_POST } from "../api/graphql/queries";
 import { INCREMENT_JOB_POST_VIEWS } from "../api/graphql/mutations.js";
-import { JobPost } from "../types/types.ts";
+import useViewJobContext from "../context/ViewJobContext.tsx";
 
 const ViewJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
-
-  const [isApplicationModalVisible, setIsApplicationModalVisible] =
-    useState(false);
-  const [jobPost, setJobPost] = useState<JobPost>({
-    id: "",
-    status: "",
-    title: "",
-    jobDescription: [],
-    workPeriod: { type: "", dates: [], days: [] },
-    workTime: { type: "", startTime: "", endTime: "" },
-    salary: { salaryType: "", salaryAmount: 0 },
-    photos: [],
-    detailedDescription: "",
-    addressName: "",
-    createdAt: "",
-    views: 0,
-    publisher: { nickname: "", createdAt: "" },
-    applicationCount: 0,
-    myJobApplication: [],
-    myInterested: null,
-    interestedCount: 0,
-  });
-
   const { id = "" } = useParams();
+  const { setJobPost, isApplicationModalVisible } = useViewJobContext();
 
   const [
     incrementViews,
@@ -74,23 +52,10 @@ const ViewJobPage = () => {
     <Background>
       {getJobPostLoading && incrementViewsLoading && <LoadingOverlay />}
       <Container>
-        <Header jobPost={jobPost} />
-        <Content
-          jobPost={jobPost}
-          setJobPost={setJobPost}
-          displayApplicationModal={() => {
-            setIsApplicationModalVisible(true);
-          }}
-        />
+        <Header />
+        <Content />
       </Container>
-      {isApplicationModalVisible && (
-        <ApplicationModal
-          jobPostId={id}
-          onXClick={() => {
-            setIsApplicationModalVisible(false);
-          }}
-        />
-      )}
+      {isApplicationModalVisible && <ApplicationModal />}
     </Background>
   );
 };

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { PERIOD, WORKTIME_TYPES, PAY_TYPES } from "../constants/constants.ts";
 
 interface Input {
@@ -65,7 +65,7 @@ const CreateJobContext = createContext<CreateJobContextType | undefined>(
   undefined
 );
 
-export const CreateJobProvider = ({ children }: { children: ReactNode }) => {
+export const CreateJobProvider = ({ children }) => {
   const [input, setInput] = useState<Input>({
     title: "",
     jobTypes: [],

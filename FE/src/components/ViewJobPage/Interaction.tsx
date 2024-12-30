@@ -3,20 +3,15 @@ import { useMutation } from "@apollo/client";
 import { ReactComponent as HeartIcon } from "../../assets/icons/heart.svg";
 import { InteractionContainer } from "../../styles/ViewJobPage.styles";
 import { JOB_POST_STATUS, APPLICATION_STATUS } from "../../constants/constants";
-import { JobPost } from "../../types/types.ts";
 import {
   UNMARK_JOB_POST_AS_INTEREST,
   MARK_JOB_POST_AS_INTEREST,
 } from "../../api/graphql/mutations.js";
+import useViewJobContext from "../../context/ViewJobContext.tsx";
 
-type InteractionProps = {
-  jobPost: JobPost;
-  setJobPost: React.Dispatch<React.SetStateAction<JobPost>>;
-  displayApplicationModal: () => void;
-};
-
-const Interaction: React.FC<InteractionProps> = (props) => {
-  const { jobPost, setJobPost, displayApplicationModal } = props;
+const Interaction = () => {
+  const { jobPost, setJobPost, setIsApplicationModalVisible } =
+    useViewJobContext();
   const { id, myJobApplication = [], myInterested, status } = jobPost;
 
   const isApplied = useMemo(
@@ -59,7 +54,9 @@ const Interaction: React.FC<InteractionProps> = (props) => {
             isApplied || isClosed ? "inactivated" : ""
           }`}
           disabled={isApplied || isClosed}
-          onClick={displayApplicationModal}
+          onClick={() => {
+            setIsApplicationModalVisible(true);
+          }}
         >
           {isClosed
             ? "마감된 알바에요."

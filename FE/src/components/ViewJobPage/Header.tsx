@@ -2,13 +2,10 @@ import React from "react";
 import { HeaderContainer } from "../../styles/ViewJobPage.styles";
 import { CloseTag } from "../../styles/global.ts";
 import { JOB_POST_STATUS, JOB_TYPES } from "../../constants/constants";
-import { JobPost } from "../../types/types.ts";
+import useViewJobContext from "../../context/ViewJobContext.tsx";
 
-type HeaderProps = {
-  jobPost: JobPost;
-};
-
-const Header: React.FC<HeaderProps> = ({ jobPost }) => {
+const Header = () => {
+  const { jobPost } = useViewJobContext();
   const {
     jobDescription = [],
     status,

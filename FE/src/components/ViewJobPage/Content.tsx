@@ -4,26 +4,12 @@ import Profile from "./Profile.tsx";
 import BasicInfo from "./BasicInfo.tsx";
 import Interaction from "./Interaction.tsx";
 import { ContentContainer } from "../../styles/ViewJobPage.styles";
-import { JobPost } from "../../types/types.ts";
 import defaultImage from "../../assets/images/jobDefault.png";
+import useViewJobContext from "../../context/ViewJobContext.tsx";
 
-type ContentProps = {
-  jobPost: JobPost;
-  setJobPost: React.Dispatch<React.SetStateAction<JobPost>>;
-  displayApplicationModal: () => void;
-};
-
-const Content: React.FC<ContentProps> = (props) => {
-  const { jobPost, setJobPost, displayApplicationModal } = props;
-  const {
-    workPeriod,
-    workTime,
-    salary,
-    photos,
-    detailedDescription,
-    addressName,
-    publisher,
-  } = jobPost;
+const Content = () => {
+  const { jobPost, setJobPost } = useViewJobContext();
+  const { photos, detailedDescription } = jobPost;
 
   return (
     <ContentContainer>
@@ -31,36 +17,17 @@ const Content: React.FC<ContentProps> = (props) => {
         <ImageSlider
           imageUrls={photos && photos.length ? photos : [defaultImage]}
         />
-        <Profile
-          nickname={publisher?.nickname || ""}
-          timeTogether={publisher?.createdAt || ""}
-        />
+        <Profile />
       </div>
       <div className="rightSection">
         <div className="textInfo">
-          <BasicInfo
-            pay={{
-              type: salary?.salaryType || "",
-              amount: salary?.salaryAmount || 0,
-            }}
-            address={addressName || ""}
-            period={workPeriod || { type: "" }}
-            time={{
-              type: workTime?.type || "",
-              startTime: workTime?.startTime || "",
-              endTime: workTime?.endTime || "",
-            }}
-          />
+          <BasicInfo />
           <div className="detail">
             <div className="title">상세 내용</div>
             <div className="description">{detailedDescription}</div>
           </div>
         </div>
-        <Interaction
-          jobPost={jobPost}
-          setJobPost={setJobPost}
-          displayApplicationModal={displayApplicationModal}
-        />
+        <Interaction />
       </div>
     </ContentContainer>
   );

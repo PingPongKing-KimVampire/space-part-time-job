@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { max } from "date-fns";
 import CustomCalendar from "../CustomCalendar.tsx";
 import CustomMap from "../CustomMap.tsx";
@@ -13,28 +13,31 @@ import { ReactComponent as WonIcon } from "../../assets/icons/won.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
 import { ReactComponent as LocationIcon } from "../../assets/icons/location-outline.svg";
 import { ReactComponent as ClockIcon } from "../../assets/icons/clock.svg";
+import useViewJobContext from "../../context/ViewJobContext.tsx";
 
-type BasicInfoProps = {
-  pay: { type: string; amount: number };
-  address: string;
-  period: { type: string; dates?: string[]; days?: string[] };
-  time: { type: string; startTime?: string; endTime?: string };
-};
-
-const BasicInfo: React.FC<BasicInfoProps> = (props) => {
-  const { pay, address, period, time } = props;
+const BasicInfo = () => {
+  const { jobPost } = useViewJobContext();
+  const { salary, addressName, workPeriod, workTime } = jobPost;
+  const pay = useMemo(() => {
+    if (!salary) return null;
+    return { type: salary.salaryType, amount: salary.salaryAmount };
+  }, [salary]);
 
   const payToDisplay = useMemo(() => formatPayForDisplay(pay), [pay]);
-  const timeToDisplay = useMemo(() => formatTimeForDisplay(time), [time]);
+  const timeToDisplay = useMemo(
+    () => (workTime ? formatTimeForDisplay(workTime) : ""),
+    [workTime]
+  );
   const periodToDisplay = useMemo(
-    () => formatPeriodForDisplay(period),
-    [period]
+    () => (workPeriod ? formatPeriodForDisplay(workPeriod) : ""),
+    [workPeriod]
   );
 
   const detailCalendarElement = useMemo(() => {
-    if (PERIOD[period.type] !== PERIOD.SHORT_TERM) return null;
-    const dates = new Set(period.dates);
-    const lastDate = max(period.dates!.map((date) => new Date(date)));
+    if (!workPeriod) return null;
+    if (PERIOD[workPeriod.type] !== PERIOD.SHORT_TERM) return null;
+    const dates = new Set(workPeriod.dates);
+    const lastDate = max(workPeriod.dates!.map((date) => new Date(date)));
     return (
       <CustomCalendar
         dates={dates || new Set()}
@@ -43,19 +46,23 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
         style={{ width: "70%" }}
       />
     );
-  }, [period]);
+  }, [workPeriod]);
 
+  if (!pay || !addressName || !workPeriod || !workTime) return null;
   // TODO: WonIcon outline 아이콘으로 다시 찾아보기
   return (
     <BasicInfoContainer>
       <InfoItem iconElement={<WonIcon />} text={payToDisplay} />
       <InfoItem
         iconElement={<LocationIcon />}
-        text={address}
+        text={addressName}
         detail={{
           name: "지도",
           element: (
-            <CustomMap style={{ boxShadow: "none" }} markerAddress={address} />
+            <CustomMap
+              style={{ boxShadow: "none" }}
+              markerAddress={addressName}
+            />
           ),
         }}
       />

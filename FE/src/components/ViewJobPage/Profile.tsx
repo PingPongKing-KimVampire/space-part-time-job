@@ -1,20 +1,19 @@
 import React from "react";
 import { ProfileContainer } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as UserProfileIcon } from "../../assets/icons/profile.svg";
+import useViewJobContext from "../../context/ViewJobContext.tsx";
 
-type ProfileProps = {
-  nickname: string;
-  timeTogether: string;
-};
+const Profile = () => {
+  const { jobPost } = useViewJobContext();
 
-const Profile: React.FC<ProfileProps> = ({ nickname, timeTogether }) => {
+  if (!jobPost?.publisher) return null;
   return (
     <ProfileContainer>
       <UserProfileIcon />
       <div className="userInfo">
-        <div className="nickname">{nickname}</div>
+        <div className="nickname">{jobPost.publisher.nickname}</div>
         <div className="timeTogether">
-          우주알바와 함께한지 {timeTogether} 전
+          우주알바와 함께한지 {jobPost.publisher.createdAt} 전
         </div>
       </div>
     </ProfileContainer>

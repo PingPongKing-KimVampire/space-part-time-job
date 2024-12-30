@@ -21,12 +21,12 @@ import AuthRoute from "./routes/AuthRoute.tsx";
 import NotFoundRoute from "./routes/NotFoundRoute.tsx";
 import { IP_ADDRESS } from "./constants/constants";
 import { CreateJobProvider } from "./context/CreateJobContext.tsx";
+import { ViewJobProvider } from "./context/ViewJobContext.tsx";
 
 const { styled } = createStitches();
 
 const Background = styled("div", {
   minWidth: "calc(100vw - 15px)",
-  // minHeight: "100vh",
   height: "100vh",
   position: "relative",
   display: "flex",
@@ -70,7 +70,14 @@ function App() {
                   }
                 />
                 <Route path="/explore-jobs" element={<ExploreJobsPage />} />
-                <Route path="/view-job/:id" element={<ViewJobPage />} />
+                <Route
+                  path="/view-job/:id"
+                  element={
+                    <ViewJobProvider>
+                      <ViewJobPage />
+                    </ViewJobProvider>
+                  }
+                />
                 <Route path="/mypage" element={<MyPage />} />
                 <Route
                   path="/view-applications/:id"

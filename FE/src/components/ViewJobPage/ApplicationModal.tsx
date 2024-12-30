@@ -6,21 +6,27 @@ import { ApplicationModalBackground } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as XIcon } from "../../assets/icons/x-mark.svg";
 import { checkRulePassInApplication } from "../../utils/checkRulePass";
 import { APPLY_TO_JOB_POST } from "../../api/graphql/mutations.js";
+import useViewJobContext from "../../context/ViewJobContext.tsx";
 
-const ApplicationModal = ({ jobPostId, onXClick }) => {
+const ApplicationModal = () => {
+  const { jobPost, setIsApplicationModalVisible } = useViewJobContext();
+
   const [coverLetter, setCoverLetter] = useState("");
   const [isValid, setIsValid] = useState(false);
 
   const [applyToJobPost, { loading: applyLoading }] =
     useMutation(APPLY_TO_JOB_POST);
 
+  const onXClick = () => {
+    setIsApplicationModalVisible(false);
+  };
+
   const onApplyClick = async () => {
     try {
       await applyToJobPost({
-        variables: { input: { jobPostId, coverLetter } },
+        variables: { input: { jobPostId: jobPost.id, coverLetter } },
       });
     } catch (e) {
-      // TODO : 경고 메시지 표시
       console.log(e);
     }
     onXClick();
