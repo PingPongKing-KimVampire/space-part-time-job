@@ -43,8 +43,13 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
   useEffect(() => {
     if (!myApplicationsData || !myApplicationsData.listMyJobApplications)
       return;
+    const applications = [...myApplicationsData.listMyJobApplications];
+    const sortedApplications = applications.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
     setMyApplications(
-      myApplicationsData.listMyJobApplications.map((application) => ({
+      sortedApplications.map((application) => ({
         ...application,
         createdAt: formatTimeAgo(application.createdAt),
       }))

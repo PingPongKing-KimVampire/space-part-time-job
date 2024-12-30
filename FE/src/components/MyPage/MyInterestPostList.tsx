@@ -36,10 +36,15 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   useEffect(() => {
     if (!interestedPostsData || !interestedPostsData.listMyInterestedJobPosts)
       return;
+    const posts = [...interestedPostsData.listMyInterestedJobPosts];
+    const sortedPosts = posts.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
     setMyInterestPosts(
-      interestedPostsData.listMyInterestedJobPosts.map((interestedPost) => ({
-        ...interestedPost,
-        createdAt: formatTimeAgo(interestedPost.createdAt),
+      sortedPosts.map((post) => ({
+        ...post,
+        createdAt: formatTimeAgo(post.createdAt),
       }))
     );
   }, [interestedPostsData]);
