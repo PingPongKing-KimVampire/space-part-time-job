@@ -57,7 +57,7 @@ const CreateJobPage = () => {
       newWarnings.title = ERROR.CREATE_JOB.FOLLOW_TITLE_RULE;
     if (isFocused.jobTypes && !isValid.jobTypes)
       newWarnings.jobTypes = ERROR.CREATE_JOB.FOLLOW_JOB_TYPES_RULE;
-    if (!isValid.days) newWarnings.days = ERROR.CREATE_JOB.FOLLOW_WEEKDAYS_RULE;
+    if (!isValid.days) newWarnings.days = ERROR.CREATE_JOB.FOLLOW_DAYS_RULE;
     if (isFocused.dates && !isValid.dates)
       newWarnings.dates = ERROR.CREATE_JOB.FOLLOW_DATES_RULE;
     if (isFocused.pay) newWarnings.pay = isValid.pay;

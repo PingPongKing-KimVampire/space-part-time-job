@@ -22,7 +22,7 @@ type JobFilterProps = {
 
 const JobFilter: React.FC<JobFilterProps> = (props) => {
   const { filter, setFilter } = props;
-  const { period, jobTypes, time, weekDays } = filter;
+  const { period, jobTypes, time, days } = filter;
 
   const periodToDisplay = useMemo(
     () => [PERIOD.SHORT_TERM, PERIOD.LONG_TERM],
@@ -56,11 +56,11 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
     }));
   };
 
-  const onWeekDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const dayClicked = e.currentTarget.textContent || "";
     setFilter((state) => ({
       ...state,
-      weekDays: toggleSelected(state.weekDays, dayClicked),
+      days: toggleSelected(state.days, dayClicked),
     }));
   };
 
@@ -68,7 +68,7 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
     setFilter({
       period: null,
       jobTypes: [],
-      weekDays: [],
+      days: [],
       time: { start: TIME_NOT_SET, end: TIME_NOT_SET },
     });
   };
@@ -112,24 +112,25 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
       </FilterField>
       {period === PERIOD.LONG_TERM && (
         <FilterField>
-          <label htmlFor="weekDays">일하는 요일</label>
+          <label htmlFor="days">일하는 요일</label>
           <Chips
-            id="weekDays"
+            id="days"
             options={Object.values(DAYS)}
-            onClick={onWeekDayClick}
-            isSelected={(day) => weekDays.includes(day)}
+            onClick={onDayClick}
+            isSelected={(day) => days.includes(day)}
             containerStyle={ChipsContainerStyle}
             optionStyle={ChipsOptionStyle}
           />
         </FilterField>
       )}
       <FilterField>
-        <label htmlFor="weekDays">일하는 시간</label>
+        <label htmlFor="time">일하는 시간</label>
         <TimeRangeSelection
           time={time}
           setTime={setTime}
           isMini={true}
           notSetPossible={true}
+          autoBoth={true}
         />
       </FilterField>
     </JobFilterContainer>

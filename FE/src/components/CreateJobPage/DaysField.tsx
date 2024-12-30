@@ -33,7 +33,7 @@ const DaysField = () => {
       warning={warnings.days}
     >
       <Chips
-        id="weekDays"
+        id="days"
         options={Object.values(DAYS)}
         onClick={onDayClick}
         isSelected={(day: string) => input.days.includes(day)}

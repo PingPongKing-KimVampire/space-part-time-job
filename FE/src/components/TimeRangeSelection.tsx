@@ -12,6 +12,7 @@ const TimeRangeSelection = ({
   setTime,
   isMini = false,
   notSetPossible = false,
+  autoBoth = false,
 }) => {
   const [isSelecting, setIsSelecting] = useState({
     start: false,
@@ -23,6 +24,23 @@ const TimeRangeSelection = ({
     [isSelecting]
   );
 
+  const setStartTime = (start) => {
+    if (!autoBoth) setTime((state) => ({ ...state, start }));
+    if (start === TIME_NOT_SET && time.end !== TIME_NOT_SET)
+      setTime((state) => ({ start, end: TIME_NOT_SET }));
+    else if (start !== TIME_NOT_SET && time.end === TIME_NOT_SET)
+      setTime((state) => ({ start, end: "24:00" }));
+    setTime((state) => ({ ...state, start }));
+  };
+  const setEndTime = (end) => {
+    if (!autoBoth) setTime((state) => ({ ...state, end }));
+    if (end === TIME_NOT_SET && time.start !== TIME_NOT_SET)
+      setTime((state) => ({ end, start: TIME_NOT_SET }));
+    else if (end !== TIME_NOT_SET && time.start === TIME_NOT_SET)
+      setTime((state) => ({ end, start: "00:00" }));
+    setTime((state) => ({ ...state, end }));
+  };
+
   return (
     <Container
       className={`${isSelectingOne ? "hasMarginBottom" : ""} ${
@@ -32,7 +50,7 @@ const TimeRangeSelection = ({
       <TimeSelection
         label="시작"
         time={time.start}
-        setTime={(time) => setTime((state) => ({ ...state, start: time }))}
+        setTime={setStartTime}
         isSelecting={isSelecting.start}
         setIsSelecting={(isSelecting) =>
           setIsSelecting((state) => ({ ...state, start: isSelecting }))
@@ -44,7 +62,7 @@ const TimeRangeSelection = ({
       <TimeSelection
         label="종료"
         time={time.end}
-        setTime={(time) => setTime((state) => ({ ...state, end: time }))}
+        setTime={setEndTime}
         isSelecting={isSelecting.end}
         setIsSelecting={(isSelecting) =>
           setIsSelecting((state) => ({ ...state, end: isSelecting }))

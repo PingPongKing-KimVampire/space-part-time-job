@@ -27,7 +27,7 @@ export const Calendar = styled("div", {
     alignItems: "center",
     boxSizing: "border-box",
   },
-  "& .weekDay": {
+  "& .day": {
     padding: "4px",
     fontSize: "14px",
     color: "#9A9A9A",

@@ -46,7 +46,7 @@ const ExploreJobsPage = () => {
     period: null,
     jobTypes: [],
     time: { start: TIME_NOT_SET, end: TIME_NOT_SET },
-    weekDays: [],
+    days: [],
   });
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     hasNextPage: false,
@@ -139,7 +139,7 @@ const ExploreJobsPage = () => {
       if (Object.keys(neighborhoods).length === 0 || !selectedNeighborhoodID)
         return;
       const selectedNeighborhood = neighborhoods[selectedNeighborhoodID];
-      const days = filter.weekDays.map((day) => DAYS_KEY[day]);
+      const days = filter.days.map((day) => DAYS_KEY[day]);
       const { startTime, endTime } = getProcessedTime();
 
       const filters = {

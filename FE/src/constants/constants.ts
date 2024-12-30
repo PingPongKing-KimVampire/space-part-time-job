@@ -28,7 +28,7 @@ export const ERROR = {
   CREATE_JOB: {
     FOLLOW_TITLE_RULE: "* 최소 6자에서 최대 30자까지 입력할 수 있어요.",
     FOLLOW_JOB_TYPES_RULE: "* 하는 일은 1개 이상, 3개 이하로 선택할 수 있어요.",
-    FOLLOW_WEEKDAYS_RULE: "* 요일을 1개 이상 선택해 주세요.",
+    FOLLOW_DAYS_RULE: "* 요일을 1개 이상 선택해 주세요.",
     FOLLOW_DATES_RULE: "* 날짜를 1일 이상 선택해 주세요.",
     FOLLOW_PAY_RULE: "* 급여를 입력해 주세요.",
     FOLLOW_PAY_HOURLY_RULE:

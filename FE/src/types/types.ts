@@ -87,5 +87,5 @@ export type Filter = {
   period: string | null;
   jobTypes: string[];
   time: { start: string; end: string };
-  weekDays: string[];
+  days: string[];
 };
