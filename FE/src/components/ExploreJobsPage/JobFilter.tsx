@@ -6,7 +6,12 @@ import {
   ChipsContainerStyle,
   ChipsOptionStyle,
 } from "../../styles/ExploreJobsPage.styles";
-import { JOB_TYPES, TERM, DAYS, TIME_NOT_SET } from "../../constants/constants";
+import {
+  JOB_TYPES,
+  PERIOD,
+  DAYS,
+  TIME_NOT_SET,
+} from "../../constants/constants";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 import { Filter } from "../../types/types.ts";
 
@@ -17,9 +22,12 @@ type JobFilterProps = {
 
 const JobFilter: React.FC<JobFilterProps> = (props) => {
   const { filter, setFilter } = props;
-  const { term, jobTypes, time, weekDays } = filter;
+  const { period, jobTypes, time, weekDays } = filter;
 
-  const termToDisplay = useMemo(() => [TERM.SHORT_TERM, TERM.LONG_TERM], []);
+  const periodToDisplay = useMemo(
+    () => [PERIOD.SHORT_TERM, PERIOD.LONG_TERM],
+    []
+  );
 
   const toggleSelected = (
     list: string[],
@@ -32,11 +40,11 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
     return list.concat(target);
   };
 
-  const onTermClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const termClicked = e.currentTarget.textContent || TERM.SHORT_TERM;
+  const onPeriodClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const periodClicked = e.currentTarget.textContent || PERIOD.SHORT_TERM;
     setFilter((state) => ({
       ...state,
-      term: state.term === termClicked ? null : termClicked,
+      period: state.period === periodClicked ? null : periodClicked,
     }));
   };
 
@@ -58,7 +66,7 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
 
   const onInitClick = () => {
     setFilter({
-      term: null,
+      period: null,
       jobTypes: [],
       weekDays: [],
       time: { start: TIME_NOT_SET, end: TIME_NOT_SET },
@@ -84,9 +92,9 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
         <label htmlFor="period">일하는 기간</label>
         <Chips
           id="period"
-          options={termToDisplay}
-          onClick={onTermClick}
-          isSelected={(t) => t === term}
+          options={periodToDisplay}
+          onClick={onPeriodClick}
+          isSelected={(t) => t === period}
           containerStyle={ChipsContainerStyle}
           optionStyle={ChipsOptionStyle}
         />
@@ -102,7 +110,7 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
           optionStyle={ChipsOptionStyle}
         />
       </FilterField>
-      {term === TERM.LONG_TERM && (
+      {period === PERIOD.LONG_TERM && (
         <FilterField>
           <label htmlFor="weekDays">일하는 요일</label>
           <Chips

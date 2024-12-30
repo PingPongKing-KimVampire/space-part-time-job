@@ -2,7 +2,7 @@ import {
   PAY_TYPES,
   WORKTIME_TYPES,
   DAYS,
-  TERM,
+  PERIOD,
 } from "../constants/constants.ts";
 import formatCurrency from "./formatCurrency.ts";
 import { format, isToday, isTomorrow, min, max } from "date-fns";
@@ -71,7 +71,7 @@ export const formatPeriodForDisplay = (period: {
     return `총 ${dates.length}일 / ${minDate}~${maxDate} 중`;
   };
   // 1개월 이상인 경우 요일 가공
-  if (TERM[period.type] === TERM.LONG_TERM)
+  if (PERIOD[period.type] === PERIOD.LONG_TERM)
     return formatDaysForDisplay(period.days || []);
   // 단기인 경우 날짜 가공
   return formatDatesForDisplay(period.dates || []);

@@ -32,7 +32,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
         maxLength={maxLength}
       />
       <CharCounter>
-        <span>{[...value].length}</span>/200
+        <span>{[...value].length}</span>/{maxLength}
       </CharCounter>
     </Container>
   );

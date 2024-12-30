@@ -1,15 +1,15 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { TERM, WORKTIME_TYPES, PAY_TYPES } from "../constants/constants.ts";
+import { PERIOD, WORKTIME_TYPES, PAY_TYPES } from "../constants/constants.ts";
 
 interface Input {
   title: string;
   jobTypes: string[];
   dates: Set<string>;
   days: string[];
-  term: string;
+  period: string;
   time: { type: string; start: string; end: string };
   pay: { type: string; amount: string };
-  address: string;
+  place: string;
   photos: Record<string, string>;
   description: string;
 }
@@ -55,6 +55,10 @@ interface CreateJobContextType {
   setIsFocused: React.Dispatch<React.SetStateAction<IsFocused>>;
   setIsValid: React.Dispatch<React.SetStateAction<IsValid>>;
   setWarnings: React.Dispatch<React.SetStateAction<Warnings>>;
+  isPayMessageVisible: boolean;
+  setIsPayMessageVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  imageUploadLoading: boolean;
+  setImageUploadLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateJobContext = createContext<CreateJobContextType | undefined>(
@@ -67,10 +71,10 @@ export const CreateJobProvider = ({ children }: { children: ReactNode }) => {
     jobTypes: [],
     dates: new Set(),
     days: [],
-    term: TERM.TODAY,
+    period: PERIOD.TODAY,
     time: { type: WORKTIME_TYPES.FLEXIBLE, start: "09:00", end: "18:00" },
     pay: { type: PAY_TYPES.HOURLY, amount: "" },
-    address: "",
+    place: "",
     photos: {},
     description: "",
   });
@@ -93,6 +97,8 @@ export const CreateJobProvider = ({ children }: { children: ReactNode }) => {
     place: false,
   });
   const [warnings, setWarnings] = useState<Warnings>({});
+  const [isPayMessageVisible, setIsPayMessageVisible] = useState<boolean>(true);
+  const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
 
   return (
     <CreateJobContext.Provider
@@ -105,6 +111,10 @@ export const CreateJobProvider = ({ children }: { children: ReactNode }) => {
         setIsFocused,
         setIsValid,
         setWarnings,
+        isPayMessageVisible,
+        setIsPayMessageVisible,
+        imageUploadLoading,
+        setImageUploadLoading,
       }}
     >
       {children}

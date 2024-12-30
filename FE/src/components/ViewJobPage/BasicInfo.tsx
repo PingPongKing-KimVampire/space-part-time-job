@@ -7,7 +7,7 @@ import {
   formatTimeForDisplay,
   formatPeriodForDisplay,
 } from "../../utils/formatJobInfoForDisplay";
-import { TERM } from "../../constants/constants";
+import { PERIOD } from "../../constants/constants";
 import { BasicInfoContainer } from "../../styles/ViewJobPage.styles";
 import { ReactComponent as WonIcon } from "../../assets/icons/won.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
@@ -32,7 +32,7 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
   );
 
   const detailCalendarElement = useMemo(() => {
-    if (TERM[period.type] !== TERM.SHORT_TERM) return null;
+    if (PERIOD[period.type] !== PERIOD.SHORT_TERM) return null;
     const dates = new Set(period.dates);
     const lastDate = max(period.dates!.map((date) => new Date(date)));
     return (

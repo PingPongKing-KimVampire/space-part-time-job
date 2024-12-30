@@ -13,7 +13,7 @@ import { Container, Calendar, DateItem } from "../styles/CustomCalendar.styles";
 
 type CustomCalendarProps = {
   dates: Set<string>;
-  setDates?: (dates: Set<string>) => void;
+  setDates?: (getNewDate: (dates: Set<string>) => Set<string>) => void;
   lastDate: Date;
   onClickStart?: () => void;
   isTitleVisible?: boolean;
@@ -31,12 +31,10 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
   } = props;
 
   const today = useMemo(() => new Date().setHours(0, 0, 0, 0), []);
-  // const selectableStart = useMemo(() => today, [today]); // 선택 가능한 시작 날짜 (오늘)
-  // const selectableEnd = useMemo(() => lastDate, [lastDate]); // 선택 가능한 끝 날짜 (마지막 날짜)
   const visibleStart = useMemo(() => startOfWeek(today), [today]); // 볼 수 있는 시작 날짜 (오늘이 있는 주의 첫 날)
   const visibleEnd = useMemo(() => endOfWeek(lastDate), [lastDate]); // 볼 수 있는 끝 날짜 (마지막 날짜가 있는 주의 마지막 날)
   const visibleDates = useMemo(() => {
-    const dates = eachDayOfInterval({
+    return eachDayOfInterval({
       start: visibleStart,
       end: visibleEnd,
     }).map((date) => ({
@@ -47,7 +45,6 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
       isSunday: isSunday(date),
       isToday: isSameDay(today, date),
     }));
-    return dates;
   }, [visibleStart, visibleEnd, today, lastDate]);
   const title = useMemo(() => {
     return `${format(today, "yyyy.MM.dd")}~${format(lastDate, "yyyy.MM.dd")}`;

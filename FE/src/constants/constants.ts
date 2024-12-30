@@ -76,13 +76,13 @@ export const JOB_TYPES = {
 };
 export const JOB_TYPES_KEY = reverseKeyValue(JOB_TYPES);
 
-export const TERM = {
+export const PERIOD = {
   TODAY: "오늘",
   TOMORROW: "내일",
   SHORT_TERM: "단기",
   LONG_TERM: "1개월 이상",
 };
-export const TERM_KEY = reverseKeyValue(TERM);
+export const PERIOD_KEY = reverseKeyValue(PERIOD);
 
 export const DAYS = {
   SUNDAY: "일",

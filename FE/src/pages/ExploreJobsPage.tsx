@@ -23,8 +23,8 @@ import {
 } from "../api/graphql/queries.js";
 import {
   ERROR,
-  TERM,
-  TERM_KEY,
+  PERIOD,
+  PERIOD_KEY,
   JOB_TYPES_KEY,
   DAYS_KEY,
   TIME_NOT_SET,
@@ -43,7 +43,7 @@ const ExploreJobsPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue, 100);
   const [filter, setFilter] = useState<Filter>({
-    term: null,
+    period: null,
     jobTypes: [],
     time: { start: TIME_NOT_SET, end: TIME_NOT_SET },
     weekDays: [],
@@ -147,11 +147,11 @@ const ExploreJobsPage = () => {
           (district) => district.id
         ),
         keyword: debouncedSearchValue || null,
-        workPeriodType: filter.term ? TERM_KEY[filter.term] : null,
+        workPeriodType: filter.period ? PERIOD_KEY[filter.period] : null,
         jobCategories: filter.jobTypes.map((type) => JOB_TYPES_KEY[type]),
         startTime,
         endTime,
-        ...(filter.term === TERM.LONG_TERM && { days }),
+        ...(filter.period === PERIOD.LONG_TERM && { days }),
         status: JOB_POST_STATUS.OPEN,
       };
       const pagination = { afterCursor: cursor, first: 20 };

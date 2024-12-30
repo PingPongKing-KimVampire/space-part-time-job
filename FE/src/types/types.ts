@@ -84,7 +84,7 @@ export type PageInfo = {
 };
 
 export type Filter = {
-  term: string | null;
+  period: string | null;
   jobTypes: string[];
   time: { start: string; end: string };
   weekDays: string[];
