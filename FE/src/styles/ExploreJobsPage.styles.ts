@@ -132,13 +132,11 @@ export const LocationIcon = styled(Location, {
 export const ContentContainer = styled("div", {
   width: "100%",
   marginTop: "10px",
-  display: "flex",
-  alignItems: "flex-start",
-  gap: "35px",
 });
 
 export const JobFilterContainer = styled("div", {
-  width: "250px",
+  width: "290px",
+  boxSizing: "border-box",
   background: "white",
   border: "1px solid #E3E9ED",
   borderRadius: "16px",
@@ -147,6 +145,7 @@ export const JobFilterContainer = styled("div", {
   flexDirection: "column",
   marginBottom: "40px",
   gap: "20px",
+  position: "fixed",
   "& .topContainer": {
     display: "flex",
     justifyContent: "space-between",
@@ -187,9 +186,11 @@ export const ChipsOptionStyle = {
 };
 
 export const JobListContainer = styled("div", {
-  flexGrow: "1",
+  width: "675px",
+  boxSizing: "border-box",
   display: "flex",
   flexDirection: "column",
+  marginLeft: "325px",
   "& .totalCount": {
     textDecoration: "underline",
     alignSelf: "flex-end",

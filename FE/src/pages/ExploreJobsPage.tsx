@@ -192,6 +192,7 @@ const ExploreJobsPage = () => {
 
   useEffect(() => {
     // 검색 조건이 변경된 후 패치
+    window.scrollTo(0, 0);
     isChangedSearchConditionRef.current = true;
     fetchJobPosts(null);
   }, [fetchJobPosts]);
