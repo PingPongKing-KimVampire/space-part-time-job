@@ -13,10 +13,6 @@ const JobTypesField = () => {
   const onJobTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!isFocused.jobTypes)
       setIsFocused((state) => ({ ...state, jobTypes: true }));
-    console.log(
-      "e.currentTarget.textContent || JOB_TYPES.SERVING",
-      e.currentTarget.textContent || JOB_TYPES.SERVING
-    );
     const newJobTypes = toggleItemInList(
       input.jobTypes,
       e.currentTarget.textContent || JOB_TYPES.SERVING

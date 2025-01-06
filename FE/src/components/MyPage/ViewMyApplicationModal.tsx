@@ -11,7 +11,7 @@ const ViewMyApplicationModal = ({ coverLetter, setDetailApplication }) => {
     <ModalBackground>
       <div className="container">
         <div className="title">내 자기소개</div>
-        <div>{coverLetter}</div>
+        <div className="content">{coverLetter}</div>
         <XIcon onClick={onXClick} />
       </div>
     </ModalBackground>

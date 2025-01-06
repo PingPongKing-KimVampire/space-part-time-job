@@ -8,6 +8,7 @@ import MyInterestPostList from "./MyInterestPostList.tsx";
 
 type PostListProp = {
   selectedTab: Tab;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type MouseEventHandlers = {
@@ -18,7 +19,7 @@ export type MouseEventHandlers = {
   onInnerClickableMouseLeave: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
-const PostList: React.FC<PostListProp> = ({ selectedTab }) => {
+const PostList: React.FC<PostListProp> = ({ selectedTab, setIsLoading }) => {
   const navigate = useNavigate();
 
   const onItemMouseEnter = useCallback(
@@ -69,11 +70,26 @@ const PostList: React.FC<PostListProp> = ({ selectedTab }) => {
 
   if (!selectedTab || !selectedTab.label) return null;
   if (selectedTab.label === TAB_INFO.post.label) {
-    return <MyPostList mouseEventHandlers={mouseEventHandlers} />;
+    return (
+      <MyPostList
+        mouseEventHandlers={mouseEventHandlers}
+        setIsLoading={setIsLoading}
+      />
+    );
   } else if (selectedTab.label === TAB_INFO.apply.label) {
-    return <MyAppliedPostList mouseEventHandlers={mouseEventHandlers} />;
+    return (
+      <MyAppliedPostList
+        mouseEventHandlers={mouseEventHandlers}
+        setIsLoading={setIsLoading}
+      />
+    );
   }
-  return <MyInterestPostList mouseEventHandlers={mouseEventHandlers} />;
+  return (
+    <MyInterestPostList
+      mouseEventHandlers={mouseEventHandlers}
+      setIsLoading={setIsLoading}
+    />
+  );
 };
 
 export default PostList;

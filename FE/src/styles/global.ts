@@ -139,5 +139,8 @@ export const ModalBackground = styled("div", {
       strokeWidth: "1",
       cursor: "pointer",
     },
+    "& .content": {
+      lineHeight: "24px",
+    },
   },
 });

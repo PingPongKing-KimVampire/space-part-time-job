@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import CustomTextarea from "../CustomTextarea.tsx";
 import LoadingOverlay from "../LoadingOverlay.tsx";
-import { ModalBackground } from "../../styles/global.ts";
+import { ModalBackground, WarningText } from "../../styles/global.ts";
 import { ReactComponent as XIcon } from "../../assets/icons/x-mark.svg";
 import { checkRulePassInApplication } from "../../utils/checkRulePass";
 import { APPLY_TO_JOB_POST } from "../../api/graphql/mutations.js";
 import useViewJobContext from "../../context/ViewJobContext.tsx";
+import { ERROR } from "../../constants/constants.ts";
 
 const ApplicationModal = () => {
   const { jobPost, setIsApplicationModalVisible } = useViewJobContext();
@@ -14,7 +15,7 @@ const ApplicationModal = () => {
   const [coverLetter, setCoverLetter] = useState("");
   const [isValid, setIsValid] = useState(false);
 
-  const [applyToJobPost, { loading: applyLoading }] =
+  const [applyToJobPost, { loading: applyLoading, error: applyError }] =
     useMutation(APPLY_TO_JOB_POST);
 
   const onXClick = () => {
@@ -27,7 +28,7 @@ const ApplicationModal = () => {
         variables: { input: { jobPostId: jobPost.id, coverLetter } },
       });
     } catch (e) {
-      console.log(e);
+      console.error("ApplyToJobPost Mutation Error: ", e.message);
     }
     onXClick();
   };
@@ -53,6 +54,7 @@ const ApplicationModal = () => {
             }}
           />
         </div>
+        {applyError && <WarningText>{ERROR.SERVER}</WarningText>}
         <button
           className={`applyButton ${!isValid ? "inactivated" : ""}`}
           disabled={!isValid}

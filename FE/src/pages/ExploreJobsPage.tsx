@@ -55,6 +55,8 @@ const ExploreJobsPage = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const isChangedSearchConditionRef = useRef<boolean>(false);
+  const [fetchDistrictBoundaryError, setFetchDistrictBoundaryError] =
+    useState(false);
 
   const {
     loading: getResidentNeighborhoodLoading,
@@ -96,7 +98,9 @@ const ExploreJobsPage = () => {
         try {
           boundaries = await fetchDistrictBoundary(neighborhood.id);
         } catch (e) {
-          console.error(e.message);
+          console.error("FetchDistrictBoundary Error: ", e.message);
+          setFetchDistrictBoundaryError(true);
+          return;
         }
         result[neighborhood.id] = {
           ...neighborhood,
@@ -155,7 +159,11 @@ const ExploreJobsPage = () => {
         status: JOB_POST_STATUS.OPEN,
       };
       const pagination = { afterCursor: cursor, first: 20 };
-      searchJobPosts({ variables: { filters, pagination } });
+      try {
+        searchJobPosts({ variables: { filters, pagination } });
+      } catch (e) {
+        console.log("SearchJobPosts Query Error: ", e.message);
+      }
     },
     [
       debouncedSearchValue,
@@ -199,7 +207,9 @@ const ExploreJobsPage = () => {
           />
         </InputContainer>
         <WarningText>
-          {(getResidentNeighborhoodError || searchJobPostsError) &&
+          {(getResidentNeighborhoodError ||
+            searchJobPostsError ||
+            fetchDistrictBoundaryError) &&
             ERROR.SERVER}
         </WarningText>
         <ContentContainer>

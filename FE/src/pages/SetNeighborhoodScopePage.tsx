@@ -32,7 +32,8 @@ const SetNeighborhoodScopePage = () => {
     Record<string, Record<string, Level>>
   >({});
   const [polygonLine, setPolygonLine] = useState<Coordinate[]>([]);
-  const [warning, setWarning] = useState<string>("");
+  const [fetchDistrictBoundaryError, setFetchDistrictBoundaryError] =
+    useState(false);
 
   useEffect(() => {
     // 마운트될 때 세션 스토리지에서 neighborhoods 값 가져와서 neighborhoods 세팅
@@ -49,8 +50,14 @@ const SetNeighborhoodScopePage = () => {
     // 구역 경계 정보 가져오기
     const setupDistrictBoundaries = async () => {
       const result = {};
-      for (const { id } of placeParsed) {
-        result[id] = await fetchDistrictBoundary(id);
+      try {
+        for (const { id } of placeParsed) {
+          result[id] = await fetchDistrictBoundary(id);
+        }
+      } catch (e) {
+        console.error("FetchDistrictBoundary Error: ", e.message);
+        setFetchDistrictBoundaryError(true);
+        return;
       }
       setDistrictBoundaries(result);
     };
@@ -118,11 +125,10 @@ const SetNeighborhoodScopePage = () => {
       error: setResidentNeighborhoodError,
     },
   ] = useMutation(SET_RESIDENT_NEIGHBORHOOD);
-  useEffect(() => {
-    setWarning(setResidentNeighborhoodError ? ERROR.SERVER : "");
-  }, [setResidentNeighborhoodError]);
 
-  const sendResidentNeighborhood = async () => {
+  const onCompleteButtonClick = async () => {
+    sessionStorage.clear();
+
     const input = {
       neighborhoods: Object.values(neighborhoods).map((neighborhood) => ({
         id: neighborhood.id,
@@ -131,20 +137,11 @@ const SetNeighborhoodScopePage = () => {
     };
     try {
       await setResidentNeighborhood({ variables: { input } });
-    } catch {
-      throw new Error(ERROR.NETWORK);
-    }
-  };
-
-  const onCompleteButtonClick = async () => {
-    sessionStorage.clear();
-    try {
-      await sendResidentNeighborhood();
-      navigate("/explore-jobs");
     } catch (e) {
-      // TODO : 경고 메시지 표시해야 함
-      console.log(e);
+      console.error("SetResidentNeighborhood Mutation Error: ", e.message);
+      return;
     }
+    navigate("/explore-jobs");
   };
 
   return (
@@ -196,7 +193,9 @@ const SetNeighborhoodScopePage = () => {
               });
             }}
           />
-          <WarningText>{warning}</WarningText>
+          {(setResidentNeighborhoodError || fetchDistrictBoundaryError) && (
+            <WarningText>{ERROR.SERVER}</WarningText>
+          )}
         </ScopeSettingContainer>
         <CompleteButton
           className={!Object.keys(neighborhoods).length ? "inactivated" : ""}

@@ -6,6 +6,7 @@ import PostList from "../components/MyPage/PostList.tsx";
 import { MainBackgroundColor } from "../styles/global";
 import { Background, TopArea, BottomArea } from "../styles/MyPage.styles";
 import { Tab } from "../types/types.ts";
+import LoadingOverlay from "../components/LoadingOverlay.tsx";
 
 export const TAB_INFO: Record<string, Tab> = {
   apply: { label: "지원 내역", pos: "left" },
@@ -16,6 +17,7 @@ export const TAB_INFO: Record<string, Tab> = {
 const MyPage = () => {
   useBackgroundColor(MainBackgroundColor);
   const [selectedTab, setSelectedTab] = useState(TAB_INFO.apply);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const tabKey = sessionStorage.getItem("tabKey");
     if (tabKey) setSelectedTab(TAB_INFO[tabKey]);
@@ -23,6 +25,7 @@ const MyPage = () => {
 
   return (
     <Background>
+      {isLoading && <LoadingOverlay />}
       <TopArea>
         <div className="container">
           <Profile />
@@ -30,7 +33,7 @@ const MyPage = () => {
         </div>
       </TopArea>
       <BottomArea>
-        <PostList selectedTab={selectedTab} />
+        <PostList selectedTab={selectedTab} setIsLoading={setIsLoading} />
       </BottomArea>
     </Background>
   );

@@ -36,6 +36,7 @@ const LoginPage = (): React.JSX.Element => {
 
   const [selectedTab, setSelectedTab] = useState<LOGIN_TAB>(LOGIN_TAB.ID_PW);
   const [notiVisible, setNotiVisible] = useState<boolean>(false);
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const [inputValue, setInputValue] = useState({
     id: "",
@@ -132,10 +133,18 @@ const LoginPage = (): React.JSX.Element => {
     }
     // 기본 유효성 검사를 통과한 경우 로그인 API 요청
     try {
+      setLoginLoading(true);
       await login(selectedTab, inputValue);
+      setLoginLoading(false);
+    } catch (e) {
+      setLoginLoading(false);
+      setWarning(e.message);
+      return;
+    }
+    try {
       getResidentNeighborhood(); // 상주 지역 설정 여부 확인 -> 결과에 따라 다른 페이지로 이동
     } catch (e) {
-      setWarning(e.message);
+      console.error("GetResidentNeighborhood Query Error: ", e.message);
     }
   };
 
@@ -169,7 +178,7 @@ const LoginPage = (): React.JSX.Element => {
 
   return (
     <Background>
-      {getResidentNeighborhoodLoading && <LoadingOverlay />}
+      {(loginLoading || getResidentNeighborhoodLoading) && <LoadingOverlay />}
       <Container>
         <Title>
           <div className="sub">

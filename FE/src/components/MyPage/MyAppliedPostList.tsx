@@ -3,11 +3,12 @@ import { useQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../../utils/formatTimeAgo.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import {
+  ERROR,
   APPLICATION_STATUS,
   JOB_POST_STATUS,
 } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles.ts";
-import { CloseTag } from "../../styles/global.ts";
+import { WarningText, CloseTag } from "../../styles/global.ts";
 import { AcceptedBadge, RejectedBadge } from "../Badges.tsx";
 import { LIST_MY_JOB_APPLICATIONS } from "../../api/graphql/queries.js";
 import { CANCEL_JOB_APPLICATION } from "../../api/graphql/mutations.js";
@@ -16,10 +17,12 @@ import ViewMyApplicationModal from "./ViewMyApplicationModal.tsx";
 
 type MyAppliedPostListProp = {
   mouseEventHandlers: MouseEventHandlers;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
   mouseEventHandlers,
+  setIsLoading,
 }) => {
   const {
     onItemMouseEnter,
@@ -60,7 +63,12 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     const applicationId = (e.target as HTMLElement)
       .closest(".item")
       ?.getAttribute("data-application-id");
-    await cancelApplication({ variables: { id: applicationId } });
+    try {
+      await cancelApplication({ variables: { id: applicationId } });
+    } catch (e) {
+      console.error("CancelJobApplication Mutation Error: ", e.message);
+      return;
+    }
     setMyApplications((state) =>
       state.filter((application) => application.id !== applicationId)
     );
@@ -86,11 +94,15 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     });
   };
 
+  useEffect(() => {
+    setIsLoading(getMyApplicationsLoading || cancelApplicationLoading);
+  }, [getMyApplicationsLoading, cancelApplicationLoading]);
+
   return (
     <>
       {myApplications
         .filter(({ status }) => status !== APPLICATION_STATUS.CANCELED)
-        .map(({ id, jobPost, coverLetter, status, createdAt }) => (
+        .map(({ id, jobPost, status, createdAt }) => (
           <ListItem
             className="item"
             onMouseEnter={onItemMouseEnter}
@@ -135,6 +147,9 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
             </div>
           </ListItem>
         ))}
+      {(getMyApplicationsError || cancelApplicationError) && (
+        <WarningText>{ERROR.SERVER}</WarningText>
+      )}
       {detailApplication.isVisible && (
         <ViewMyApplicationModal
           coverLetter={detailApplication.coverLetter}

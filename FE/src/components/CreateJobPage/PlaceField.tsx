@@ -36,16 +36,22 @@ const PlaceField = () => {
 
   useEffect(() => {
     const displayExposureNeighborhoods = async () => {
-      const coordinate = await fetchCoordinateByAddress(input.place); // 주소 -> 좌표
-      if (!coordinate) return;
-      const { id, name } = await fetchNeighborhoodInfoByCoordinate(coordinate); // 좌표 -> 동 ID, 행정동
-      if (!id || !name) return;
-      const boundary = await fetchDistrictBoundary(id); // 동 ID -> 동 경계 데이터
-      if (!boundary) return;
-      setExposureNeighborhoods({
-        main: name,
-        sub: boundary[4].districts.map((district) => district.name),
-      });
+      try {
+        const coordinate = await fetchCoordinateByAddress(input.place); // 주소 -> 좌표
+        if (!coordinate) return;
+        const { id, name } = await fetchNeighborhoodInfoByCoordinate(
+          coordinate
+        ); // 좌표 -> 동 ID, 행정동
+        if (!id || !name) return;
+        const boundary = await fetchDistrictBoundary(id); // 동 ID -> 동 경계 데이터
+        if (!boundary) return;
+        setExposureNeighborhoods({
+          main: name,
+          sub: boundary[4].districts.map((district) => district.name),
+        });
+      } catch (e) {
+        console.error("Display Exposure Neighborhoods Error", e.message);
+      }
     };
     if (input.place) displayExposureNeighborhoods();
   }, [input.place]);

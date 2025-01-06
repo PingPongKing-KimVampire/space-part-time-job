@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../../utils/formatTimeAgo.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
-import { JOB_POST_STATUS } from "../../constants/constants.ts";
+import { ERROR, JOB_POST_STATUS } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles";
-import { CloseTag } from "../../styles/global.ts";
+import { CloseTag, WarningText } from "../../styles/global.ts";
 import { LIST_MY_INTERESTED_JOB_POSTS } from "../../api/graphql/queries.js";
 import { UNMARK_JOB_POST_AS_INTEREST } from "../../api/graphql/mutations.js";
 import { InterestedJobPost } from "../../types/types.ts";
 
 type MyInterestPostListProps = {
   mouseEventHandlers: MouseEventHandlers;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   mouseEventHandlers,
+  setIsLoading,
 }) => {
-  const navigate = useNavigate();
   const {
     onItemMouseEnter,
     onItemMouseLeave,
@@ -60,11 +60,20 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
       .closest(".item")
       ?.getAttribute("data-post-id");
     if (!postId) return;
-    await unmarkInterest({ variables: { jobPostId: postId } });
+    try {
+      await unmarkInterest({ variables: { jobPostId: postId } });
+    } catch (e) {
+      console.error("UnmarkJobPostAsInterest Mutation Error: ", e.message);
+      return;
+    }
     setMyInterestPosts((state) =>
       state.filter((interestedPost) => interestedPost.jobPost.id !== postId)
     );
   };
+
+  useEffect(() => {
+    setIsLoading(getInterestedPostsLoading || unmarkInterestLoading);
+  }, [getInterestedPostsLoading, unmarkInterestLoading]);
 
   return (
     <>
@@ -95,6 +104,9 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
           </div>
         </ListItem>
       ))}
+      {(getInterestedPostsError || unmarkInterestError) && (
+        <WarningText>{ERROR.SERVER}</WarningText>
+      )}
     </>
   );
 };

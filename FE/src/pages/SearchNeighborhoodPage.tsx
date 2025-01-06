@@ -18,9 +18,11 @@ import {
 import CustomInput from "../components/CustomInput.tsx";
 import SelectedNeighborhoods from "../components/SearchNeighborhoodPage/SelectedNeighborhoods.tsx";
 import ResultNeighborhoods from "../components/SearchNeighborhoodPage/ResultNeighborhoods.tsx";
-import { MainBackgroundColor } from "../styles/global.ts";
+import { MainBackgroundColor, WarningText } from "../styles/global.ts";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
 import { Neighborhood, SelectedNeighborhood } from "../types/types.ts";
+import LoadingOverlay from "../components/LoadingOverlay.tsx";
+import { ERROR } from "../constants/constants.ts";
 
 const SearchNeighborhoodPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -39,6 +41,9 @@ const SearchNeighborhoodPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue, 100);
   const searchResultBoxRef = useRef<HTMLDivElement>(null);
+
+  const [fetchTotalNeighborhoodsError, setFetchTotalNeighboordsError] =
+    useState(false);
 
   const convertLevelToScopeValue = (level) => {
     return (parseInt(level) - 1) * 100;
@@ -59,19 +64,28 @@ const SearchNeighborhoodPage = () => {
     },
   });
   useEffect(() => {
+    const setupTotalNeighborhoods = async () => {
+      const result = await fetchTotalNeighborhoods();
+      setTotalNeighborhoods(result);
+    };
     const setupSelectedNeighborhoods = () => {
       const placeSaved = sessionStorage.getItem("neighborhoods");
       if (placeSaved) {
         setSelectedNeighborhoods(JSON.parse(placeSaved));
         return;
       }
-      getResidentNeighborhood(); // 세션 스토리지에 없다면, 상주 지역 조회 API 호출
+      try {
+        getResidentNeighborhood(); // 세션 스토리지에 없다면, 상주 지역 조회 API 호출
+      } catch (e) {
+        console.error("GetResidentNeighborhood Query Error: ", e.message);
+      }
     };
-    const setupTotalNeighborhoods = async () => {
-      const result = await fetchTotalNeighborhoods();
-      setTotalNeighborhoods(result);
-    };
-    setupTotalNeighborhoods(); // 처음 모든 동 정보를 받아옴
+    try {
+      setupTotalNeighborhoods(); // 처음 모든 동 정보를 받아옴
+    } catch (e) {
+      setFetchTotalNeighboordsError(true);
+      return;
+    }
     setupSelectedNeighborhoods(); // 디폴트로 선택될 동 정보를 받아옴 (세션 스토리지 -> 상주 지역 조회 API)
   }, []);
 
@@ -147,6 +161,7 @@ const SearchNeighborhoodPage = () => {
 
   return (
     <Background>
+      {getResidentLoading && <LoadingOverlay />}
       <Container>
         <label className="title" htmlFor="neighborhood">
           상주하는 지역을 최대 3개 선택해주세요.
@@ -162,6 +177,9 @@ const SearchNeighborhoodPage = () => {
           }}
           maxLength={20}
         />
+        {(getResidentError || fetchTotalNeighborhoodsError) && (
+          <WarningText>{ERROR.SERVER}</WarningText>
+        )}
         <div className="content">
           <SelectedNeighborhoods
             neighborhoods={selectedNeighborhoods}
@@ -171,7 +189,6 @@ const SearchNeighborhoodPage = () => {
             neighborhoods={filteredNeighborhoods}
             getElements={getNeighborhoodElements}
             ref={searchResultBoxRef}
-            hood
           />
         </div>
         <NextButton

@@ -97,7 +97,6 @@ const CreateJobPage = () => {
     return true;
   }, [isValid, input.period, imageUploadLoading]);
 
-  // useMutation 훅을 사용하여 뮤테이션 함수 생성
   const [
     createJobPost,
     { loading: createJobPostLoading, error: createJobPostError },
@@ -110,25 +109,34 @@ const CreateJobPage = () => {
   }, [createJobPostError]);
 
   const postJob = async () => {
-    const workPeriod: WorkPeriod = {
-      type: PERIOD_KEY[
-        input.period === PERIOD.LONG_TERM ? PERIOD.LONG_TERM : PERIOD.SHORT_TERM
-      ],
+    const getProcessedPeriod = () => {
+      const workPeriod: WorkPeriod = {
+        type: PERIOD_KEY[
+          input.period === PERIOD.LONG_TERM
+            ? PERIOD.LONG_TERM
+            : PERIOD.SHORT_TERM
+        ],
+      };
+      if (input.period === PERIOD.TODAY) {
+        workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
+      } else if (input.period === PERIOD.TOMORROW) {
+        workPeriod.dates = [format(addDays(new Date(), 1), "yyyy-MM-dd")];
+      } else if (input.period === PERIOD.SHORT_TERM) {
+        workPeriod.dates = Array.from(input.dates);
+      } else {
+        workPeriod.days = input.days.map((day) => DAYS_KEY[day]);
+      }
+      return workPeriod;
     };
-    if (input.period === PERIOD.TODAY) {
-      workPeriod.dates = [format(new Date(), "yyyy-MM-dd")];
-    } else if (input.period === PERIOD.TOMORROW) {
-      workPeriod.dates = [format(addDays(new Date(), 1), "yyyy-MM-dd")];
-    } else if (input.period === PERIOD.SHORT_TERM) {
-      workPeriod.dates = Array.from(input.dates);
-    } else {
-      workPeriod.days = input.days.map((day) => DAYS_KEY[day]);
-    }
-    const workTime: WorkTime = { type: WORKTIME_TYPES_KEY[input.time.type] };
-    if (input.time.type === WORKTIME_TYPES.FIXED) {
-      workTime.startTime = input.time.start;
-      workTime.endTime = input.time.end;
-    }
+    const getProcessedTime = () => {
+      const workTime: WorkTime = { type: WORKTIME_TYPES_KEY[input.time.type] };
+      if (input.time.type === WORKTIME_TYPES.FIXED) {
+        workTime.startTime = input.time.start;
+        workTime.endTime =
+          input.time.end !== "24:00" ? input.time.end : "00:00";
+      }
+      return workTime;
+    };
     const payAmount = parseInt(input.pay.amount.replace(/,/g, ""));
     const salary = {
       salaryType: PAY_TYPES_KEY[input.pay.type],
@@ -142,8 +150,8 @@ const CreateJobPage = () => {
           input: {
             title: input.title,
             jobDescription: input.jobTypes.map((type) => JOB_TYPES_KEY[type]),
-            workPeriod,
-            workTime,
+            workPeriod: getProcessedPeriod(),
+            workTime: getProcessedTime(),
             salary,
             photos: Object.values(input.photos),
             detailedDescription: input.description,
@@ -151,8 +159,9 @@ const CreateJobPage = () => {
           },
         },
       });
-    } catch {
-      throw new Error(ERROR.NETWORK);
+    } catch (e) {
+      console.error("CreateJobPost Mutation Error: ", e.message);
+      throw new Error(ERROR.SERVER);
     }
   };
 

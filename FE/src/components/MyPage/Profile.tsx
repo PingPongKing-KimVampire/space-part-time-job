@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { logout } from "../../api/rest/auth.ts";
@@ -19,17 +19,20 @@ const Profile = () => {
     };
   }, [data]);
 
+  const [logoutError, setLogoutError] = useState(false);
+
   const onLogoutClick = async () => {
     try {
       await logout();
     } catch (e) {
-      console.log(e);
+      console.log("Logout Error", e.message);
+      setLogoutError(true);
       return;
     }
     navigate("/login");
   };
 
-  if (loading) return null;
+  if (loading || error || logoutError) return null;
   return (
     <ProfileContainer>
       <div className="userInfo">

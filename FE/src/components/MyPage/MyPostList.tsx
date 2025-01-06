@@ -4,17 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { PageInfo } from "../../types/types.ts";
 import { GET_MY_JOB_POSTS } from "../../api/graphql/queries.js";
 import { CLOSE_JOB_POST } from "../../api/graphql/mutations.js";
-import { JOB_POST_STATUS } from "../../constants/constants.ts";
+import { ERROR, JOB_POST_STATUS } from "../../constants/constants.ts";
 import { ListItem } from "../../styles/MyPage.styles";
-import { CloseTag } from "../../styles/global.ts";
+import { CloseTag, WarningText } from "../../styles/global.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import { JobPost } from "../../types/types.ts";
 
 type MyPostListProp = {
   mouseEventHandlers: MouseEventHandlers;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
+const MyPostList: React.FC<MyPostListProp> = ({
+  mouseEventHandlers,
+  setIsLoading,
+}) => {
   const navigate = useNavigate();
   const {
     onItemMouseEnter,
@@ -53,12 +57,16 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
 
   const fetchMyJobPosts = useCallback(
     (cursor) => {
-      getMyJobPosts({
-        variables: {
-          filters: { onlyMyPosts: true },
-          pagination: { afterCursor: cursor, first: 20 },
-        },
-      });
+      try {
+        getMyJobPosts({
+          variables: {
+            filters: { onlyMyPosts: true },
+            pagination: { afterCursor: cursor, first: 20 },
+          },
+        });
+      } catch (e) {
+        console.error("GetMyJobPosts Query Error: ", e.message);
+      }
     },
     [getMyJobPosts]
   );
@@ -94,7 +102,12 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
       .closest(".item")
       ?.getAttribute("data-post-id");
     if (!postId) return;
-    await closeJobPost({ variables: { id: postId } });
+    try {
+      await closeJobPost({ variables: { id: postId } });
+    } catch (e) {
+      console.error("CloseJobPost Mutation Error: ", e.message);
+      return;
+    }
     setMyJobPosts((state) =>
       state.map((post) => {
         if (post.id !== postId) return post;
@@ -111,6 +124,10 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
     if (!postId) return;
     navigate(`/view-applications/${postId}`);
   };
+
+  useEffect(() => {
+    setIsLoading(getMyJobPostsLoading || closeLoading);
+  }, [getMyJobPostsLoading, closeLoading]);
 
   return (
     <>
@@ -152,6 +169,9 @@ const MyPostList: React.FC<MyPostListProp> = ({ mouseEventHandlers }) => {
           </div>
         </ListItem>
       ))}
+      {(getMyJobPostsError || closeError) && (
+        <WarningText>{ERROR.SERVER}</WarningText>
+      )}
       <div ref={bottomRef} style={{ height: "10px", background: "red" }} />
     </>
   );

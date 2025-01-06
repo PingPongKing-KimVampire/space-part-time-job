@@ -2,12 +2,17 @@ import React, { useMemo } from "react";
 import { useMutation } from "@apollo/client";
 import { ReactComponent as HeartIcon } from "../../assets/icons/heart.svg";
 import { InteractionContainer } from "../../styles/ViewJobPage.styles";
-import { JOB_POST_STATUS, APPLICATION_STATUS } from "../../constants/constants";
+import {
+  JOB_POST_STATUS,
+  APPLICATION_STATUS,
+  ERROR,
+} from "../../constants/constants";
 import {
   UNMARK_JOB_POST_AS_INTEREST,
   MARK_JOB_POST_AS_INTEREST,
 } from "../../api/graphql/mutations.js";
 import useViewJobContext from "../../context/ViewJobContext.tsx";
+import { WarningText } from "../../styles/global.ts";
 
 const Interaction = () => {
   const { jobPost, setJobPost, setIsApplicationModalVisible } =
@@ -29,6 +34,7 @@ const Interaction = () => {
     useMutation(UNMARK_JOB_POST_AS_INTEREST);
   const onHeartClick = async () => {
     if (!myInterested && isClosed) return; // 마감한 알바라면 mark는 불가능함
+    if (markLoading || unmarkLoading) return;
     const mutation = myInterested ? unmarkInterest : markInterest;
     try {
       const response = await mutation({ variables: { jobPostId: id } });
@@ -42,7 +48,7 @@ const Interaction = () => {
         interestedCount: responsePost.interestedCount,
       }));
     } catch (e) {
-      console.log(e);
+      console.error("Mark or Unmark Mutation Error: ", e.message);
     }
   };
 
@@ -71,6 +77,7 @@ const Interaction = () => {
           onClick={onHeartClick}
         />
       </div>
+      {(markError || unmarkError) && <WarningText>{ERROR.SERVER}</WarningText>}
     </InteractionContainer>
   );
 };

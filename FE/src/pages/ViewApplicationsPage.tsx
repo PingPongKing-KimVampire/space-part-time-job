@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import { MainBackgroundColor } from "../styles/global.ts";
+import { MainBackgroundColor, WarningText } from "../styles/global.ts";
 import { Container, UserInfo } from "../styles/ViewApplicationsPage.styles.ts";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { AcceptedBadge, RejectedBadge } from "../components/Badges.tsx";
-import { APPLICATION_STATUS } from "../constants/constants.ts";
+import { ERROR, APPLICATION_STATUS } from "../constants/constants.ts";
 import { GET_JOB_POST_APPLICATIONS } from "../api/graphql/queries.js";
 import { DECIDE_JOB_APPLICATION } from "../api/graphql/mutations.js";
 import formatTimeAgo from "../utils/formatTimeAgo.ts";
 import { Application } from "../types/types.ts";
+import LoadingOverlay from "../components/LoadingOverlay.tsx";
 
 const ViewApplicantsPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -44,11 +45,16 @@ const ViewApplicantsPage = () => {
   const onDecideButtonClick = async (e, status) => {
     const applicationId = e.target.closest(".item")?.getAttribute("data-id");
     if (!applicationId) return;
-    await decideJobApplication({
-      variables: {
-        input: { id: applicationId, status },
-      },
-    });
+    try {
+      await decideJobApplication({
+        variables: {
+          input: { id: applicationId, status },
+        },
+      });
+    } catch (e) {
+      console.error("DecideJobApplication Mutation Error: ", e.message);
+      return;
+    }
     // 결정 사항에 따라 applications 직접 업데이트
     setApplications((state) =>
       state.map((application) => {
@@ -60,6 +66,9 @@ const ViewApplicantsPage = () => {
 
   return (
     <Container>
+      {(getApplicationsLoading || decideApplicationLoading) && (
+        <LoadingOverlay />
+      )}
       {applications
         .filter(({ status }) => status !== APPLICATION_STATUS.CANCELED)
         .map(({ id, coverLetter, applicant, status, createdAt }) => (
@@ -94,6 +103,9 @@ const ViewApplicantsPage = () => {
             )}
           </div>
         ))}
+      {(getApplicationsError || decideApplicationError) && (
+        <WarningText>{ERROR.SERVER}</WarningText>
+      )}
     </Container>
   );
 };
