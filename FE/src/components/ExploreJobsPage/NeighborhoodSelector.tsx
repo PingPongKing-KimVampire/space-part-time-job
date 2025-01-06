@@ -26,9 +26,10 @@ const NeighborhoodSelector: React.FC<NeighborhoodButtonProps> = (props) => {
         }}
       >
         <LocationIcon />
-        {neighborhoods &&
+        {(neighborhoods &&
           selectedNeighborhoodID &&
-          neighborhoods[selectedNeighborhoodID].name}
+          neighborhoods[selectedNeighborhoodID]?.name) ||
+          ""}
         <ArrowDownIcon isSelected={isSelectBoxVisible} />
       </button>
       <div className={`selectBox ${isSelectBoxVisible ? "isVisible" : ""}`}>

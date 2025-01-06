@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
 import { MainBackgroundColor } from "../styles/global";
@@ -31,8 +32,10 @@ import {
   JOB_POST_STATUS,
 } from "../constants/constants";
 import { JobPost, PageInfo, Filter } from "../types/types.ts";
+import setQueryParam from "../utils/setQueryParam.ts";
 
 const ExploreJobsPage = () => {
+  const location = useLocation();
   useBackgroundColor(MainBackgroundColor);
 
   const [neighborhoods, setNeighborhoods] = useState<
@@ -57,6 +60,18 @@ const ExploreJobsPage = () => {
   const isChangedSearchConditionRef = useRef<boolean>(false);
   const [fetchDistrictBoundaryError, setFetchDistrictBoundaryError] =
     useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearchValue(params.get("query") || "");
+    setSelectedNeighborhoodID(params.get("neighborhood-id") || "");
+  }, [location.search]);
+  useEffect(() => {
+    setQueryParam("query", searchValue);
+  }, [searchValue]);
+  useEffect(() => {
+    setQueryParam("neighborhood-id", selectedNeighborhoodID);
+  }, [selectedNeighborhoodID]);
 
   const {
     loading: getResidentNeighborhoodLoading,
@@ -143,6 +158,7 @@ const ExploreJobsPage = () => {
       if (Object.keys(neighborhoods).length === 0 || !selectedNeighborhoodID)
         return;
       const selectedNeighborhood = neighborhoods[selectedNeighborhoodID];
+      if (!selectedNeighborhood) return;
       const days = filter.days.map((day) => DAYS_KEY[day]);
       const { startTime, endTime } = getProcessedTime();
 

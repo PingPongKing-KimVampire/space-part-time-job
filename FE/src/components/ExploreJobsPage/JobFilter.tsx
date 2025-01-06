@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Chips from "../Chips.tsx";
 import {
   JobFilterContainer,
@@ -11,9 +12,12 @@ import {
   PERIOD,
   DAYS,
   TIME_NOT_SET,
+  START_TIMES,
+  END_TIMES,
 } from "../../constants/constants";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 import { Filter } from "../../types/types.ts";
+import setQueryParam from "../../utils/setQueryParam.ts";
 
 type JobFilterProps = {
   filter: Filter;
@@ -21,6 +25,7 @@ type JobFilterProps = {
 };
 
 const JobFilter: React.FC<JobFilterProps> = (props) => {
+  const location = useLocation();
   const { filter, setFilter } = props;
   const { period, jobTypes, time, days } = filter;
 
@@ -28,6 +33,33 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
     () => [PERIOD.SHORT_TERM, PERIOD.LONG_TERM],
     []
   );
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const period = params.get("period") || "";
+    const [startTime, endTime] = params.get("time")?.split("~") || [];
+    const allTimeSet =
+      START_TIMES.includes(startTime) && END_TIMES.includes(endTime);
+    const jobTypes = params.get("categories")?.split(",") || [];
+    const days = params.get("days")?.split(",") || [];
+    setFilter({
+      period: periodToDisplay.includes(period) ? period : "",
+      jobTypes: jobTypes.filter((type) =>
+        Object.values(JOB_TYPES).includes(type)
+      ),
+      time: {
+        start: allTimeSet ? startTime : TIME_NOT_SET,
+        end: allTimeSet ? endTime : TIME_NOT_SET,
+      },
+      days: days.filter((day) => Object.values(DAYS).includes(day)),
+    });
+  }, [location.search]);
+  useEffect(() => {
+    setQueryParam("period", filter.period);
+    setQueryParam("categories", filter.jobTypes.join(","));
+    setQueryParam("time", `${filter.time.start}~${filter.time.end}`);
+    setQueryParam("days", filter.days.join(","));
+  }, [filter]);
 
   const toggleSelected = (
     list: string[],
@@ -73,11 +105,26 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
     });
   };
 
-  const setTime = (getTime) => {
-    setFilter((state) => ({
-      ...state,
-      time: getTime(state.time),
-    }));
+  const setTime = (getTime, type) => {
+    setFilter((state) => {
+      const time = getTime(state.time);
+      const { start, end } = time;
+      if (type === "start") {
+        if (start === TIME_NOT_SET && end !== TIME_NOT_SET) {
+          time.end = TIME_NOT_SET;
+        } else if (start !== TIME_NOT_SET && end === TIME_NOT_SET) {
+          time.end = "24:00";
+        }
+      } else {
+        // type = "end"
+        if (end === TIME_NOT_SET && start !== TIME_NOT_SET) {
+          time.start = TIME_NOT_SET;
+        } else if (end !== TIME_NOT_SET && start === TIME_NOT_SET) {
+          time.start = "00:00";
+        }
+      }
+      return { ...state, time };
+    });
   };
 
   return (
