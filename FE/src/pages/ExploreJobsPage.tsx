@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
 import { MainBackgroundColor } from "../styles/global";
@@ -38,9 +39,9 @@ const ExploreJobsPage = () => {
   const location = useLocation();
   useBackgroundColor(MainBackgroundColor);
 
-  const [neighborhoods, setNeighborhoods] = useState<
-    Record<string, SearchNeighborhood>
-  >({});
+  // const [neighborhoods, setNeighborhoods] = useState<
+  //   Record<string, SearchNeighborhood>
+  // >({});
   const [selectedNeighborhoodID, setSelectedNeighborhoodID] =
     useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
@@ -58,8 +59,8 @@ const ExploreJobsPage = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const isChangedSearchConditionRef = useRef<boolean>(false);
-  const [fetchDistrictBoundaryError, setFetchDistrictBoundaryError] =
-    useState(false);
+  // const [fetchDistrictBoundaryError, setFetchDistrictBoundaryError] =
+  //   useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -72,6 +73,8 @@ const ExploreJobsPage = () => {
   useEffect(() => {
     setQueryParam("neighborhood-id", selectedNeighborhoodID);
   }, [selectedNeighborhoodID]);
+
+  useEffect(() => {}, []);
 
   const {
     loading: getResidentNeighborhoodLoading,
