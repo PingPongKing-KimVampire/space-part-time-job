@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { OptionHoverColor, NavigationBarHeight, ellipsisStyle } from "./global";
+import { SubColor, NavigationBarHeight, ellipsisStyle } from "./global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../assets/icons/location.svg";
 
@@ -61,7 +61,7 @@ export const NeighborhoodSelectorContainer = styled("div", {
     transition: "background 0.2s",
     position: "relative",
     "&:hover": {
-      background: OptionHoverColor,
+      background: SubColor,
     },
   },
   "& .selectBox": {
@@ -96,10 +96,10 @@ export const NeighborhoodSelectorContainer = styled("div", {
       whiteSpace: "nowrap",
       cursor: "pointer",
       "&:hover": {
-        background: OptionHoverColor,
+        background: SubColor,
       },
       "&.selected": {
-        background: OptionHoverColor,
+        background: SubColor,
         "&:hover": {
           background: "#C3CDFF",
         },

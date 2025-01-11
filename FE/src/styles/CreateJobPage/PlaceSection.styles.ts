@@ -1,6 +1,6 @@
 import { createStitches } from "@stitches/react";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
-import { OptionHoverColor } from "../../styles/global";
+import { SubColor } from "../../styles/global";
 
 const { styled } = createStitches();
 
@@ -18,7 +18,7 @@ export const ExposurePanel = styled("div", {
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  background: OptionHoverColor,
+  background: SubColor,
   borderRadius: "12px",
   padding: "16px",
   boxSizing: "border-box",

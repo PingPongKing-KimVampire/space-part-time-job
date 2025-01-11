@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainButtonStyle, OptionButtonStyle, OptionHoverColor } from "./global";
+import { MainButtonStyle, OptionButtonStyle, SubColor } from "./global";
 
 const { styled } = createStitches();
 
@@ -49,7 +49,7 @@ export const SelectedContainer = styled("div", {
   },
   "& .searchItem": {
     ...itemStyle,
-    background: `${OptionHoverColor} !important`,
+    background: `${SubColor} !important`,
     color: `black !important`,
     border: `none !important`,
     "&:hover": {

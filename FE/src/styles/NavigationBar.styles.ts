@@ -1,9 +1,5 @@
 import { createStitches } from "@stitches/react";
-import {
-  MainColor,
-  OptionHoverColor,
-  NavigationBarHeight,
-} from "../styles/global.ts";
+import { MainColor, NavigationBarHeight } from "../styles/global.ts";
 
 const { styled } = createStitches();
 
@@ -34,9 +30,6 @@ export const Content = styled("div", {
           fontWeight: "900",
           cursor: "pointer",
           transition: "color 0.3s",
-          "&:hover": {
-            color: OptionHoverColor,
-          },
         },
         "& .buttons": {
           display: "flex",
@@ -47,9 +40,6 @@ export const Content = styled("div", {
             height: "36px",
             cursor: "pointer",
             transition: "fill 0.3s",
-            "&:hover": {
-              fill: OptionHoverColor,
-            },
           },
         },
       },
@@ -67,9 +57,6 @@ export const Content = styled("div", {
           cursor: "pointer",
           transition: "fill 0.3s",
           strokeWidth: "1.8",
-          "&:hover": {
-            stroke: OptionHoverColor,
-          },
         },
       },
     },

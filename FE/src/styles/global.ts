@@ -2,13 +2,13 @@ import { createStitches } from "@stitches/react";
 
 const { styled } = createStitches();
 
-export const MainColor = "#4361EE";
-export const MainHoverColor = "#2E4BD5";
+export const MainColor = "#1d2b64";
+export const MainHoverColor = "#384C9F";
 export const MainBackgroundColor = "#F9FBFC";
-export const OptionHoverColor = "#DCE2FF";
-export const NavigationBarHeight = "65px";
+export const SubColor = "#DCE2FF";
 export const NegativeColor = "#EE4346";
 export const NegativeHoverColor = "#DD2B2E";
+export const NavigationBarHeight = "65px";
 
 export const ButtonStyle = {
   fontWeight: "bold",
@@ -64,8 +64,8 @@ export const OptionButtonStyle = {
     cursor: "pointer",
     fontWeight: "600",
     "&:hover": {
-      background: OptionHoverColor,
-      borderColor: OptionHoverColor,
+      background: SubColor,
+      borderColor: SubColor,
     },
   },
 };

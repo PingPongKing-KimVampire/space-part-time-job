@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainColor, OptionHoverColor } from "./global";
+import { MainColor, SubColor } from "./global";
 
 const { styled } = createStitches();
 
@@ -46,7 +46,7 @@ export const DateItem = styled("button", {
   "&.selectable": {
     cursor: "pointer",
     "&:hover": {
-      background: OptionHoverColor,
+      background: SubColor,
     },
   },
   "&.selectable, &.viewable": {

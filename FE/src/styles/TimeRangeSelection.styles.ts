@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { OptionHoverColor } from "../styles/global";
+import { SubColor } from "../styles/global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 
 const { styled } = createStitches();
@@ -52,7 +52,7 @@ export const TimeSelectionContainer = styled("div", {
       borderRadius: "10px",
     },
     "&:hover": {
-      background: OptionHoverColor,
+      background: SubColor,
     },
   },
   "& label": {
@@ -116,7 +116,7 @@ export const SelectBox = styled("div", {
     letterSpacing: "1px",
     color: "#9A9A9A",
     "&:hover": {
-      background: OptionHoverColor,
+      background: SubColor,
       color: "black",
     },
   },
