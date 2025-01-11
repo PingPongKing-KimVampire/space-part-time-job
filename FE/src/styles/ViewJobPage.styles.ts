@@ -2,7 +2,7 @@ import { createStitches } from "@stitches/react";
 import {
   MainColor,
   MainHoverColor,
-  OptionHoverColor,
+  SubColor,
   MainButtonStyle,
   ellipsisStyle,
 } from "./global";
@@ -34,7 +34,7 @@ export const HeaderContainer = styled("div", {
       color: MainColor,
       border: `1px solid ${MainColor}`,
       padding: "5px 9px",
-      background: OptionHoverColor,
+      background: SubColor,
       borderRadius: "10px",
       fontWeight: "500",
       fontSize: "16px",
@@ -222,7 +222,7 @@ export const BasicInfoContainer = styled("div", {
         borderRadius: "10px",
         marginLeft: "-5px",
         "&:hover": {
-          background: OptionHoverColor,
+          background: SubColor,
         },
       },
     },
@@ -255,7 +255,7 @@ export const InteractionContainer = styled("div", {
       transition: "all 0.2s",
       cursor: "pointer",
       "&:hover": {
-        fill: OptionHoverColor,
+        fill: SubColor,
         stroke: MainColor,
         strokeWidth: "1.5",
       },

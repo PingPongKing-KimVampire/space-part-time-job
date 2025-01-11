@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { OptionHoverColor } from "../../styles/global";
+import { SubColor } from "../../styles/global";
 
 const { styled } = createStitches();
 
@@ -33,8 +33,8 @@ export const UploadButton = styled("button", {
     width: "40%",
   },
   "&:hover": {
-    background: OptionHoverColor,
-    borderColor: OptionHoverColor,
+    background: SubColor,
+    borderColor: SubColor,
     color: "black",
   },
 });

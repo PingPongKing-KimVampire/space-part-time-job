@@ -3,7 +3,7 @@ import {
   MainButtonStyle,
   MainColor,
   MainHoverColor,
-  OptionHoverColor,
+  SubColor,
   NavigationBarHeight,
   ellipsisStyle,
 } from "./global";
@@ -151,7 +151,7 @@ export const ListItem = styled("button", {
   border: "none",
   cursor: "pointer",
   "&.isHovering": {
-    background: OptionHoverColor,
+    background: SubColor,
   },
   "& .main": {
     display: "flex",

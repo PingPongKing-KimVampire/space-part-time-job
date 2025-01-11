@@ -1,11 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createStitches } from "@stitches/react";
-import {
-  ApolloProvider,
-  ApolloClient,
-  InMemoryCache,
-  HttpLink,
-} from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
+import apolloClient from "./api/graphql/apolloClient.js";
 import SignupPage from "./pages/SignupPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import CreateJobPage from "./pages/CreateJobPage.tsx";
@@ -19,7 +15,6 @@ import ScrollToTop from "./components/ScrollToTop.tsx";
 import NavigationBar from "./components/NavigationBar.tsx";
 import AuthRoute from "./routes/AuthRoute.tsx";
 import NotFoundRoute from "./routes/NotFoundRoute.tsx";
-import { IP_ADDRESS } from "./constants/constants";
 import { CreateJobProvider } from "./context/CreateJobContext.tsx";
 import { ViewJobProvider } from "./context/ViewJobContext.tsx";
 
@@ -32,19 +27,9 @@ const Background = styled("div", {
   display: "flex",
 });
 
-const httpLink = new HttpLink({
-  uri: `https://${IP_ADDRESS}/api/graphql`, // 서버의 GraphQL 엔드포인트
-  credentials: "include", // 쿠키를 포함하여 요청을 보냄
-});
-
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
-});
-
 function App() {
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <BrowserRouter>
         <ScrollToTop />
         <Background>

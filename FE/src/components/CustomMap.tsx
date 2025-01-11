@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import { createStitches } from "@stitches/react";
-import { MainColor } from "../styles/global";
 import { Coordinate } from "../types/types.ts";
 
 const { styled } = createStitches();
@@ -46,9 +45,9 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
       polygonRef.current = new kakao.maps.Polygon({
         path: polygonPath, // 선을 구성하는 좌표배열
         strokeWeight: 3,
-        strokeColor: MainColor,
+        strokeColor: "#405CDB",
         strokeOpacity: 1,
-        fillColor: MainColor,
+        fillColor: "#405CDB",
         fillOpacity: 0.2,
       });
       polygonRef.current?.setMap(mapRef.current);
