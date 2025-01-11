@@ -7,7 +7,7 @@ export const Container = styled("div", {
   background: MainColor,
   height: NavigationBarHeight,
   width: "100%",
-  zIndex: "1",
+  zIndex: "2",
   boxShadow: "0 0 3px 1px #9FB0FF",
   display: "flex",
   justifyContent: "center",

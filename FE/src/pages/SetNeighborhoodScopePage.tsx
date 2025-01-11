@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
 import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
 import CustomMap from "../components/CustomMap.tsx";
@@ -19,9 +20,11 @@ import { ERROR } from "../constants/constants.ts";
 import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations.js";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WarningText } from "../styles/global.ts";
+import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods.ts";
 
 const SetNeighborhoodScopePage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [neighborhoods, setNeighborhoods] = useState<
     Record<string, SelectedNeighborhood>
@@ -137,6 +140,8 @@ const SetNeighborhoodScopePage = () => {
     };
     try {
       await setResidentNeighborhood({ variables: { input } });
+      // TODO : 빨간 줄 해결하기
+      dispatch(fetchResidentNeighborhoods());
     } catch (e) {
       console.error("SetResidentNeighborhood Mutation Error: ", e.message);
       return;

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useQuery, useLazyQuery } from "@apollo/client";
-import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
+import { useLazyQuery } from "@apollo/client";
 import { MainBackgroundColor } from "../styles/global";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import useBackgroundColor from "../utils/useBackgroundColor";
@@ -18,11 +17,7 @@ import {
   ContentContainer,
 } from "../styles/ExploreJobsPage.styles";
 import { WarningText } from "../styles/global";
-import { SearchNeighborhood } from "../types/types.ts";
-import {
-  GET_RESIDENT_NEIGHBORHOOD,
-  SEARCH_JOB_POSTS,
-} from "../api/graphql/queries.js";
+import { SEARCH_JOB_POSTS } from "../api/graphql/queries.js";
 import {
   ERROR,
   PERIOD,
@@ -32,16 +27,22 @@ import {
   TIME_NOT_SET,
   JOB_POST_STATUS,
 } from "../constants/constants";
-import { JobPost, PageInfo, Filter } from "../types/types.ts";
+import { JobPost, PageInfo, Filter, ApiState } from "../types/types.ts";
 import setQueryParam from "../utils/setQueryParam.ts";
+import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods.ts";
 
 const ExploreJobsPage = () => {
-  const location = useLocation();
   useBackgroundColor(MainBackgroundColor);
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const {
+    data: residentNeighborhoods,
+    loading: fetchResidentNeighborhoodsLoading,
+    error: fetchResidentNeighborhoodsError,
+  } = useSelector(
+    (state: { residentNeighborhoods: ApiState }) => state.residentNeighborhoods
+  );
 
-  // const [neighborhoods, setNeighborhoods] = useState<
-  //   Record<string, SearchNeighborhood>
-  // >({});
   const [selectedNeighborhoodID, setSelectedNeighborhoodID] =
     useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
@@ -59,8 +60,6 @@ const ExploreJobsPage = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const isChangedSearchConditionRef = useRef<boolean>(false);
-  // const [fetchDistrictBoundaryError, setFetchDistrictBoundaryError] =
-  //   useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -74,15 +73,21 @@ const ExploreJobsPage = () => {
     setQueryParam("neighborhood-id", selectedNeighborhoodID);
   }, [selectedNeighborhoodID]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (Object.keys(residentNeighborhoods).length === 0) {
+      // TODO : 빨간 줄 해결하기
+      dispatch(fetchResidentNeighborhoods());
+    }
+  }, [residentNeighborhoods]);
 
-  const {
-    loading: getResidentNeighborhoodLoading,
-    error: getResidentNeighborhoodError,
-    data: meData,
-  } = useQuery(GET_RESIDENT_NEIGHBORHOOD, {
-    fetchPolicy: "network-only",
-  });
+  useEffect(() => {
+    // 선택된 동이 없을 경우, 첫 번째 상주 지역을 선택
+    const neighborhoodIds = Object.keys(residentNeighborhoods);
+    if (neighborhoodIds.length === 0) return;
+    if (neighborhoodIds.includes(selectedNeighborhoodID)) return;
+    setSelectedNeighborhoodID(neighborhoodIds[0]);
+  }, [residentNeighborhoods]);
+
   const [
     searchJobPosts,
     { loading: searchJobPostsLoading, error: searchJobPostsError },
@@ -107,38 +112,6 @@ const ExploreJobsPage = () => {
     },
   });
 
-  useEffect(() => {
-    // 상주 지역과 그 인접 동 데이터 불러와서 neighborhoods 상태로 세팅
-    const setupNeighborhoods = async (residentNeighborhoods) => {
-      const result = {};
-      for (const neighborhood of residentNeighborhoods) {
-        let boundaries;
-        try {
-          boundaries = await fetchDistrictBoundary(neighborhood.id);
-        } catch (e) {
-          console.error("FetchDistrictBoundary Error: ", e.message);
-          setFetchDistrictBoundaryError(true);
-          return;
-        }
-        result[neighborhood.id] = {
-          ...neighborhood,
-          districts: boundaries[neighborhood.level].districts,
-        };
-      }
-      setNeighborhoods(result);
-    };
-    if (!meData?.me?.residentNeighborhood) return;
-    setupNeighborhoods(meData?.me?.residentNeighborhood);
-  }, [meData]);
-
-  useEffect(() => {
-    // 선택된 동이 없을 경우, 첫 번째 상주 지역을 선택
-    if (Object.keys(neighborhoods).includes(selectedNeighborhoodID)) return;
-    const ids = Object.keys(neighborhoods);
-    if (ids.length === 0) return;
-    setSelectedNeighborhoodID(ids[0]);
-  }, [neighborhoods]);
-
   const fetchJobPosts = useCallback(
     (cursor) => {
       const getProcessedTime = () => {
@@ -158,9 +131,13 @@ const ExploreJobsPage = () => {
         }
         return { startTime: filter.time.start, endTime: filter.time.end };
       };
-      if (Object.keys(neighborhoods).length === 0 || !selectedNeighborhoodID)
+      if (
+        Object.keys(residentNeighborhoods).length === 0 ||
+        !selectedNeighborhoodID
+      )
         return;
-      const selectedNeighborhood = neighborhoods[selectedNeighborhoodID];
+      const selectedNeighborhood =
+        residentNeighborhoods[selectedNeighborhoodID];
       if (!selectedNeighborhood) return;
       const days = filter.days.map((day) => DAYS_KEY[day]);
       const { startTime, endTime } = getProcessedTime();
@@ -187,7 +164,7 @@ const ExploreJobsPage = () => {
     [
       debouncedSearchValue,
       filter,
-      neighborhoods,
+      residentNeighborhoods,
       selectedNeighborhoodID,
       searchJobPosts,
     ]
@@ -207,14 +184,14 @@ const ExploreJobsPage = () => {
 
   return (
     <Background>
-      {(getResidentNeighborhoodLoading ||
+      {(fetchResidentNeighborhoodsLoading ||
         (searchJobPostsLoading && !isChangedSearchConditionRef.current)) && (
         <LoadingOverlay />
       )}
       <Container>
         <InputContainer>
           <NeighborhoodButton
-            neighborhoods={neighborhoods}
+            neighborhoods={residentNeighborhoods}
             selectedNeighborhoodID={selectedNeighborhoodID}
             setSelectedNeighborhoodID={setSelectedNeighborhoodID}
           />
@@ -227,9 +204,7 @@ const ExploreJobsPage = () => {
           />
         </InputContainer>
         <WarningText>
-          {(getResidentNeighborhoodError ||
-            searchJobPostsError ||
-            fetchDistrictBoundaryError) &&
+          {(searchJobPostsError || fetchResidentNeighborhoodsError) &&
             ERROR.SERVER}
         </WarningText>
         <ContentContainer>

@@ -45,6 +45,7 @@ export const InputContainer = styled("div", {
 });
 
 export const NeighborhoodSelectorContainer = styled("div", {
+  zIndex: "1",
   "& .selectButton": {
     height: "100%",
     padding: "7px 10px",

@@ -89,3 +89,9 @@ export type Filter = {
   time: { start: string; end: string };
   days: string[];
 };
+
+export type ApiState<T = any> = {
+  data: T;
+  loading: boolean;
+  error: Error | null;
+};
