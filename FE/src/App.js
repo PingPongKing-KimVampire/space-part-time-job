@@ -36,41 +36,41 @@ function App() {
           <Routes>
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route element={<AuthRoute />}>
+            {/* <Route element={<AuthRoute />}> */}
+            <Route
+              path="/search-neighborhood"
+              element={<SearchNeighborhoodPage />}
+            />
+            <Route
+              path="/set-neighborhood-scope"
+              element={<SetNeighborhoodScopePage />}
+            />
+            <Route element={<NavigationBar />}>
               <Route
-                path="/search-neighborhood"
-                element={<SearchNeighborhoodPage />}
+                path="/create-job"
+                element={
+                  <CreateJobProvider>
+                    <CreateJobPage />
+                  </CreateJobProvider>
+                }
               />
+              <Route path="/explore-jobs" element={<ExploreJobsPage />} />
               <Route
-                path="/set-neighborhood-scope"
-                element={<SetNeighborhoodScopePage />}
+                path="/view-job/:id"
+                element={
+                  <ViewJobProvider>
+                    <ViewJobPage />
+                  </ViewJobProvider>
+                }
               />
-              <Route element={<NavigationBar />}>
-                <Route
-                  path="/create-job"
-                  element={
-                    <CreateJobProvider>
-                      <CreateJobPage />
-                    </CreateJobProvider>
-                  }
-                />
-                <Route path="/explore-jobs" element={<ExploreJobsPage />} />
-                <Route
-                  path="/view-job/:id"
-                  element={
-                    <ViewJobProvider>
-                      <ViewJobPage />
-                    </ViewJobProvider>
-                  }
-                />
-                <Route path="/mypage" element={<MyPage />} />
-                <Route
-                  path="/view-applications/:id"
-                  element={<ViewApplications />}
-                />
-              </Route>
-              <Route path="*" element={<NotFoundRoute />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route
+                path="/view-applications/:id"
+                element={<ViewApplications />}
+              />
             </Route>
+            <Route path="*" element={<NotFoundRoute />} />
+            {/* </Route> */}
           </Routes>
         </Background>
       </BrowserRouter>

@@ -7,7 +7,7 @@ import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import PasswordInput from "../components/PasswordInput.tsx";
 import NotificationBox from "../components/NotificationBox.tsx";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
-import { WarningText, MainBackgroundColor } from "../styles/global";
+import { WarningText, MainBackgroundColor, MainColor } from "../styles/global";
 import {
   Background,
   Container,
@@ -28,9 +28,10 @@ import {
   LOGIN_TAB,
 } from "../constants/constants";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
+import logoImage from "../assets/images/logo.png";
 
 const LoginPage = (): React.JSX.Element => {
-  useBackgroundColor(MainBackgroundColor);
+  useBackgroundColor(MainColor);
   const navigate = useNavigate();
   const countdownTimer = useCountdownTimer(SEND_SMSCODE_COUNTDOWN_SEC);
 
@@ -180,9 +181,10 @@ const LoginPage = (): React.JSX.Element => {
     <Background>
       {(loginLoading || getResidentNeighborhoodLoading) && <LoadingOverlay />}
       <Container>
+        <img src={logoImage} className="logoImage" />
         <Title>
           <div className="sub">
-            <span>우</span>리 <span>주</span>변의 <span>알바</span>
+            우<span>리</span> 주<span>변의</span> 알바
           </div>
           <div className="main">우주 알바</div>
         </Title>

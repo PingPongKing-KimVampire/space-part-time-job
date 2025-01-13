@@ -1,4 +1,4 @@
-import { MainColor, MainButtonStyle } from "../global";
+import { MainColor, MainButtonStyle, SubColor } from "../global";
 import { createStitches } from "@stitches/react";
 const { styled } = createStitches();
 
@@ -14,7 +14,11 @@ export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  marginBottom: "60px",
+  marginBottom: "150px",
+  "& .logoImage": {
+    height: "80px",
+    marginBottom: "35px",
+  },
 });
 
 export const Title = styled("div", {
@@ -22,18 +26,19 @@ export const Title = styled("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  gap: "5px",
+  gap: "8px",
+  color: "white",
+  letterSpacing: "1px",
   "& .sub": {
     fontSize: "24px",
     fontWeight: "400",
     span: {
-      color: MainColor,
+      color: SubColor,
     },
   },
   "& .main": {
     fontSize: "50px",
-    fontWeight: "900",
-    color: MainColor,
+    fontWeight: "800",
   },
 });
 
@@ -58,7 +63,7 @@ export const TabButton = styled("button", {
     borderTopRightRadius: "10px",
   },
   "&.selected": {
-    borderBottom: "none",
+    borderBottom: "1px solid white",
     background: "white",
     color: "black",
   },
@@ -80,9 +85,9 @@ export const LoginButton = styled("button", {
 
 export const SignupMessage = styled("div", {
   marginTop: "20px",
-  color: "#707070",
+  color: SubColor,
   "& span": {
-    color: MainColor,
+    color: "white",
     cursor: "pointer",
   },
 });
