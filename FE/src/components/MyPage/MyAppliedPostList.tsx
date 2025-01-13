@@ -7,7 +7,7 @@ import {
   APPLICATION_STATUS,
   JOB_POST_STATUS,
 } from "../../constants/constants.ts";
-import { ListItem } from "../../styles/MyPage.styles.ts";
+import { ListItem } from "../../styles/pages/MyPage.styles.ts";
 import { WarningText, CloseTag } from "../../styles/global.ts";
 import { AcceptedBadge, RejectedBadge } from "../Badges.tsx";
 import { LIST_MY_JOB_APPLICATIONS } from "../../api/graphql/queries.js";

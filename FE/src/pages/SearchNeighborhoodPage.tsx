@@ -14,7 +14,7 @@ import {
   Background,
   Container,
   NextButton,
-} from "../styles/SearchNeighborhoodPage.styles";
+} from "../styles/pages/SearchNeighborhoodPage.styles";
 import CustomInput from "../components/CustomInput.tsx";
 import SelectedNeighborhoods from "../components/SearchNeighborhoodPage/SelectedNeighborhoods.tsx";
 import ResultNeighborhoods from "../components/SearchNeighborhoodPage/ResultNeighborhoods.tsx";

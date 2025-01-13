@@ -4,12 +4,7 @@ import useCreateJobContext from "../../context/CreateJobContext.tsx";
 import { uploadImages } from "../../api/rest/post.ts";
 import { ReactComponent as CameraIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as XmarkIcon } from "../../assets/icons/x-mark.svg";
-import {
-  Container,
-  UploadButton,
-  ImagesContainer,
-  ImageDisplay,
-} from "../../styles/CreateJobPage/ImageSection.styles.ts";
+import { PhotoContainer } from "../../styles/pages/CreateJobPage.styles.ts";
 
 const VALID_IMAGE_BYTE = 10 * 1024 * 1024;
 
@@ -108,7 +103,7 @@ const PhotoField = () => {
       subInfo="(선택)"
       warning={warnings.photos}
     >
-      <Container>
+      <PhotoContainer>
         {/* 숨겨진 파일 입력 */}
         <input
           type="file"
@@ -122,7 +117,8 @@ const PhotoField = () => {
           style={{ display: "none" }}
         />
         {/* 파일 선택 커스텀 버튼 */}
-        <UploadButton
+        <button
+          className="uploadButton"
           onClick={() => {
             setIsValid((state) => ({
               ...state,
@@ -133,19 +129,19 @@ const PhotoField = () => {
         >
           <CameraIcon />
           {Object.keys(input.photos).length}/10
-        </UploadButton>
-        <ImagesContainer>
+        </button>
+        <div className="imagesContainer">
           {input.photos &&
             Object.keys(input.photos).map((url, index) => (
-              <ImageDisplay key={url}>
+              <div className="imageDisplay" key={url}>
                 <img src={url} alt={`uploaded ${index}`} />
                 <button onClick={onXmarkClick} data-url={url}>
                   <XmarkIcon />
                 </button>
-              </ImageDisplay>
+              </div>
             ))}
-        </ImagesContainer>
-      </Container>
+        </div>
+      </PhotoContainer>
     </FormField>
   );
 };

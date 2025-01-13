@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import {
   JobItemContainer,
   JobItemContextBox,
-} from "../../styles/ExploreJobsPage.styles";
+} from "../../styles/pages/ExploreJobsPage.styles";
 import {
   formatPayForDisplay,
   formatTimeForDisplay,

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { SelectedContainer } from "../../styles/SearchNeighborhoodPage.styles";
+import { SelectedContainer } from "../../styles/pages/SearchNeighborhoodPage.styles";
 import { Neighborhood } from "../../types/types.ts";
 
 type SelectedNeighborhoodsProps = {

@@ -3,12 +3,12 @@ import ImageSlider from "./ImageSlider.tsx";
 import Profile from "./Profile.tsx";
 import BasicInfo from "./BasicInfo.tsx";
 import Interaction from "./Interaction.tsx";
-import { ContentContainer } from "../../styles/ViewJobPage.styles";
+import { ContentContainer } from "../../styles/pages/ViewJobPage.styles";
 import defaultImage from "../../assets/images/jobDefault.png";
 import useViewJobContext from "../../context/ViewJobContext.tsx";
 
 const Content = () => {
-  const { jobPost, setJobPost } = useViewJobContext();
+  const { jobPost } = useViewJobContext();
   const { photos, detailedDescription } = jobPost;
 
   return (

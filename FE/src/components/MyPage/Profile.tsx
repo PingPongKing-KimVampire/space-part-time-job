@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { logout } from "../../api/rest/auth.ts";
-import { ProfileContainer } from "../../styles/MyPage.styles";
+import { ProfileContainer } from "../../styles/pages/MyPage.styles";
 import { ReactComponent as ProfileIcon } from "../../assets/icons/profile.svg";
 import { GET_MY_BASIC_INFO } from "../../api/graphql/queries.js";
 import formatTimeAgo from "../../utils/formatTimeAgo.ts";

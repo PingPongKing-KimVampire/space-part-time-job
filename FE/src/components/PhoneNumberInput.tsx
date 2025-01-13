@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import CustomInput from "./CustomInput.tsx";
 
-interface PhoneNumberInputProps {
+type PhoneNumberInputProps = {
   borderType?: "multi-top" | "multi-middle" | "multi-bottom" | "single";
   invalid?: boolean;
   value: string;
@@ -9,7 +9,7 @@ interface PhoneNumberInputProps {
   onBlurStart?: () => void;
   children?: React.ReactNode;
   width?: string;
-}
+};
 
 // CustomInput을 활용해 구현한 휴대전화번호 전용 인풋 컴포넌트
 // 클릭 시 커서 위치를 원하는 대로 지정하기 위해 ref가 필요하여 컴포넌트로 분리했음

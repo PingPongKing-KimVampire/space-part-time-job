@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
-import { ImageSliderContainer } from "../../styles/ViewJobPage.styles";
+import { ImageSliderContainer } from "../../styles/pages/ViewJobPage.styles";
 import { ReactComponent as LeftArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { ReactComponent as RightArrowIcon } from "../../assets/icons/arrow-right.svg";
 

@@ -18,7 +18,7 @@ import {
   Background,
   Container,
   PostButton,
-} from "../styles/CreateJobPage.styles";
+} from "../styles/pages/CreateJobPage.styles";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import FormSection from "../components/CreateJobPage/FormSection.tsx";
 import { WarningText, MainBackgroundColor } from "../styles/global";

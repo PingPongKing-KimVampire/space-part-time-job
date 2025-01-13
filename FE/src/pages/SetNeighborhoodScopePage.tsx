@@ -13,8 +13,8 @@ import {
   NeighborhoodsContainer,
   PlusButton,
   CompleteButton,
-} from "../styles/SetNeighborhoodScopePage.styles";
-import LevelSlider from "../components/SetNeighborhoodScopePage/LevelSlider.tsx";
+} from "../styles/pages/SetNeighborhoodScopePage.styles";
+import LevelSlider from "../components/LevelSlider.tsx";
 import { SelectedNeighborhood, Coordinate, Level } from "../types/types.ts";
 import { ERROR } from "../constants/constants.ts";
 import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations.js";

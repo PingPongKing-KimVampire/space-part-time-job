@@ -3,7 +3,7 @@ import Chips from "../Chips.tsx";
 import FormField from "./FormField.tsx";
 import useCreateJobContext from "../../context/CreateJobContext.tsx";
 import { WORKTIME_TYPES } from "../../constants/constants.ts";
-import { TimeContainer } from "../../styles/CreateJobPage.styles.ts";
+import { TimeContainer } from "../../styles/pages/CreateJobPage.styles.ts";
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 
 const TimeField = () => {

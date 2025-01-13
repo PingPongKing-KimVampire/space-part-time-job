@@ -4,7 +4,10 @@ import { ReactComponent as WriteIcon } from "../assets/icons/write.svg";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { ReactComponent as BackIcon } from "../assets/icons/arrow-left.svg";
 import { ReactComponent as LocationIcon } from "../assets/icons/location.svg";
-import { Container, Content } from "../styles/NavigationBar.styles.ts";
+import {
+  Container,
+  Content,
+} from "../styles/components/NavigationBar.styles.ts";
 
 const BAR = {
   MAIN: "main",

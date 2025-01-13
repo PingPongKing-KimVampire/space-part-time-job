@@ -18,7 +18,7 @@ import {
   LoginButton,
   SignupMessage,
   PhoneNumberInputChild,
-} from "../styles/LoginPage.styles";
+} from "../styles/pages/LoginPage.styles.ts";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import { checkRulePassInAuth } from "../utils/checkRulePass";
 import useCountdownTimer from "../utils/useCountdownTimer";

@@ -5,9 +5,9 @@ import {
   Background,
   Container,
   SignupButton,
-} from "../styles/SignupPage.styles";
+} from "../styles/pages/SignupPage.styles";
 import { checkRulePassInAuth } from "../utils/checkRulePass";
-import { Title } from "../styles/LoginPage.styles";
+import { Title } from "../styles/pages/LoginPage.styles";
 import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
 import useBackgroundColor from "../utils/useBackgroundColor";

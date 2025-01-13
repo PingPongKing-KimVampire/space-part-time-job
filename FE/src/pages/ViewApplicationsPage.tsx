@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import useBackgroundColor from "../utils/useBackgroundColor.ts";
 import { MainBackgroundColor, WarningText } from "../styles/global.ts";
-import { Container, UserInfo } from "../styles/ViewApplicationsPage.styles.ts";
+import {
+  Container,
+  UserInfo,
+} from "../styles/pages/ViewApplicationsPage.styles.ts";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { AcceptedBadge, RejectedBadge } from "../components/Badges.tsx";
 import { ERROR, APPLICATION_STATUS } from "../constants/constants.ts";

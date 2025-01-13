@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-import { MainColor, NavigationBarHeight } from "../styles/global.ts";
+import { MainColor, NavigationBarHeight } from "../global.ts";
 
 const { styled } = createStitches();
 

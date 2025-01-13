@@ -9,7 +9,11 @@ import {
   isSunday,
 } from "date-fns";
 import { DAYS } from "../constants/constants";
-import { Container, Calendar, DateItem } from "../styles/CustomCalendar.styles";
+import {
+  Container,
+  Calendar,
+  DateItem,
+} from "../styles/components/CustomCalendar.styles";
 
 type CustomCalendarProps = {
   dates: Set<string>;

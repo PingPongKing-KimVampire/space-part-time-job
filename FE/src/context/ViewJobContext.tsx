@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState } from "react";
 import { JobPost } from "../types/types.ts";
 
-interface ViewJobContextType {
+type ViewJobContextType = {
   jobPost: JobPost;
   setJobPost: React.Dispatch<React.SetStateAction<JobPost>>;
   isApplicationModalVisible: boolean;
   setIsApplicationModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 const ViewJobContext = createContext<ViewJobContextType | undefined>(undefined);
 

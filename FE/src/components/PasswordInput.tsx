@@ -1,28 +1,8 @@
 import React, { useState } from "react";
 import CustomInput, { InputProps } from "./CustomInput.tsx";
-import { createStitches } from "@stitches/react";
 import { ReactComponent as EyeIcon } from "../assets/icons/eye.svg";
 import { ReactComponent as EyeSlashIcon } from "../assets/icons/eye-slash.svg";
-
-const { styled } = createStitches();
-
-export const EyeButton = styled("button", {
-  position: "absolute",
-  right: "12px",
-  top: "50%",
-  transform: "translateY(-50%)",
-  height: "60%",
-  border: "none",
-  background: "none",
-  cursor: "pointer",
-  outline: "none",
-  "& svg": {
-    width: "100%",
-    height: "100%",
-    strokeWidth: "0.8",
-    color: "#7C7C7C",
-  },
-});
+import { EyeButton } from "../styles/components/CustomInput.styles.ts";
 
 const PasswordInput: React.FC<InputProps> = (props) => {
   const {

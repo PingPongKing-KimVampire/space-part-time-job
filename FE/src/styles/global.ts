@@ -2,8 +2,10 @@ import { createStitches } from "@stitches/react";
 
 const { styled } = createStitches();
 
-export const MainColor = "#1d2b64";
-export const MainHoverColor = "#384C9F";
+export const MainColor = "#384C9F";
+export const MainHoverColor = "#1d2b64";
+// export const MainColor = "#1d2b64";
+// export const MainHoverColor = "#384C9F";
 export const MainBackgroundColor = "#F9FBFC";
 export const SubColor = "#DCE2FF";
 export const NegativeColor = "#EE4346";

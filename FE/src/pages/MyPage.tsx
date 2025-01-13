@@ -4,7 +4,7 @@ import Profile from "../components/MyPage/Profile.tsx";
 import Tabs from "../components/MyPage/Tabs.tsx";
 import PostList from "../components/MyPage/PostList.tsx";
 import { MainBackgroundColor } from "../styles/global";
-import { Background, TopArea, BottomArea } from "../styles/MyPage.styles";
+import { Background, TopArea, BottomArea } from "../styles/pages/MyPage.styles";
 import { Tab } from "../types/types.ts";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 

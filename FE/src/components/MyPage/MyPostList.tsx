@@ -5,7 +5,7 @@ import { PageInfo } from "../../types/types.ts";
 import { GET_MY_JOB_POSTS } from "../../api/graphql/queries.js";
 import { CLOSE_JOB_POST } from "../../api/graphql/mutations.js";
 import { ERROR, JOB_POST_STATUS } from "../../constants/constants.ts";
-import { ListItem } from "../../styles/MyPage.styles";
+import { ListItem } from "../../styles/pages/MyPage.styles";
 import { CloseTag, WarningText } from "../../styles/global.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import { JobPost } from "../../types/types.ts";

@@ -1,4 +1,4 @@
-import { MainColor, MainButtonStyle } from "../styles/global";
+import { MainColor, MainButtonStyle } from "../global";
 import { createStitches } from "@stitches/react";
 const { styled } = createStitches();
 

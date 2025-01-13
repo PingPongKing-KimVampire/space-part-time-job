@@ -1,44 +1,7 @@
 import React from "react";
-import { createStitches } from "@stitches/react";
-import { MainColor, MainHoverColor, SubColor } from "../styles/global";
+import { Container, Option } from "../styles/components/Chips.styles.ts";
 
-const { styled } = createStitches();
-
-const Container = styled("div", {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  gap: "9px 7px",
-});
-
-const Option = styled("button", {
-  padding: "5px 12px",
-  borderRadius: "18px",
-  fontSize: "16px",
-  display: "flex",
-  border: `1px solid ${MainColor}`,
-  cursor: "pointer",
-  transitionProperty: "background boxShadow",
-  transitionDuration: "0.2s",
-  "&:not(.selected)": {
-    background: "white",
-    "&:hover": {
-      background: SubColor,
-      borderColor: SubColor,
-    },
-  },
-  "&.selected": {
-    background: MainColor,
-    color: "white",
-    boxShadow: "0 0 3px 1px #AFB7DB",
-    "&:hover": {
-      background: MainHoverColor,
-      borderColor: MainHoverColor,
-    },
-  },
-});
-
-interface ChipsPops {
+type ChipsPops = {
   id: string;
   options: string[];
   // TODO : 이 물음표 없애야함
@@ -47,7 +10,7 @@ interface ChipsPops {
   isSelected?: (day: string) => boolean;
   containerStyle?: Record<string, string>;
   optionStyle?: Record<string, string>;
-}
+};
 
 const Chips: React.FC<ChipsPops> = (props) => {
   const {

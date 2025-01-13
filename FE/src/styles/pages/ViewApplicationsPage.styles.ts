@@ -6,7 +6,7 @@ import {
   NegativeColor,
   NegativeHoverColor,
   ellipsisStyle,
-} from "./global";
+} from "../global";
 
 const { styled } = createStitches();
 

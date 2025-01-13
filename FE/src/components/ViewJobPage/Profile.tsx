@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileContainer } from "../../styles/ViewJobPage.styles";
+import { ProfileContainer } from "../../styles/pages/ViewJobPage.styles";
 import { ReactComponent as UserProfileIcon } from "../../assets/icons/profile.svg";
 import useViewJobContext from "../../context/ViewJobContext.tsx";
 

@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../../utils/formatTimeAgo.ts";
 import { MouseEventHandlers } from "./PostList.tsx";
 import { ERROR, JOB_POST_STATUS } from "../../constants/constants.ts";
-import { ListItem } from "../../styles/MyPage.styles";
+import { ListItem } from "../../styles/pages/MyPage.styles";
 import { CloseTag, WarningText } from "../../styles/global.ts";
 import { LIST_MY_INTERESTED_JOB_POSTS } from "../../api/graphql/queries.js";
 import { UNMARK_JOB_POST_AS_INTEREST } from "../../api/graphql/mutations.js";

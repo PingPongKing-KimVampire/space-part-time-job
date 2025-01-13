@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { JobListContainer } from "../../styles/ExploreJobsPage.styles";
+import { JobListContainer } from "../../styles/pages/ExploreJobsPage.styles";
 import JobItem from "./JobItem.tsx";
 import { JobPost } from "../../types/types.ts";
 

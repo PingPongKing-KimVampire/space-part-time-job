@@ -1,28 +1,6 @@
 import React from "react";
 import { ReactComponent as CheckBadgeIcon } from "../assets/icons/check-badge.svg";
-import { createStitches } from "@stitches/react";
-import { MainColor, NegativeColor } from "../styles/global";
-
-const { styled } = createStitches();
-
-const Badge = styled("div", {
-  display: "flex",
-  alignItems: "center",
-  gap: "3px",
-  fontWeight: "bold",
-  fontSize: "16px",
-  "&.accepted": {
-    color: MainColor,
-  },
-  "&.rejected": {
-    color: NegativeColor,
-  },
-  "& svg": {
-    width: "20px",
-    height: "20px",
-    strokeWidth: "2",
-  },
-});
+import { Badge } from "../styles/components/Badge.styles.ts";
 
 export const AcceptedBadge = (props) => {
   const { style = {} } = props;

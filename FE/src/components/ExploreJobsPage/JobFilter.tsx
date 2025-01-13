@@ -6,7 +6,7 @@ import {
   FilterField,
   ChipsContainerStyle,
   ChipsOptionStyle,
-} from "../../styles/ExploreJobsPage.styles";
+} from "../../styles/pages/ExploreJobsPage.styles";
 import {
   JOB_TYPES,
   PERIOD,

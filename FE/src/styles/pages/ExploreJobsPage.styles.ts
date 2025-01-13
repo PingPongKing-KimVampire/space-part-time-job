@@ -1,7 +1,7 @@
 import { createStitches } from "@stitches/react";
-import { SubColor, NavigationBarHeight, ellipsisStyle } from "./global";
-import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
-import { ReactComponent as Location } from "../assets/icons/location.svg";
+import { SubColor, NavigationBarHeight, ellipsisStyle } from "../global";
+import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
+import { ReactComponent as Location } from "../../assets/icons/location.svg";
 
 const { styled } = createStitches();
 

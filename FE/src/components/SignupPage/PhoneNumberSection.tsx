@@ -8,7 +8,7 @@ import {
   PhoneNumberContainer,
   SendNumberButton,
   TimeCounter,
-} from "../../styles/SignupPage.styles";
+} from "../../styles/pages/SignupPage.styles";
 import { WarningText } from "../../styles/global";
 import { SEND_SMSCODE_COUNTDOWN_SEC, ERROR } from "../../constants/constants";
 

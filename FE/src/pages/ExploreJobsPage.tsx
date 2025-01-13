@@ -15,7 +15,7 @@ import {
   Container,
   InputContainer,
   ContentContainer,
-} from "../styles/ExploreJobsPage.styles";
+} from "../styles/pages/ExploreJobsPage.styles";
 import { WarningText } from "../styles/global";
 import { SEARCH_JOB_POSTS } from "../api/graphql/queries.js";
 import {

@@ -10,10 +10,9 @@ import {
 } from "../../constants/constants.ts";
 import formatCurrency from "../../utils/formatCurrency.ts";
 import {
-  Container,
-  Unit,
+  PayContainer,
   MinimumMessage,
-} from "../../styles/CreateJobPage/PaySection.styles.ts";
+} from "../../styles/pages/CreateJobPage.styles.ts";
 import getMinimumMonthlyPay from "../../utils/getMinimumMonthlyPay.ts";
 import { checkRulePassInCreateJob } from "../../utils/checkRulePass.ts";
 
@@ -142,7 +141,7 @@ const PayField = () => {
 
   return (
     <FormField id="pay" title="급여" warning={warnings.pay}>
-      <Container>
+      <PayContainer>
         <Chips
           id="pay"
           options={Object.values(VISIBLE_PAY_TYPES)}
@@ -163,9 +162,11 @@ const PayField = () => {
             onFocus: onPayAmountFocus,
           }}
         >
-          <Unit>{input.pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}</Unit>
+          <div className="unit">
+            {input.pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}
+          </div>
         </CustomInput>
-      </Container>
+      </PayContainer>
       {isPayMessageVisible && <MinimumMessage>{minimumMessage}</MinimumMessage>}
     </FormField>
   );

@@ -6,7 +6,7 @@ import Header from "../components/ViewJobPage/Header.tsx";
 import Content from "../components/ViewJobPage/Content.tsx";
 import ApplicationModal from "../components/ViewJobPage/ApplicationModal.tsx";
 import useBackgroundColor from "../utils/useBackgroundColor";
-import { Background, Container } from "../styles/ViewJobPage.styles";
+import { Background, Container } from "../styles/pages/ViewJobPage.styles";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { MainBackgroundColor, WarningText } from "../styles/global";
 import { GET_JOB_POST } from "../api/graphql/queries";

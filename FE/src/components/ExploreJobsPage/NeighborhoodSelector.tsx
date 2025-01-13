@@ -3,7 +3,7 @@ import {
   NeighborhoodSelectorContainer,
   LocationIcon,
   ArrowDownIcon,
-} from "../../styles/ExploreJobsPage.styles";
+} from "../../styles/pages/ExploreJobsPage.styles";
 import { SearchNeighborhood } from "../../types/types.ts";
 
 type NeighborhoodButtonProps = {

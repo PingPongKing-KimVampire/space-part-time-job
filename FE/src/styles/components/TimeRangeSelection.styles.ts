@@ -1,6 +1,6 @@
 import { createStitches } from "@stitches/react";
-import { SubColor } from "../styles/global";
-import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
+import { SubColor } from "../global";
+import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 
 const { styled } = createStitches();
 

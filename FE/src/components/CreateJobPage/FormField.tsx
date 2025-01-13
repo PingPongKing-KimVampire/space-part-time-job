@@ -1,5 +1,5 @@
 import React from "react";
-import { FormFieldContainer } from "../../styles/CreateJobPage.styles";
+import { FormFieldContainer } from "../../styles/pages/CreateJobPage.styles";
 import { WarningText } from "../../styles/global";
 
 const FormField = (props) => {

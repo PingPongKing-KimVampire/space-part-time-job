@@ -9,11 +9,9 @@ import {
   fetchDistrictBoundary,
 } from "../../api/rest/neighborhood.ts";
 import {
-  Container,
-  ExposurePanel,
-  ExposureDetailContent,
+  PlaceContainer,
   ArrowDownIcon,
-} from "../../styles/CreateJobPage/PlaceSection.styles.ts";
+} from "../../styles/pages/CreateJobPage.styles.ts";
 
 const PlaceField = () => {
   const { input, setInput, setIsValid } = useCreateJobContext();
@@ -58,7 +56,7 @@ const PlaceField = () => {
 
   return (
     <FormField id="place" title="일하는 장소" warning="">
-      <Container>
+      <PlaceContainer>
         <CustomInput
           id="place"
           placeholder="주소를 입력해주세요."
@@ -69,7 +67,8 @@ const PlaceField = () => {
         {input.place !== "" && (
           <>
             <CustomMap markerAddress={input.place} />
-            <ExposurePanel
+            <div
+              className="exposuePanel"
               onClick={() => {
                 setIsExposureDetailVisible((state) => !state);
               }}
@@ -81,15 +80,17 @@ const PlaceField = () => {
                 </span>
                 에서 노출 <ArrowDownIcon isSelected={isExposureDetailVisible} />
               </div>
-              <ExposureDetailContent
-                className={isExposureDetailVisible ? "visible" : ""}
+              <div
+                className={`exposureDetailContent ${
+                  isExposureDetailVisible ? "visible" : ""
+                }`}
               >
                 {exposureNeighborhoods.sub.join(", ")}
-              </ExposureDetailContent>
-            </ExposurePanel>
+              </div>
+            </div>
           </>
         )}
-      </Container>
+      </PlaceContainer>
     </FormField>
   );
 };

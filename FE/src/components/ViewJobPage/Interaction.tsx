@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useMutation } from "@apollo/client";
 import { ReactComponent as HeartIcon } from "../../assets/icons/heart.svg";
-import { InteractionContainer } from "../../styles/ViewJobPage.styles";
+import { InteractionContainer } from "../../styles/pages/ViewJobPage.styles";
 import {
   JOB_POST_STATUS,
   APPLICATION_STATUS,

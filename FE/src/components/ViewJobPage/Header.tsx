@@ -1,5 +1,5 @@
 import React from "react";
-import { HeaderContainer } from "../../styles/ViewJobPage.styles";
+import { HeaderContainer } from "../../styles/pages/ViewJobPage.styles";
 import { CloseTag } from "../../styles/global.ts";
 import { JOB_POST_STATUS, JOB_TYPES } from "../../constants/constants";
 import useViewJobContext from "../../context/ViewJobContext.tsx";

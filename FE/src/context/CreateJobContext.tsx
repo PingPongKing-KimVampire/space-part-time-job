@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { PERIOD, WORKTIME_TYPES, PAY_TYPES } from "../constants/constants.ts";
 
-interface Input {
+type Input = {
   title: string;
   jobTypes: string[];
   dates: Set<string>;
@@ -12,18 +12,18 @@ interface Input {
   place: string;
   photos: Record<string, string>;
   description: string;
-}
+};
 
-interface IsFocused {
+type IsFocused = {
   title: boolean;
   jobTypes: boolean;
   days: boolean;
   dates: boolean;
   pay: boolean;
   description: boolean;
-}
+};
 
-interface IsValid {
+type IsValid = {
   title: boolean;
   jobTypes: boolean;
   days: boolean;
@@ -32,9 +32,9 @@ interface IsValid {
   description: boolean;
   photos: { size: boolean; count: boolean; response: boolean };
   place: boolean;
-}
+};
 
-export interface Warnings {
+export type Warnings = {
   title?: string;
   image?: string;
   jobTypes?: string;
@@ -44,9 +44,9 @@ export interface Warnings {
   description?: string;
   photos?: string;
   post?: string;
-}
+};
 
-interface CreateJobContextType {
+type CreateJobContextType = {
   input: Input;
   isFocused: IsFocused;
   isValid: IsValid;
@@ -59,7 +59,7 @@ interface CreateJobContextType {
   setIsPayMessageVisible: React.Dispatch<React.SetStateAction<boolean>>;
   imageUploadLoading: boolean;
   setImageUploadLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 const CreateJobContext = createContext<CreateJobContextType | undefined>(
   undefined

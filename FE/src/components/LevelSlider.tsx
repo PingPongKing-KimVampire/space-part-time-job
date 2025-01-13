@@ -3,7 +3,7 @@ import {
   Container,
   Slider,
   MarkersContainer,
-} from "../../styles/SetNeighborhoodScopePage/LevelSlider.tsx";
+} from "../styles/components/LevelSlider.styles.ts";
 
 const LevelSlider = ({ level, value, setValue }) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

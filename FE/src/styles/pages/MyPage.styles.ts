@@ -6,7 +6,7 @@ import {
   SubColor,
   NavigationBarHeight,
   ellipsisStyle,
-} from "./global";
+} from "../global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 
 const { styled } = createStitches();

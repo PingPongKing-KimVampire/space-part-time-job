@@ -4,7 +4,7 @@ import {
   TimeSelectionContainer,
   ArrowDownIcon,
   SelectBox,
-} from "../styles/TimeRangeSelection.styles";
+} from "../styles/components/TimeRangeSelection.styles";
 import { START_TIMES, END_TIMES, TIME_NOT_SET } from "../constants/constants";
 
 const TimeRangeSelection = ({
