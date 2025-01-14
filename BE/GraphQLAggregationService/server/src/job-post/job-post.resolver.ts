@@ -14,7 +14,7 @@ import {
   JobPost,
   JobPostConnection,
   JobPostSearchFilter,
-  JobPostStatus,
+  JobPostStatusEnum,
 } from 'src/graphql';
 import { JobPostService } from './grpc/job-post.service';
 import { JobApplyService } from 'src/job-apply/grpc/job-apply.service';
@@ -48,7 +48,7 @@ export class JobPostResolver {
       createdAt,
     } = await this.jobPostService.createJobPost(grpcPayload);
     return {
-      status: JobPostStatus.OPEN,
+      status: JobPostStatusEnum.OPEN,
       ...createJobPostInput,
       createdAt,
       id,

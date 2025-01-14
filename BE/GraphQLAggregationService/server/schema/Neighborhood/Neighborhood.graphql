@@ -1,5 +1,19 @@
+"""
+동네 타입
+"""
 type Neighborhood {
+  """
+  동네 ID
+  """
   id: ID!
+
+  """
+  동네 범위(레벨)
+  """
   level: Int!
+
+  """
+  동네 이름
+  """
   name: String!
 }

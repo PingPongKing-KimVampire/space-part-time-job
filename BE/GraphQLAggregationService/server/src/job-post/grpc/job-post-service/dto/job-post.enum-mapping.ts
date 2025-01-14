@@ -1,60 +1,60 @@
 import {
-  DayOfWeek,
-  JobCategory,
-  JobPostStatus,
-  SalaryType,
-  WorkPeriodType,
-  WorkTimeType,
+  DayOfWeekEnum,
+  JobCategoryEnum,
+  JobPostStatusEnum,
+  SalaryEnum,
+  WorkPeriodEnum,
+  WorkTimeEnum,
 } from 'src/graphql';
 
-export const JobCategoryMapping = {
-  0: JobCategory.SERVING,
-  1: JobCategory.KITCHEN_ASSISTANT,
-  2: JobCategory.CHEF,
-  3: JobCategory.STORE_MANAGEMENT,
-  4: JobCategory.BEVERAGE_MAKING,
-  5: JobCategory.BAKING,
-  6: JobCategory.CLEANING,
-  7: JobCategory.ERRANDS,
-  8: JobCategory.FLYER_DISTRIBUTION,
-  9: JobCategory.TUTORING,
-  10: JobCategory.SCHOOL_PICKUP_HELPER,
-  11: JobCategory.CHILD_CARE,
-  12: JobCategory.ELDER_CARE,
-  13: JobCategory.HOUSEKEEPING,
-  14: JobCategory.MOVING_ASSISTANCE,
-  15: JobCategory.PET_CARE,
-  16: JobCategory.CONVENIENCE_STORE,
-  17: JobCategory.OTHER,
+export const JobCategoryEnumMapping = {
+  0: JobCategoryEnum.SERVING,
+  1: JobCategoryEnum.KITCHEN_ASSISTANT,
+  2: JobCategoryEnum.CHEF,
+  3: JobCategoryEnum.STORE_MANAGEMENT,
+  4: JobCategoryEnum.BEVERAGE_MAKING,
+  5: JobCategoryEnum.BAKING,
+  6: JobCategoryEnum.CLEANING,
+  7: JobCategoryEnum.ERRANDS,
+  8: JobCategoryEnum.FLYER_DISTRIBUTION,
+  9: JobCategoryEnum.TUTORING,
+  10: JobCategoryEnum.SCHOOL_PICKUP_HELPER,
+  11: JobCategoryEnum.CHILD_CARE,
+  12: JobCategoryEnum.ELDER_CARE,
+  13: JobCategoryEnum.HOUSEKEEPING,
+  14: JobCategoryEnum.MOVING_ASSISTANCE,
+  15: JobCategoryEnum.PET_CARE,
+  16: JobCategoryEnum.CONVENIENCE_STORE,
+  17: JobCategoryEnum.OTHER,
 };
 
-export const DayOfWeekMapping = {
-  0: DayOfWeek.MONDAY,
-  1: DayOfWeek.TUESDAY,
-  2: DayOfWeek.WEDNESDAY,
-  3: DayOfWeek.THURSDAY,
-  4: DayOfWeek.FRIDAY,
-  5: DayOfWeek.SATURDAY,
-  6: DayOfWeek.SUNDAY,
+export const DayOfWeekEnumMapping = {
+  0: DayOfWeekEnum.MONDAY,
+  1: DayOfWeekEnum.TUESDAY,
+  2: DayOfWeekEnum.WEDNESDAY,
+  3: DayOfWeekEnum.THURSDAY,
+  4: DayOfWeekEnum.FRIDAY,
+  5: DayOfWeekEnum.SATURDAY,
+  6: DayOfWeekEnum.SUNDAY,
 };
 
-export const WorkPeriodTypeMapping = {
-  0: WorkPeriodType.SHORT_TERM,
-  1: WorkPeriodType.LONG_TERM,
+export const WorkPeriodEnumMapping = {
+  0: WorkPeriodEnum.SHORT_TERM,
+  1: WorkPeriodEnum.LONG_TERM,
 };
 
-export const WorkTimeTypeMapping = {
-  0: WorkTimeType.FLEXIBLE,
-  1: WorkTimeType.FIXED,
+export const WorkTimeEnumMapping = {
+  0: WorkTimeEnum.FLEXIBLE,
+  1: WorkTimeEnum.FIXED,
 };
 
-export const SalaryTypeMapping = {
-  0: SalaryType.HOURLY,
-  1: SalaryType.PER_TASK,
-  2: SalaryType.MONTHLY,
+export const SalaryEnumMapping = {
+  0: SalaryEnum.HOURLY,
+  1: SalaryEnum.PER_TASK,
+  2: SalaryEnum.MONTHLY,
 };
 
-export const JobPostStatusMapping = {
-  1: JobPostStatus.OPEN,
-  2: JobPostStatus.CLOSE,
+export const JobPostStatusEnumMapping = {
+  1: JobPostStatusEnum.OPEN,
+  2: JobPostStatusEnum.CLOSE,
 };

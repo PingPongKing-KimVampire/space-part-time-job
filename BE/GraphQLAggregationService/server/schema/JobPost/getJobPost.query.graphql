@@ -1,3 +1,6 @@
 extend type Query {
+  """
+  공고 상세 조회
+  """
   getJobPost(id: ID!): JobPost
 }

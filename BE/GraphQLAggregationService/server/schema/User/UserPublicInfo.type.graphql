@@ -1,5 +1,19 @@
+"""
+공개 사용자 정보 타입
+"""
 type UserPublicInfo {
+  """
+  사용자 ID
+  """
   id: ID!
+
+  """
+  사용자 닉네임
+  """
   nickname: String!
-  createdAt: String!
+
+  """
+  사용자 생성 날짜 (ISO 8601 형식)
+  """
+  createdAt: DateTime!
 }

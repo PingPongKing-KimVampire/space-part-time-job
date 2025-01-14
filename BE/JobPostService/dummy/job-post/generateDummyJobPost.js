@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 
-function getRandomJobDescriptions() {
+function getRandomJobCategories() {
   const jobCategories = [
     "SERVING",
     "KITCHEN_ASSISTANT",
@@ -133,7 +133,7 @@ async function getDummyData(targetPath = "../dummy-job-posts.json") {
 
     dummyArray.forEach((dummy) => {
       dummy.userId = getRandomUserId(userData);
-      dummy.jobDescription = getRandomJobDescriptions();
+      dummy.JobCategories = getRandomJobCategories();
       dummy.workPeriod = {
         type: Math.random() > 0.5 ? "SHORT_TERM" : "LONG_TERM",
       };

@@ -1,8 +1,21 @@
+"""
+지원서 상태 변경에 필요한 입력 타입
+"""
 input DecideJobApplicationInput {
+  """
+  지원 ID
+  """
   id: ID!
-  status: ApplicationStatus!
+
+  """
+  변경할 상태
+  """
+  status: ApplicationStatusEnum!
 }
 
 extend type Mutation {
+  """
+  게시자가 지원서를 승인하거나 거절할 수 있음
+  """
   decideJobApplication(input: DecideJobApplicationInput!): JobApplication!
 }

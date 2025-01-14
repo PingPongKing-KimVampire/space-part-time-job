@@ -1,8 +1,29 @@
-# User 관련 타입
+"""
+사용자 타입
+"""
 type User {
+  """
+  사용자 ID
+  """
   id: ID!
+
+  """
+  사용자 닉네임
+  """
   nickname: String!
-  phoneNumber: String!
-  createdAt: String!
+
+  """
+  사용자 전화번호
+  """
+  phoneNumber: PhoneNumber!
+
+  """
+  사용자 생성 날짜 (ISO 8601 형식)
+  """
+  createdAt: DateTime!
+
+  """
+  상주 동네 정보 (최대 3개)
+  """
   residentNeighborhood: [Neighborhood!]
 }

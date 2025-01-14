@@ -1,3 +1,6 @@
 extend type Mutation {
+  """
+  조회수 증가 후 조회수 반환
+  """
   incrementJobPostViews(id: ID!): Int!
 }

@@ -1,56 +1,224 @@
-# 하는 일 카테고리
-enum JobCategory {
+"""
+하는 일 카테고리
+"""
+enum JobCategoryEnum {
+  """
+  서빙
+  """
   SERVING
+
+  """
+  주방보조/설거지
+  """
   KITCHEN_ASSISTANT
+
+  """
+  주방장/조리사
+  """
   CHEF
+
+  """
+  매장관리/판매
+  """
   STORE_MANAGEMENT
+
+  """
+  음료 제조
+  """
   BEVERAGE_MAKING
+
+  """
+  베이킹
+  """
   BAKING
+
+  """
+  업체 청소
+  """
   CLEANING
+
+  """
+  심부름/소일거리
+  """
   ERRANDS
+
+  """
+  전단지 배포
+  """
   FLYER_DISTRIBUTION
+
+  """
+  과외/학원
+  """
   TUTORING
+
+  """
+  등하원도우미
+  """
   SCHOOL_PICKUP_HELPER
+
+  """
+  아이돌봄
+  """
   CHILD_CARE
+
+  """
+  어르신 돌봄
+  """
   ELDER_CARE
+
+  """
+  가사/집정리
+  """
   HOUSEKEEPING
+
+  """
+  짐 옮기기
+  """
   MOVING_ASSISTANCE
+
+  """
+  반려동물 돌봄
+  """
   PET_CARE
+
+  """
+  편의점
+  """
   CONVENIENCE_STORE
+
+  """
+  기타
+  """
   OTHER
 }
 
-# 일하는 요일
-enum DayOfWeek {
+"""
+근무 요일
+"""
+enum DayOfWeekEnum {
+  """
+  월요일
+  """
   MONDAY
+
+  """
+  화요일
+  """
   TUESDAY
+
+  """
+  수요일
+  """
   WEDNESDAY
+
+  """
+  목요일
+  """
   THURSDAY
+
+  """
+  금요일
+  """
   FRIDAY
+
+  """
+  토요일
+  """
   SATURDAY
+
+  """
+  일요일
+  """
   SUNDAY
 }
 
-# 근무 기간
-enum WorkPeriodType {
+"""
+근무 기간 (단기/장기 여부)
+"""
+enum WorkPeriodEnum {
+  """
+  단기 알바
+  """
   SHORT_TERM
+
+  """
+  1개월 이상 장기 알바
+  """
   LONG_TERM
 }
 
-# 근무 시간 협의 여부
-enum WorkTimeType {
+"""
+근무 시간 타입 (협의 가능/고정)
+"""
+enum WorkTimeEnum {
+  """
+  근무 시간 협의 가능
+  """
   FLEXIBLE
+
+  """
+  고정 근무 시간
+  """
   FIXED
 }
 
-# 급여 타입
-enum SalaryType {
+"""
+급여 타입
+"""
+enum SalaryEnum {
+  """
+  시급
+  """
   HOURLY
+
+  """
+  건당
+  """
   PER_TASK
+
+  """
+  월급
+  """
   MONTHLY
 }
 
-enum JobPostStatus {
+"""
+공고 상태
+"""
+enum JobPostStatusEnum {
+  """
+  채용 중
+  """
   OPEN
+
+  """
+  채용 중 아님
+  """
   CLOSE
+}
+
+"""
+지원서 상태
+"""
+enum ApplicationStatusEnum {
+  """
+  대기중
+  """
+  PENDING
+
+  """
+  승인됨
+  """
+  ACCEPTED
+
+  """
+  거절됨
+  """
+  REJECTED
+
+  """
+  사용자가 취소함
+  """
+  CANCELED
 }

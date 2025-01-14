@@ -10,12 +10,12 @@ import { ConfigService } from '@nestjs/config';
 import { lastValueFrom, Observable } from 'rxjs';
 import { CreateJobPostInput, JobPost, UserPublicInfo } from 'src/graphql';
 import {
-  DayOfWeekMapping,
-  JobCategoryMapping,
-  JobPostStatusMapping,
-  SalaryTypeMapping,
-  WorkPeriodTypeMapping,
-  WorkTimeTypeMapping,
+  DayOfWeekEnumMapping,
+  JobCategoryEnumMapping,
+  JobPostStatusEnumMapping,
+  SalaryEnumMapping,
+  WorkPeriodEnumMapping,
+  WorkTimeEnumMapping,
 } from './job-post-service/dto/job-post.enum-mapping';
 import { UserService } from 'src/user/user.service';
 import { CloseJobPostRequest } from './job-post-service/dto/close-job-post/request.dto';
@@ -192,23 +192,23 @@ export class JobPostService implements OnModuleInit {
   }
 
   private async transformGrpcJobPost(jobPost: grpcJobPost): Promise<JobPost> {
-    if (jobPost.jobDescription) {
-      jobPost.jobDescription = jobPost.jobDescription.map(
-        (jobDescription) => JobCategoryMapping[jobDescription],
+    if (jobPost.JobCategories) {
+      jobPost.JobCategories = jobPost.JobCategories.map(
+        (jobCategory) => JobCategoryEnumMapping[jobCategory],
       );
     }
 
     if (jobPost.status) {
-      jobPost.status = JobPostStatusMapping[jobPost.status];
+      jobPost.status = JobPostStatusEnumMapping[jobPost.status];
     }
 
-    jobPost.salary.salaryType = SalaryTypeMapping[jobPost.salary.salaryType];
-    jobPost.workPeriod.type = WorkPeriodTypeMapping[jobPost.workPeriod.type];
-    jobPost.workTime.type = WorkTimeTypeMapping[jobPost.workTime.type];
+    jobPost.salary.salaryType = SalaryEnumMapping[jobPost.salary.salaryType];
+    jobPost.workPeriod.type = WorkPeriodEnumMapping[jobPost.workPeriod.type];
+    jobPost.workTime.type = WorkTimeEnumMapping[jobPost.workTime.type];
 
     if (jobPost.workPeriod.days) {
       jobPost.workPeriod.days = jobPost.workPeriod.days.map(
-        (day) => DayOfWeekMapping[day],
+        (day) => DayOfWeekEnumMapping[day],
       );
     }
 

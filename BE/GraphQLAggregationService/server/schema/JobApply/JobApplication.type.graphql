@@ -1,15 +1,34 @@
-enum ApplicationStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-  CANCELED
-}
-
+"""
+지원서 타입
+"""
 type JobApplication {
+  """
+  지원 ID
+  """
   id: ID!
+
+  """
+  지원한 공고
+  """
   jobPost: JobPost!
+
+  """
+  지원서 내용
+  """
   coverLetter: String!
+
+  """
+  지원자 정보
+  """
   applicant: UserPublicInfo!
-  status: ApplicationStatus!
-  createdAt: String!
+
+  """
+  지원 상태
+  """
+  status: ApplicationStatusEnum!
+
+  """
+  지원 생성 날짜 (ISO 8601 형식)
+  """
+  createdAt: DateTime!
 }

@@ -1,32 +1,106 @@
 extend type Mutation {
+  """
+  공고 생성
+  """
   createJobPost(input: CreateJobPostInput!): JobPost
 }
 
+"""
+공고 생성에 필요한 입력 타입
+"""
 input CreateJobPostInput {
+  """
+  공고 제목
+  """
   title: String!
-  jobDescription: [JobCategory!]!
+
+  """
+  하는 일 카테고리
+  """
+  JobCategories: [JobCategoryEnum!]!
+
+  """
+  근무 기간
+  """
   workPeriod: WorkPeriodInput!
+
+  """
+  근무 시간
+  """
   workTime: WorkTimeInput!
+
+  """
+  급여 정보
+  """
   salary: SalaryInput!
-  photos: [String!]
+
+  """
+  공고 이미지 리스트 (URL 형식)
+  """
+  photos: [URL!]
+
+  """
+  공고 상세 설명
+  """
   detailedDescription: String!
+
+  """
+  도로명 주소 or 지번 주소
+  """
   addressName: String!
 }
 
+"""
+근무 기간 입력 타입
+"""
 input WorkPeriodInput {
-  type: WorkPeriodType!
-  dates: [String!]
-  days: [DayOfWeek!]
+  """
+  단기/장기 여부
+  """
+  type: WorkPeriodEnum!
+
+  """
+  단기 근무일 날짜 리스트 (YYYY-MM-DD)
+  """
+  dates: [FormattedDate!]
+
+  """
+  장기 근무일 요일 리스트
+  """
+  days: [DayOfWeekEnum!]
 }
 
+"""
+근무 시간 입력 타입
+"""
 input WorkTimeInput {
-  type: WorkTimeType!
-  startTime: String
-  endTime: String
+  """
+  협의 가능/고정 여부
+  """
+  type: WorkTimeEnum!
+
+  """
+  시작 시간 (HH:mm)
+  """
+  startTime: FormattedTime
+
+  """
+  종료 시간 (HH:mm)
+  """
+  endTime: FormattedTime
 }
 
+"""
+급여 입력 타입
+"""
 input SalaryInput {
-  salaryType: SalaryType!
+  """
+  급여 타입 (시급/건당/월급 등)
+  """
+  salaryType: SalaryEnum!
+
+  """
+  급여 금액
+  """
   salaryAmount: BigInt!
 }
-

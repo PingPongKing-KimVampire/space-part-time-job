@@ -74,7 +74,7 @@ message SalaryInput {
 message JobPost {
   string id = 1;
   string title = 2;
-  repeated JobCategory jobDescription = 3;
+  repeated JobCategory JobCategories = 3;
   WorkPeriodInput workPeriod = 4;
   WorkTimeInput workTime = 5;
   SalaryInput salary = 6;

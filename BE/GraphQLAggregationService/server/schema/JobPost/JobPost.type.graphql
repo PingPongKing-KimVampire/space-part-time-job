@@ -1,39 +1,149 @@
-scalar BigInt
-
+"""
+아르바이트 공고 타입
+"""
 type JobPost {
+  """
+  공고 ID
+  """
   id: ID!
-  status: JobPostStatus!
+
+  """
+  공고 상태
+  """
+  status: JobPostStatusEnum!
+
+  """
+  공고 제목
+  """
   title: String!
-  jobDescription: [JobCategory!]!
+
+  """
+  하는 일 카테고리
+  """
+  JobCategories: [JobCategoryEnum!]!
+
+  """
+  근무 기간
+  """
   workPeriod: WorkPeriod!
+
+  """
+  근무 시간
+  """
   workTime: WorkTime!
+
+  """
+  급여 정보
+  """
   salary: Salary!
-  photos: [String!]
+
+  """
+  공고 이미지 리스트
+  """
+  photos: [URL!]
+
+  """
+  공고 상세 설명
+  """
   detailedDescription: String!
+
+  """
+  도로명 주소 or 지번 주소
+  """
   addressName: String!
-  createdAt: String!
+
+  """
+  공고 생성 시각 (ISO 8601 형식)
+  """
+  createdAt: DateTime!
+
+  """
+  조회수
+  """
   views: Int!
+
+  """
+  공고 게시자 정보
+  """
   publisher: UserPublicInfo!
+
+  """
+  지원자 수
+  """
   applicationCount: Int!
+
+  """
+  지원서 목록 (게시자를 제외하고는 조회할 수 없음)
+  """
   applications: [JobApplication!]!
+
+  """
+  내 지원서 (지원하지 않았을 시 null)
+  """
   myJobApplication: [JobApplication]
+
+  """
+  내 관심 (관심이 없으면 null)
+  """
   myInterested: InterestedJobPost
+
+  """
+  관심 개수
+  """
   interestedCount: Int!
 }
 
+"""
+응답용 근무 기간 타입
+"""
 type WorkPeriod {
-  type: WorkPeriodType!
-  dates: [String!]
-  days: [DayOfWeek!]
+  """
+  단기/장기 여부
+  """
+  type: WorkPeriodEnum!
+
+  """
+  단기 근무일 날짜 리스트 (YYYY-MM-DD)
+  """
+  dates: [FormattedDate!]
+
+  """
+  장기 근무일 요일 리스트
+  """
+  days: [DayOfWeekEnum!]
 }
 
+"""
+응답용 근무 시간 타입
+"""
 type WorkTime {
-  type: WorkTimeType!
-  startTime: String
-  endTime: String
+  """
+  협의 가능/고정 여부
+  """
+  type: WorkTimeEnum!
+
+  """
+  시작 시간 (HH:mm)
+  """
+  startTime: FormattedTime
+
+  """
+  종료 시간 (HH:mm)
+  """
+  endTime: FormattedTime
 }
 
+"""
+응답용 급여 타입
+"""
 type Salary {
-  salaryType: SalaryType!
+  """
+  급여 타입
+  """
+  salaryType: SalaryEnum!
+
+  """
+  급여 금액
+  """
   salaryAmount: BigInt!
 }

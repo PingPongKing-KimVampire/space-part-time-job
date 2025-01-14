@@ -1,3 +1,6 @@
 extend type Mutation {
+  """
+  관심 해제 API
+  """
   unmarkJobPostAsInterest(jobPostId: ID!): JobPost!
 }

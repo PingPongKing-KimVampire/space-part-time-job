@@ -1,8 +1,21 @@
 extend type Mutation {
+  """
+  공고 지원
+  """
   applyToJobPost(input: ApplyJobPostInput!): JobApplication!
 }
 
+"""
+공고 지원에 필요한 입력 타입
+"""
 input ApplyJobPostInput {
+  """
+  지원할 공고 ID
+  """
   jobPostId: ID!
+
+  """
+  지원서 내용
+  """
   coverLetter: String!
 }

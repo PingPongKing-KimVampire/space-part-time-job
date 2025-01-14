@@ -8,14 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export enum ApplicationStatus {
-    PENDING = "PENDING",
-    ACCEPTED = "ACCEPTED",
-    REJECTED = "REJECTED",
-    CANCELED = "CANCELED"
-}
-
-export enum JobCategory {
+export enum JobCategoryEnum {
     SERVING = "SERVING",
     KITCHEN_ASSISTANT = "KITCHEN_ASSISTANT",
     CHEF = "CHEF",
@@ -36,7 +29,7 @@ export enum JobCategory {
     OTHER = "OTHER"
 }
 
-export enum DayOfWeek {
+export enum DayOfWeekEnum {
     MONDAY = "MONDAY",
     TUESDAY = "TUESDAY",
     WEDNESDAY = "WEDNESDAY",
@@ -46,25 +39,32 @@ export enum DayOfWeek {
     SUNDAY = "SUNDAY"
 }
 
-export enum WorkPeriodType {
+export enum WorkPeriodEnum {
     SHORT_TERM = "SHORT_TERM",
     LONG_TERM = "LONG_TERM"
 }
 
-export enum WorkTimeType {
+export enum WorkTimeEnum {
     FLEXIBLE = "FLEXIBLE",
     FIXED = "FIXED"
 }
 
-export enum SalaryType {
+export enum SalaryEnum {
     HOURLY = "HOURLY",
     PER_TASK = "PER_TASK",
     MONTHLY = "MONTHLY"
 }
 
-export enum JobPostStatus {
+export enum JobPostStatusEnum {
     OPEN = "OPEN",
     CLOSE = "CLOSE"
+}
+
+export enum ApplicationStatusEnum {
+    PENDING = "PENDING",
+    ACCEPTED = "ACCEPTED",
+    REJECTED = "REJECTED",
+    CANCELED = "CANCELED"
 }
 
 export interface ApplyJobPostInput {
@@ -74,46 +74,46 @@ export interface ApplyJobPostInput {
 
 export interface DecideJobApplicationInput {
     id: string;
-    status: ApplicationStatus;
+    status: ApplicationStatusEnum;
 }
 
 export interface CreateJobPostInput {
     title: string;
-    jobDescription: JobCategory[];
+    JobCategories: JobCategoryEnum[];
     workPeriod: WorkPeriodInput;
     workTime: WorkTimeInput;
     salary: SalaryInput;
-    photos?: Nullable<string[]>;
+    photos?: Nullable<URL[]>;
     detailedDescription: string;
     addressName: string;
 }
 
 export interface WorkPeriodInput {
-    type: WorkPeriodType;
-    dates?: Nullable<string[]>;
-    days?: Nullable<DayOfWeek[]>;
+    type: WorkPeriodEnum;
+    dates?: Nullable<FormattedDate[]>;
+    days?: Nullable<DayOfWeekEnum[]>;
 }
 
 export interface WorkTimeInput {
-    type: WorkTimeType;
-    startTime?: Nullable<string>;
-    endTime?: Nullable<string>;
+    type: WorkTimeEnum;
+    startTime?: Nullable<FormattedTime>;
+    endTime?: Nullable<FormattedTime>;
 }
 
 export interface SalaryInput {
-    salaryType: SalaryType;
+    salaryType: SalaryEnum;
     salaryAmount: BigInt;
 }
 
 export interface JobPostSearchFilter {
     neighborhoodIds?: Nullable<string[]>;
-    workPeriodType?: Nullable<WorkPeriodType>;
-    days?: Nullable<DayOfWeek[]>;
-    jobCategories?: Nullable<JobCategory[]>;
-    startTime?: Nullable<string>;
-    endTime?: Nullable<string>;
+    workPeriodType?: Nullable<WorkPeriodEnum>;
+    days?: Nullable<DayOfWeekEnum[]>;
+    jobCategories?: Nullable<JobCategoryEnum[]>;
+    startTime?: Nullable<FormattedTime>;
+    endTime?: Nullable<FormattedTime>;
     keyword?: Nullable<string>;
-    status?: Nullable<JobPostStatus[]>;
+    status?: Nullable<JobPostStatusEnum[]>;
     onlyMyPosts?: Nullable<boolean>;
 }
 
@@ -133,7 +133,7 @@ export interface NeighborhoodInput {
 
 export interface InterestedJobPost {
     jobPost: JobPost;
-    createdAt: string;
+    createdAt: DateTime;
 }
 
 export interface IQuery {
@@ -164,22 +164,22 @@ export interface JobApplication {
     jobPost: JobPost;
     coverLetter: string;
     applicant: UserPublicInfo;
-    status: ApplicationStatus;
-    createdAt: string;
+    status: ApplicationStatusEnum;
+    createdAt: DateTime;
 }
 
 export interface JobPost {
     id: string;
-    status: JobPostStatus;
+    status: JobPostStatusEnum;
     title: string;
-    jobDescription: JobCategory[];
+    JobCategories: JobCategoryEnum[];
     workPeriod: WorkPeriod;
     workTime: WorkTime;
     salary: Salary;
-    photos?: Nullable<string[]>;
+    photos?: Nullable<URL[]>;
     detailedDescription: string;
     addressName: string;
-    createdAt: string;
+    createdAt: DateTime;
     views: number;
     publisher: UserPublicInfo;
     applicationCount: number;
@@ -190,19 +190,19 @@ export interface JobPost {
 }
 
 export interface WorkPeriod {
-    type: WorkPeriodType;
-    dates?: Nullable<string[]>;
-    days?: Nullable<DayOfWeek[]>;
+    type: WorkPeriodEnum;
+    dates?: Nullable<FormattedDate[]>;
+    days?: Nullable<DayOfWeekEnum[]>;
 }
 
 export interface WorkTime {
-    type: WorkTimeType;
-    startTime?: Nullable<string>;
-    endTime?: Nullable<string>;
+    type: WorkTimeEnum;
+    startTime?: Nullable<FormattedTime>;
+    endTime?: Nullable<FormattedTime>;
 }
 
 export interface Salary {
-    salaryType: SalaryType;
+    salaryType: SalaryEnum;
     salaryAmount: BigInt;
 }
 
@@ -231,16 +231,21 @@ export interface Neighborhood {
 export interface User {
     id: string;
     nickname: string;
-    phoneNumber: string;
-    createdAt: string;
+    phoneNumber: PhoneNumber;
+    createdAt: DateTime;
     residentNeighborhood?: Nullable<Neighborhood[]>;
 }
 
 export interface UserPublicInfo {
     id: string;
     nickname: string;
-    createdAt: string;
+    createdAt: DateTime;
 }
 
+export type PhoneNumber = any;
+export type DateTime = any;
 export type BigInt = any;
+export type URL = any;
+export type FormattedDate = any;
+export type FormattedTime = any;
 type Nullable<T> = T | null;

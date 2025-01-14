@@ -1,3 +1,6 @@
 extend type Mutation {
+  """
+  관심 설정 API
+  """
   markJobPostAsInterest(jobPostId: ID!): JobPost!
 }

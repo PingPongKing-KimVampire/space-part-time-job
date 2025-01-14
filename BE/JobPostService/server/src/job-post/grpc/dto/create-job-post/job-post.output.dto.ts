@@ -26,7 +26,7 @@ export class Salary {
 export class JobPost {
   id: string;
   title: string;
-  jobDescription: JobCategory[];
+  JobCategories: JobCategory[];
   workPeriod: WorkPeriod;
   workTime: WorkTime;
   salary: Salary;

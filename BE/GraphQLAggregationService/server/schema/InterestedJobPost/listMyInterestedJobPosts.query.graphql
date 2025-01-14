@@ -1,8 +1,21 @@
+"""
+관심 공고 정보
+"""
 type InterestedJobPost {
+  """
+  관심 공고
+  """
   jobPost: JobPost!
-  createdAt: String!
+
+  """
+  관심을 설정한 시간 (ISO-8601 형식)
+  """
+  createdAt: DateTime!
 }
 
 extend type Query {
+  """
+  관심 있는 공고 조회
+  """
   listMyInterestedJobPosts: [InterestedJobPost]!
 }

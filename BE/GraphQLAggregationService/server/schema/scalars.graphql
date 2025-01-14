@@ -1,0 +1,30 @@
+"""
+010-XXXX-XXXX 형식
+"""
+scalar PhoneNumber
+
+"""
+ISO 8601 형식
+"""
+scalar DateTime
+
+"""
+Int보다 큰 숫자를 Number 혹은 String으로 표현할 수 있음
+"""
+scalar BigInt
+
+"""
+URL 형식
+"""
+scalar URL
+
+"""
+YYYY-MM-DD 형식
+"""
+scalar FormattedDate
+
+"""
+HH:MM 형식
+00:00 이상 23:59 이하의 값이 들어와야 함
+"""
+scalar FormattedTime
