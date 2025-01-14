@@ -7,7 +7,7 @@ import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
 import PasswordInput from "../components/PasswordInput.tsx";
 import NotificationBox from "../components/NotificationBox.tsx";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
-import { WarningText, MainBackgroundColor, MainColor } from "../styles/global";
+import { WarningText, MainColor } from "../styles/global";
 import {
   Background,
   Container,

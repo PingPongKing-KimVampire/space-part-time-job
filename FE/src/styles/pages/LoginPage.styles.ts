@@ -40,6 +40,12 @@ export const Title = styled("div", {
     fontSize: "50px",
     fontWeight: "800",
   },
+  "&.inWhite": {
+    color: MainColor,
+    "& span": {
+      color: MainColor,
+    },
+  },
 });
 
 export const LoginPanel = styled("div", {

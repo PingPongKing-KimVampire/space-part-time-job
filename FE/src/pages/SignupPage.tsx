@@ -11,7 +11,7 @@ import { Title } from "../styles/pages/LoginPage.styles";
 import UserInfoSection from "../components/SignupPage/UserInfoSection.tsx";
 import PhoneNumberSection from "../components/SignupPage/PhoneNumberSection.tsx";
 import useBackgroundColor from "../utils/useBackgroundColor";
-import { IP_ADDRESS, ERROR } from "../constants/constants";
+import { ERROR } from "../constants/constants";
 import { MainBackgroundColor } from "../styles/global";
 
 type InputValue = {
@@ -141,7 +141,7 @@ const SignupPage = () => {
   return (
     <Background>
       <Container>
-        <Title>
+        <Title className="inWhite">
           <div className="sub">
             <span>우</span>리 <span>주</span>변의 <span>알바</span>
           </div>
