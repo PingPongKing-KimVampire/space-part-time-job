@@ -68,7 +68,7 @@ const PlaceField = () => {
           <>
             <CustomMap markerAddress={input.place} />
             <div
-              className="exposuePanel"
+              className="exposurePanel"
               onClick={() => {
                 setIsExposureDetailVisible((state) => !state);
               }}

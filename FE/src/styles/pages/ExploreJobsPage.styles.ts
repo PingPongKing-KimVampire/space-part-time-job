@@ -246,12 +246,12 @@ export const JobItemContextBox = styled("div", {
   boxSizing: "border-box",
   "& .mainInfo": {
     "& .title": {
+      paddingBottom: "10px",
       fontSize: "18px",
       fontWeight: "bold",
       ...ellipsisStyle,
     },
     "& .neighborhoodAndPostTime": {
-      marginTop: "5px",
       fontSize: "13px",
       color: "#828282",
       ...ellipsisStyle,

@@ -90,7 +90,7 @@ export const PlaceContainer = styled("div", {
         fontWeight: "bold",
       },
     },
-    "& .exposueDetailContent": {
+    "& .exposureDetailContent": {
       lineHeight: "23px",
       transition: "all 0.2s",
       height: "0",
