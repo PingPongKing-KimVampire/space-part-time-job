@@ -79,7 +79,7 @@ export interface DecideJobApplicationInput {
 
 export interface CreateJobPostInput {
     title: string;
-    JobCategories: JobCategoryEnum[];
+    jobCategories: JobCategoryEnum[];
     workPeriod: WorkPeriodInput;
     workTime: WorkTimeInput;
     salary: SalaryInput;
@@ -172,7 +172,7 @@ export interface JobPost {
     id: string;
     status: JobPostStatusEnum;
     title: string;
-    JobCategories: JobCategoryEnum[];
+    jobCategories: JobCategoryEnum[];
     workPeriod: WorkPeriod;
     workTime: WorkTime;
     salary: Salary;

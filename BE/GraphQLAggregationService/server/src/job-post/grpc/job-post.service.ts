@@ -192,8 +192,8 @@ export class JobPostService implements OnModuleInit {
   }
 
   private async transformGrpcJobPost(jobPost: grpcJobPost): Promise<JobPost> {
-    if (jobPost.JobCategories) {
-      jobPost.JobCategories = jobPost.JobCategories.map(
+    if (jobPost.jobCategories) {
+      jobPost.jobCategories = jobPost.jobCategories.map(
         (jobCategory) => JobCategoryEnumMapping[jobCategory],
       );
     }

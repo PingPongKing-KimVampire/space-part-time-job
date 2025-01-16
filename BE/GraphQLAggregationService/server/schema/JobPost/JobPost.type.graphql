@@ -20,7 +20,7 @@ type JobPost {
   """
   하는 일 카테고리
   """
-  JobCategories: [JobCategoryEnum!]!
+  jobCategories: [JobCategoryEnum!]!
 
   """
   근무 기간
