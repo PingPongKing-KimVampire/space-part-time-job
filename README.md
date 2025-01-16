@@ -3,8 +3,8 @@
 
 <img alt="우주알바 로고" src="https://github.com/user-attachments/assets/28064278-fb0c-4657-bf7e-f6712b07930a" width="80%" />
 
-
 기간 : 2024.10.10 ~ 2024.12.28
+
 ### [우주알바 사용해보기]()
 
 <p align=center>
@@ -27,23 +27,35 @@
 > 모바일 애플리케이션인 당근알바의 기능과 기술 스택을 웹 환경에서 재구성했습니다.<br>
 
 ## 핵심 서비스 기능
+
 ### 📱 전화번호를 사용해 사용자를 인증할 수 있어요.
+
 - 회원가입 시 전화번호 인증을 요구해 신뢰성있는 사용자임을 보장해요.
 - 전화번호를 사용해 로그인할 수 있어요.
 
+<img src="./public/authenticatePhoneNumber.gif">
+
 ### 📍 자신의 상주 동네를 설정할 수 있어요.
+
 - 상주 동네를 검색 후 선택할 수 있어요.
 - 아르바이트 공고를 조회할 동네의 범위를 조정할 수 있어요.
 
+<img src="./public/setResidentNeighborhoods.gif">
+
 ### 📰 내 주변 아르바이트 공고를 조회할 수 있어요.
+
 - 선택한 상주 동네 주변의 아르바이트 공고를 최신 순으로 조회할 수 있어요.
 - 검색어, 카테고리, 기간, 시간 등 다양한 조건을 선택해 검색할 수 있어요.
+
+<img src="./public/exploreJobs.gif">
 
 ### 📋 공고 및 지원서를 관리할 수 있어요.
 
 - 게시한 공고를 확인하고 지원서를 관리할 수 있어요.
 - 지원한 공고를 확인하고 지원 결과를 확인할 수 있어요.
 - 관심있는 공고를 확인할 수 있어요.
+
+<img src="./public/managePostAndApplication.gif">
 
 ## 기술스택
 
@@ -102,7 +114,6 @@
     </tbody>
 </table>
 
-
 <br />
 
 ## 시스템 아키텍처
@@ -111,15 +122,14 @@
 
 ## 기술적 문제 해결
 
-
 ## 팀원 소개
 
 <div align="center">
 
-|                                     [조영우](https://github.com/choyoungwoo9)                                     |                                     [이로운](https://github.com/lru0409)                                      |                                   
-| :----------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: | 
-| <img src="https://velog.velcdn.com/images/choyoungwoo9/profile/25b6e45c-4ac4-4f04-8cf0-b2239fae5721/image.jpg" width="120" /> | <img src="https://velog.velcdn.com/images/ronn/profile/bea962b0-e5ad-4765-8ba6-7e60c7b3be3c/image.jpg" width="120" /> |
-|                                     **BE**                                     |                                     **FE**                                      |
-|                    [개발일지 모아보기](https://velog.io/@choyoungwoo9/series/%EC%9A%B0%EC%A3%BC%EC%95%8C%EB%B0%94-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B0%9C%EB%B0%9C%EA%B8%B0)                    |                    [개발일지 모아보기](https://velog.io/@ronn/series/%EC%9A%B0%EC%A3%BC-%EC%95%8C%EB%B0%94-%EA%B0%9C%EB%B0%9C-%EC%9D%BC%EC%A7%80)                     |
+|                                                            [조영우](https://github.com/choyoungwoo9)                                                             |                                              [이로운](https://github.com/lru0409)                                              |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: |
+|                  <img src="https://velog.velcdn.com/images/choyoungwoo9/profile/25b6e45c-4ac4-4f04-8cf0-b2239fae5721/image.jpg" width="120" />                   |     <img src="https://velog.velcdn.com/images/ronn/profile/bea962b0-e5ad-4765-8ba6-7e60c7b3be3c/image.jpg" width="120" />      |
+|                                                                              **BE**                                                                              |                                                             **FE**                                                             |
+| [개발일지 모아보기](https://velog.io/@choyoungwoo9/series/%EC%9A%B0%EC%A3%BC%EC%95%8C%EB%B0%94-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B0%9C%EB%B0%9C%EA%B8%B0) | [개발일지 모아보기](https://velog.io/@ronn/series/%EC%9A%B0%EC%A3%BC-%EC%95%8C%EB%B0%94-%EA%B0%9C%EB%B0%9C-%EC%9D%BC%EC%A7%80) |
 
 </div>
