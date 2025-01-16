@@ -22,10 +22,6 @@ export const fetchResidentNeighborhoods = (): ThunkAction<
       });
       // (공고를 조회할) 인접 동네 불러오기
       if (data?.me?.residentNeighborhood) {
-        console.log(
-          "data?.me?.residentNeighborhood",
-          data?.me?.residentNeighborhood
-        );
         const result = {};
         for (const neighborhood of data?.me?.residentNeighborhood) {
           const boundary = await fetchDistrictBoundary(neighborhood.id);

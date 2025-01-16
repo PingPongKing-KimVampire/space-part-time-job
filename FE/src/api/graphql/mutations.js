@@ -5,7 +5,7 @@ export const CREATE_JOB_POST = gql`
     createJobPost(input: $input) {
       id
       title
-      jobDescription
+      jobCategories
     }
   }
 `;

@@ -25,7 +25,7 @@ export type JobPost = {
   id: string;
   title: string;
   status?: string;
-  jobDescription?: string[];
+  jobCategories?: string[];
   workPeriod?: WorkPeriod;
   workTime?: WorkTime;
   salary?: { salaryType: string; salaryAmount: number };

@@ -15,7 +15,7 @@ export const ViewJobProvider = ({ children }) => {
     id: "",
     status: "",
     title: "",
-    jobDescription: [],
+    jobCategories: [],
     workPeriod: { type: "", dates: [], days: [] },
     workTime: { type: "", startTime: "", endTime: "" },
     salary: { salaryType: "", salaryAmount: 0 },

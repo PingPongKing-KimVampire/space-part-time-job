@@ -149,7 +149,7 @@ const CreateJobPage = () => {
         variables: {
           input: {
             title: input.title,
-            jobDescription: input.jobTypes.map((type) => JOB_TYPES_KEY[type]),
+            jobCategories: input.jobTypes.map((type) => JOB_TYPES_KEY[type]),
             workPeriod: getProcessedPeriod(),
             workTime: getProcessedTime(),
             salary,

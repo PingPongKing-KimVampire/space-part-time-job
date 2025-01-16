@@ -7,7 +7,7 @@ import useViewJobContext from "../../context/ViewJobContext.tsx";
 const Header = () => {
   const { jobPost } = useViewJobContext();
   const {
-    jobDescription = [],
+    jobCategories = [],
     status,
     title,
     createdAt,
@@ -19,7 +19,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       <div className="jobTypesContainer">
-        {jobDescription.map((type) => (
+        {jobCategories.map((type) => (
           <div key={type} className="jobType">
             {JOB_TYPES[type]}
           </div>

@@ -95,7 +95,7 @@ export const GET_JOB_POST = gql`
       id
       status
       title
-      jobDescription
+      jobCategories
       workPeriod {
         type
         dates
