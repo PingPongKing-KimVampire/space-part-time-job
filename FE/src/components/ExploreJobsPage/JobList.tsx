@@ -6,7 +6,7 @@ import { JobPost } from "../../types/types.ts";
 type JobListProps = {
   totalCount: number;
   jobPosts: JobPost[];
-  fetchMoreJobPosts: () => void;
+  fetchMoreJobPosts: () => Promise<void>;
 };
 
 const JobList: React.FC<JobListProps> = (props) => {
@@ -21,7 +21,7 @@ const JobList: React.FC<JobListProps> = (props) => {
       {
         root: null, // 뷰포트 기준으로 관찰
         rootMargin: "0px", // 추가적인 마진 설정 없음
-        threshold: 1.0, // 요소가 100% 화면에 보일 때만 작동
+        threshold: 0.5, // 요소가 100% 화면에 보일 때만 작동
       }
     );
     if (bottomRef.current) observer.observe(bottomRef.current);

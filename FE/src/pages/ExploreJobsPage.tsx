@@ -59,7 +59,8 @@ const ExploreJobsPage = () => {
   });
   const [totalCount, setTotalCount] = useState<number>(0);
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
-  const isChangedSearchConditionRef = useRef<boolean>(false);
+  const [nextJobPosts, setNextJobPosts] = useState<JobPost[]>([]);
+  const isFirstFetchRef = useRef<boolean>(true);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -88,32 +89,13 @@ const ExploreJobsPage = () => {
     setSelectedNeighborhoodID(neighborhoodIds[0]);
   }, [residentNeighborhoods]);
 
-  const [
-    searchJobPosts,
-    { loading: searchJobPostsLoading, error: searchJobPostsError },
-  ] = useLazyQuery(SEARCH_JOB_POSTS, {
-    fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      // 게시 시간 가공
-      const nodes = data.searchJobPosts.edges.map((edge) => ({
-        ...edge.node,
-        createdAt: formatTimeAgo(edge.node.createdAt),
-      }));
-      if (isChangedSearchConditionRef.current) {
-        // 검색 조건이 바뀐 후 패치 -> 기존 데이터 날리고 새로 저장
-        setJobPosts(nodes);
-        isChangedSearchConditionRef.current = false;
-      } else {
-        // 스크롤 다운 후 패치 -> 기존 데이터에 추가
-        setJobPosts((state) => state.concat(nodes));
-      }
-      setPageInfo(data.searchJobPosts.pageInfo); // 페이지 정보 저장
-      setTotalCount(data.searchJobPosts.totalCount); // 총 개수 저장
-    },
-  });
+  const [searchJobPosts, { error: searchJobPostsError }] = useLazyQuery(
+    SEARCH_JOB_POSTS,
+    { fetchPolicy: "network-only" }
+  );
 
   const fetchJobPosts = useCallback(
-    (cursor) => {
+    async (cursor): Promise<{ posts: JobPost[]; endCursor: string } | null> => {
       const getProcessedTime = () => {
         if (
           filter.time.start === TIME_NOT_SET ||
@@ -135,10 +117,10 @@ const ExploreJobsPage = () => {
         Object.keys(residentNeighborhoods).length === 0 ||
         !selectedNeighborhoodID
       )
-        return;
+        return null;
       const selectedNeighborhood =
         residentNeighborhoods[selectedNeighborhoodID];
-      if (!selectedNeighborhood) return;
+      if (!selectedNeighborhood) return null;
       const days = filter.days.map((day) => DAYS_KEY[day]);
       const { startTime, endTime } = getProcessedTime();
 
@@ -156,10 +138,32 @@ const ExploreJobsPage = () => {
       };
       const pagination = { afterCursor: cursor, first: 20 };
       try {
-        searchJobPosts({ variables: { filters, pagination } });
+        const result: { posts: JobPost[]; endCursor: string } =
+          await new Promise((resolve, reject) => {
+            searchJobPosts({
+              variables: { filters, pagination },
+              onCompleted: (data) => {
+                const posts = data.searchJobPosts.edges.map((edge) => ({
+                  ...edge.node,
+                  createdAt: formatTimeAgo(edge.node.createdAt),
+                }));
+                setPageInfo(data.searchJobPosts.pageInfo); // 페이지 정보 저장
+                setTotalCount(data.searchJobPosts.totalCount); // 총 개수 저장
+                resolve({
+                  posts,
+                  endCursor: data.searchJobPosts.pageInfo.endCursor,
+                });
+              },
+              onError: (error) => {
+                reject(error);
+              },
+            });
+          });
+        return result;
       } catch (e) {
         console.log("SearchJobPosts Query Error: ", e.message);
       }
+      return null;
     },
     [
       debouncedSearchValue,
@@ -171,23 +175,36 @@ const ExploreJobsPage = () => {
   );
 
   useEffect(() => {
-    // 검색 조건이 변경된 후 패치
+    // 처음이나 검색 조건이 변경된 후 패치
     window.scrollTo(0, 0);
-    isChangedSearchConditionRef.current = true;
-    fetchJobPosts(null);
+    isFirstFetchRef.current = true;
+    const setupJobPosts = async () => {
+      const firstResult = await fetchJobPosts(null);
+      if (!firstResult) return;
+      const { posts: firstPosts, endCursor } = firstResult;
+      setJobPosts(firstPosts);
+      const secondResult = await fetchJobPosts(endCursor);
+      if (!secondResult) return;
+      const { posts: secondPosts } = secondResult;
+      setNextJobPosts(secondPosts);
+    };
+    setupJobPosts();
   }, [fetchJobPosts]);
 
-  const fetchMoreJobPosts = useCallback(() => {
+  const fetchMoreJobPosts = useCallback(async () => {
     // 스크롤 영역이 바닥에 다다랐을 때 패치
-    if (pageInfo.hasNextPage) fetchJobPosts(pageInfo.endCursor);
-  }, [fetchJobPosts, pageInfo]);
+    setJobPosts((state) => state.concat(nextJobPosts));
+    setNextJobPosts([]);
+    if (pageInfo.hasNextPage) {
+      const result = await fetchJobPosts(pageInfo.endCursor);
+      if (!result) return;
+      setNextJobPosts(result.posts);
+    }
+  }, [fetchJobPosts, pageInfo, nextJobPosts]);
 
   return (
     <Background>
-      {(fetchResidentNeighborhoodsLoading ||
-        (searchJobPostsLoading && !isChangedSearchConditionRef.current)) && (
-        <LoadingOverlay />
-      )}
+      {fetchResidentNeighborhoodsLoading && <LoadingOverlay />}
       <Container>
         <InputContainer>
           <NeighborhoodButton
