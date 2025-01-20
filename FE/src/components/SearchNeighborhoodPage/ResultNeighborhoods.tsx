@@ -6,19 +6,28 @@ import { Neighborhood } from "../../types/types.ts";
 type ResultNeighborhoodsProps = {
   neighborhoods: Neighborhood[];
   getElements: (neighborhoods: Neighborhood[]) => React.JSX.Element[];
+  loading: boolean;
 };
 
 const ResultNeighborhoods = forwardRef<
   HTMLDivElement,
   ResultNeighborhoodsProps
 >((props, ref) => {
-  const { neighborhoods, getElements } = props;
+  const { neighborhoods, getElements, loading } = props;
 
   const elements = useMemo(
     () => getElements(neighborhoods),
     [neighborhoods, getElements]
   );
 
+  if (loading)
+    return (
+      <ResultContainer style={{ height: "360px" }}>
+        <div className="loadingItem" />
+        <div className="loadingItem" />
+        <div className="loadingItem" />
+      </ResultContainer>
+    );
   return (
     <ResultContainer style={{ height: "360px" }}>
       <List

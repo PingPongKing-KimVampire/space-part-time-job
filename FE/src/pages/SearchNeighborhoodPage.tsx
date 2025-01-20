@@ -21,16 +21,20 @@ import ResultNeighborhoods from "../components/SearchNeighborhoodPage/ResultNeig
 import { MainBackgroundColor, WarningText } from "../styles/global.ts";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
 import { Neighborhood, SelectedNeighborhood } from "../types/types.ts";
-import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { ERROR } from "../constants/constants.ts";
 
 const SearchNeighborhoodPage = () => {
   useBackgroundColor(MainBackgroundColor);
   const navigate = useNavigate();
 
-  const [totalNeighborhoods, setTotalNeighborhoods] = useState<Neighborhood[]>(
-    []
-  );
+  const [totalNeighborhoods, setTotalNeighborhoods] = useState<{
+    data: Neighborhood[];
+    loading: boolean;
+    error: Error | null;
+  }>({ data: [], loading: false, error: null });
+  // const [totalNeighborhoods, setTotalNeighborhoods] = useState<Neighborhood[]>(
+  //   []
+  // );
   const [filteredNeighborhoods, setFilteredNeighborhoods] = useState<
     Neighborhood[]
   >([]);
@@ -42,8 +46,10 @@ const SearchNeighborhoodPage = () => {
   const debouncedSearchValue = useDebounce(searchValue, 100);
   const searchResultBoxRef = useRef<HTMLDivElement>(null);
 
-  const [fetchTotalNeighborhoodsError, setFetchTotalNeighboordsError] =
-    useState(false);
+  // const [fetchTotalNeighborhoodsError, setFetchTotalNeighboordsError] =
+  //   useState(false);
+  // const [fetchTotalNeighborhoodsLoading, setFetchTotalNeighborhoodsLoading] =
+  //   useState(false);
 
   const convertLevelToScopeValue = (level) => {
     return (parseInt(level) - 1) * 100;
@@ -65,8 +71,9 @@ const SearchNeighborhoodPage = () => {
   });
   useEffect(() => {
     const setupTotalNeighborhoods = async () => {
+      setTotalNeighborhoods((state) => ({ ...state, loading: true }));
       const result = await fetchTotalNeighborhoods();
-      setTotalNeighborhoods(result);
+      setTotalNeighborhoods({ data: result, loading: false, error: null });
     };
     const setupSelectedNeighborhoods = () => {
       const placeSaved = sessionStorage.getItem("neighborhoods");
@@ -83,7 +90,7 @@ const SearchNeighborhoodPage = () => {
     try {
       setupTotalNeighborhoods(); // 처음 모든 동 정보를 받아옴
     } catch (e) {
-      setFetchTotalNeighboordsError(true);
+      setTotalNeighborhoods((state) => ({ ...state, error: e }));
       return;
     }
     setupSelectedNeighborhoods(); // 디폴트로 선택될 동 정보를 받아옴 (세션 스토리지 -> 상주 지역 조회 API)
@@ -94,7 +101,7 @@ const SearchNeighborhoodPage = () => {
     searchResultBoxRef.current?.scrollTo(0, 0);
     // 검색 키워드에 맞는 동만 필터링
     setFilteredNeighborhoods(
-      totalNeighborhoods.filter((neighborhood) =>
+      totalNeighborhoods.data.filter((neighborhood) =>
         neighborhood.name.includes(debouncedSearchValue)
       )
     );
@@ -161,7 +168,6 @@ const SearchNeighborhoodPage = () => {
 
   return (
     <Background>
-      {getResidentLoading && <LoadingOverlay />}
       <Container>
         <label className="title" htmlFor="neighborhood">
           상주하는 지역을 최대 3개 선택해주세요.
@@ -177,7 +183,7 @@ const SearchNeighborhoodPage = () => {
           }}
           maxLength={20}
         />
-        {(getResidentError || fetchTotalNeighborhoodsError) && (
+        {(getResidentError || totalNeighborhoods.error) && (
           <WarningText>{ERROR.SERVER}</WarningText>
         )}
         <div className="content">
@@ -188,6 +194,7 @@ const SearchNeighborhoodPage = () => {
           <ResultNeighborhoods
             neighborhoods={filteredNeighborhoods}
             getElements={getNeighborhoodElements}
+            loading={totalNeighborhoods.loading || getResidentLoading}
             ref={searchResultBoxRef}
           />
         </div>

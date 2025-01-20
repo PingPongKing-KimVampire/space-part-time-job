@@ -62,6 +62,13 @@ export const SelectedContainer = styled("div", {
 export const ResultContainer = styled("div", {
   marginTop: "16px",
   "& .searchItem": { ...itemStyle, marginBottom: "10px" },
+  "& .loadingItem": {
+    width: "100%",
+    height: "52.5px",
+    marginBottom: "10px",
+    background: "#EDEDED",
+    borderRadius: "16px",
+  },
 });
 
 export const NextButton = styled("button", {
