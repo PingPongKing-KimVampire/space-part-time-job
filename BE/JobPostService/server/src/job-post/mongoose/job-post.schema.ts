@@ -19,7 +19,7 @@ export class JobPost {
   title: string;
 
   @Prop({ required: true })
-  JobCategories: string[];
+  jobCategories: string[];
 
   @Prop({
     type: {

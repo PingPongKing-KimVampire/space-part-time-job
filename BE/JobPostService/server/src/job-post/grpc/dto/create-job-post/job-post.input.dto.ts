@@ -118,7 +118,7 @@ export class CreateJobPostInput {
     ({ value }) => value.map((job: number) => JobCategoryMapping[job]),
     { toClassOnly: true },
   )
-  JobCategories: string[];
+  jobCategories: string[];
 
   @Validate(IsValidWorkPeriod)
   @ValidateNested()

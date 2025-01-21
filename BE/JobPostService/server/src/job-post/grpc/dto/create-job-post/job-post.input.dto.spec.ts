@@ -38,7 +38,7 @@ describe('CreateJobPostInput 유효성 검사', () => {
     const input: any = new CreateJobPostInput();
     input.title = '유효한 제목';
     input.userId = 'userId';
-    input.JobCategories = [ReverseJobCategoryMapping[JobCategory.BAKING]];
+    input.jobCategories = [ReverseJobCategoryMapping[JobCategory.BAKING]];
     input.workPeriod = {
       type: ReverseWorkPeriodTypeMapping[WorkPeriodType.SHORT_TERM],
       dates: [format(today, 'yyyy-MM-dd')],
@@ -90,7 +90,7 @@ describe('CreateJobPostInput 유효성 검사', () => {
 
   it('하는 일 목록이 비어있을 때 실패', async () => {
     const input = getValidInput();
-    input.JobCategories = [];
+    input.jobCategories = [];
     const transformedInput = plainToClass(CreateJobPostInput, input);
     const errors = await validate(transformedInput);
     expect(errors.length).toBeGreaterThan(0);
@@ -98,7 +98,7 @@ describe('CreateJobPostInput 유효성 검사', () => {
 
   it('하는 일 목록이 3개를 초과할 때 실패', async () => {
     const input = getValidInput();
-    input.JobCategories = [
+    input.jobCategories = [
       ReverseJobCategoryMapping[JobCategory.CLEANING],
       ReverseJobCategoryMapping[JobCategory.BAKING],
       ReverseJobCategoryMapping[JobCategory.BEVERAGE_MAKING],
@@ -111,7 +111,7 @@ describe('CreateJobPostInput 유효성 검사', () => {
 
   it('하는 일 목록이 중복일 때 실패', async () => {
     const input = getValidInput();
-    input.JobCategories = [
+    input.jobCategories = [
       ReverseJobCategoryMapping[JobCategory.CLEANING],
       ReverseJobCategoryMapping[JobCategory.CLEANING],
     ];

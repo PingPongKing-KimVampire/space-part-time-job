@@ -6,7 +6,7 @@ import "common.proto";
 message CreateJobPostInput {
   string userId = 1;
   string title = 2;
-  repeated JobCategory JobCategories = 3;
+  repeated JobCategory jobCategories = 3;
   WorkPeriodInput workPeriod = 4;
   WorkTimeInput workTime = 5;
   SalaryInput salary = 6;

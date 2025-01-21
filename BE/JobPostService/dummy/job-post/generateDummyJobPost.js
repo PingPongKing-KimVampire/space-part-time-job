@@ -133,7 +133,7 @@ async function getDummyData(targetPath = "../dummy-job-posts.json") {
 
     dummyArray.forEach((dummy) => {
       dummy.userId = getRandomUserId(userData);
-      dummy.JobCategories = getRandomJobCategories();
+      dummy.jobCategories = getRandomJobCategories();
       dummy.workPeriod = {
         type: Math.random() > 0.5 ? "SHORT_TERM" : "LONG_TERM",
       };

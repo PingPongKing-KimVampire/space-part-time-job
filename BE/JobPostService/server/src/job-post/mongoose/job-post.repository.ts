@@ -69,7 +69,7 @@ export class JobPostRepository {
       query.neighborhoodId = { $in: filters.neighborhoodIds };
     }
     if (filters.jobCategories) {
-      query.JobCategories = { $in: filters.jobCategories };
+      query.jobCategories = { $in: filters.jobCategories };
     }
     if (filters.workPeriodType === WorkPeriodType.SHORT_TERM) {
       query['workPeriod.type'] = filters.workPeriodType;
