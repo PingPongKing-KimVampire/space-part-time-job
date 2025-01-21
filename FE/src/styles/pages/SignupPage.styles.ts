@@ -14,6 +14,18 @@ export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
   justifyContent: "",
+  "@bp3": {
+    width: "85%",
+  },
+  "@bp2": {
+    "& input": {
+      padding: "15px",
+      fontSize: "15px",
+      "&::placeholder": {
+        fontSize: "15px",
+      },
+    },
+  },
 });
 
 export const PhoneNumberContainer = styled("div", {
@@ -26,13 +38,27 @@ export const PhoneNumberContainer = styled("div", {
 export const SendNumberButton = styled("button", {
   ...MainButtonStyle,
   width: "100%",
+  "@bp3": {
+    padding: "13px",
+    fontSize: "21px",
+  },
+  "@bp2": {
+    padding: "12px",
+    fontSize: "20px",
+  },
 });
 
 export const SignupButton = styled("button", {
   ...MainButtonStyle,
-  width: "700px",
-  position: "absolute",
-  bottom: "30px",
+  margin: "30px 0",
+  "@bp3": {
+    padding: "13px",
+    fontSize: "21px",
+  },
+  "@bp2": {
+    padding: "12px",
+    fontSize: "20px",
+  },
 });
 
 export const TimeCounter = styled("div", {

@@ -28,25 +28,15 @@ export const ButtonStyle = {
   position: "relative",
   transitionDuration: "0.2s",
   transitionProperty: "background border",
-  // TODO: LoginPage
-  "@bp3": {
-    padding: "14px",
-  },
-  "@bp2": {
-    padding: "12px",
-  },
-  "@bp1": {
-    padding: "10px",
-    borderRadius: "12px",
-  },
 };
 
 export const MainButtonStyle = {
   ...ButtonStyle,
   fontSize: "24px",
+  fontWeight: "800",
   "&.inactivated": {
-    background: "#EDEDED",
-    color: "#B0B0B0",
+    background: "#E7E7E7",
+    color: "#AAAAAA",
     cursor: "not-allowed",
   },
   "&:not(.inactivated)": {
@@ -56,11 +46,6 @@ export const MainButtonStyle = {
     "&:hover": {
       background: MainHoverColor,
     },
-  },
-  "@bp1": {
-    ...ButtonStyle["@bp1"],
-    // TODO: LoginPage
-    fontSize: "20px",
   },
 };
 

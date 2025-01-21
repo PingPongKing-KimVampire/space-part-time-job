@@ -20,11 +20,13 @@ export const Container = styled("div", {
   "& .logoImage": {
     height: "80px",
     marginBottom: "35px",
-  },
-  "@bp1": {
-    "& .logoImage": {
+    "@bp1": {
       height: "65px",
       marginBottom: "25px",
+    },
+    "@bp6": {
+      height: "60px",
+      marginBottom: "18px",
     },
   },
   "@media (max-height: 1000px)": {
@@ -41,23 +43,30 @@ export const Title = styled("div", {
   flexDirection: "column",
   alignItems: "center",
   gap: "8px",
-  color: "white",
   letterSpacing: "1px",
+  color: MainColor,
   "& .sub": {
     fontSize: "24px",
-    fontWeight: "400",
-    span: {
-      color: SubColor,
-    },
+    fontWeight: "600",
   },
   "& .main": {
     fontSize: "50px",
-    fontWeight: "800",
+    fontWeight: "900",
   },
-  "&.inWhite": {
-    color: MainColor,
-    "& span": {
-      color: MainColor,
+  "&.white": {
+    color: "white",
+    "& .sub span": {
+      color: SubColor,
+    },
+  },
+  "@bp6": {
+    gap: "6px",
+    marginBottom: "34px",
+    "& .sub": {
+      fontSize: "20px",
+    },
+    "& .main": {
+      fontSize: "46px",
     },
   },
   "@bp3": {
@@ -80,6 +89,9 @@ export const Title = styled("div", {
 
 export const LoginPanel = styled("div", {
   width: "500px",
+  "@bp6": {
+    width: "460px",
+  },
   "@bp3": {
     width: "450px",
   },
@@ -112,6 +124,10 @@ export const TabButton = styled("button", {
     background: "white",
     color: "black",
   },
+  "@bp6": {
+    padding: "16px",
+    fontSize: "18px",
+  },
   "@bp3": {
     padding: "15px",
     fontSize: "18px",
@@ -128,6 +144,9 @@ export const LoginForm = styled("form", {
   border: "1px solid #CDD2D7",
   borderTop: "none",
   borderRadius: "0 0 10px 10px",
+  "@bp6": {
+    padding: "30px 28px 26px 26px",
+  },
   "@bp3": {
     padding: "30px 26px 24px 26px",
   },
@@ -138,6 +157,13 @@ export const LoginForm = styled("form", {
   },
   "@bp1": {
     padding: "27px 24px 22px 24px",
+    "& input": {
+      padding: "13px",
+      fontSize: "16px",
+      "&::placeholder": {
+        fontSize: "16px",
+      },
+    },
   },
 });
 
@@ -145,17 +171,18 @@ export const LoginButton = styled("button", {
   ...MainButtonStyle,
   width: "100%",
   marginTop: "24px",
-  "@bp3": {
-    ...MainButtonStyle["@bp3"],
-    marginTop: "18px",
+  "@bp6": {
+    padding: "13px",
+    marginTop: "16px !important",
+    fontSize: "22px",
   },
   "@bp2": {
-    ...MainButtonStyle["@bp2"],
-    marginTop: "16px",
+    padding: "12px",
   },
   "@bp1": {
-    ...MainButtonStyle["@bp1"],
-    marginTop: "10px",
+    padding: "10px",
+    borderRadius: "12px",
+    fontSize: "20px",
   },
 });
 

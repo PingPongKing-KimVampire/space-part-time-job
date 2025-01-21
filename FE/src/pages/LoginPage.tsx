@@ -182,7 +182,7 @@ const LoginPage = (): React.JSX.Element => {
       {(loginLoading || getResidentNeighborhoodLoading) && <LoadingOverlay />}
       <Container>
         <img src={logoImage} className="logoImage" />
-        <Title>
+        <Title className="white">
           <div className="sub">
             우<span>리</span> 주<span>변의</span> 알바
           </div>

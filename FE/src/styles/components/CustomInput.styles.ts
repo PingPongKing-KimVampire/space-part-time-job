@@ -36,14 +36,6 @@ export const Input = styled("input", {
       },
     },
   },
-  "@bp1": {
-    // TODO: LoginPage
-    padding: "13px",
-    fontSize: "16px",
-    "&::placeholder": {
-      fontSize: "16px",
-    },
-  },
 });
 
 export const EyeButton = styled("button", {

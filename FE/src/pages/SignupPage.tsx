@@ -141,7 +141,7 @@ const SignupPage = () => {
   return (
     <Background>
       <Container>
-        <Title className="inWhite">
+        <Title>
           <div className="sub">
             <span>우</span>리 <span>주</span>변의 <span>알바</span>
           </div>
@@ -163,14 +163,14 @@ const SignupPage = () => {
           checkValidation={checkValidation}
           signupWarning={signupWarning}
         />
+        <SignupButton
+          className={isAllValid ? "" : "inactivated"}
+          disabled={!isAllValid}
+          onClick={SignupButtonClicked}
+        >
+          시작하기
+        </SignupButton>
       </Container>
-      <SignupButton
-        className={isAllValid ? "" : "inactivated"}
-        disabled={!isAllValid}
-        onClick={SignupButtonClicked}
-      >
-        시작하기
-      </SignupButton>
     </Background>
   );
 };
