@@ -1,7 +1,4 @@
-import { createStitches } from "@stitches/react";
-import { MainColor, MainHoverColor, SubColor } from "../global.ts";
-
-const { styled } = createStitches();
+import { styled, MainColor, MainHoverColor, SubColor } from "../global.ts";
 
 export const Container = styled("div", {
   display: "flex",

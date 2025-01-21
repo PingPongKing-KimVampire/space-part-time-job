@@ -1,5 +1,5 @@
-import { createStitches } from "@stitches/react";
 import {
+  styled,
   MainButtonStyle,
   MainColor,
   MainHoverColor,
@@ -8,8 +8,6 @@ import {
   ellipsisStyle,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
-
-const { styled } = createStitches();
 
 export const Background = styled("div", {
   width: "100%",

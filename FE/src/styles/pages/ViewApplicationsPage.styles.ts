@@ -1,5 +1,5 @@
-import { createStitches } from "@stitches/react";
 import {
+  styled,
   MainButtonStyle,
   MainColor,
   NavigationBarHeight,
@@ -7,8 +7,6 @@ import {
   NegativeHoverColor,
   ellipsisStyle,
 } from "../global";
-
-const { styled } = createStitches();
 
 export const Container = styled("div", {
   width: "100%",
@@ -37,10 +35,10 @@ export const Container = styled("div", {
       width: "100%",
       display: "flex",
       justifyContent: "space-between",
-      marginTop: "16px",
+      marginTop: "10px",
       "& button": {
         ...MainButtonStyle,
-        fontSize: "20px",
+        fontSize: "18px",
         width: "49.2%",
         padding: "9px",
         borderRadius: "12px",
@@ -66,7 +64,7 @@ export const UserInfo = styled("div", {
   },
   "& .nickname": {
     fontSize: "20px",
-    fontWeight: "600",
+    fontWeight: "700",
     maxWidth: "500px",
     ...ellipsisStyle,
   },

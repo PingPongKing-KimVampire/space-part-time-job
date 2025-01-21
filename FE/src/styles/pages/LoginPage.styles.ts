@@ -1,6 +1,4 @@
-import { MainColor, MainButtonStyle, SubColor } from "../global";
-import { createStitches } from "@stitches/react";
-const { styled } = createStitches();
+import { styled, MainColor, MainButtonStyle, SubColor } from "../global";
 
 export const Background = styled("div", {
   width: "100%",
@@ -8,16 +6,32 @@ export const Background = styled("div", {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  "@media (max-height: 700px)": {
+    alignItems: "flex-start",
+    padding: "50px",
+  },
 });
 
 export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  marginBottom: "150px",
+  marginBottom: "7%",
   "& .logoImage": {
     height: "80px",
     marginBottom: "35px",
+  },
+  "@bp1": {
+    "& .logoImage": {
+      height: "65px",
+      marginBottom: "25px",
+    },
+  },
+  "@media (max-height: 1000px)": {
+    marginBottom: "4%",
+  },
+  "@media (max-height: 800px)": {
+    marginBottom: "0%",
   },
 });
 
@@ -46,10 +60,35 @@ export const Title = styled("div", {
       color: MainColor,
     },
   },
+  "@bp3": {
+    "& .sub": {
+      fontSize: "21px",
+    },
+    "& .main": {
+      fontSize: "45px",
+    },
+  },
+  "@bp1": {
+    "& .sub": {
+      fontSize: "18px",
+    },
+    "& .main": {
+      fontSize: "40px",
+    },
+  },
 });
 
 export const LoginPanel = styled("div", {
   width: "500px",
+  "@bp3": {
+    width: "450px",
+  },
+  "@bp2": {
+    width: "400px",
+  },
+  "@bp1": {
+    width: "320px",
+  },
 });
 
 export const TabButton = styled("button", {
@@ -73,6 +112,14 @@ export const TabButton = styled("button", {
     background: "white",
     color: "black",
   },
+  "@bp3": {
+    padding: "15px",
+    fontSize: "18px",
+  },
+  "@bp1": {
+    padding: "12px",
+    fontSize: "16px",
+  },
 });
 
 export const LoginForm = styled("form", {
@@ -81,12 +128,35 @@ export const LoginForm = styled("form", {
   border: "1px solid #CDD2D7",
   borderTop: "none",
   borderRadius: "0 0 10px 10px",
+  "@bp3": {
+    padding: "30px 26px 24px 26px",
+  },
+  "@bp2": {
+    "& input": {
+      padding: "15px",
+    },
+  },
+  "@bp1": {
+    padding: "27px 24px 22px 24px",
+  },
 });
 
 export const LoginButton = styled("button", {
   ...MainButtonStyle,
   width: "100%",
   marginTop: "24px",
+  "@bp3": {
+    ...MainButtonStyle["@bp3"],
+    marginTop: "18px",
+  },
+  "@bp2": {
+    ...MainButtonStyle["@bp2"],
+    marginTop: "16px",
+  },
+  "@bp1": {
+    ...MainButtonStyle["@bp1"],
+    marginTop: "10px",
+  },
 });
 
 export const SignupMessage = styled("div", {

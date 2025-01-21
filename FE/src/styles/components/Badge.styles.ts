@@ -1,7 +1,4 @@
-import { createStitches } from "@stitches/react";
-import { MainColor, NegativeColor } from "../global.ts";
-
-const { styled } = createStitches();
+import { styled, MainColor, NegativeColor } from "../global.ts";
 
 export const Badge = styled("div", {
   display: "flex",

@@ -1,6 +1,4 @@
-import { createStitches } from "@stitches/react";
-
-const { styled } = createStitches();
+import { styled } from "../global.ts";
 
 export const Container = styled("div", {
   width: "100%",

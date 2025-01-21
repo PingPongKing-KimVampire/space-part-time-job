@@ -1,11 +1,18 @@
 import { createStitches } from "@stitches/react";
-
-const { styled } = createStitches();
+export const { styled } = createStitches({
+  media: {
+    bp1: "(max-width: 480px)", // 모바일
+    bp2: "(max-width: 600px)", // 작은 모바일
+    bp3: "(max-width: 768px)", // 태블릿 (세로)
+    bp4: "(max-width: 1024px)", // 태블릿 (가로) 및 작은 데스크탑
+    bp5: "(max-width: 1280px)", // 작은 데스크탑
+    bp6: "(max-width: 1440px)", // 중간 크기 데스크탑
+    bp7: "(max-width: 1600px)", // 큰 데스크탑
+  },
+});
 
 export const MainColor = "#384C9F";
 export const MainHoverColor = "#1d2b64";
-// export const MainColor = "#1d2b64";
-// export const MainHoverColor = "#384C9F";
 export const MainBackgroundColor = "#F9FBFC";
 export const SubColor = "#DCE2FF";
 export const NegativeColor = "#EE4346";
@@ -21,6 +28,17 @@ export const ButtonStyle = {
   position: "relative",
   transitionDuration: "0.2s",
   transitionProperty: "background border",
+  // TODO: LoginPage
+  "@bp3": {
+    padding: "14px",
+  },
+  "@bp2": {
+    padding: "12px",
+  },
+  "@bp1": {
+    padding: "10px",
+    borderRadius: "12px",
+  },
 };
 
 export const MainButtonStyle = {
@@ -38,6 +56,11 @@ export const MainButtonStyle = {
     "&:hover": {
       background: MainHoverColor,
     },
+  },
+  "@bp1": {
+    ...ButtonStyle["@bp1"],
+    // TODO: LoginPage
+    fontSize: "20px",
   },
 };
 

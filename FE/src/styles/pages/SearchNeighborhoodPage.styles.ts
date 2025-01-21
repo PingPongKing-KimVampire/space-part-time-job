@@ -1,7 +1,9 @@
-import { createStitches } from "@stitches/react";
-import { MainButtonStyle, OptionButtonStyle, SubColor } from "../global";
-
-const { styled } = createStitches();
+import {
+  styled,
+  MainButtonStyle,
+  OptionButtonStyle,
+  SubColor,
+} from "../global";
 
 export const Background = styled("div", {
   width: "100%",

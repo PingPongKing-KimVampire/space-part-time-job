@@ -1,13 +1,11 @@
-import { createStitches } from "@stitches/react";
 import {
+  styled,
   MainColor,
   MainHoverColor,
   SubColor,
   MainButtonStyle,
   ellipsisStyle,
 } from "../global";
-
-const { styled } = createStitches();
 
 export const Background = styled("div", {
   width: "100%",

@@ -1,7 +1,4 @@
-import { createStitches } from "@stitches/react";
-import { MainColor } from "../global.ts";
-
-const { styled } = createStitches();
+import { styled, MainColor } from "../global.ts";
 
 export const Input = styled("input", {
   background: "white",
@@ -37,6 +34,14 @@ export const Input = styled("input", {
       single: {
         borderRadius: "16px",
       },
+    },
+  },
+  "@bp1": {
+    // TODO: LoginPage
+    padding: "13px",
+    fontSize: "16px",
+    "&::placeholder": {
+      fontSize: "16px",
     },
   },
 });

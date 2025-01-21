@@ -1,7 +1,4 @@
-import { createStitches } from "@stitches/react";
-import { MainColor, NavigationBarHeight } from "../global.ts";
-
-const { styled } = createStitches();
+import { styled, MainColor, NavigationBarHeight } from "../global.ts";
 
 export const Container = styled("div", {
   background: MainColor,

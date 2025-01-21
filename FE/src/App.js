@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { createStitches } from "@stitches/react";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "./api/graphql/apolloClient.js";
 import SignupPage from "./pages/SignupPage.tsx";
@@ -17,8 +16,7 @@ import AuthRoute from "./routes/AuthRoute.tsx";
 import NotFoundRoute from "./routes/NotFoundRoute.tsx";
 import { CreateJobProvider } from "./context/CreateJobContext.tsx";
 import { ViewJobProvider } from "./context/ViewJobContext.tsx";
-
-const { styled } = createStitches();
+import { styled } from "./styles/global.ts";
 
 const Background = styled("div", {
   minWidth: "calc(100vw - 15px)",

@@ -1,8 +1,5 @@
-import { createStitches } from "@stitches/react";
-import { SubColor } from "../global";
+import { styled, SubColor } from "../global";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
-
-const { styled } = createStitches();
 
 export const Container = styled("div", {
   display: "flex",
