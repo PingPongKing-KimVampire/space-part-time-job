@@ -49,7 +49,8 @@ const ApplicationModal = () => {
             maxLength={200}
             eventHandlers={{
               onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                setCoverLetter(e.target.value);
+                const value = e.target.value;
+                setCoverLetter(value.length > 200 ? value.slice(0, 200) : value);
               },
             }}
           />
