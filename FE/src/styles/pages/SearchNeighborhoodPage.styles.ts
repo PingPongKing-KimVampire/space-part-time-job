@@ -11,23 +11,62 @@ export const Background = styled("div", {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  "@media(max-height: 800px)": {
+    alignItems: "flex-start",
+  }
 });
 
 export const Container = styled("div", {
-  width: "700px",
+  width: "1000px",
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   "& .title": {
-    fontSize: "30px",
+    fontSize: "35px",
     fontWeight: "bold",
     marginBottom: "40px",
     width: "100%",
     textAlign: "center",
+    lineHeight: "40px",
   },
   "& .content": {
     display: "flex",
     flexDirection: "column",
+    width: "100%",
   },
+  "@bp5": {
+    width: "90%",
+    "& .title": {
+      fontSize: "32px",
+    }
+  },
+  "@bp3": {
+    "& .title .newLine": {
+      display: "block",
+    }
+  },
+  "@bp2": {
+    "& input": { // TODO : input 반응형은 LoginPage 스타일과 동일
+      padding: "15px",
+    },
+  },
+  "@bp1": {
+    "& .title": {
+      fontSize: "26px",
+      marginBottom: "20px",
+      lineHeight: "35px",
+    },
+    "& input": {
+      padding: "13px",
+      fontSize: "16px",
+      "&::placeholder": {
+        fontSize: "16px",
+      },
+    }
+  },
+  "@media(max-height: 800px)": {
+    padding: "40px 0 30px 0",
+  }
 });
 
 const itemStyle = {
@@ -39,8 +78,7 @@ const itemStyle = {
 export const SelectedContainer = styled("div", {
   display: "flex",
   gap: "8px",
-  transition: "margin-top 0.2s",
-  marginTop: "14px",
+  marginTop: "20px",
   height: "52.5px",
   "&.empty": {
     background: "#E4E4E4",
@@ -59,10 +97,18 @@ export const SelectedContainer = styled("div", {
       color: "black !important",
     },
   },
+  "@bp1": {
+    marginTop: "12px",
+    height: "47px",
+    gap: "7px",
+    "& .searchItem": {
+      fontSize: "15px",
+    }
+  }
 });
 
 export const ResultContainer = styled("div", {
-  marginTop: "16px",
+  marginTop: "20px",
   "& .searchItem": { ...itemStyle, marginBottom: "10px" },
   "& .loadingItem": {
     width: "100%",
@@ -71,6 +117,16 @@ export const ResultContainer = styled("div", {
     background: "#EDEDED",
     borderRadius: "16px",
   },
+  "@bp1": {
+    marginTop: "12px",
+    "& .searchItem": {
+      padding: "14px",
+      fontSize: "15px",
+    },
+    "& .loadingItem": {
+      height: "47px",
+    }
+  }
 });
 
 export const NextButton = styled("button", {
@@ -85,4 +141,12 @@ export const NextButton = styled("button", {
     transform: "translateY(-50%)",
     right: "20px",
   },
+  "@bp1": {
+    marginTop: "25px",
+    fontSize: "20px",
+    padding: "14px",
+    "& .selectedCount": {
+      fontSize: "16px",
+    }
+  }
 });

@@ -1,7 +1,7 @@
-import React, { useMemo, forwardRef } from "react";
+import React, { useState, useMemo, useEffect, forwardRef } from "react";
 import { FixedSizeList as List } from "react-window";
 import { ResultContainer } from "../../styles/pages/SearchNeighborhoodPage.styles";
-import { Neighborhood } from "../../types/types.ts";
+import { Neighborhood } from "../../types/types";
 
 type ResultNeighborhoodsProps = {
   neighborhoods: Neighborhood[];
@@ -14,26 +14,49 @@ const ResultNeighborhoods = forwardRef<
   ResultNeighborhoodsProps
 >((props, ref) => {
   const { neighborhoods, getElements, loading } = props;
-
+  const [listHeight, setListHeight] = useState(0);
+  const [itemHeight, setItemHeight] = useState(0);
   const elements = useMemo(
     () => getElements(neighborhoods),
     [neighborhoods, getElements]
   );
 
+  useEffect(() => {
+    const updateListHeight = () => {
+      setListHeight(window.innerHeight * 0.5);
+    }
+    updateListHeight();
+    window.addEventListener('resize', updateListHeight);
+    return () => {
+      window.removeEventListener('resize', updateListHeight);
+    }
+  }, []);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 480px)'); // @bp1
+    const updateItemHeight = (e)  => {
+      setItemHeight(e.matches ? 56 : 62.8);
+    }
+    updateItemHeight(mediaQuery);
+    mediaQuery.addEventListener("change", updateItemHeight);
+    return () => {
+      mediaQuery.removeEventListener("change", updateItemHeight);
+    }
+  }, []);
+
   if (loading)
     return (
-      <ResultContainer style={{ height: "360px" }}>
+      <ResultContainer style={{ height: `${listHeight}px` }}>
         <div className="loadingItem" />
         <div className="loadingItem" />
         <div className="loadingItem" />
       </ResultContainer>
     );
   return (
-    <ResultContainer style={{ height: "360px" }}>
+    <ResultContainer style={{ height: `${listHeight}px` }}>
       <List
-        height={360}
+        height={listHeight}
         itemCount={neighborhoods.length}
-        itemSize={62.8}
+        itemSize={itemHeight}
         width="100%"
         ref={ref}
       >

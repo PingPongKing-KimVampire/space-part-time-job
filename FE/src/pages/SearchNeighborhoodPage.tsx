@@ -7,21 +7,21 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
-import { fetchTotalNeighborhoods } from "../api/rest/neighborhood.ts";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import useDebounce from "../utils/useDebounce.ts";
+import { fetchTotalNeighborhoods } from "../api/rest/neighborhood";
+import useBackgroundColor from "../utils/useBackgroundColor";
+import useDebounce from "../utils/useDebounce";
 import {
   Background,
   Container,
   NextButton,
 } from "../styles/pages/SearchNeighborhoodPage.styles";
-import CustomInput from "../components/CustomInput.tsx";
-import SelectedNeighborhoods from "../components/SearchNeighborhoodPage/SelectedNeighborhoods.tsx";
-import ResultNeighborhoods from "../components/SearchNeighborhoodPage/ResultNeighborhoods.tsx";
-import { MainBackgroundColor, WarningText } from "../styles/global.ts";
+import CustomInput from "../components/CustomInput";
+import SelectedNeighborhoods from "../components/SearchNeighborhoodPage/SelectedNeighborhoods";
+import ResultNeighborhoods from "../components/SearchNeighborhoodPage/ResultNeighborhoods";
+import { MainBackgroundColor, WarningText } from "../styles/global";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
-import { Neighborhood, SelectedNeighborhood } from "../types/types.ts";
-import { ERROR } from "../constants/constants.ts";
+import { Neighborhood, SelectedNeighborhood } from "../types/types";
+import { ERROR } from "../constants/constants";
 
 const SearchNeighborhoodPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -32,9 +32,6 @@ const SearchNeighborhoodPage = () => {
     loading: boolean;
     error: Error | null;
   }>({ data: [], loading: false, error: null });
-  // const [totalNeighborhoods, setTotalNeighborhoods] = useState<Neighborhood[]>(
-  //   []
-  // );
   const [filteredNeighborhoods, setFilteredNeighborhoods] = useState<
     Neighborhood[]
   >([]);
@@ -45,11 +42,6 @@ const SearchNeighborhoodPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue, 100);
   const searchResultBoxRef = useRef<HTMLDivElement>(null);
-
-  // const [fetchTotalNeighborhoodsError, setFetchTotalNeighboordsError] =
-  //   useState(false);
-  // const [fetchTotalNeighborhoodsLoading, setFetchTotalNeighborhoodsLoading] =
-  //   useState(false);
 
   const convertLevelToScopeValue = (level) => {
     return (parseInt(level) - 1) * 100;
@@ -170,7 +162,7 @@ const SearchNeighborhoodPage = () => {
     <Background>
       <Container>
         <label className="title" htmlFor="neighborhood">
-          상주하는 지역을 최대 3개 선택해주세요.
+          상주하는 지역을 <span className="newLine">최대 3개 선택해주세요.</span>
         </label>
         <CustomInput
           id="neighborhood"
