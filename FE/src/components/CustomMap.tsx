@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { Coordinate } from "../types/types.ts";
 import { Container } from "../styles/components/CustomMap.styles.ts";
 
@@ -13,6 +13,7 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef<kakao.maps>(null);
   const polygonRef = useRef<kakao.maps.Polygon>(null);
+  const resizeTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -26,7 +27,7 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
     mapRef.current.setZoomable(false);
   }, []);
 
-  useEffect(() => {
+  const updatePolygon = (polygonLine) => {
     if (polygonRef.current) polygonRef.current?.setMap(null); // 이전 폴리곤 삭제
     if (polygonLine.length === 0) return;
 
@@ -54,9 +55,8 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
     );
     setPolygon(polygonPath); // 폴리곤 표시
     setCenter(polygonPath); // 지도 중심 설정
-  }, [polygonLine]);
-
-  useEffect(() => {
+  };
+  const updateMarker = (markerAddress) => {
     // 전달된 주소에 마커 표시하기
     if (!markerAddress) return;
     const geocoder = new kakao.maps.services.Geocoder();
@@ -69,6 +69,26 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
       });
       mapRef.current.setCenter(coordinate);
     });
+  };
+
+  const handleResize = useCallback(() => {
+    if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+    resizeTimeoutRef.current = setTimeout(() => {
+      updatePolygon(polygonLine);
+    }, 200);
+  }, [polygonLine]);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
+
+  useEffect(() => {
+    updatePolygon(polygonLine);
+  }, [polygonLine]);
+  useEffect(() => {
+    updateMarker(markerAddress);
   }, [markerAddress]);
 
   return <Container ref={mapContainerRef} style={style} />;

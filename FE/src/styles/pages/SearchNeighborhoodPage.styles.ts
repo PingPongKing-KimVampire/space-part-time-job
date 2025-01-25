@@ -13,11 +13,11 @@ export const Background = styled("div", {
   alignItems: "center",
   "@media(max-height: 800px)": {
     alignItems: "flex-start",
-  }
+  },
 });
 
 export const Container = styled("div", {
-  width: "1000px",
+  width: "800px",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -34,19 +34,20 @@ export const Container = styled("div", {
     flexDirection: "column",
     width: "100%",
   },
-  "@bp5": {
+  "@bp4": {
     width: "90%",
     "& .title": {
       fontSize: "32px",
-    }
+    },
   },
   "@bp3": {
     "& .title .newLine": {
       display: "block",
-    }
+    },
   },
   "@bp2": {
-    "& input": { // TODO : input 반응형은 LoginPage 스타일과 동일
+    "& input": {
+      // TODO : input 반응형은 LoginPage 스타일과 동일
       padding: "15px",
     },
   },
@@ -62,11 +63,11 @@ export const Container = styled("div", {
       "&::placeholder": {
         fontSize: "16px",
       },
-    }
+    },
   },
   "@media(max-height: 800px)": {
     padding: "40px 0 30px 0",
-  }
+  },
 });
 
 const itemStyle = {
@@ -103,8 +104,8 @@ export const SelectedContainer = styled("div", {
     gap: "7px",
     "& .searchItem": {
       fontSize: "15px",
-    }
-  }
+    },
+  },
 });
 
 export const ResultContainer = styled("div", {
@@ -125,8 +126,8 @@ export const ResultContainer = styled("div", {
     },
     "& .loadingItem": {
       height: "47px",
-    }
-  }
+    },
+  },
 });
 
 export const NextButton = styled("button", {
@@ -147,6 +148,6 @@ export const NextButton = styled("button", {
     padding: "14px",
     "& .selectedCount": {
       fontSize: "16px",
-    }
-  }
+    },
+  },
 });

@@ -18,6 +18,9 @@ export const Container = styled("div", {
   bottom: "40px",
   left: "50%",
   transform: "translateX(-50%)",
+  "@bp3": {
+    width: "90%",
+  },
 });
 
 export const ScopeSettingContainer = styled("div", {
@@ -29,6 +32,10 @@ export const ScopeSettingContainer = styled("div", {
   boxShadow: "0 0 30px 10px rgba(0, 0, 0, 0.03)",
   boxSizing: "border-box",
   marginBottom: "20px",
+  "@bp2": {
+    padding: "20px 20px 15px 20px",
+    marginBottom: "12px",
+  },
 });
 
 export const NeighborhoodsContainer = styled("div", {
@@ -56,6 +63,11 @@ export const NeighborhoodsContainer = styled("div", {
         color: MainColor,
       },
     },
+  },
+  "@bp2": {
+    height: "45px",
+    marginBottom: "24px",
+    "& .neighborhoodButton": { padding: "12px" },
   },
 });
 
@@ -86,4 +98,8 @@ export const PlusButton = styled("button", {
 export const CompleteButton = styled("button", {
   width: "100%",
   ...MainButtonStyle,
+  "@bp2": {
+    fontSize: "22px",
+    padding: "13px",
+  },
 });
