@@ -21,7 +21,7 @@ type CustomCalendarProps = {
   lastDate: Date;
   onClickStart?: () => void;
   isTitleVisible?: boolean;
-  style?: { width?: string; marginTop?: string };
+  className: string;
 };
 
 const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
@@ -31,7 +31,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
     lastDate,
     onClickStart,
     isTitleVisible = true,
-    style = {},
+    className,
   } = props;
 
   const today = useMemo(() => new Date().setHours(0, 0, 0, 0), []);
@@ -81,7 +81,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
   };
 
   return (
-    <Container style={style}>
+    <Container className={className}>
       {isTitleVisible && <div className="title">{title}</div>}
       <Calendar
         onMouseDown={() => {
@@ -120,7 +120,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
 
             return (
               <DateItem
-                className={classNames.join(" ")}
+                className={`dateItem ${classNames.join(" ")}`}
                 disabled={!setDates || !dateInfo.isSelectable}
                 key={dateInfo.dateString}
                 data-date={dateInfo.dateString}

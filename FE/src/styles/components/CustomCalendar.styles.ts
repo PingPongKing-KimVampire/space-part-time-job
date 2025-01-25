@@ -10,6 +10,33 @@ export const Container = styled("div", {
     fontWeight: "bold",
     padding: "15px",
   },
+  "&.inCreateJob": {
+    marginTop: "-35px",
+    width: "350px",
+    "@bp2": {
+      marginTop: "-25px",
+      gap: "6px",
+      "& .title": {
+        fontSize: "16px",
+        padding: "10px",
+      },
+      "& .dateItem": {
+        padding: "6px",
+        fontSize: "14px",
+      },
+    },
+    "@bp1": {
+      width: "280px",
+      "& .title": {
+        fontSize: "14px",
+        padding: "8px",
+      },
+      "& .dateItem": {
+        padding: "4px",
+        fontSize: "13px",
+      },
+    },
+  },
 });
 
 export const Calendar = styled("div", {

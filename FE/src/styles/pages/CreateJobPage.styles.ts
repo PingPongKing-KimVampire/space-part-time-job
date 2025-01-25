@@ -18,6 +18,12 @@ export const Background = styled("div", {
 
 export const Container = styled("div", {
   width: "1000px",
+  "@bp5": {
+    width: "80%",
+  },
+  "@bp4": {
+    width: "90%",
+  },
 });
 
 export const FormSectionContainer = styled("div", {
@@ -41,6 +47,31 @@ export const FormSectionContainer = styled("div", {
     gap: "40px",
     boxSizing: "border-box",
   },
+  "@bp5": {
+    marginTop: "35px",
+    "& .content": {
+      padding: "34px",
+      gap: "34px",
+    },
+  },
+  "@bp3": {
+    marginTop: "30px",
+    "& .content": {
+      padding: "26px",
+      gap: "26px",
+    },
+  },
+  "@bp1": {
+    marginTop: "22px",
+    "& > label": {
+      fontSize: "18px",
+      marginBottom: "10px",
+    },
+    "& .content": {
+      padding: "23px",
+      gap: "23px",
+    },
+  },
 });
 
 export const FormFieldContainer = styled("div", {
@@ -57,12 +88,50 @@ export const FormFieldContainer = styled("div", {
       fontSize: "18px",
     },
   },
+  "@bp2": {
+    "& input, & textarea": {
+      // TODO : 로그인 페이지와 동일
+      padding: "15px",
+    },
+  },
+  "@bp1": {
+    "& > label": {
+      fontSize: "18px",
+      marginBottom: "10px",
+      "& span": {
+        fontSize: "16px",
+      },
+    },
+    "& input, & textarea": {
+      padding: "13px",
+      fontSize: "16px",
+      "&::placeholder": {
+        fontSize: "16px",
+      },
+    },
+    "& .charCounter": {
+      display: "none",
+    },
+    "& .chips": {
+      gap: "7px 5px",
+      "& .option": {
+        fontSize: "15px",
+        padding: "4px 9px",
+      },
+    },
+  },
 });
 
 export const TimeContainer = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "20px",
+  "@bp2": {
+    gap: "14px",
+  },
+  "@bp1": {
+    gap: "10px",
+  },
 });
 
 export const PlaceContainer = styled("div", {
@@ -224,7 +293,20 @@ export const PhotoContainer = styled("div", {
 
 export const PostButton = styled("button", {
   ...MainButtonStyle,
-  width: "1000px",
+  width: "100%",
   bottom: "20px",
   marginTop: "65px",
+  "@bp5": {
+    marginTop: "40px",
+  },
+  "@bp3": {
+    marginTop: "35px",
+    padding: "14px",
+    fontSize: "22px",
+  },
+  "@bp1": {
+    marginTop: "30px",
+    padding: "12px",
+    fontSize: "20px",
+  },
 });

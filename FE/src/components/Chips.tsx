@@ -23,11 +23,13 @@ const Chips: React.FC<ChipsPops> = (props) => {
   } = props;
 
   return (
-    <Container id={id} style={containerStyle}>
+    <Container id={id} className="chips" style={containerStyle}>
       {options &&
         options.map((option) => (
           <Option
-            className={isSelected ? (isSelected(option) ? "selected" : "") : ""}
+            className={`option ${
+              isSelected ? (isSelected(option) ? "selected" : "") : ""
+            }`}
             key={option}
             onClick={onClick}
             style={optionStyle}

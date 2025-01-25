@@ -31,7 +31,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
         onBlur={onBlur}
         maxLength={maxLength}
       />
-      <CharCounter>
+      <CharCounter className="charCounter">
         <span>{[...value].length}</span>/{maxLength}
       </CharCounter>
     </Container>

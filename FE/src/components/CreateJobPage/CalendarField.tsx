@@ -19,7 +19,7 @@ const CalendarField = () => {
           if (!isFocused.dates)
             setIsFocused((state) => ({ ...state, dates: true }));
         }}
-        style={{ width: "43%", marginTop: "-30px" }}
+        className="inCreateJob"
       />
     </FormField>
   );

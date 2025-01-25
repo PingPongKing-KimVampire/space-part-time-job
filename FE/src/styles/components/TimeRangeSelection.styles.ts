@@ -26,6 +26,16 @@ export const Container = styled("div", {
       fontWeight: "500",
     },
   },
+  "@bp2": {
+    "& .waveSymbol": {
+      fontSize: "24px",
+    },
+  },
+  "@bp1": {
+    "& .waveSymbol": {
+      fontSize: "18px",
+    },
+  },
 });
 
 export const TimeSelectionContainer = styled("div", {
@@ -59,6 +69,25 @@ export const TimeSelectionContainer = styled("div", {
     color: "#9A9A9A",
     fontSize: "14px",
   },
+  "@bp2": {
+    "& .timeInputButton": {
+      padding: "14px",
+      fontSize: "16px",
+    },
+    "& label": {
+      top: "-20px",
+    },
+  },
+  "@bp1": {
+    "& .timeInputButton": {
+      padding: "12px",
+      fontSize: "14px",
+    },
+    "& label": {
+      fontSize: "12px",
+      top: "-18px",
+    },
+  },
 });
 
 // TODO : ArrowDownIcon 하나로 만들어서 재사용하자.
@@ -87,6 +116,15 @@ export const ArrowDownIcon = styled(ArrowDown, {
     height: "18px",
     right: "7px",
     strokeWidth: "1",
+  },
+  "@bp2": {
+    width: "26px",
+    height: "26px",
+    right: "10px",
+  },
+  "@bp1": {
+    width: "22px",
+    height: "22px",
   },
 });
 
@@ -128,5 +166,18 @@ export const SelectBox = styled("div", {
   },
   "&::-webkit-scrollbar": {
     display: "none",
+  },
+  "@bp2": {
+    padding: "4px",
+    "& .optionButton": {
+      padding: "7px",
+      fontSize: "14px",
+    },
+  },
+  "@bp1": {
+    "& .optionButton": {
+      padding: "5px",
+      fontSize: "12px",
+    },
   },
 });
