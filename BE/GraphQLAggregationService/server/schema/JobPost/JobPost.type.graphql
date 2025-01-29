@@ -65,22 +65,22 @@ type JobPost {
   """
   공고 게시자 정보
   """
-  publisher: UserPublicInfo!
+  publisher: JobPostPublisherResult!
 
   """
   지원자 수
   """
-  applicationCount: Int!
+  applicationCount: JobPostApplicationCountResult!
 
   """
   지원서 목록 (게시자를 제외하고는 조회할 수 없음)
   """
-  applications: [JobApplication!]!
+  applications: JobPostApplicationsResult!
 
   """
   내 지원서 (지원하지 않았을 시 null)
   """
-  myJobApplication: [JobApplication]
+  myJobApplication: JobPostMyJobApplicationResult!
 
   """
   내 관심 (관심이 없으면 null)
@@ -147,3 +147,15 @@ type Salary {
   """
   salaryAmount: BigInt!
 }
+
+union JobPostApplicationsResult = JobApplications | InternalError | ForbiddenError
+
+union JobPostPublisherResult = UserPublicInfo | InternalError
+
+type ApplicationCount {
+	count: Int!
+}
+
+union JobPostApplicationCountResult = ApplicationCount | InternalError
+
+union JobPostMyJobApplicationResult = JobApplications | InternalError

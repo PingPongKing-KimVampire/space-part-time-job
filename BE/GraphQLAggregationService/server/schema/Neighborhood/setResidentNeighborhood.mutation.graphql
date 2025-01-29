@@ -2,7 +2,7 @@ extend type Mutation {
   """
   상주 동네 설정 (최대 3개 가능)
   """
-  setResidentNeighborhood(input: SetResidentNeighborhoodInput!): [Neighborhood!]!
+  setResidentNeighborhood(input: SetResidentNeighborhoodInput!): SetResidentNeighborhoodResult!
 }
 
 """
@@ -29,3 +29,10 @@ input NeighborhoodInput {
   """
   level: Int!
 }
+
+type NeighborhoodList {
+  neighborhoods: [Neighborhood!]!
+}
+
+# 존재하지 않는 id인 경우 NotFoundError
+union SetResidentNeighborhoodResult = NeighborhoodList | NotFoundError | BadInputError

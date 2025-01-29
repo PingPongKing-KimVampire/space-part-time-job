@@ -34,7 +34,7 @@ export class JobPostResolver {
   async createJobPost(
     @Args('input') createJobPostInput: CreateJobPostInput,
     @Context('req') req: Request,
-  ): Promise<JobPost> {
+  ) {
     const user = this.parseUserDataHeader(
       req.headers['space-part-time-job-user-data-base64'],
     );
@@ -48,27 +48,46 @@ export class JobPostResolver {
       createdAt,
     } = await this.jobPostService.createJobPost(grpcPayload);
     return {
+      __typename: 'JobPost',
       status: JobPostStatusEnum.OPEN,
       ...createJobPostInput,
       createdAt,
       id,
       addressName: realAddressName,
       views: 0,
-      applicationCount: 0,
-      applications: [],
       publisher: {
+        __typename: 'UserPublicInfo',
         id: user.id,
         nickname: user.nickname,
         createdAt: user.createdAt,
       },
+      applicationCount: {
+        __typename: 'ApplicationCount',
+        count: 0,
+      },
+      applications: {
+        __typename: 'JobApplications',
+        applications: [],
+      },
+      myJobApplication: {
+        __typename: 'JobApplications',
+        applications: [],
+      },
       interestedCount: 0,
+      myInterested: null,
     };
   }
 
   @Query('getJobPost')
   async getJobPost(@Args('id') jobPostId: string): Promise<JobPost> {
     const jobPost = await this.jobPostService.getJobPost(jobPostId);
-    return jobPost;
+    // @ts-ignore
+    jobPost.publisher.__typename = 'UserPublicInfo';
+    const ret = {
+      __typename: 'JobPost',
+      ...jobPost,
+    };
+    return ret;
   }
 
   @Query('searchJobPosts')
@@ -76,7 +95,7 @@ export class JobPostResolver {
     @Args('filters') filters: JobPostSearchFilter,
     @Args('pagination') pagination: { afterCursor: string; first: number },
     @Context('req') req: Request,
-  ): Promise<JobPostConnection> {
+  ) {
     const { id: userId } = this.parseUserDataHeader(
       req.headers['space-part-time-job-user-data-base64'],
     );
@@ -104,7 +123,12 @@ export class JobPostResolver {
       userId,
     );
 
-    return result;
+    result.edges.forEach((edge) => {
+      // @ts-ignore
+      edge.node.publisher.__typename = 'UserPublicInfo';
+    });
+
+    return { __typename: 'JobPostConnection', ...result };
   }
 
   private parseUserDataHeader(header: string): any {
@@ -123,7 +147,7 @@ export class JobPostResolver {
   async incrementJobPostViews(
     @Args('id') jobPostId: string,
     @Context('req') req: Request,
-  ): Promise<number> {
+  ) {
     const user = this.parseUserDataHeader(
       req.headers['space-part-time-job-user-data-base64'],
     );
@@ -131,7 +155,8 @@ export class JobPostResolver {
       jobPostId,
       user.id,
     );
-    return views;
+
+    return { __typename: 'ViewsCountType', count: views };
   }
 
   @ResolveField('myJobApplication')
@@ -150,25 +175,34 @@ export class JobPostResolver {
       },
     );
 
-    return (response.jobApplicationList ?? []).map((jobApplication) => ({
-      id: jobApplication.id,
-      coverLetter: jobApplication.coverLetter,
-      createdAt: jobApplication.createdAt,
-      jobPostId: jobApplication.jobPostId,
-      userId: jobApplication.userId,
-      status: this.getEnumKeyByValue(
-        ApplicationStatusGrpcType,
-        jobApplication.status,
+    return {
+      __typename: 'JobApplications',
+      applications: (response.jobApplicationList ?? []).map(
+        (jobApplication) => ({
+          id: jobApplication.id,
+          coverLetter: jobApplication.coverLetter,
+          createdAt: jobApplication.createdAt,
+          jobPostId: jobApplication.jobPostId,
+          userId: jobApplication.userId,
+          status: this.getEnumKeyByValue(
+            ApplicationStatusGrpcType,
+            jobApplication.status,
+          ),
+        }),
       ),
-    }));
+    };
   }
 
   @ResolveField('applicationCount')
-  async resolveApplicationCount(@Parent() jobPost: JobPost): Promise<number> {
+  async resolveApplicationCount(@Parent() jobPost: JobPost) {
     const response = await this.jobApplyService.countJobApplicationByPost({
       jobPostId: jobPost.id,
     });
-    return response.jobApplicationCount;
+
+    return {
+      __typename: 'ApplicationCount',
+      count: response.jobApplicationCount,
+    };
   }
 
   @ResolveField('applications')
@@ -185,9 +219,12 @@ export class JobPostResolver {
         userId: user.id,
       });
 
-    return (response.jobApplicationList ?? []).map((jobApplication) =>
-      this.transformJobApplicationResponse(jobApplication),
-    );
+    return {
+      __typename: 'JobApplications',
+      applications: (response.jobApplicationList ?? []).map((jobApplication) =>
+        this.transformJobApplicationResponse(jobApplication),
+      ),
+    };
   }
 
   @ResolveField('myInterested')
@@ -224,12 +261,14 @@ export class JobPostResolver {
   async closeJobPost(
     @Args('id') jobPostId: string,
     @Context('req') req: Request,
-  ): Promise<JobPost> {
+  ) {
     const user = this.parseUserDataHeader(
       req.headers['space-part-time-job-user-data-base64'],
     );
     const jobPost = await this.jobPostService.closeJobPost(jobPostId, user.id);
-    return jobPost;
+    // @ts-ignore
+    jobPost.publisher.__typename = 'UserPublicInfo';
+    return { __typename: 'JobPost', ...jobPost };
   }
 
   @Mutation('markJobPostAsInterest')
@@ -243,7 +282,7 @@ export class JobPostResolver {
 
     await this.jobPostService.markJobPostAsInterest(jobPostId, user.id);
     const jobPost = await this.getJobPost(jobPostId);
-    return jobPost;
+    return { __typename: 'JobPost', ...jobPost };
   }
 
   @Mutation('unmarkJobPostAsInterest')
@@ -257,7 +296,7 @@ export class JobPostResolver {
 
     await this.jobPostService.unmarkJobPostAsInterest(jobPostId, user.id);
     const jobPost = await this.getJobPost(jobPostId);
-    return jobPost;
+    return { __typename: 'JobPost', ...jobPost };
   }
 
   private getEnumKeyByValue<T extends object>(

@@ -11,7 +11,7 @@ extend type Query {
     페이지네이션 조건
     """
     pagination: JobPostCursorInput!
-  ): JobPostConnection!
+  ): SearchJobPostsResult!
 }
 
 """
@@ -116,3 +116,5 @@ type PageInfo {
   """
   endCursor: String
 }
+
+union SearchJobPostsResult = JobPostConnection | BadInputError | InternalError

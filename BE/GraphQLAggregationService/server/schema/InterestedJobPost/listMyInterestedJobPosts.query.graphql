@@ -17,5 +17,11 @@ extend type Query {
   """
   관심 있는 공고 조회
   """
-  listMyInterestedJobPosts: [InterestedJobPost]!
+  listMyInterestedJobPosts: ListMyInterestedJobPostsResult!
 }
+
+type InterestedJobPost {
+  interestedJobPosts: [InterestedJobPost]!
+}
+
+union ListMyInterestedJobPostsResult = InterestedJobPost | InternalError

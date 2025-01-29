@@ -16,12 +16,17 @@ export class InterestedJobPostResolver {
     const { interestedJobPosts } =
       await this.jobPostService.listMyInterestedJobPost(user.id);
 
-    return (interestedJobPosts ?? []).map(async (interestedJobPost) => ({
-      jobPost: await this.jobPostResolver.getJobPost(
-        interestedJobPost.jobPostId,
+    return {
+      __typename: 'InterestedJobPost',
+      interestedJobPosts: (interestedJobPosts ?? []).map(
+        async (interestedJobPost) => ({
+          jobPost: await this.jobPostResolver.getJobPost(
+            interestedJobPost.jobPostId,
+          ),
+          createdAt: interestedJobPost.createdAt,
+        }),
       ),
-      createdAt: interestedJobPost.createdAt,
-    }));
+    };
   }
 
   private parseUserDataHeader(header: string): any {

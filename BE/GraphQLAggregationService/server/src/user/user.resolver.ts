@@ -1,9 +1,25 @@
 import { HttpException } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Neighborhood, SetResidentNeighborhoodInput, User } from 'src/graphql';
+import {
+  Args,
+  Context,
+  createUnionType,
+  Mutation,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
+import {
+  InternalError,
+  Neighborhood,
+  SetResidentNeighborhoodInput,
+  User,
+} from 'src/graphql';
 import { UserService } from './user.service';
 import { DistrictService } from 'src/district/district.service';
 import { RpcException } from '@nestjs/microservices';
+import {
+  WooJooInternalError,
+  WooJooNotFoundError,
+} from 'src/util/graphql.error';
 
 type UserData = {
   id: string;
@@ -21,17 +37,27 @@ export class meResolver {
     private readonly districtService: DistrictService,
   ) {}
   @Query('me')
-  async getMe(@Context('req') req: Request): Promise<User> {
+  async getMe(@Context('req') req: Request): Promise<any> {
     const user: UserData = this.parseUserDataHeader(req);
-    const residentNeighborhood =
-      await this.getResidentNeighborhoodsByUserData(user);
-    return {
+    const ret = {
+      __typename: 'User',
       id: user.id,
       phoneNumber: user.phoneNumber,
       nickname: user.nickname,
       createdAt: user.createdAt,
-      residentNeighborhood,
-    } as User;
+      residentNeighborhoods: null,
+    };
+    try {
+      const residentNeighborhoods =
+        await this.getResidentNeighborhoodsByUserData(user);
+      ret.residentNeighborhoods = {
+        __typename: 'ResidentNeighborhoodsType',
+        neighborhoods: residentNeighborhoods,
+      };
+    } catch (e) {
+      ret.residentNeighborhoods = WooJooInternalError;
+    }
+    return ret;
   }
 
   private async getResidentNeighborhoodsByUserData(
@@ -72,7 +98,7 @@ export class meResolver {
   async setResidentNeighborhood(
     @Args('input') setResidentNeighborhoodInput: SetResidentNeighborhoodInput,
     @Context('req') req: Request,
-  ): Promise<Neighborhood[]> {
+  ) {
     try {
       const user: UserData = this.parseUserDataHeader(req);
       await this.userService.setUserResidentDistrict(
@@ -84,16 +110,21 @@ export class meResolver {
         setResidentNeighborhoodInput.neighborhoods.map((value) => value.id),
       );
 
-      return neighborhoodsIdAndName.map((neighborhoodName, idx) => ({
-        name: neighborhoodName.name,
-        id: setResidentNeighborhoodInput.neighborhoods[idx].id,
-        level: setResidentNeighborhoodInput.neighborhoods[idx].level,
-      }));
+      const ret = {
+        __typename: 'NeighborhoodList',
+        neighborhoods: neighborhoodsIdAndName.map((neighborhoodName, idx) => ({
+          name: neighborhoodName.name,
+          id: setResidentNeighborhoodInput.neighborhoods[idx].id,
+          level: setResidentNeighborhoodInput.neighborhoods[idx].level,
+        })),
+      };
+      return ret;
     } catch (e) {
       if (e.details === '동네를 찾을 수 없음') {
-        throw new RpcException(e.details);
+        console.error(e);
+        return WooJooNotFoundError;
       }
-      throw new RpcException(e);
+      throw e;
     }
   }
 

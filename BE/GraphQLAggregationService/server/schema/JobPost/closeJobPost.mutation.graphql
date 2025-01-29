@@ -2,5 +2,7 @@ extend type Mutation {
   """
   공고를 닫음
   """
-  closeJobPost(id: ID!): JobPost
+  closeJobPost(id: ID!): CloseJobPostResult!
 }
+
+union CloseJobPostResult = JobPost | NotFoundError | InternalError

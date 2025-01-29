@@ -2,7 +2,7 @@ extend type Mutation {
   """
   공고 생성
   """
-  createJobPost(input: CreateJobPostInput!): JobPost
+  createJobPost(input: CreateJobPostInput!): CreateJobPostResult!
 }
 
 """
@@ -104,3 +104,5 @@ input SalaryInput {
   """
   salaryAmount: BigInt!
 }
+
+union CreateJobPostResult = JobPost | BadInputError | InternalError

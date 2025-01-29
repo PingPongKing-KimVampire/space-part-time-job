@@ -2,7 +2,7 @@ extend type Mutation {
   """
   공고 지원
   """
-  applyToJobPost(input: ApplyJobPostInput!): JobApplication!
+  applyToJobPost(input: ApplyJobPostInput!): ApplyToJobPostResult!
 }
 
 """
@@ -19,3 +19,5 @@ input ApplyJobPostInput {
   """
   coverLetter: String!
 }
+
+union ApplyToJobPostResult = JobApplication | BadInputError | InternalError

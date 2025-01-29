@@ -2,5 +2,7 @@ extend type Mutation {
   """
   관심 설정 API
   """
-  markJobPostAsInterest(jobPostId: ID!): JobPost!
+  markJobPostAsInterest(jobPostId: ID!): MarkJobPostAsInterestResult!
 }
+
+union MarkJobPostAsInterestResult = JobPost | NotFoundError | InternalError

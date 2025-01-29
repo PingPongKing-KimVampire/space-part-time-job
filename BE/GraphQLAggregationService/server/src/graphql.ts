@@ -67,17 +67,17 @@ export enum ApplicationStatusEnum {
     CANCELED = "CANCELED"
 }
 
-export interface ApplyJobPostInput {
+export class ApplyJobPostInput {
     jobPostId: string;
     coverLetter: string;
 }
 
-export interface DecideJobApplicationInput {
+export class DecideJobApplicationInput {
     id: string;
     status: ApplicationStatusEnum;
 }
 
-export interface CreateJobPostInput {
+export class CreateJobPostInput {
     title: string;
     jobCategories: JobCategoryEnum[];
     workPeriod: WorkPeriodInput;
@@ -88,24 +88,24 @@ export interface CreateJobPostInput {
     addressName: string;
 }
 
-export interface WorkPeriodInput {
+export class WorkPeriodInput {
     type: WorkPeriodEnum;
     dates?: Nullable<FormattedDate[]>;
     days?: Nullable<DayOfWeekEnum[]>;
 }
 
-export interface WorkTimeInput {
+export class WorkTimeInput {
     type: WorkTimeEnum;
     startTime?: Nullable<FormattedTime>;
     endTime?: Nullable<FormattedTime>;
 }
 
-export interface SalaryInput {
+export class SalaryInput {
     salaryType: SalaryEnum;
     salaryAmount: BigInt;
 }
 
-export interface JobPostSearchFilter {
+export class JobPostSearchFilter {
     neighborhoodIds?: Nullable<string[]>;
     workPeriodType?: Nullable<WorkPeriodEnum>;
     days?: Nullable<DayOfWeekEnum[]>;
@@ -117,58 +117,82 @@ export interface JobPostSearchFilter {
     onlyMyPosts?: Nullable<boolean>;
 }
 
-export interface JobPostCursorInput {
+export class JobPostCursorInput {
     afterCursor?: Nullable<string>;
     first: number;
 }
 
-export interface SetResidentNeighborhoodInput {
+export class SetResidentNeighborhoodInput {
     neighborhoods: NeighborhoodInput[];
 }
 
-export interface NeighborhoodInput {
+export class NeighborhoodInput {
     id: string;
     level: number;
 }
 
-export interface InterestedJobPost {
+export interface BaseError {
+    message: string;
+}
+
+export class InterestedJobPost {
     jobPost: JobPost;
     createdAt: DateTime;
+    interestedJobPosts: Nullable<InterestedJobPost>[];
 }
 
-export interface IQuery {
-    listMyInterestedJobPosts(): Nullable<InterestedJobPost>[] | Promise<Nullable<InterestedJobPost>[]>;
-    getMyJobApplication(id: string): JobApplication | Promise<JobApplication>;
-    listMyJobApplications(): Nullable<JobApplication>[] | Promise<Nullable<JobApplication>[]>;
-    getJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
-    searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): JobPostConnection | Promise<JobPostConnection>;
-    me(): User | Promise<User>;
-    _empty(): Nullable<string> | Promise<Nullable<string>>;
+export abstract class IQuery {
+    abstract listMyInterestedJobPosts(): ListMyInterestedJobPostsResult | Promise<ListMyInterestedJobPostsResult>;
+
+    abstract getMyJobApplication(id: string): GetMyJobApplicationResult | Promise<GetMyJobApplicationResult>;
+
+    abstract listMyJobApplications(): ListMyJobApplicationsResult | Promise<ListMyJobApplicationsResult>;
+
+    abstract getJobPost(id: string): GetJobPostResult | Promise<GetJobPostResult>;
+
+    abstract searchJobPosts(filters: JobPostSearchFilter, pagination: JobPostCursorInput): SearchJobPostsResult | Promise<SearchJobPostsResult>;
+
+    abstract me(): MeResult | Promise<MeResult>;
+
+    abstract _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
-export interface IMutation {
-    markJobPostAsInterest(jobPostId: string): JobPost | Promise<JobPost>;
-    unmarkJobPostAsInterest(jobPostId: string): JobPost | Promise<JobPost>;
-    applyToJobPost(input: ApplyJobPostInput): JobApplication | Promise<JobApplication>;
-    cancelJobApplication(id: string): JobApplication | Promise<JobApplication>;
-    decideJobApplication(input: DecideJobApplicationInput): JobApplication | Promise<JobApplication>;
-    closeJobPost(id: string): Nullable<JobPost> | Promise<Nullable<JobPost>>;
-    createJobPost(input: CreateJobPostInput): Nullable<JobPost> | Promise<Nullable<JobPost>>;
-    incrementJobPostViews(id: string): number | Promise<number>;
-    setResidentNeighborhood(input: SetResidentNeighborhoodInput): Neighborhood[] | Promise<Neighborhood[]>;
-    _empty(): Nullable<string> | Promise<Nullable<string>>;
+export abstract class IMutation {
+    abstract markJobPostAsInterest(jobPostId: string): MarkJobPostAsInterestResult | Promise<MarkJobPostAsInterestResult>;
+
+    abstract unmarkJobPostAsInterest(jobPostId: string): UnmarkJobPostAsInterestResult | Promise<UnmarkJobPostAsInterestResult>;
+
+    abstract applyToJobPost(input: ApplyJobPostInput): ApplyToJobPostResult | Promise<ApplyToJobPostResult>;
+
+    abstract cancelJobApplication(id: string): CancelJobApplicationResult | Promise<CancelJobApplicationResult>;
+
+    abstract decideJobApplication(input: DecideJobApplicationInput): DecideJobApplicationResult | Promise<DecideJobApplicationResult>;
+
+    abstract closeJobPost(id: string): CloseJobPostResult | Promise<CloseJobPostResult>;
+
+    abstract createJobPost(input: CreateJobPostInput): CreateJobPostResult | Promise<CreateJobPostResult>;
+
+    abstract incrementJobPostViews(id: string): IncrementJobPostViewsResult | Promise<IncrementJobPostViewsResult>;
+
+    abstract setResidentNeighborhood(input: SetResidentNeighborhoodInput): SetResidentNeighborhoodResult | Promise<SetResidentNeighborhoodResult>;
+
+    abstract _empty(): Nullable<string> | Promise<Nullable<string>>;
 }
 
-export interface JobApplication {
+export class JobApplication {
     id: string;
-    jobPost: JobPost;
     coverLetter: string;
-    applicant: UserPublicInfo;
     status: ApplicationStatusEnum;
     createdAt: DateTime;
+    jobPost: JobApplicationJobPostResult;
+    applicant: JobApplicationApplicantResult;
 }
 
-export interface JobPost {
+export class JobApplications {
+    applications: Nullable<JobApplication>[];
+}
+
+export class JobPost {
     id: string;
     status: JobPostStatusEnum;
     title: string;
@@ -181,65 +205,98 @@ export interface JobPost {
     addressName: string;
     createdAt: DateTime;
     views: number;
-    publisher: UserPublicInfo;
-    applicationCount: number;
-    applications: JobApplication[];
-    myJobApplication?: Nullable<Nullable<JobApplication>[]>;
+    publisher: JobPostPublisherResult;
+    applicationCount: JobPostApplicationCountResult;
+    applications: JobPostApplicationsResult;
+    myJobApplication: JobPostMyJobApplicationResult;
     myInterested?: Nullable<InterestedJobPost>;
     interestedCount: number;
 }
 
-export interface WorkPeriod {
+export class WorkPeriod {
     type: WorkPeriodEnum;
     dates?: Nullable<FormattedDate[]>;
     days?: Nullable<DayOfWeekEnum[]>;
 }
 
-export interface WorkTime {
+export class WorkTime {
     type: WorkTimeEnum;
     startTime?: Nullable<FormattedTime>;
     endTime?: Nullable<FormattedTime>;
 }
 
-export interface Salary {
+export class Salary {
     salaryType: SalaryEnum;
     salaryAmount: BigInt;
 }
 
-export interface JobPostConnection {
+export class ApplicationCount {
+    count: number;
+}
+
+export class ViewsCountType {
+    count: number;
+}
+
+export class JobPostConnection {
     totalCount: number;
     edges: JobPostEdge[];
     pageInfo: PageInfo;
 }
 
-export interface JobPostEdge {
+export class JobPostEdge {
     cursor: string;
     node: JobPost;
 }
 
-export interface PageInfo {
+export class PageInfo {
     hasNextPage: boolean;
     endCursor?: Nullable<string>;
 }
 
-export interface Neighborhood {
+export class Neighborhood {
     id: string;
     level: number;
     name: string;
 }
 
-export interface User {
+export class NeighborhoodList {
+    neighborhoods: Neighborhood[];
+}
+
+export class User {
     id: string;
     nickname: string;
     phoneNumber: PhoneNumber;
     createdAt: DateTime;
-    residentNeighborhood?: Nullable<Neighborhood[]>;
+    residentNeighborhoods: UserResidentNeighborhoodsResult;
 }
 
-export interface UserPublicInfo {
+export class ResidentNeighborhoodsType {
+    neighborhoods: Neighborhood[];
+}
+
+export class UserPublicInfo {
     id: string;
     nickname: string;
     createdAt: DateTime;
+}
+
+export class NotFoundError implements BaseError {
+    message: string;
+}
+
+export class BadInputError implements BaseError {
+    message: string;
+    invalidFields: string[];
+}
+
+export class InternalError implements BaseError {
+    message: string;
+}
+
+export class ForbiddenError implements BaseError {
+    message: string;
 }
 
 export type PhoneNumber = any;
@@ -248,4 +305,26 @@ export type BigInt = any;
 export type URL = any;
 export type FormattedDate = any;
 export type FormattedTime = any;
+export type ListMyInterestedJobPostsResult = InterestedJobPost | InternalError;
+export type MarkJobPostAsInterestResult = JobPost | NotFoundError | InternalError;
+export type UnmarkJobPostAsInterestResult = JobPost | NotFoundError | InternalError;
+export type JobApplicationJobPostResult = JobPost | InternalError;
+export type JobApplicationApplicantResult = UserPublicInfo | InternalError;
+export type ApplyToJobPostResult = JobApplication | BadInputError | InternalError;
+export type CancelJobApplicationResult = JobApplication | NotFoundError | ForbiddenError;
+export type DecideJobApplicationResult = JobApplication | BadInputError | NotFoundError | ForbiddenError | InternalError;
+export type GetMyJobApplicationResult = JobApplication | ForbiddenError;
+export type ListMyJobApplicationsResult = JobApplications | InternalError;
+export type JobPostApplicationsResult = JobApplications | InternalError | ForbiddenError;
+export type JobPostPublisherResult = UserPublicInfo | InternalError;
+export type JobPostApplicationCountResult = ApplicationCount | InternalError;
+export type JobPostMyJobApplicationResult = JobApplications | InternalError;
+export type CloseJobPostResult = JobPost | NotFoundError | InternalError;
+export type CreateJobPostResult = JobPost | BadInputError | InternalError;
+export type GetJobPostResult = JobPost | NotFoundError | InternalError;
+export type IncrementJobPostViewsResult = ViewsCountType | NotFoundError | InternalError;
+export type SearchJobPostsResult = JobPostConnection | BadInputError | InternalError;
+export type SetResidentNeighborhoodResult = NeighborhoodList | NotFoundError | BadInputError;
+export type UserResidentNeighborhoodsResult = ResidentNeighborhoodsType | InternalError;
+export type MeResult = User | InternalError;
 type Nullable<T> = T | null;

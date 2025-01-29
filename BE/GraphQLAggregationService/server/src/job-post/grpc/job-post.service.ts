@@ -226,9 +226,12 @@ export class JobPostService implements OnModuleInit {
       );
       const { jobPost } = response;
       this.transformGrpcJobPost(jobPost);
+
+      // TODO: 컨트롤러로 이동(서비스의 다른 메서드도 마찬가지)
       jobPost.publisher = await this.userService.getUserPublicInfo(
         jobPost.userId,
       );
+
       return jobPost;
     } catch (e) {
       console.error('getJobPost grpc 에러 발생:', e);

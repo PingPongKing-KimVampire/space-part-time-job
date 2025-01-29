@@ -2,5 +2,11 @@ extend type Mutation {
   """
   조회수 증가 후 조회수 반환
   """
-  incrementJobPostViews(id: ID!): Int!
+  incrementJobPostViews(id: ID!): IncrementJobPostViewsResult!
 }
+
+type ViewsCountType{
+	count: Int!
+}
+
+union IncrementJobPostViewsResult = ViewsCountType | NotFoundError | InternalError

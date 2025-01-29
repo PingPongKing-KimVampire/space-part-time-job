@@ -17,5 +17,7 @@ extend type Mutation {
   """
   게시자가 지원서를 승인하거나 거절할 수 있음
   """
-  decideJobApplication(input: DecideJobApplicationInput!): JobApplication!
+  decideJobApplication(input: DecideJobApplicationInput!): DecideJobApplicationResult!
 }
+
+union DecideJobApplicationResult = JobApplication | BadInputError | NotFoundError | ForbiddenError | InternalError

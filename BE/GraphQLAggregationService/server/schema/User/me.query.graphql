@@ -2,5 +2,7 @@ extend type Query {
   """
   현재 로그인한 사용자의 정보 조회
   """
-  me: User!
+  me: MeResult!
 }
+
+union MeResult = User | InternalError

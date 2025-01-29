@@ -35,9 +35,13 @@ export class JobApplyResolver {
       ...applyJobPostInput,
       userId: user.id,
     });
-    return this.transformJobApplicationResponse(
-      jobApplicationResponse.jobApplication,
-    );
+
+    return {
+      __typename: 'JobApplication',
+      ...this.transformJobApplicationResponse(
+        jobApplicationResponse.jobApplication,
+      ),
+    };
   }
 
   @Mutation('cancelJobApplication')
@@ -54,19 +58,28 @@ export class JobApplyResolver {
         userId: user.id,
       });
 
-    return this.transformJobApplicationResponse(
-      jobApplicationResponse.jobApplication,
-    );
+    return {
+      __typename: 'JobApplication',
+      ...this.transformJobApplicationResponse(
+        jobApplicationResponse.jobApplication,
+      ),
+    };
   }
 
   @ResolveField('jobPost')
   async resolveJobPost(@Parent() jobApplication) {
-    return this.jobPostService.getJobPost(jobApplication.jobPostId);
+    return {
+      __typename: 'JobPost',
+      ...(await this.jobPostService.getJobPost(jobApplication.jobPostId)),
+    };
   }
 
   @ResolveField('applicant')
   async resolveApplicant(@Parent() jobApplication) {
-    return this.userService.getUserPublicInfo(jobApplication.userId);
+    return {
+      __typename: 'UserPublicInfo',
+      ...(await this.userService.getUserPublicInfo(jobApplication.userId)),
+    };
   }
 
   @Mutation('decideJobApplication')
@@ -83,7 +96,10 @@ export class JobApplyResolver {
       status: ApplicationStatusGrpcType[input.status],
     });
 
-    return this.transformJobApplicationResponse(jobApplication);
+    return {
+      __typename: 'JobApplication',
+      ...this.transformJobApplicationResponse(jobApplication),
+    };
   }
 
   @Query('listMyJobApplications')
@@ -96,9 +112,12 @@ export class JobApplyResolver {
         userId: user.id,
       });
 
-    return (jobApplicationList ?? []).map((jobApplication) =>
-      this.transformJobApplicationResponse(jobApplication),
-    );
+    return {
+      __typename: 'JobApplications',
+      applications: (jobApplicationList ?? []).map((jobApplication) =>
+        this.transformJobApplicationResponse(jobApplication),
+      ),
+    };
   }
 
   @Query('getMyJobApplication')
@@ -113,7 +132,10 @@ export class JobApplyResolver {
       jobApplicationId: id,
       userId: user.id,
     });
-    return this.transformJobApplicationResponse(jobApplication);
+    return {
+      __typename: 'JobApplication',
+      ...this.transformJobApplicationResponse(jobApplication),
+    };
   }
 
   private getEnumKeyByValue<T extends object>(

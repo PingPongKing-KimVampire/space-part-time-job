@@ -2,5 +2,7 @@ extend type Mutation {
   """
   사용자가 본인의 지원 취소 (PENDING 상태일 때만 취소 가능)
   """
-  cancelJobApplication(id: ID!): JobApplication!
+  cancelJobApplication(id: ID!): CancelJobApplicationResult!
 }
+
+union CancelJobApplicationResult = JobApplication | NotFoundError | ForbiddenError

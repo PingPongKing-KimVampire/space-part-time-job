@@ -2,5 +2,7 @@ extend type Query {
   """
   내 지원서 중 특정 지원서 조회
   """
-  getMyJobApplication(id: ID!): JobApplication!
+  getMyJobApplication(id: ID!): GetMyJobApplicationResult!
 }
+
+union GetMyJobApplicationResult = JobApplication | ForbiddenError

@@ -8,19 +8,9 @@ type JobApplication {
   id: ID!
 
   """
-  지원한 공고
-  """
-  jobPost: JobPost!
-
-  """
   지원서 내용
   """
   coverLetter: String!
-
-  """
-  지원자 정보
-  """
-  applicant: UserPublicInfo!
 
   """
   지원 상태
@@ -31,4 +21,23 @@ type JobApplication {
   지원 생성 날짜 (ISO 8601 형식)
   """
   createdAt: DateTime!
+
+  """
+  지원한 공고
+  """
+  jobPost: JobApplicationJobPostResult!
+
+  """
+  지원자 정보
+  """
+  applicant: JobApplicationApplicantResult!
+
 }
+
+type JobApplications {
+	applications: [JobApplication]!
+}
+
+union JobApplicationJobPostResult = JobPost | InternalError
+
+union JobApplicationApplicantResult = UserPublicInfo | InternalError

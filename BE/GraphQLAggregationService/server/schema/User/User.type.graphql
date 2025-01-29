@@ -25,5 +25,11 @@ type User {
   """
   상주 동네 정보 (최대 3개)
   """
-  residentNeighborhood: [Neighborhood!]
+  residentNeighborhoods: UserResidentNeighborhoodsResult!
 }
+
+type ResidentNeighborhoodsType {
+  neighborhoods: [Neighborhood!]!
+}
+
+union UserResidentNeighborhoodsResult = ResidentNeighborhoodsType | InternalError

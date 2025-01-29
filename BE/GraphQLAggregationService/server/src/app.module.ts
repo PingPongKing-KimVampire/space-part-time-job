@@ -19,6 +19,7 @@ import { BigIntResolver } from 'graphql-scalars';
       typePaths: ['./**/*.graphql'],
       definitions: {
         path: join(process.cwd(), 'src/graphql.ts'),
+        outputAs: 'class',
       },
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
