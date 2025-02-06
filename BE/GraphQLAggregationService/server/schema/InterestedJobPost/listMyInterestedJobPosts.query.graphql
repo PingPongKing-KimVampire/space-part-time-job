@@ -20,8 +20,8 @@ extend type Query {
   listMyInterestedJobPosts: ListMyInterestedJobPostsResult!
 }
 
-type InterestedJobPost {
+type InterestedJobPosts {
   interestedJobPosts: [InterestedJobPost]!
 }
 
-union ListMyInterestedJobPostsResult = InterestedJobPost | InternalError
+union ListMyInterestedJobPostsResult = InterestedJobPosts | InternalError

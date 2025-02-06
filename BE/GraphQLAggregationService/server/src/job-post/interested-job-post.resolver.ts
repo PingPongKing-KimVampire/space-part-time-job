@@ -17,7 +17,7 @@ export class InterestedJobPostResolver {
       await this.jobPostService.listMyInterestedJobPost(user.id);
 
     return {
-      __typename: 'InterestedJobPost',
+      __typename: 'InterestedJobPosts',
       interestedJobPosts: (interestedJobPosts ?? []).map(
         async (interestedJobPost) => ({
           jobPost: await this.jobPostResolver.getJobPost(

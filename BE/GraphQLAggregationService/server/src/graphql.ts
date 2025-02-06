@@ -138,7 +138,6 @@ export interface BaseError {
 export class InterestedJobPost {
     jobPost: JobPost;
     createdAt: DateTime;
-    interestedJobPosts: Nullable<InterestedJobPost>[];
 }
 
 export abstract class IQuery {
@@ -155,6 +154,10 @@ export abstract class IQuery {
     abstract me(): MeResult | Promise<MeResult>;
 
     abstract _empty(): Nullable<string> | Promise<Nullable<string>>;
+}
+
+export class InterestedJobPosts {
+    interestedJobPosts: Nullable<InterestedJobPost>[];
 }
 
 export abstract class IMutation {
@@ -305,7 +308,7 @@ export type BigInt = any;
 export type URL = any;
 export type FormattedDate = any;
 export type FormattedTime = any;
-export type ListMyInterestedJobPostsResult = InterestedJobPost | InternalError;
+export type ListMyInterestedJobPostsResult = InterestedJobPosts | InternalError;
 export type MarkJobPostAsInterestResult = JobPost | NotFoundError | InternalError;
 export type UnmarkJobPostAsInterestResult = JobPost | NotFoundError | InternalError;
 export type JobApplicationJobPostResult = JobPost | InternalError;
