@@ -168,14 +168,14 @@ const MyPostList: React.FC<MyPostListProp> = ({
             )}
             <button
               className={`applicationButton ${
-                applicationCount === 0 ? "inactivated" : ""
+                (!applicationCount || applicationCount === 0) ? "inactivated" : ""
               }`}
               onMouseEnter={onInnerClickableMouseEnter}
               onMouseLeave={onInnerClickableMouseLeave}
               onClick={onApplicationButtonClick}
-              disabled={applicationCount === 0}
+              disabled={!applicationCount|| applicationCount === 0}
             >
-              지원서 확인<span className="count">({applicationCount}건)</span>
+              지원서 확인<span className="count">({applicationCount || "?"}건)</span>
             </button>
           </div>
         </ListItem>

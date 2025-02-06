@@ -135,43 +135,70 @@ export const GET_MY_JOB_POSTS = gql`
 
 export const GET_JOB_POST = gql`
   query GetJobPost($id: ID!) {
-    getJobPost(id: $id) {
-      id
-      status
-      title
-      jobCategories
-      workPeriod {
-        type
-        dates
-        days
-      }
-      workTime {
-        type
-        startTime
-        endTime
-      }
-      salary {
-        salaryType
-        salaryAmount
-      }
-      photos
-      detailedDescription
-      addressName
-      createdAt
-      views
-      publisher {
-        nickname
-        createdAt
-      }
-      applicationCount
-      myJobApplication {
+    getJobPost(id: $getJobPostId) {
+      ... on JobPost {
         id
         status
-      }
-      myInterested {
+        title
+        jobCategories
+        workPeriod {
+          type
+          dates
+          days
+        }
+        workTime {
+          type
+          startTime
+          endTime
+        }
+        salary {
+          salaryType
+          salaryAmount
+        }
+        photos
+        detailedDescription
+        addressName
         createdAt
+        views
+        publisher {
+          ... on UserPublicInfo {
+            nickname
+            createdAt
+          }
+          ... on InternalError {
+            message
+          }
+        }
+        applicationCount {
+          ... on ApplicationCount {
+            count
+          }
+          ... on InternalError {
+            message
+          }
+        }
+        myJobApplication {
+          ... on InternalError {
+            message
+          }
+          ... on JobApplications {
+            applications {
+              id
+              status
+            }
+          }
+        }
+        myInterested {
+          createdAt
+        }
+        interestedCount
       }
-      interestedCount
+      ... on NotFoundError {
+        message
+      }
+      ... on InternalError {
+        message
+      }
     }
   }
 `;

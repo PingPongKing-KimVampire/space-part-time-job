@@ -11,19 +11,21 @@ import {
   UNMARK_JOB_POST_AS_INTEREST,
   MARK_JOB_POST_AS_INTEREST,
 } from "../../api/graphql/mutations.js";
-import useViewJobContext from "../../context/ViewJobContext.tsx";
-import { WarningText } from "../../styles/global.ts";
+import useViewJobContext from "../../context/ViewJobContext";
+import { WarningText } from "../../styles/global";
 
 const Interaction = () => {
   const { jobPost, setJobPost, setIsApplicationModalVisible } =
     useViewJobContext();
-  const { id, myJobApplication = [], myInterested, status } = jobPost;
+  const { id, myJobApplication, myInterested, status } = jobPost;
 
   const isApplied = useMemo(
-    () =>
-      myJobApplication.some(
+    () => {
+      if (!myJobApplication) return null; // TODO : 지원서 받아오기 실패
+      return myJobApplication.some(
         (application) => application.status === APPLICATION_STATUS.PENDING
-      ),
+      )
+    },
     [jobPost]
   );
   const isClosed = useMemo(() => status === JOB_POST_STATUS.CLOSE, [jobPost]);
@@ -57,15 +59,17 @@ const Interaction = () => {
       <div className="interaction">
         <button
           className={`applyButton ${
-            isApplied || isClosed ? "inactivated" : ""
+            isApplied === null || isApplied || isClosed ? "inactivated" : ""
           }`}
-          disabled={isApplied || isClosed}
+          disabled={isApplied === null || isApplied || isClosed}
           onClick={() => {
             setIsApplicationModalVisible(true);
           }}
         >
           {isClosed
             ? "마감된 알바에요."
+            : isApplied === null
+            ? "서버 오류로 지금은 지원할 수 없어요."
             : isApplied
             ? "내가 이미 지원한 알바에요."
             : "지원하기"}

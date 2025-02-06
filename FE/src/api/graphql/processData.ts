@@ -30,9 +30,30 @@ export const processGetMyJobPosts = (data) => {
         if (post.applicationCount.__typename === "ApplicationCount") {
             post.applicationCount = post.applicationCount.count;
         } else { // InternalError
-            post.applicationCount = null;
+            post.applicationCount = null; // TODO : applicationCount가 null로 오는 거 처리해야지!!!
         }
         return post;
     });
     return { posts, pageInfo: data.searchJobPosts.pageInfo };
+}
+
+export const processGetJobPost = (data) => {
+    if (data.getJobPost.__typename !== "JobPost") {
+        throw new Error(data.message);
+    }
+    const post = data.getJobPost;
+    if (post.publisher.__typename !== "UserPublicInfo") {
+        post.publisher = null;
+    }
+    if (post.applicationCount.__typename === "ApplicationCount") {
+        post.applicationCount = post.applicationCount.count;
+    } else {
+        post.applicationCount = null;
+    }
+    if (post.myApplication.__typename === "JobApplications") {
+        post.myApplication = post.myApplication.applications;
+    } else {
+        post.myApplication = null;
+    }
+    return post;
 }

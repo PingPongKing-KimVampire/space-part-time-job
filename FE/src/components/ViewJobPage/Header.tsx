@@ -30,7 +30,7 @@ const Header = () => {
         {title}
       </div>
       <div className="subInfo">
-        {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestedCount}  ·  지원 ${applicationCount}`}
+        {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestedCount}  ·  지원 ${applicationCount || '?'}`}
       </div>
     </HeaderContainer>
   );

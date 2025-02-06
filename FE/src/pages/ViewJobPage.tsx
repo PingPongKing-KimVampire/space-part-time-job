@@ -1,18 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import formatTimeAgo from "../utils/formatTimeAgo";
-import Header from "../components/ViewJobPage/Header.tsx";
-import Content from "../components/ViewJobPage/Content.tsx";
-import ApplicationModal from "../components/ViewJobPage/ApplicationModal.tsx";
+import Header from "../components/ViewJobPage/Header";
+import Content from "../components/ViewJobPage/Content";
+import ApplicationModal from "../components/ViewJobPage/ApplicationModal";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import { Background, Container } from "../styles/pages/ViewJobPage.styles";
-import LoadingOverlay from "../components/LoadingOverlay.tsx";
+import LoadingOverlay from "../components/LoadingOverlay";
 import { MainBackgroundColor, WarningText } from "../styles/global";
 import { GET_JOB_POST } from "../api/graphql/queries";
+import { processGetJobPost } from "../api/graphql/processData";
 import { INCREMENT_JOB_POST_VIEWS } from "../api/graphql/mutations.js";
-import useViewJobContext from "../context/ViewJobContext.tsx";
-import { ERROR } from "../constants/constants.ts";
+import useViewJobContext from "../context/ViewJobContext";
+import { ERROR } from "../constants/constants";
 
 const ViewJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -24,29 +25,34 @@ const ViewJobPage = () => {
     { loading: incrementViewsLoading, error: incrementViewsError },
   ] = useMutation(INCREMENT_JOB_POST_VIEWS);
 
+  const [getJobPostFinalError, setGetJobPostFinalError] = useState<Error | null>(null);
   const [getJobPost, { loading: getJobPostLoading, error: getJobPostError }] =
     useLazyQuery(GET_JOB_POST, {
       variables: { id },
       fetchPolicy: "network-only",
       onCompleted: async (data) => {
         try {
+          const post = processGetJobPost(data);
           const incrementViewsResponse = await incrementViews({
             variables: { id },
           });
           setJobPost({
-            ...data.getJobPost,
-            createdAt: formatTimeAgo(data.getJobPost.createdAt),
+            ...post,
+            createdAt: formatTimeAgo(post.createdAt),
             publisher: {
-              ...data.getJobPost.publisher,
-              createdAt: formatTimeAgo(data.getJobPost.publisher.createdAt),
+              ...post.publisher,
+              createdAt: formatTimeAgo(post.publisher.createdAt),
             },
             views: incrementViewsResponse.data.incrementJobPostViews,
           });
         } catch (e) {
-          console.error("IncrementJobPostViews Mutation Error: ", e.message);
+          setGetJobPostFinalError(e);
         }
       },
     });
+  useEffect(() => {
+    if (getJobPostError) setGetJobPostFinalError(new Error(ERROR.SERVER));
+  }, [getJobPostError])
 
   useEffect(() => {
     if (isApplicationModalVisible) return;
@@ -57,10 +63,16 @@ const ViewJobPage = () => {
     }
   }, [isApplicationModalVisible, getJobPost]);
 
-  if (getJobPostError || incrementViewsError)
+  if (incrementViewsError)
     return (
       <Background>
         <WarningText>{ERROR.SERVER}</WarningText>
+      </Background>
+    );
+  if (getJobPostFinalError)
+    return (
+      <Background>
+        <WarningText>{getJobPostFinalError.message}</WarningText>
       </Background>
     );
   if (getJobPostLoading) return <LoadingOverlay />;

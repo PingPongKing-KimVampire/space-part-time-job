@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { max } from "date-fns";
-import CustomCalendar from "../CustomCalendar.tsx";
-import CustomMap from "../CustomMap.tsx";
+import CustomCalendar from "../CustomCalendar";
+import CustomMap from "../CustomMap";
 import {
   formatPayForDisplay,
   formatTimeForDisplay,
@@ -13,7 +13,7 @@ import { ReactComponent as WonIcon } from "../../assets/icons/won.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
 import { ReactComponent as LocationIcon } from "../../assets/icons/location-outline.svg";
 import { ReactComponent as ClockIcon } from "../../assets/icons/clock.svg";
-import useViewJobContext from "../../context/ViewJobContext.tsx";
+import useViewJobContext from "../../context/ViewJobContext";
 
 const BasicInfo = () => {
   const { jobPost } = useViewJobContext();

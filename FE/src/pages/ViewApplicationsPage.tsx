@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-import useBackgroundColor from "../utils/useBackgroundColor.ts";
-import { MainBackgroundColor, WarningText } from "../styles/global.ts";
+import useBackgroundColor from "../utils/useBackgroundColor";
+import { MainBackgroundColor, WarningText } from "../styles/global";
 import {
   Container,
   UserInfo,
-} from "../styles/pages/ViewApplicationsPage.styles.ts";
+} from "../styles/pages/ViewApplicationsPage.styles";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
-import { AcceptedBadge, RejectedBadge } from "../components/Badges.tsx";
-import { ERROR, APPLICATION_STATUS } from "../constants/constants.ts";
+import { AcceptedBadge, RejectedBadge } from "../components/Badges";
+import { ERROR, APPLICATION_STATUS } from "../constants/constants";
 import { GET_JOB_POST_APPLICATIONS } from "../api/graphql/queries.js";
 import { DECIDE_JOB_APPLICATION } from "../api/graphql/mutations.js";
-import formatTimeAgo from "../utils/formatTimeAgo.ts";
-import { Application } from "../types/types.ts";
-import LoadingOverlay from "../components/LoadingOverlay.tsx";
+import formatTimeAgo from "../utils/formatTimeAgo";
+import { Application } from "../types/types";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const ViewApplicantsPage = () => {
   useBackgroundColor(MainBackgroundColor);
