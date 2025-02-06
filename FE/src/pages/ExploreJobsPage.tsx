@@ -27,9 +27,9 @@ import {
   TIME_NOT_SET,
   JOB_POST_STATUS,
 } from "../constants/constants";
-import { JobPost, PageInfo, Filter, ApiState } from "../types/types.ts";
-import setQueryParam from "../utils/setQueryParam.ts";
-import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods.ts";
+import { JobPost, PageInfo, Filter, ApiState } from "../types/types";
+import setQueryParam from "../utils/setQueryParam";
+import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods";
 
 const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);

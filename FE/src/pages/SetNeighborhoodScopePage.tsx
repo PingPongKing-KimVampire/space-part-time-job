@@ -30,7 +30,6 @@ const SetNeighborhoodScopePage = () => {
     Record<string, SelectedNeighborhood>
   >({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  // const [scopeValues, setScopeValues] = useState<Record<string, string>>({}); // 동 ID와 레벨 매핑
   const [districtBoundaries, setDistrictBoundaries] = useState<
     Record<string, Record<string, Level>>
   >({});

@@ -2,9 +2,10 @@ import { ThunkAction } from "redux-thunk";
 import { Action } from "redux";
 import apolloClient from "../api/graphql/apolloClient.js";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
-import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
-import { ApiState } from "../types/types.ts";
-import { SearchNeighborhood } from "../types/types.ts";
+import { processGetResidentNeighborhood } from "../api/graphql/processData";
+import { fetchDistrictBoundary } from "../api/rest/neighborhood";
+import { ApiState } from "../types/types";
+import { SearchNeighborhood } from "../types/types";
 
 export const fetchResidentNeighborhoods = (): ThunkAction<
   Promise<void>,
@@ -20,18 +21,17 @@ export const fetchResidentNeighborhoods = (): ThunkAction<
         query: GET_RESIDENT_NEIGHBORHOOD,
         fetchPolicy: "network-only",
       });
-      // (공고를 조회할) 인접 동네 불러오기
-      if (data?.me?.residentNeighborhood) {
-        const result = {};
-        for (const neighborhood of data?.me?.residentNeighborhood) {
-          const boundary = await fetchDistrictBoundary(neighborhood.id);
-          result[neighborhood.id] = {
-            ...neighborhood,
-            districts: boundary[neighborhood.level].districts,
-          };
-        }
-        dispatch(setResidentNeighborhoods(result));
+      const neighborhoods = processGetResidentNeighborhood(data);
+      const result = {};
+      for (const neighborhood of neighborhoods) {
+        // (공고를 조회할) 인접 동네 불러오기
+        const boundary = await fetchDistrictBoundary(neighborhood.id);
+        result[neighborhood.id] = {
+          ...neighborhood,
+          districts: boundary[neighborhood.level].districts,
+        };
       }
+      dispatch(setResidentNeighborhoods(result));
     } catch (e) {
       dispatch(setResidentNeighborhoodsError(e));
       console.log("FetchResidentNeighborhoodsError: ", e);

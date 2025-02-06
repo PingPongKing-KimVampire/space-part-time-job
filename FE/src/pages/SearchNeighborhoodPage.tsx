@@ -20,6 +20,7 @@ import SelectedNeighborhoods from "../components/SearchNeighborhoodPage/Selected
 import ResultNeighborhoods from "../components/SearchNeighborhoodPage/ResultNeighborhoods";
 import { MainBackgroundColor, WarningText } from "../styles/global";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
+import { processGetResidentNeighborhood } from "../api/graphql/processData"; 
 import { Neighborhood, SelectedNeighborhood } from "../types/types";
 import { ERROR } from "../constants/constants";
 
@@ -38,6 +39,7 @@ const SearchNeighborhoodPage = () => {
   const [selectedNeighborhoods, setSelectedNeighborhoods] = useState<
     SelectedNeighborhood[]
   >([]);
+  const [getResidentError, setGetResidentError] = useState<Error | null>(null);
 
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue, 100);
@@ -49,25 +51,24 @@ const SearchNeighborhoodPage = () => {
 
   const [
     getResidentNeighborhood,
-    { loading: getResidentLoading, error: getResidentError },
+    { loading: getResidentLoading },
   ] = useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
     onCompleted: (data) => {
-      const residentNeighborhoods = data.me.residentNeighborhoods;
-      if (residentNeighborhoods.__typename === "ResidentNeighborhoodsType") {
+      try {
+        const neighborhoods = processGetResidentNeighborhood(data);
         setSelectedNeighborhoods(
-          residentNeighborhoods.neighborhoods.map((neighborhood) => ({
+          neighborhoods.map((neighborhood) => ({
             ...neighborhood,
             scopeValue: convertLevelToScopeValue(neighborhood.level),
           }))
         );
-      } else if (residentNeighborhoods.__typename === "InternalError") {
-        console.error(
-          "Error fetching resident neighborhoods:",
-          residentNeighborhoods.message
-        );
-        // TODO : 화면에 표시하기
+      } catch (e) {
+        setGetResidentError(e);
       }
     },
+    onError: (error) => {
+      setGetResidentError(error);
+    }
   });
   useEffect(() => {
     const setupTotalNeighborhoods = async () => {
@@ -184,9 +185,8 @@ const SearchNeighborhoodPage = () => {
           }}
           maxLength={20}
         />
-        {(getResidentError || totalNeighborhoods.error) && (
-          <WarningText>{ERROR.SERVER}</WarningText>
-        )}
+        {totalNeighborhoods.error && <WarningText>{ERROR.SERVER}</WarningText>}
+        {getResidentError && <WarningText>{getResidentError.message}</WarningText>}
         <div className="content">
           <SelectedNeighborhoods
             neighborhoods={selectedNeighborhoods}

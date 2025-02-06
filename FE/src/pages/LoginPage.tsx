@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
-import { sendSmsCodeAtLogin, login } from "../api/rest/auth.ts";
-import CustomInput from "../components/CustomInput.tsx";
-import PhoneNumberInput from "../components/PhoneNumberInput.tsx";
-import PasswordInput from "../components/PasswordInput.tsx";
-import NotificationBox from "../components/NotificationBox.tsx";
-import LoadingOverlay from "../components/LoadingOverlay.tsx";
+import { sendSmsCodeAtLogin, login } from "../api/rest/auth";
+import CustomInput from "../components/CustomInput";
+import PhoneNumberInput from "../components/PhoneNumberInput";
+import PasswordInput from "../components/PasswordInput";
+import NotificationBox from "../components/NotificationBox";
+import LoadingOverlay from "../components/LoadingOverlay";
 import { WarningText, MainColor } from "../styles/global";
 import {
   Background,
@@ -18,7 +18,7 @@ import {
   LoginButton,
   SignupMessage,
   PhoneNumberInputChild,
-} from "../styles/pages/LoginPage.styles.ts";
+} from "../styles/pages/LoginPage.styles";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import { checkRulePassInAuth } from "../utils/checkRulePass";
 import useCountdownTimer from "../utils/useCountdownTimer";
@@ -28,6 +28,7 @@ import {
   LOGIN_TAB,
 } from "../constants/constants";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
+import { processGetResidentNeighborhood } from "../api/graphql/processData"; 
 import logoImage from "../assets/images/logo.png";
 
 const LoginPage = (): React.JSX.Element => {
@@ -100,22 +101,15 @@ const LoginPage = (): React.JSX.Element => {
     },
   ] = useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
     onCompleted: (data) => {
-      if (data.me.__typename === "User") {
-        const residentNeighborhoods = data.me.residentNeighborhoods;
-        if (residentNeighborhoods.__typename === "ResidentNeighborhoodsType") {
-          if (
-            !residentNeighborhoods.neighborhoods ||
-            residentNeighborhoods.neighborhoods.length === 0
-          ) {
-            navigate("/search-neighborhood");
-          } else {
-            navigate("/explore-jobs");
-          }
-        } else if (residentNeighborhoods.__typename === "InternalError") {
-          setWarning(residentNeighborhoods.message);
+      try {
+        const neighborhoods = processGetResidentNeighborhood(data);
+        if (!neighborhoods || neighborhoods.length === 0) {
+          navigate("/search-neighborhood");
+        } else {
+          navigate("/explore-jobs");
         }
-      } else if (data.me.__typename === "InternalError") {
-        setWarning(data.me.message);
+      } catch (e) {
+        setWarning(e.message);
       }
     },
   });
