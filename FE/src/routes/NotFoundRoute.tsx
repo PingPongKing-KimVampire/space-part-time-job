@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { GET_MY_ID } from "../api/graphql/queries.js";
 import { useQuery } from "@apollo/client";
-import LoadingOverlay from "../components/LoadingOverlay.tsx";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const NotFoundRoute = () => {
   // 로그인된 경우 exlore-jobs, 안 된 경우 login 페이지로 이동

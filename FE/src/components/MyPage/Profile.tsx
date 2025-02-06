@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { logout } from "../../api/rest/auth.ts";
+import { logout } from "../../api/rest/auth";
 import { ProfileContainer } from "../../styles/pages/MyPage.styles";
 import { ReactComponent as ProfileIcon } from "../../assets/icons/profile.svg";
 import { GET_MY_BASIC_INFO } from "../../api/graphql/queries.js";
-import formatTimeAgo from "../../utils/formatTimeAgo.ts";
+import formatTimeAgo from "../../utils/formatTimeAgo";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -13,6 +13,10 @@ const Profile = () => {
   const { data, loading, error } = useQuery(GET_MY_BASIC_INFO);
   const { nickname = "", timeTogether = "" } = useMemo(() => {
     if (!data) return {};
+    if (data.me.__typename === "InternalError") {
+      return { nickname: "불러오기 실패", timeTogether: "불러오기 실패" };
+    }
+    // me: User
     return {
       nickname: data.me.nickname,
       timeTogether: formatTimeAgo(data.me.createdAt),
