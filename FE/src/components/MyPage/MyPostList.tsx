@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { PageInfo } from "../../types/types.ts";
+import { PageInfo } from "../../types/types";
 import { GET_MY_JOB_POSTS } from "../../api/graphql/queries.js";
+import { processGetMyJobPosts } from "../../api/graphql/processData";
 import { CLOSE_JOB_POST } from "../../api/graphql/mutations.js";
-import { ERROR, JOB_POST_STATUS } from "../../constants/constants.ts";
+import { ERROR, JOB_POST_STATUS } from "../../constants/constants";
 import { ListItem } from "../../styles/pages/MyPage.styles";
-import { CloseTag, WarningText } from "../../styles/global.ts";
-import { MouseEventHandlers } from "./PostList.tsx";
-import { JobPost } from "../../types/types.ts";
+import { CloseTag, WarningText } from "../../styles/global";
+import { MouseEventHandlers } from "./PostList";
+import { JobPost } from "../../types/types";
 
 type MyPostListProp = {
   mouseEventHandlers: MouseEventHandlers;
@@ -36,24 +37,34 @@ const MyPostList: React.FC<MyPostListProp> = ({
   const isFirstFetchRef = useRef<boolean>(true);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  const [getMyJobPostsFinalError, setGetJobPostsFinalError] = useState<Error | null>(null);
   const [
     getMyJobPosts,
     { loading: getMyJobPostsLoading, error: getMyJobPostsError },
   ] = useLazyQuery(GET_MY_JOB_POSTS, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      const nodes = data.searchJobPosts.edges.map((edge) => edge.node);
-      if (isFirstFetchRef.current) {
-        // 탭이 바뀐 후 패치 -> 기존 데이터 날리고 세로 저장
-        setMyJobPosts(nodes);
-        isFirstFetchRef.current = false;
-      } else {
-        // 스크롤 다운 후 패치 -> 기존 데이터에 추가
-        setMyJobPosts(nodes);
+      try {
+        const { posts, pageInfo } = processGetMyJobPosts(data);
+        // TODO : 둘 다 기존 데이터 날리는 거 아닌가? 스크롤 시 잘 추가되나?
+        if (isFirstFetchRef.current) {
+          // 탭이 바뀐 후 패치 -> 기존 데이터 날리고 세로 저장
+          setMyJobPosts(posts);
+          isFirstFetchRef.current = false;
+        } else {
+          // 스크롤 다운 후 패치 -> 기존 데이터에 추가
+          setMyJobPosts(posts);
+        }
+        setMyJobPostsPageInfo(pageInfo);
+      } catch (e) {
+        setGetJobPostsFinalError(e);
       }
-      setMyJobPostsPageInfo(data.searchJobPosts.pageInfo);
     },
   });
+  useEffect(() => {
+    if (getMyJobPostsError)
+    setGetJobPostsFinalError(new Error(ERROR.SERVER));
+  }, [getMyJobPostsError]);
 
   const fetchMyJobPosts = useCallback(
     (cursor) => {
@@ -169,9 +180,8 @@ const MyPostList: React.FC<MyPostListProp> = ({
           </div>
         </ListItem>
       ))}
-      {(getMyJobPostsError || closeError) && (
-        <WarningText>{ERROR.SERVER}</WarningText>
-      )}
+      {closeError && <WarningText>{ERROR.SERVER}</WarningText>}
+      {getMyJobPostsFinalError && <WarningText>{getMyJobPostsFinalError.message}</WarningText>}
       <div ref={bottomRef} style={{ height: "10px", background: "red" }} />
     </>
   );

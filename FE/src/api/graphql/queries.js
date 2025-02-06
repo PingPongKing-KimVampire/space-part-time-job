@@ -52,41 +52,48 @@ export const GET_MY_BASIC_INFO = gql`
 `;
 
 export const SEARCH_JOB_POSTS = gql`
-  query SearchJobPosts(
-    $filters: JobPostSearchFilter!
-    $pagination: JobPostCursorInput!
-  ) {
+  query SearchJobPosts($filters: JobPostSearchFilter!, $pagination: JobPostCursorInput!) {
     searchJobPosts(filters: $filters, pagination: $pagination) {
-      totalCount
-      edges {
-        node {
-          id
-          title
-          workPeriod {
-            type
-            dates
-            days
+      ... on JobPostConnection {
+        totalCount
+        edges {
+          node {
+            id
+            title
+            workPeriod {
+              dates
+              days
+              type
+            }
+            workTime {
+              type
+              startTime
+              endTime
+            }
+            salary {
+              salaryType
+              salaryAmount
+            }
+            photos
+            addressName
+            createdAt
           }
-          workTime {
-            type
-            startTime
-            endTime
-          }
-          salary {
-            salaryType
-            salaryAmount
-          }
-          photos
-          addressName
-          createdAt
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
         }
       }
-      pageInfo {
-        hasNextPage
-        endCursor
+      ... on BadInputError {
+        message
+        invalidFields
+      }
+      ... on InternalError {
+        message
       }
     }
   }
+  
 `;
 
 export const GET_MY_JOB_POSTS = gql`
@@ -95,17 +102,32 @@ export const GET_MY_JOB_POSTS = gql`
     $pagination: JobPostCursorInput!
   ) {
     searchJobPosts(filters: $filters, pagination: $pagination) {
-      edges {
-        node {
-          id
-          title
-          status
-          applicationCount
+      ... on JobPostConnection {
+        edges {
+          node {
+            id
+            title
+            status
+            applicationCount
+            ... on ApplicationCount {
+              count
+            }
+            ... on InternalError {
+              message
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
         }
       }
-      pageInfo {
-        hasNextPage
-        endCursor
+      ... on BadInputError {
+        message
+        invalidFields
+      }
+      ... on InternalError {
+        message
       }
     }
   }

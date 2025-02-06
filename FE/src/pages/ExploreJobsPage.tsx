@@ -6,9 +6,9 @@ import { MainBackgroundColor } from "../styles/global";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import useDebounce from "../utils/useDebounce";
-import JobList from "../components/ExploreJobsPage/JobList.tsx";
-import JobFilter from "../components/ExploreJobsPage/JobFilter.tsx";
-import NeighborhoodButton from "../components/ExploreJobsPage/NeighborhoodSelector.tsx";
+import JobList from "../components/ExploreJobsPage/JobList";
+import JobFilter from "../components/ExploreJobsPage/JobFilter";
+import NeighborhoodButton from "../components/ExploreJobsPage/NeighborhoodSelector";
 import LoadingOverlay from "../components/LoadingOverlay";
 import {
   Background,
@@ -18,6 +18,7 @@ import {
 } from "../styles/pages/ExploreJobsPage.styles";
 import { WarningText } from "../styles/global";
 import { SEARCH_JOB_POSTS } from "../api/graphql/queries.js";
+import { processSearchJobPosts } from "../api/graphql/processData";
 import {
   ERROR,
   PERIOD,
@@ -93,6 +94,10 @@ const ExploreJobsPage = () => {
     SEARCH_JOB_POSTS,
     { fetchPolicy: "network-only" }
   );
+  const [searchJobPostsFinalError, setSearchJobPostsFinalError] = useState<Error | null>(null);
+  useEffect(() => {
+    if (searchJobPostsError) setSearchJobPostsFinalError(new Error(ERROR.SERVER));
+  }, [searchJobPostsError])
 
   const fetchJobPosts = useCallback(
     async (cursor): Promise<{ posts: JobPost[]; endCursor: string } | null> => {
@@ -143,19 +148,21 @@ const ExploreJobsPage = () => {
             searchJobPosts({
               variables: { filters, pagination },
               onCompleted: (data) => {
-                const posts = data.searchJobPosts.edges.map((edge) => ({
-                  ...edge.node,
-                  createdAt: formatTimeAgo(edge.node.createdAt),
-                }));
-                setPageInfo(data.searchJobPosts.pageInfo); // 페이지 정보 저장
-                setTotalCount(data.searchJobPosts.totalCount); // 총 개수 저장
-                resolve({
-                  posts,
-                  endCursor: data.searchJobPosts.pageInfo.endCursor,
-                });
+                try {
+                  const { totalCount, edges, pageInfo } = processSearchJobPosts(data);
+                  const posts = edges.map((edge) => ({
+                    ...edge.node,
+                    createdAt: formatTimeAgo(edge.node.createdAt),
+                  }));
+                  setPageInfo(pageInfo); // 페이지 정보 저장
+                  setTotalCount(totalCount); // 총 개수 저장
+                  resolve({ posts, endCursor: pageInfo.endCursor });
+                } catch (e) {
+                  reject(e);
+                }
               },
               onError: (error) => {
-                reject(error);
+                reject(new Error(ERROR.SERVER));
               },
             });
           });
@@ -221,8 +228,8 @@ const ExploreJobsPage = () => {
           />
         </InputContainer>
         <WarningText>
-          {(searchJobPostsError || fetchResidentNeighborhoodsError) &&
-            ERROR.SERVER}
+          {fetchResidentNeighborhoodsError && ERROR.SERVER}
+          {searchJobPostsFinalError && searchJobPostsFinalError.message}
         </WarningText>
         <ContentContainer>
           <JobFilter filter={filter} setFilter={setFilter} />

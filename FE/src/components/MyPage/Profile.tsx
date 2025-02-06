@@ -5,6 +5,7 @@ import { logout } from "../../api/rest/auth";
 import { ProfileContainer } from "../../styles/pages/MyPage.styles";
 import { ReactComponent as ProfileIcon } from "../../assets/icons/profile.svg";
 import { GET_MY_BASIC_INFO } from "../../api/graphql/queries.js";
+import { processGetMyBasicInfo } from "../../api/graphql/processData";
 import formatTimeAgo from "../../utils/formatTimeAgo";
 
 const Profile = () => {
@@ -13,14 +14,12 @@ const Profile = () => {
   const { data, loading, error } = useQuery(GET_MY_BASIC_INFO);
   const { nickname = "", timeTogether = "" } = useMemo(() => {
     if (!data) return {};
-    if (data.me.__typename === "InternalError") {
+    try {
+      const { nickname, createdAt } = processGetMyBasicInfo(data);
+      return { nickname, timeTogether: formatTimeAgo(createdAt)}
+    } catch {
       return { nickname: "불러오기 실패", timeTogether: "불러오기 실패" };
     }
-    // me: User
-    return {
-      nickname: data.me.nickname,
-      timeTogether: formatTimeAgo(data.me.createdAt),
-    };
   }, [data]);
 
   const [logoutError, setLogoutError] = useState(false);
