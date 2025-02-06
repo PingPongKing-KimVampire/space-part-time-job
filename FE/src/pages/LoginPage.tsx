@@ -100,13 +100,22 @@ const LoginPage = (): React.JSX.Element => {
     },
   ] = useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
     onCompleted: (data) => {
-      if (
-        !data.me.residentNeighborhood ||
-        data.me.residentNeighborhood.length === 0
-      ) {
-        navigate("/search-neighborhood");
-      } else {
-        navigate("/explore-jobs");
+      if (data.me.__typename === "User") {
+        const residentNeighborhoods = data.me.residentNeighborhoods;
+        if (residentNeighborhoods.__typename === "ResidentNeighborhoodsType") {
+          if (
+            !residentNeighborhoods.neighborhoods ||
+            residentNeighborhoods.neighborhoods.length === 0
+          ) {
+            navigate("/search-neighborhood");
+          } else {
+            navigate("/explore-jobs");
+          }
+        } else if (residentNeighborhoods.__typename === "InternalError") {
+          setWarning(residentNeighborhoods.message);
+        }
+      } else if (data.me.__typename === "InternalError") {
+        setWarning(data.me.message);
       }
     },
   });

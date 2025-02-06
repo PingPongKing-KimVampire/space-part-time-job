@@ -3,10 +3,22 @@ import { gql } from "@apollo/client";
 export const GET_RESIDENT_NEIGHBORHOOD = gql`
   query GetResidentNeighborhood {
     me {
-      residentNeighborhood {
-        id
-        level
-        name
+      ... on User {
+        residentNeighborhoods {
+          ... on ResidentNeighborhoodsType {
+            neighborhoods {
+              id
+              level
+              name
+            }
+          }
+          ... on InternalError {
+            message
+          }
+        }
+      }
+      ... on InternalError {
+        message
       }
     }
   }
@@ -15,7 +27,12 @@ export const GET_RESIDENT_NEIGHBORHOOD = gql`
 export const GET_MY_ID = gql`
   query GetMyId {
     me {
-      id
+      ... on User {
+        id
+      }
+      ... on InternalError {
+        message
+      }
     }
   }
 `;

@@ -52,13 +52,21 @@ const SearchNeighborhoodPage = () => {
     { loading: getResidentLoading, error: getResidentError },
   ] = useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
     onCompleted: (data) => {
-      if (!data?.me?.residentNeighborhood) return;
-      setSelectedNeighborhoods(
-        data.me.residentNeighborhood.map((neighborhood) => ({
-          ...neighborhood,
-          scopeValue: convertLevelToScopeValue(neighborhood.level),
-        }))
-      );
+      const residentNeighborhoods = data.me.residentNeighborhoods;
+      if (residentNeighborhoods.__typename === "ResidentNeighborhoodsType") {
+        setSelectedNeighborhoods(
+          residentNeighborhoods.neighborhoods.map((neighborhood) => ({
+            ...neighborhood,
+            scopeValue: convertLevelToScopeValue(neighborhood.level),
+          }))
+        );
+      } else if (residentNeighborhoods.__typename === "InternalError") {
+        console.error(
+          "Error fetching resident neighborhoods:",
+          residentNeighborhoods.message
+        );
+        // TODO : 화면에 표시하기
+      }
     },
   });
   useEffect(() => {
@@ -162,7 +170,8 @@ const SearchNeighborhoodPage = () => {
     <Background>
       <Container>
         <label className="title" htmlFor="neighborhood">
-          상주하는 지역을 <span className="newLine">최대 3개 선택해주세요.</span>
+          상주하는 지역을{" "}
+          <span className="newLine">최대 3개 선택해주세요.</span>
         </label>
         <CustomInput
           id="neighborhood"
