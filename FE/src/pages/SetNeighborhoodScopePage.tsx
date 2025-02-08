@@ -18,6 +18,7 @@ import LevelSlider from "../components/LevelSlider.tsx";
 import { SelectedNeighborhood, Coordinate, Level } from "../types/types.ts";
 import { ERROR } from "../constants/constants.ts";
 import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations.js";
+import { processSetResidentNeighborhood } from "../api/graphql/processData";
 import LoadingOverlay from "../components/LoadingOverlay.tsx";
 import { WarningText } from "../styles/global.ts";
 import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods.ts";
@@ -121,12 +122,20 @@ const SetNeighborhoodScopePage = () => {
   };
 
   const [
+    setResidentNeighborhoodFinalError,
+    setSetResidentNeighborhoodFinalError,
+  ] = useState<Error | null>(null);
+  const [
     setResidentNeighborhood,
     {
       loading: setResidentNeighborhoodLoading,
       error: setResidentNeighborhoodError,
     },
   ] = useMutation(SET_RESIDENT_NEIGHBORHOOD);
+  useEffect(() => {
+    if (setResidentNeighborhoodError)
+      setSetResidentNeighborhoodFinalError(new Error(ERROR.SERVER));
+  }, [setResidentNeighborhoodError]);
 
   const onCompleteButtonClick = async () => {
     sessionStorage.clear();
@@ -138,11 +147,12 @@ const SetNeighborhoodScopePage = () => {
       })),
     };
     try {
-      await setResidentNeighborhood({ variables: { input } });
-      // TODO : 빨간 줄 해결하기
-      dispatch(fetchResidentNeighborhoods());
+      const response = await setResidentNeighborhood({ variables: { input } });
+      if (!response.data || !response.data.setResidentNeighborhood) return;
+      processSetResidentNeighborhood(response.data);
+      dispatch(fetchResidentNeighborhoods()); // TODO : 빨간 줄 해결하기
     } catch (e) {
-      console.error("SetResidentNeighborhood Mutation Error: ", e.message);
+      setSetResidentNeighborhoodFinalError(e);
       return;
     }
     navigate("/explore-jobs");
@@ -197,8 +207,13 @@ const SetNeighborhoodScopePage = () => {
               });
             }}
           />
-          {(setResidentNeighborhoodError || fetchDistrictBoundaryError) && (
+          {fetchDistrictBoundaryError && (
             <WarningText>{ERROR.SERVER}</WarningText>
+          )}
+          {setResidentNeighborhoodFinalError && (
+            <WarningText>
+              {setResidentNeighborhoodFinalError.message}
+            </WarningText>
           )}
         </ScopeSettingContainer>
         <CompleteButton

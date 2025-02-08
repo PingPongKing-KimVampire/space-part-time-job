@@ -14,6 +14,7 @@ import {
   PAY_TYPES_KEY,
 } from "../constants/constants";
 import { CREATE_JOB_POST } from "../api/graphql/mutations.js";
+import { processCreatePost } from "../api/graphql/processData";
 import {
   Background,
   Container,
@@ -106,7 +107,7 @@ const CreateJobPage = () => {
       ...state,
       post: createJobPostError ? ERROR.SERVER : "",
     }));
-  }, [createJobPostError]);
+  }, [setWarnings, createJobPostError]);
 
   const postJob = async () => {
     const getProcessedPeriod = () => {
@@ -145,7 +146,7 @@ const CreateJobPage = () => {
     };
 
     try {
-      await createJobPost({
+      const response = await createJobPost({
         variables: {
           input: {
             title: input.title,
@@ -159,6 +160,7 @@ const CreateJobPage = () => {
           },
         },
       });
+      processCreatePost(response.data);
     } catch (e) {
       console.error("CreateJobPost Mutation Error: ", e.message);
       throw new Error(ERROR.SERVER);
