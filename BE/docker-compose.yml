@@ -131,7 +131,7 @@ services:
 
   imageuploadservice:
     build:
-      context: ./ImageUploadService/Server
+      context: ./ImageUploadService/server
       dockerfile: Dockerfile
     container_name: imageuploadservice
     ports:
