@@ -12,6 +12,7 @@ import { MainBackgroundColor, WarningText } from "../styles/global";
 import { GET_JOB_POST } from "../api/graphql/queries";
 import { processGetJobPost } from "../api/graphql/processData";
 import { INCREMENT_JOB_POST_VIEWS } from "../api/graphql/mutations.js";
+import { processIncrementViews } from "../api/graphql/processData";
 import useViewJobContext from "../context/ViewJobContext";
 import { ERROR } from "../constants/constants";
 
@@ -25,7 +26,8 @@ const ViewJobPage = () => {
     { loading: incrementViewsLoading, error: incrementViewsError },
   ] = useMutation(INCREMENT_JOB_POST_VIEWS);
 
-  const [getJobPostFinalError, setGetJobPostFinalError] = useState<Error | null>(null);
+  const [getJobPostFinalError, setGetJobPostFinalError] =
+    useState<Error | null>(null);
   const [getJobPost, { loading: getJobPostLoading, error: getJobPostError }] =
     useLazyQuery(GET_JOB_POST, {
       variables: { id },
@@ -36,6 +38,7 @@ const ViewJobPage = () => {
           const incrementViewsResponse = await incrementViews({
             variables: { id },
           });
+          const views = processIncrementViews(incrementViewsResponse.data);
           setJobPost({
             ...post,
             createdAt: formatTimeAgo(post.createdAt),
@@ -43,7 +46,7 @@ const ViewJobPage = () => {
               ...post.publisher,
               createdAt: formatTimeAgo(post.publisher.createdAt),
             },
-            views: incrementViewsResponse.data.incrementJobPostViews,
+            views,
           });
         } catch (e) {
           setGetJobPostFinalError(e);
@@ -52,7 +55,7 @@ const ViewJobPage = () => {
     });
   useEffect(() => {
     if (getJobPostError) setGetJobPostFinalError(new Error(ERROR.SERVER));
-  }, [getJobPostError])
+  }, [getJobPostError]);
 
   useEffect(() => {
     if (isApplicationModalVisible) return;

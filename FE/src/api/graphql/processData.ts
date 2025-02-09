@@ -66,9 +66,15 @@ export const processCreatePost = (data) => {
 };
 
 export const processSetResidentNeighborhood = (data) => {
-  console.log("processSetResidentNeighborhood");
   if (data.setResidentNeighborhood.__typename !== "NeighborhoodList") {
     throw new Error(data.setResidentNeighborhood).message;
   }
   return data.setResidentNeighborhood.neighborhoods;
+};
+
+export const processIncrementViews = (data) => {
+  if (data.incrementJobPostViews.__typename !== "ViewsCountType") {
+    throw new Error(data.incrementJobPostViews.message);
+  }
+  return data.incrementJobPostViews.count;
 };
