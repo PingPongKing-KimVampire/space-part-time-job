@@ -206,44 +206,85 @@ export const GET_JOB_POST = gql`
 export const GET_JOB_POST_APPLICATIONS = gql`
   query GetJobPostApplications($id: ID!) {
     getJobPost(id: $id) {
-      applications {
-        id
-        coverLetter
-        applicant {
-          nickname
+      ... on JobPost {
+        applications {
+          ... on JobApplications {
+            applications {
+              id
+              coverLetter
+              applicant {
+                ... on UserPublicInfo {
+                  nickname
+                }
+                ... on InternalError {
+                  message
+                }
+              }
+              status
+              createdAt
+            }
+          }
+          ... on InternalError {
+            message
+          }
+          ... on ForbiddenError {
+            message
+          }
         }
-        status
-        createdAt
+      }
+      ... on NotFoundError {
+        message
+      }
+      ... on InternalError {
+        message
       }
     }
   }
 `;
 
 export const LIST_MY_JOB_APPLICATIONS = gql`
-  query ListMyJobApplications {
-    listMyJobApplications {
-      id
-      jobPost {
+query ListMyJobApplications {
+  listMyJobApplications {
+    ... on JobApplications {
+      applications {
         id
-        title
-        status
+        jobPost {
+          ... on JobPost {
+            id
+            title
+            status
+          }
+          ... on InternalError {
+            message
+          }
+        }
+        coverLetter
+        createdAt
       }
-      coverLetter
-      status
-      createdAt
+    }
+    ... on InternalError {
+      message
     }
   }
+}
 `;
 
 export const LIST_MY_INTERESTED_JOB_POSTS = gql`
-  query ListMyInterestedJobPosts {
-    listMyInterestedJobPosts {
-      jobPost {
-        id
-        status
-        title
+query ListMyInterestedJobPosts {
+  listMyInterestedJobPosts {
+    ... on InterestedJobPosts {
+      interestedJobPosts {
+        jobPost {
+          id
+          status
+          title
+        }
+        createdAt
       }
-      createdAt
+    }
+    ... on InternalError {
+      message
     }
   }
+}
 `;

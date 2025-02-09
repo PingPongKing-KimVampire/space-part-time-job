@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import formatTimeAgo from "../../utils/formatTimeAgo.ts";
-import { MouseEventHandlers } from "./PostList.tsx";
+import formatTimeAgo from "../../utils/formatTimeAgo";
+import { MouseEventHandlers } from "./PostList";
 import {
   ERROR,
   APPLICATION_STATUS,
   JOB_POST_STATUS,
-} from "../../constants/constants.ts";
-import { ListItem } from "../../styles/pages/MyPage.styles.ts";
-import { WarningText, CloseTag } from "../../styles/global.ts";
-import { AcceptedBadge, RejectedBadge } from "../Badges.tsx";
+} from "../../constants/constants";
+import { ListItem } from "../../styles/pages/MyPage.styles";
+import { WarningText, CloseTag } from "../../styles/global";
+import { AcceptedBadge, RejectedBadge } from "../Badges";
 import { LIST_MY_JOB_APPLICATIONS } from "../../api/graphql/queries.js";
+import { processListMyApplications } from "../../api/graphql/processData";
 import { CANCEL_JOB_APPLICATION } from "../../api/graphql/mutations.js";
-import { Application } from "../../types/types.ts";
-import ViewMyApplicationModal from "./ViewMyApplicationModal.tsx";
+import { Application } from "../../types/types";
+import ViewMyApplicationModal from "./ViewMyApplicationModal";
 
 type MyAppliedPostListProp = {
   mouseEventHandlers: MouseEventHandlers;
@@ -33,6 +34,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
   } = mouseEventHandlers;
 
   const [myApplications, setMyApplications] = useState<Application[]>([]);
+  const [getApplicationsFinalError, setGetApplicationsFinalError] = useState<Error | null>(null);
   const {
     data: myApplicationsData,
     loading: getMyApplicationsLoading,
@@ -41,18 +43,25 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
   useEffect(() => {
     if (!myApplicationsData || !myApplicationsData.listMyJobApplications)
       return;
-    const applications = [...myApplicationsData.listMyJobApplications];
-    const sortedApplications = applications.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-    setMyApplications(
-      sortedApplications.map((application) => ({
-        ...application,
-        createdAt: formatTimeAgo(application.createdAt),
-      }))
-    );
+    try {
+      const applications = [...processListMyApplications(myApplicationsData)]; // TODO : 복사 안 해도 되나?
+      const sortedApplications = applications.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setMyApplications(
+        sortedApplications.map((application) => ({
+          ...application,
+          createdAt: formatTimeAgo(application.createdAt),
+        }))
+      );
+    } catch (e) {
+      setGetApplicationsFinalError(e);
+    }
   }, [myApplicationsData]);
+  useEffect(() => {
+    if (getMyApplicationsError) setGetApplicationsFinalError(new Error(ERROR.SERVER));
+  }, [getMyApplicationsError]);
 
   const [
     cancelApplication,
@@ -116,7 +125,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
               {jobPost?.status === JOB_POST_STATUS.CLOSE && (
                 <CloseTag>마감</CloseTag>
               )}
-              <div className="title">{jobPost?.title}</div>
+              <div className="title">{jobPost?.title || "불러오기 실패"}</div>
             </div>
             <div className="interaction">
               <div className="createdAt">{createdAt} 전</div>
@@ -147,9 +156,10 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
             </div>
           </ListItem>
         ))}
-      {(getMyApplicationsError || cancelApplicationError) && (
-        <WarningText>{ERROR.SERVER}</WarningText>
-      )}
+      {cancelApplicationError && <WarningText>{ERROR.SERVER}</WarningText>}
+      {getApplicationsFinalError && 
+        <WarningText>{getApplicationsFinalError.message}</WarningText>
+      }
       {detailApplication.isVisible && (
         <ViewMyApplicationModal
           coverLetter={detailApplication.coverLetter}

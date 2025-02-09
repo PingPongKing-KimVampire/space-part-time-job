@@ -11,6 +11,7 @@ import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { AcceptedBadge, RejectedBadge } from "../components/Badges";
 import { ERROR, APPLICATION_STATUS } from "../constants/constants";
 import { GET_JOB_POST_APPLICATIONS } from "../api/graphql/queries.js";
+import { processGetApplications } from "../api/graphql/processData";
 import { DECIDE_JOB_APPLICATION } from "../api/graphql/mutations.js";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import { Application } from "../types/types";
@@ -23,6 +24,7 @@ const ViewApplicantsPage = () => {
 
   const { id = "" } = useParams();
 
+  const [getApplicationsFinalError, setGetApplicationsFinalError] = useState<Error | null>(null);
   const {
     data: applicationsData,
     error: getApplicationsError,
@@ -32,14 +34,21 @@ const ViewApplicantsPage = () => {
   });
   useEffect(() => {
     if (!applicationsData) return;
-    const data = applicationsData.getJobPost.applications;
-    setApplications(
-      data.map((application) => ({
-        ...application,
-        createdAt: formatTimeAgo(application.createdAt),
-      }))
-    );
+    try {
+      const applications = processGetApplications(applicationsData);
+      setApplications(
+        applications.map((application) => ({
+          ...application,
+          createdAt: formatTimeAgo(application.createdAt),
+        }))
+      );
+    } catch (e) {
+      setGetApplicationsFinalError(e);
+    }
   }, [applicationsData]);
+  useEffect(() => {
+    if (getApplicationsError) setGetApplicationsFinalError(new Error(ERROR.SERVER));
+  }, [getApplicationsError]);
 
   const [
     decideJobApplication,
@@ -80,7 +89,7 @@ const ViewApplicantsPage = () => {
             {status === APPLICATION_STATUS.REJECTED && <RejectedBadge />}
             <UserInfo>
               <ProfileIcon />
-              <div className="nickname">{applicant?.nickname}</div>
+              <div className="nickname">{applicant?.nickname || "불러오기 실패"}</div>
               <div className="createdAt">ㆍ {createdAt}</div>
             </UserInfo>
             <div className="coverLetter">{coverLetter}</div>
@@ -106,9 +115,10 @@ const ViewApplicantsPage = () => {
             )}
           </div>
         ))}
-      {(getApplicationsError || decideApplicationError) && (
-        <WarningText>{ERROR.SERVER}</WarningText>
-      )}
+      {decideApplicationError && <WarningText>{ERROR.SERVER}</WarningText>}
+      {getApplicationsFinalError && 
+        <WarningText>{getApplicationsFinalError.message}</WarningText>
+      }
     </Container>
   );
 };

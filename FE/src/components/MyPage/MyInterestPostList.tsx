@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import formatTimeAgo from "../../utils/formatTimeAgo.ts";
-import { MouseEventHandlers } from "./PostList.tsx";
-import { ERROR, JOB_POST_STATUS } from "../../constants/constants.ts";
+import formatTimeAgo from "../../utils/formatTimeAgo";
+import { MouseEventHandlers } from "./PostList";
+import { ERROR, JOB_POST_STATUS } from "../../constants/constants";
 import { ListItem } from "../../styles/pages/MyPage.styles";
-import { CloseTag, WarningText } from "../../styles/global.ts";
+import { CloseTag, WarningText } from "../../styles/global";
 import { LIST_MY_INTERESTED_JOB_POSTS } from "../../api/graphql/queries.js";
+import { processListInterestedPosts } from "../../api/graphql/processData";
 import { UNMARK_JOB_POST_AS_INTEREST } from "../../api/graphql/mutations.js";
-import { InterestedJobPost } from "../../types/types.ts";
+import { InterestedJobPost } from "../../types/types";
 
 type MyInterestPostListProps = {
   mouseEventHandlers: MouseEventHandlers;
@@ -29,6 +30,7 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   const [myInterestPosts, setMyInterestPosts] = useState<InterestedJobPost[]>(
     []
   );
+  const [getInterestedPostsFinalError, setGetInterestedPostsFinalError] = useState<Error | null>(null);
   const {
     data: interestedPostsData,
     loading: getInterestedPostsLoading,
@@ -37,18 +39,26 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   useEffect(() => {
     if (!interestedPostsData || !interestedPostsData.listMyInterestedJobPosts)
       return;
-    const posts = [...interestedPostsData.listMyInterestedJobPosts];
-    const sortedPosts = posts.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-    setMyInterestPosts(
-      sortedPosts.map((post) => ({
-        ...post,
-        createdAt: formatTimeAgo(post.createdAt),
-      }))
-    );
+    try {
+      const posts = processListInterestedPosts(interestedPostsData);
+      // const posts = [...processListInterestedPosts(interestedPostsData)]; // TODO : 복사 안 해도 되나?
+      const sortedPosts = posts.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setMyInterestPosts(
+        sortedPosts.map((post) => ({
+          ...post,
+          createdAt: formatTimeAgo(post.createdAt),
+        }))
+      );
+    } catch (e) {
+      setGetInterestedPostsFinalError(e);
+    }
   }, [interestedPostsData]);
+  useEffect(() => {
+    if (getInterestedPostsError) setGetInterestedPostsFinalError(new Error(ERROR.SERVER));
+  }, [getInterestedPostsError])
 
   const [
     unmarkInterest,
@@ -104,9 +114,10 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
           </div>
         </ListItem>
       ))}
-      {(getInterestedPostsError || unmarkInterestError) && (
-        <WarningText>{ERROR.SERVER}</WarningText>
-      )}
+      {unmarkInterestError && <WarningText>{ERROR.SERVER}</WarningText>}
+      {getInterestedPostsFinalError && 
+        <WarningText>{getInterestedPostsFinalError.message}</WarningText>
+      }
     </>
   );
 };
