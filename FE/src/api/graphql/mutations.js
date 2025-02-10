@@ -58,7 +58,16 @@ export const INCREMENT_JOB_POST_VIEWS = gql`
 export const APPLY_TO_JOB_POST = gql`
   mutation ApplyToJobPost($input: ApplyJobPostInput!) {
     applyToJobPost(input: $input) {
-      id
+      ... on JobApplication {
+        id
+      }
+      ... on BadInputError {
+        message
+        invalidFields
+      }
+      ... on InternalError {
+        message
+      }
     }
   }
 `;
@@ -82,7 +91,15 @@ export const CLOSE_JOB_POST = gql`
 export const CANCEL_JOB_APPLICATION = gql`
   mutation CancelJobApplication($id: ID!) {
     cancelJobApplication(id: $id) {
-      id
+      ... on JobApplication {
+        id
+      }
+      ... on NotFoundError {
+        message
+      }
+      ... on ForbiddenError {
+        message
+      }
     }
   }
 `;

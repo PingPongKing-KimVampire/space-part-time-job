@@ -35,9 +35,14 @@ const ViewJobPage = () => {
       onCompleted: async (data) => {
         try {
           const post = processGetJobPost(data);
-          const incrementViewsResponse = await incrementViews({
-            variables: { id },
-          });
+          let incrementViewsResponse;
+          try {
+            incrementViewsResponse = await incrementViews({
+              variables: { id },
+            });
+          } catch {
+            throw new Error(ERROR.SERVER);
+          }
           const views = processIncrementViews(incrementViewsResponse.data);
           setJobPost({
             ...post,

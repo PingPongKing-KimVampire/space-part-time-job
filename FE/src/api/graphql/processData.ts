@@ -29,8 +29,7 @@ export const processGetMyJobPosts = (data) => {
     if (post.applicationCount.__typename === "ApplicationCount") {
       post.applicationCount = post.applicationCount.count;
     } else {
-      // InternalError
-      post.applicationCount = null; // TODO : applicationCount가 null로 오는 거 처리해야지!!!
+      post.applicationCount = null;
     }
     return post;
   });
@@ -59,55 +58,69 @@ export const processGetJobPost = (data) => {
 };
 
 export const processGetApplications = (data) => {
-    if (data.getJobPost.__typename !== "JobPost") {
-        throw new Error(data.message);
-    }
-    if (data.getJobPost.applications.__typename !== "JobApplications") {
-        throw new Error(data.getJobPost.applications.message);
-    }
-    const applications = data.getJobPost.applications.applications;
-    applications.forEach((application) => {
-        if (application.applicant.__typename !== "UserPublicInfo")
-            application.applicant = null;
-    });
-    return applications;
-}
+  if (data.getJobPost.__typename !== "JobPost") {
+    throw new Error(data.message);
+  }
+  if (data.getJobPost.applications.__typename !== "JobApplications") {
+    throw new Error(data.getJobPost.applications.message);
+  }
+  const applications = data.getJobPost.applications.applications;
+  applications.forEach((application) => {
+    if (application.applicant.__typename !== "UserPublicInfo")
+      application.applicant = null;
+  });
+  return applications;
+};
 
 export const processListMyApplications = (data) => {
-    if (data.listMyJobApplications.__typename !== "JobApplications") {
-        throw new Error(data.listMyJobApplications.message);
-    }
-    const applications = data.listMyJobApplications.applications;
-    if (applications.jobPost.__typename !== "JobPost") {
-        applications.jobPost = null;
-    }
-    return applications;
-}
+  if (data.listMyJobApplications.__typename !== "JobApplications") {
+    throw new Error(data.listMyJobApplications.message);
+  }
+  const applications = data.listMyJobApplications.applications;
+  if (applications.jobPost.__typename !== "JobPost") {
+    applications.jobPost = null;
+  }
+  return applications;
+};
 
 export const processListInterestedPosts = (data) => {
-    if (data.listMyInterestedJobPosts.__typename !== "InterestedJobPosts") {
-        throw new Error(data.listMyInterestedJobPosts.message);
-    }
-    return data.listMyInterestedJobPosts.interestedJobPosts;
-}
+  if (data.listMyInterestedJobPosts.__typename !== "InterestedJobPosts") {
+    throw new Error(data.listMyInterestedJobPosts.message);
+  }
+  return data.listMyInterestedJobPosts.interestedJobPosts;
+};
 
 export const processCreatePost = (data) => {
-    if (data.createJobPost.__typename !== "JobPost") {
-      throw new Error(data.createJobPost.message);
-    }
-    return data.createJobPost;
-  };
-  
-  export const processSetResidentNeighborhood = (data) => {
-    if (data.setResidentNeighborhood.__typename !== "NeighborhoodList") {
-      throw new Error(data.setResidentNeighborhood).message;
-    }
-    return data.setResidentNeighborhood.neighborhoods;
-  };
-  
-  export const processIncrementViews = (data) => {
-    if (data.incrementJobPostViews.__typename !== "ViewsCountType") {
-      throw new Error(data.incrementJobPostViews.message);
-    }
-    return data.incrementJobPostViews.count;
-  };
+  if (data.createJobPost.__typename !== "JobPost") {
+    throw new Error(data.createJobPost.message);
+  }
+  return data.createJobPost;
+};
+
+export const processSetResidentNeighborhood = (data) => {
+  if (data.setResidentNeighborhood.__typename !== "NeighborhoodList") {
+    throw new Error(data.setResidentNeighborhood).message;
+  }
+  return data.setResidentNeighborhood.neighborhoods;
+};
+
+export const processIncrementViews = (data) => {
+  if (data.incrementJobPostViews.__typename !== "ViewsCountType") {
+    throw new Error(data.incrementJobPostViews.message);
+  }
+  return data.incrementJobPostViews.count;
+};
+
+export const processApplyToPost = (data) => {
+  if (data.applyToJobPost.__typename !== "JobApplication") {
+    throw new Error(data.applyToJobPost.message);
+  }
+  return data.applyToJobPost;
+};
+
+export const processCancelApplication = (data) => {
+  if (data.cancelJobApplication.__typename !== "JobApplication") {
+    throw new Error(data.cancelJobApplication.message);
+  }
+  return data.cancelJobApplication;
+};

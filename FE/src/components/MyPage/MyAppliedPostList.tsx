@@ -10,9 +10,10 @@ import {
 import { ListItem } from "../../styles/pages/MyPage.styles";
 import { WarningText, CloseTag } from "../../styles/global";
 import { AcceptedBadge, RejectedBadge } from "../Badges";
-import { LIST_MY_JOB_APPLICATIONS } from "../../api/graphql/queries.js";
+import { LIST_MY_JOB_APPLICATIONS } from "../../api/graphql/queries";
 import { processListMyApplications } from "../../api/graphql/processData";
-import { CANCEL_JOB_APPLICATION } from "../../api/graphql/mutations.js";
+import { CANCEL_JOB_APPLICATION } from "../../api/graphql/mutations";
+import { processCancelApplication } from "../../api/graphql/processData";
 import { Application } from "../../types/types";
 import ViewMyApplicationModal from "./ViewMyApplicationModal";
 
@@ -34,7 +35,8 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
   } = mouseEventHandlers;
 
   const [myApplications, setMyApplications] = useState<Application[]>([]);
-  const [getApplicationsFinalError, setGetApplicationsFinalError] = useState<Error | null>(null);
+  const [getApplicationsFinalError, setGetApplicationsFinalError] =
+    useState<Error | null>(null);
   const {
     data: myApplicationsData,
     loading: getMyApplicationsLoading,
@@ -60,22 +62,36 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     }
   }, [myApplicationsData]);
   useEffect(() => {
-    if (getMyApplicationsError) setGetApplicationsFinalError(new Error(ERROR.SERVER));
+    if (getMyApplicationsError)
+      setGetApplicationsFinalError(new Error(ERROR.SERVER));
   }, [getMyApplicationsError]);
 
+  const [cancelApplicationFinalError, setCancelApplicationFinalError] =
+    useState<Error | null>(null);
   const [
     cancelApplication,
     { loading: cancelApplicationLoading, error: cancelApplicationError },
   ] = useMutation(CANCEL_JOB_APPLICATION);
+  useEffect(() => {
+    if (cancelApplicationError)
+      setCancelApplicationFinalError(new Error(ERROR.SERVER));
+  }, [cancelApplicationError]);
+
   const onCancelClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     const applicationId = (e.target as HTMLElement)
       .closest(".item")
       ?.getAttribute("data-application-id");
     try {
-      await cancelApplication({ variables: { id: applicationId } });
+      let response;
+      try {
+        response = cancelApplication({ variables: { id: applicationId } });
+      } catch {
+        throw new Error(ERROR.SERVER);
+      }
+      processCancelApplication(response.data);
     } catch (e) {
-      console.error("CancelJobApplication Mutation Error: ", e.message);
+      setCancelApplicationFinalError(e);
       return;
     }
     setMyApplications((state) =>
@@ -156,10 +172,12 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
             </div>
           </ListItem>
         ))}
-      {cancelApplicationError && <WarningText>{ERROR.SERVER}</WarningText>}
-      {getApplicationsFinalError && 
+      {cancelApplicationFinalError && (
+        <WarningText>{cancelApplicationFinalError.message}</WarningText>
+      )}
+      {getApplicationsFinalError && (
         <WarningText>{getApplicationsFinalError.message}</WarningText>
-      }
+      )}
       {detailApplication.isVisible && (
         <ViewMyApplicationModal
           coverLetter={detailApplication.coverLetter}

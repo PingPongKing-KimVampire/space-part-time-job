@@ -13,7 +13,7 @@ import {
   WORKTIME_TYPES_KEY,
   PAY_TYPES_KEY,
 } from "../constants/constants";
-import { CREATE_JOB_POST } from "../api/graphql/mutations.js";
+import { CREATE_JOB_POST } from "../api/graphql/mutations";
 import { processCreatePost } from "../api/graphql/processData";
 import {
   Background,
@@ -21,21 +21,21 @@ import {
   PostButton,
 } from "../styles/pages/CreateJobPage.styles";
 import useBackgroundColor from "../utils/useBackgroundColor";
-import FormSection from "../components/CreateJobPage/FormSection.tsx";
+import FormSection from "../components/CreateJobPage/FormSection";
 import { WarningText, MainBackgroundColor } from "../styles/global";
-import LoadingOverlay from "../components/LoadingOverlay.tsx";
-import { WorkPeriod, WorkTime } from "../types/types.ts";
-import useCreateJobContext, { Warnings } from "../context/CreateJobContext.tsx";
-import TitleField from "../components/CreateJobPage/TitleField.tsx";
-import JobTypesField from "../components/CreateJobPage/JobTypesField.tsx";
-import PeriodField from "../components/CreateJobPage/PeriodField.tsx";
-import CalendarField from "../components/CreateJobPage/CalendarField.tsx";
-import DaysField from "../components/CreateJobPage/DaysField.tsx";
-import TimeField from "../components/CreateJobPage/TimeField.tsx";
-import PayField from "../components/CreateJobPage/PayField.tsx";
-import PlaceField from "../components/CreateJobPage/PlaceField.tsx";
-import PhotoField from "../components/CreateJobPage/PhotoField.tsx";
-import DescriptionField from "../components/CreateJobPage/DescriptionField.tsx";
+import LoadingOverlay from "../components/LoadingOverlay";
+import { WorkPeriod, WorkTime } from "../types/types";
+import useCreateJobContext, { Warnings } from "../context/CreateJobContext";
+import TitleField from "../components/CreateJobPage/TitleField";
+import JobTypesField from "../components/CreateJobPage/JobTypesField";
+import PeriodField from "../components/CreateJobPage/PeriodField";
+import CalendarField from "../components/CreateJobPage/CalendarField";
+import DaysField from "../components/CreateJobPage/DaysField";
+import TimeField from "../components/CreateJobPage/TimeField";
+import PayField from "../components/CreateJobPage/PayField";
+import PlaceField from "../components/CreateJobPage/PlaceField";
+import PhotoField from "../components/CreateJobPage/PhotoField";
+import DescriptionField from "../components/CreateJobPage/DescriptionField";
 
 const CreateJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -146,24 +146,28 @@ const CreateJobPage = () => {
     };
 
     try {
-      const response = await createJobPost({
-        variables: {
-          input: {
-            title: input.title,
-            jobCategories: input.jobTypes.map((type) => JOB_TYPES_KEY[type]),
-            workPeriod: getProcessedPeriod(),
-            workTime: getProcessedTime(),
-            salary,
-            photos: Object.values(input.photos),
-            detailedDescription: input.description,
-            addressName: input.place,
+      let response;
+      try {
+        response = await createJobPost({
+          variables: {
+            input: {
+              title: input.title,
+              jobCategories: input.jobTypes.map((type) => JOB_TYPES_KEY[type]),
+              workPeriod: getProcessedPeriod(),
+              workTime: getProcessedTime(),
+              salary,
+              photos: Object.values(input.photos),
+              detailedDescription: input.description,
+              addressName: input.place,
+            },
           },
-        },
-      });
+        });
+      } catch {
+        throw new Error(ERROR.SERVER);
+      }
       processCreatePost(response.data);
     } catch (e) {
-      console.error("CreateJobPost Mutation Error: ", e.message);
-      throw new Error(ERROR.SERVER);
+      throw new Error(e);
     }
   };
 

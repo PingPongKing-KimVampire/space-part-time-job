@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
-import { fetchDistrictBoundary } from "../api/rest/neighborhood.ts";
-import CustomMap from "../components/CustomMap.tsx";
+import { fetchDistrictBoundary } from "../api/rest/neighborhood";
+import CustomMap from "../components/CustomMap";
 import { ReactComponent as XmarkIcon } from "../assets/icons/x-mark.svg";
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
 import {
@@ -14,14 +14,14 @@ import {
   PlusButton,
   CompleteButton,
 } from "../styles/pages/SetNeighborhoodScopePage.styles";
-import LevelSlider from "../components/LevelSlider.tsx";
-import { SelectedNeighborhood, Coordinate, Level } from "../types/types.ts";
-import { ERROR } from "../constants/constants.ts";
-import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations.js";
+import LevelSlider from "../components/LevelSlider";
+import { SelectedNeighborhood, Coordinate, Level } from "../types/types";
+import { ERROR } from "../constants/constants";
+import { SET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/mutations";
 import { processSetResidentNeighborhood } from "../api/graphql/processData";
-import LoadingOverlay from "../components/LoadingOverlay.tsx";
-import { WarningText } from "../styles/global.ts";
-import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods.ts";
+import LoadingOverlay from "../components/LoadingOverlay";
+import { WarningText } from "../styles/global";
+import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods";
 
 const SetNeighborhoodScopePage = () => {
   const navigate = useNavigate();
@@ -147,7 +147,12 @@ const SetNeighborhoodScopePage = () => {
       })),
     };
     try {
-      const response = await setResidentNeighborhood({ variables: { input } });
+      let response;
+      try {
+        response = await setResidentNeighborhood({ variables: { input } });
+      } catch {
+        throw new Error(ERROR.SERVER);
+      }
       if (!response.data || !response.data.setResidentNeighborhood) return;
       processSetResidentNeighborhood(response.data);
       dispatch(fetchResidentNeighborhoods()); // TODO : 빨간 줄 해결하기
