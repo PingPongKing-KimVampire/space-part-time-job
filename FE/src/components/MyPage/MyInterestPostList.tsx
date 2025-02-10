@@ -5,9 +5,10 @@ import { MouseEventHandlers } from "./PostList";
 import { ERROR, JOB_POST_STATUS } from "../../constants/constants";
 import { ListItem } from "../../styles/pages/MyPage.styles";
 import { CloseTag, WarningText } from "../../styles/global";
-import { LIST_MY_INTERESTED_JOB_POSTS } from "../../api/graphql/queries.js";
+import { LIST_MY_INTERESTED_JOB_POSTS } from "../../api/graphql/queries";
 import { processListInterestedPosts } from "../../api/graphql/processData";
-import { UNMARK_JOB_POST_AS_INTEREST } from "../../api/graphql/mutations.js";
+import { UNMARK_JOB_POST_AS_INTEREST } from "../../api/graphql/mutations";
+import { processUnmarkPostAsInterest } from "../../api/graphql/processData";
 import { InterestedJobPost } from "../../types/types";
 
 type MyInterestPostListProps = {
@@ -30,7 +31,8 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   const [myInterestPosts, setMyInterestPosts] = useState<InterestedJobPost[]>(
     []
   );
-  const [getInterestedPostsFinalError, setGetInterestedPostsFinalError] = useState<Error | null>(null);
+  const [getInterestedPostsFinalError, setGetInterestedPostsFinalError] =
+    useState<Error | null>(null);
   const {
     data: interestedPostsData,
     loading: getInterestedPostsLoading,
@@ -57,13 +59,17 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
     }
   }, [interestedPostsData]);
   useEffect(() => {
-    if (getInterestedPostsError) setGetInterestedPostsFinalError(new Error(ERROR.SERVER));
-  }, [getInterestedPostsError])
+    if (getInterestedPostsError)
+      setGetInterestedPostsFinalError(new Error(ERROR.SERVER));
+  }, [getInterestedPostsError]);
 
-  const [
-    unmarkInterest,
-    { loading: unmarkInterestLoading, error: unmarkInterestError },
-  ] = useMutation(UNMARK_JOB_POST_AS_INTEREST);
+  const [unmarkInterest, { loading: unmarkLoading, error: unmarkError }] =
+    useMutation(UNMARK_JOB_POST_AS_INTEREST);
+  const [unmarkFinalError, setUnmarkFinalError] = useState<Error | null>(null);
+  useEffect(() => {
+    if (unmarkError) setUnmarkFinalError(new Error(ERROR.SERVER));
+  }, [unmarkError]);
+
   const onCancelClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     const postId = (e.target as HTMLElement)
@@ -71,9 +77,15 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
       ?.getAttribute("data-post-id");
     if (!postId) return;
     try {
-      await unmarkInterest({ variables: { jobPostId: postId } });
+      let response;
+      try {
+        response = await unmarkInterest({ variables: { jobPostId: postId } });
+      } catch {
+        throw new Error(ERROR.SERVER);
+      }
+      processUnmarkPostAsInterest(response.data);
     } catch (e) {
-      console.error("UnmarkJobPostAsInterest Mutation Error: ", e.message);
+      setUnmarkFinalError(e);
       return;
     }
     setMyInterestPosts((state) =>
@@ -82,8 +94,8 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   };
 
   useEffect(() => {
-    setIsLoading(getInterestedPostsLoading || unmarkInterestLoading);
-  }, [getInterestedPostsLoading, unmarkInterestLoading]);
+    setIsLoading(getInterestedPostsLoading || unmarkLoading);
+  }, [getInterestedPostsLoading, unmarkLoading]);
 
   return (
     <>
@@ -114,10 +126,12 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
           </div>
         </ListItem>
       ))}
-      {unmarkInterestError && <WarningText>{ERROR.SERVER}</WarningText>}
-      {getInterestedPostsFinalError && 
+      {unmarkFinalError && (
+        <WarningText>{unmarkFinalError.message}</WarningText>
+      )}
+      {getInterestedPostsFinalError && (
         <WarningText>{getInterestedPostsFinalError.message}</WarningText>
-      }
+      )}
     </>
   );
 };

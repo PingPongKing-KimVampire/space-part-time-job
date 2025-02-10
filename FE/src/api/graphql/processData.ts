@@ -138,3 +138,17 @@ export const processClosePost = (data) => {
   }
   return data.closeJobPost;
 };
+
+export const processMarkPostAsInterest = (data) => {
+  if (data.markJobPostAsInterest.__typename !== "JobPost") {
+    throw new Error(data.markJobPostAsInterest.message);
+  }
+  return data.markJobPostAsInterest;
+};
+
+export const processUnmarkPostAsInterest = (data) => {
+  if (data.unmarkJobPostAsInterest.__typename !== "JobPost") {
+    throw new Error(data.unmarkJobPostAsInterest.message);
+  }
+  return data.unmarkJobPostAsInterest;
+};

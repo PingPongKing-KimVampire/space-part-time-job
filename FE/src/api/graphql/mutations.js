@@ -130,10 +130,18 @@ export const CANCEL_JOB_APPLICATION = gql`
 export const MARK_JOB_POST_AS_INTEREST = gql`
   mutation MarkJobPostAsInterest($jobPostId: ID!) {
     markJobPostAsInterest(jobPostId: $jobPostId) {
-      myInterested {
-        createdAt
+      ... on JobPost {
+        myInterested {
+          createdAt
+        }
+        interestedCount
       }
-      interestedCount
+      ... on NotFoundError {
+        message
+      }
+      ... on InternalError {
+        message
+      }
     }
   }
 `;
@@ -141,10 +149,18 @@ export const MARK_JOB_POST_AS_INTEREST = gql`
 export const UNMARK_JOB_POST_AS_INTEREST = gql`
   mutation UnmarkJobPostAsInterest($jobPostId: ID!) {
     unmarkJobPostAsInterest(jobPostId: $jobPostId) {
-      myInterested {
-        createdAt
+      ... on JobPost {
+        myInterested {
+          createdAt
+        }
+        interestedCount
       }
-      interestedCount
+      ... on NotFoundError {
+        message
+      }
+      ... on InternalError {
+        message
+      }
     }
   }
 `;
