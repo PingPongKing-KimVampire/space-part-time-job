@@ -33,6 +33,7 @@ const ViewApplicantsPage = () => {
     loading: getApplicationsLoading,
   } = useQuery(GET_JOB_POST_APPLICATIONS, {
     variables: { id },
+    fetchPolicy: "network-only",
   });
   useEffect(() => {
     if (!applicationsData) return;

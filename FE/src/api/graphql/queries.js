@@ -52,7 +52,10 @@ export const GET_MY_BASIC_INFO = gql`
 `;
 
 export const SEARCH_JOB_POSTS = gql`
-  query SearchJobPosts($filters: JobPostSearchFilter!, $pagination: JobPostCursorInput!) {
+  query SearchJobPosts(
+    $filters: JobPostSearchFilter!
+    $pagination: JobPostCursorInput!
+  ) {
     searchJobPosts(filters: $filters, pagination: $pagination) {
       ... on JobPostConnection {
         totalCount
@@ -93,7 +96,6 @@ export const SEARCH_JOB_POSTS = gql`
       }
     }
   }
-  
 `;
 
 export const GET_MY_JOB_POSTS = gql`
@@ -108,12 +110,13 @@ export const GET_MY_JOB_POSTS = gql`
             id
             title
             status
-            applicationCount
-            ... on ApplicationCount {
-              count
-            }
-            ... on InternalError {
-              message
+            applicationCount {
+              ... on ApplicationCount {
+                count
+              }
+              ... on InternalError {
+                message
+              }
             }
           }
         }
@@ -135,7 +138,7 @@ export const GET_MY_JOB_POSTS = gql`
 
 export const GET_JOB_POST = gql`
   query GetJobPost($id: ID!) {
-    getJobPost(id: $getJobPostId) {
+    getJobPost(id: $id) {
       ... on JobPost {
         id
         status
@@ -243,48 +246,49 @@ export const GET_JOB_POST_APPLICATIONS = gql`
 `;
 
 export const LIST_MY_JOB_APPLICATIONS = gql`
-query ListMyJobApplications {
-  listMyJobApplications {
-    ... on JobApplications {
-      applications {
-        id
-        jobPost {
-          ... on JobPost {
-            id
-            title
-            status
+  query ListMyJobApplications {
+    listMyJobApplications {
+      ... on JobApplications {
+        applications {
+          id
+          jobPost {
+            ... on JobPost {
+              id
+              title
+              status
+            }
+            ... on InternalError {
+              message
+            }
           }
-          ... on InternalError {
-            message
-          }
+          status
+          coverLetter
+          createdAt
         }
-        coverLetter
-        createdAt
+      }
+      ... on InternalError {
+        message
       }
     }
-    ... on InternalError {
-      message
-    }
   }
-}
 `;
 
 export const LIST_MY_INTERESTED_JOB_POSTS = gql`
-query ListMyInterestedJobPosts {
-  listMyInterestedJobPosts {
-    ... on InterestedJobPosts {
-      interestedJobPosts {
-        jobPost {
-          id
-          status
-          title
+  query ListMyInterestedJobPosts {
+    listMyInterestedJobPosts {
+      ... on InterestedJobPosts {
+        interestedJobPosts {
+          jobPost {
+            id
+            status
+            title
+          }
+          createdAt
         }
-        createdAt
+      }
+      ... on InternalError {
+        message
       }
     }
-    ... on InternalError {
-      message
-    }
   }
-}
 `;

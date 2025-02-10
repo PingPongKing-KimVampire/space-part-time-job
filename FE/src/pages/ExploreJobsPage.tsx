@@ -94,10 +94,12 @@ const ExploreJobsPage = () => {
     SEARCH_JOB_POSTS,
     { fetchPolicy: "network-only" }
   );
-  const [searchJobPostsFinalError, setSearchJobPostsFinalError] = useState<Error | null>(null);
+  const [searchJobPostsFinalError, setSearchJobPostsFinalError] =
+    useState<Error | null>(null);
   useEffect(() => {
-    if (searchJobPostsError) setSearchJobPostsFinalError(new Error(ERROR.SERVER));
-  }, [searchJobPostsError])
+    if (searchJobPostsError)
+      setSearchJobPostsFinalError(new Error(ERROR.SERVER));
+  }, [searchJobPostsError]);
 
   const fetchJobPosts = useCallback(
     async (cursor): Promise<{ posts: JobPost[]; endCursor: string } | null> => {
@@ -149,7 +151,8 @@ const ExploreJobsPage = () => {
               variables: { filters, pagination },
               onCompleted: (data) => {
                 try {
-                  const { totalCount, edges, pageInfo } = processSearchJobPosts(data);
+                  const { totalCount, edges, pageInfo } =
+                    processSearchJobPosts(data);
                   const posts = edges.map((edge) => ({
                     ...edge.node,
                     createdAt: formatTimeAgo(edge.node.createdAt),

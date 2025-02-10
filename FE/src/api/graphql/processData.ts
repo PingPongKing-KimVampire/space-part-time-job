@@ -14,10 +14,10 @@ export const processGetMyBasicInfo = (data) => {
 };
 
 export const processSearchJobPosts = (data) => {
-  if (data.__typename !== "JobPostConnection") {
+  if (data.searchJobPosts.__typename !== "JobPostConnection") {
     throw new Error(data.message);
   }
-  return data;
+  return data.searchJobPosts;
 };
 
 export const processGetMyJobPosts = (data) => {
@@ -25,7 +25,7 @@ export const processGetMyJobPosts = (data) => {
     throw new Error(data.message);
   }
   const posts = data.searchJobPosts.edges.map((edge) => {
-    const post = edge.node;
+    const post = JSON.parse(JSON.stringify(edge.node));
     if (post.applicationCount.__typename === "ApplicationCount") {
       post.applicationCount = post.applicationCount.count;
     } else {
@@ -40,7 +40,7 @@ export const processGetJobPost = (data) => {
   if (data.getJobPost.__typename !== "JobPost") {
     throw new Error(data.message);
   }
-  const post = data.getJobPost;
+  const post = JSON.parse(JSON.stringify(data.getJobPost));
   if (post.publisher.__typename !== "UserPublicInfo") {
     post.publisher = null;
   }
@@ -49,10 +49,10 @@ export const processGetJobPost = (data) => {
   } else {
     post.applicationCount = null;
   }
-  if (post.myApplication.__typename === "JobApplications") {
-    post.myApplication = post.myApplication.applications;
+  if (post.myJobApplication.__typename === "JobApplications") {
+    post.myJobApplication = post.myJobApplication.applications;
   } else {
-    post.myApplication = null;
+    post.myJobApplication = null;
   }
   return post;
 };
@@ -76,10 +76,14 @@ export const processListMyApplications = (data) => {
   if (data.listMyJobApplications.__typename !== "JobApplications") {
     throw new Error(data.listMyJobApplications.message);
   }
-  const applications = data.listMyJobApplications.applications;
-  if (applications.jobPost.__typename !== "JobPost") {
-    applications.jobPost = null;
-  }
+  const applications = JSON.parse(
+    JSON.stringify(data.listMyJobApplications.applications)
+  );
+  applications.map((application) => {
+    if (application.jobPost.__typename !== "JobPost") {
+      application.jobPost = null;
+    }
+  });
   return applications;
 };
 
@@ -87,7 +91,9 @@ export const processListInterestedPosts = (data) => {
   if (data.listMyInterestedJobPosts.__typename !== "InterestedJobPosts") {
     throw new Error(data.listMyInterestedJobPosts.message);
   }
-  return data.listMyInterestedJobPosts.interestedJobPosts;
+  return JSON.parse(
+    JSON.stringify(data.listMyInterestedJobPosts.interestedJobPosts)
+  );
 };
 
 export const processCreatePost = (data) => {

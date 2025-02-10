@@ -46,7 +46,7 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     if (!myApplicationsData || !myApplicationsData.listMyJobApplications)
       return;
     try {
-      const applications = [...processListMyApplications(myApplicationsData)]; // TODO : 복사 안 해도 되나?
+      const applications = processListMyApplications(myApplicationsData);
       const sortedApplications = applications.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -85,7 +85,9 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     try {
       let response;
       try {
-        response = cancelApplication({ variables: { id: applicationId } });
+        response = await cancelApplication({
+          variables: { id: applicationId },
+        });
       } catch {
         throw new Error(ERROR.SERVER);
       }

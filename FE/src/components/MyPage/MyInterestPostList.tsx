@@ -43,7 +43,6 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
       return;
     try {
       const posts = processListInterestedPosts(interestedPostsData);
-      // const posts = [...processListInterestedPosts(interestedPostsData)]; // TODO : 복사 안 해도 되나?
       const sortedPosts = posts.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
