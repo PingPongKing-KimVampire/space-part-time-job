@@ -75,7 +75,22 @@ export const APPLY_TO_JOB_POST = gql`
 export const DECIDE_JOB_APPLICATION = gql`
   mutation DecideJobApplication($input: DecideJobApplicationInput!) {
     decideJobApplication(input: $input) {
-      id
+      ... on JobApplication {
+        id
+      }
+      ... on BadInputError {
+        message
+        invalidFields
+      }
+      ... on NotFoundError {
+        message
+      }
+      ... on ForbiddenError {
+        message
+      }
+      ... on InternalError {
+        message
+      }
     }
   }
 `;
@@ -83,7 +98,15 @@ export const DECIDE_JOB_APPLICATION = gql`
 export const CLOSE_JOB_POST = gql`
   mutation CloseJobPost($id: ID!) {
     closeJobPost(id: $id) {
-      id
+      ... on JobPost {
+        id
+      }
+      ... on NotFoundError {
+        message
+      }
+      ... on InternalError {
+        message
+      }
     }
   }
 `;

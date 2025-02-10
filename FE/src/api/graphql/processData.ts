@@ -124,3 +124,17 @@ export const processCancelApplication = (data) => {
   }
   return data.cancelJobApplication;
 };
+
+export const processDecideApplication = (data) => {
+  if (data.decideJobApplication.__typename !== "JobApplication") {
+    throw new Error(data.decideJobApplication.message);
+  }
+  return data.decideJobApplication;
+};
+
+export const processClosePost = (data) => {
+  if (data.closeJobPost.__typename !== "JobPost") {
+    throw new Error(data.closeJobPost.message);
+  }
+  return data.closeJobPost;
+};

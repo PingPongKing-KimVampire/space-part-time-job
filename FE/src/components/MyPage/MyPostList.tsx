@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { PageInfo } from "../../types/types";
-import { GET_MY_JOB_POSTS } from "../../api/graphql/queries.js";
+import { GET_MY_JOB_POSTS } from "../../api/graphql/queries";
 import { processGetMyJobPosts } from "../../api/graphql/processData";
-import { CLOSE_JOB_POST } from "../../api/graphql/mutations.js";
+import { CLOSE_JOB_POST } from "../../api/graphql/mutations";
+import { processClosePost } from "../../api/graphql/processData";
 import { ERROR, JOB_POST_STATUS } from "../../constants/constants";
 import { ListItem } from "../../styles/pages/MyPage.styles";
 import { CloseTag, WarningText } from "../../styles/global";
@@ -37,7 +38,8 @@ const MyPostList: React.FC<MyPostListProp> = ({
   const isFirstFetchRef = useRef<boolean>(true);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const [getMyJobPostsFinalError, setGetJobPostsFinalError] = useState<Error | null>(null);
+  const [getMyJobPostsFinalError, setGetJobPostsFinalError] =
+    useState<Error | null>(null);
   const [
     getMyJobPosts,
     { loading: getMyJobPostsLoading, error: getMyJobPostsError },
@@ -62,8 +64,7 @@ const MyPostList: React.FC<MyPostListProp> = ({
     },
   });
   useEffect(() => {
-    if (getMyJobPostsError)
-    setGetJobPostsFinalError(new Error(ERROR.SERVER));
+    if (getMyJobPostsError) setGetJobPostsFinalError(new Error(ERROR.SERVER));
   }, [getMyJobPostsError]);
 
   const fetchMyJobPosts = useCallback(
@@ -107,6 +108,11 @@ const MyPostList: React.FC<MyPostListProp> = ({
 
   const [closeJobPost, { loading: closeLoading, error: closeError }] =
     useMutation(CLOSE_JOB_POST);
+  const [closeFinalError, setCloseFinalError] = useState<Error | null>(null);
+  useEffect(() => {
+    if (closeError) setCloseFinalError(new Error(ERROR.SERVER));
+  }, [closeError]);
+
   const onCloseButtonClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     const postId = (e.target as HTMLElement)
@@ -114,9 +120,15 @@ const MyPostList: React.FC<MyPostListProp> = ({
       ?.getAttribute("data-post-id");
     if (!postId) return;
     try {
-      await closeJobPost({ variables: { id: postId } });
+      let response;
+      try {
+        response = await closeJobPost({ variables: { id: postId } });
+      } catch {
+        throw new Error(ERROR.SERVER);
+      }
+      processClosePost(response.data);
     } catch (e) {
-      console.error("CloseJobPost Mutation Error: ", e.message);
+      setCloseFinalError(e);
       return;
     }
     setMyJobPosts((state) =>
@@ -168,20 +180,23 @@ const MyPostList: React.FC<MyPostListProp> = ({
             )}
             <button
               className={`applicationButton ${
-                (!applicationCount || applicationCount === 0) ? "inactivated" : ""
+                !applicationCount || applicationCount === 0 ? "inactivated" : ""
               }`}
               onMouseEnter={onInnerClickableMouseEnter}
               onMouseLeave={onInnerClickableMouseLeave}
               onClick={onApplicationButtonClick}
-              disabled={!applicationCount|| applicationCount === 0}
+              disabled={!applicationCount || applicationCount === 0}
             >
-              지원서 확인<span className="count">({applicationCount || "?"}건)</span>
+              지원서 확인
+              <span className="count">({applicationCount || "?"}건)</span>
             </button>
           </div>
         </ListItem>
       ))}
-      {closeError && <WarningText>{ERROR.SERVER}</WarningText>}
-      {getMyJobPostsFinalError && <WarningText>{getMyJobPostsFinalError.message}</WarningText>}
+      {closeFinalError && <WarningText>{closeFinalError.message}</WarningText>}
+      {getMyJobPostsFinalError && (
+        <WarningText>{getMyJobPostsFinalError.message}</WarningText>
+      )}
       <div ref={bottomRef} style={{ height: "10px", background: "red" }} />
     </>
   );

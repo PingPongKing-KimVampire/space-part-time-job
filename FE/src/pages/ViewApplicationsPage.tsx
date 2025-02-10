@@ -10,9 +10,10 @@ import {
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { AcceptedBadge, RejectedBadge } from "../components/Badges";
 import { ERROR, APPLICATION_STATUS } from "../constants/constants";
-import { GET_JOB_POST_APPLICATIONS } from "../api/graphql/queries.js";
+import { GET_JOB_POST_APPLICATIONS } from "../api/graphql/queries";
 import { processGetApplications } from "../api/graphql/processData";
-import { DECIDE_JOB_APPLICATION } from "../api/graphql/mutations.js";
+import { DECIDE_JOB_APPLICATION } from "../api/graphql/mutations";
+import { processDecideApplication } from "../api/graphql/processData";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import { Application } from "../types/types";
 import LoadingOverlay from "../components/LoadingOverlay";
@@ -24,7 +25,8 @@ const ViewApplicantsPage = () => {
 
   const { id = "" } = useParams();
 
-  const [getApplicationsFinalError, setGetApplicationsFinalError] = useState<Error | null>(null);
+  const [getApplicationsFinalError, setGetApplicationsFinalError] =
+    useState<Error | null>(null);
   const {
     data: applicationsData,
     error: getApplicationsError,
@@ -47,24 +49,38 @@ const ViewApplicantsPage = () => {
     }
   }, [applicationsData]);
   useEffect(() => {
-    if (getApplicationsError) setGetApplicationsFinalError(new Error(ERROR.SERVER));
+    if (getApplicationsError)
+      setGetApplicationsFinalError(new Error(ERROR.SERVER));
   }, [getApplicationsError]);
 
   const [
     decideJobApplication,
     { error: decideApplicationError, loading: decideApplicationLoading },
   ] = useMutation(DECIDE_JOB_APPLICATION);
+  const [decideApplicationFinalError, setDecideApplicationFinalError] =
+    useState<Error | null>(null);
+  useEffect(() => {
+    if (decideApplicationError)
+      setDecideApplicationFinalError(new Error(ERROR.SERVER));
+  }, [decideApplicationError]);
+
   const onDecideButtonClick = async (e, status) => {
     const applicationId = e.target.closest(".item")?.getAttribute("data-id");
     if (!applicationId) return;
     try {
-      await decideJobApplication({
-        variables: {
-          input: { id: applicationId, status },
-        },
-      });
+      let response;
+      try {
+        response = await decideJobApplication({
+          variables: {
+            input: { id: applicationId, status },
+          },
+        });
+      } catch {
+        throw new Error(ERROR.SERVER);
+      }
+      processDecideApplication(response.data);
     } catch (e) {
-      console.error("DecideJobApplication Mutation Error: ", e.message);
+      setDecideApplicationFinalError(e);
       return;
     }
     // 결정 사항에 따라 applications 직접 업데이트
@@ -89,7 +105,9 @@ const ViewApplicantsPage = () => {
             {status === APPLICATION_STATUS.REJECTED && <RejectedBadge />}
             <UserInfo>
               <ProfileIcon />
-              <div className="nickname">{applicant?.nickname || "불러오기 실패"}</div>
+              <div className="nickname">
+                {applicant?.nickname || "불러오기 실패"}
+              </div>
               <div className="createdAt">ㆍ {createdAt}</div>
             </UserInfo>
             <div className="coverLetter">{coverLetter}</div>
@@ -115,10 +133,12 @@ const ViewApplicantsPage = () => {
             )}
           </div>
         ))}
-      {decideApplicationError && <WarningText>{ERROR.SERVER}</WarningText>}
-      {getApplicationsFinalError && 
+      {decideApplicationFinalError && (
+        <WarningText>{decideApplicationFinalError.message}</WarningText>
+      )}
+      {getApplicationsFinalError && (
         <WarningText>{getApplicationsFinalError.message}</WarningText>
-      }
+      )}
     </Container>
   );
 };
