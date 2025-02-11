@@ -9,13 +9,20 @@ import {
   ellipsisStyle,
 } from "../global";
 
+export const Background = styled("div", {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+});
+
 const containerResponsiveStyle = getResponsiveStyleByBp(
   (navigationBarHeight) => ({
     paddingTop: `calc(${navigationBarHeight} + 24px)`,
   })
 );
 export const Container = styled("div", {
-  width: "100%",
+  width: "700px",
   height: "100%",
   display: "flex",
   flexDirection: "column",
@@ -27,11 +34,12 @@ export const Container = styled("div", {
     display: "flex",
     flexDirection: "column",
     gap: "8px",
-    width: "700px",
+    width: "100%",
     padding: "15px 20px",
     background: "white",
     borderRadius: "15px",
     boxShadow: "0 0 30px 10px rgba(0, 0, 0, 0.03)",
+    boxSizing: "border-box",
     "& .coverLetter": {
       fontSize: "15px",
       fontWeight: "400",
@@ -57,7 +65,45 @@ export const Container = styled("div", {
       },
     },
   },
-  ...containerResponsiveStyle,
+  "@bp5": { ...containerResponsiveStyle["@bp5"] },
+  "@bp4": {
+    width: "70%",
+  },
+  "@bp3": {
+    width: "80%",
+    ...containerResponsiveStyle["@bp3"],
+  },
+  "@bp2": {
+    width: "90%",
+    "& .item": {
+      padding: "12px 15px 15px 15px",
+      "& .coverLetter": {
+        fontSize: "14px",
+      },
+      "& .decideButtons": {
+        marginTop: "8px",
+        "& button": {
+          fontSize: "16px",
+          padding: "8px",
+          borderRadius: "10px",
+          width: "49%",
+        },
+      },
+    },
+  },
+  "@bp1": {
+    "& .item": {
+      gap: "7px",
+      "& .decideButtons": {
+        "& button": {
+          fontSize: "15px",
+          padding: "7px",
+          width: "48.7%",
+        },
+      },
+    },
+    ...containerResponsiveStyle["@bp1"],
+  },
 });
 
 export const UserInfo = styled("div", {
@@ -79,5 +125,29 @@ export const UserInfo = styled("div", {
     fontSize: "15px",
     color: "#828282",
     whiteSpace: "nowrap",
+  },
+  "@bp2": {
+    "& svg": {
+      width: "40px",
+      height: "40px",
+    },
+    "& .nickname": {
+      fontSize: "19px",
+    },
+    "& .createdAt": {
+      fontSize: "14px",
+    },
+  },
+  "@bp1": {
+    "& svg": {
+      width: "36px",
+      height: "36px",
+    },
+    "& .nickname": {
+      fontSize: "18px",
+    },
+    "& .createdAt": {
+      fontSize: "13px",
+    },
   },
 });

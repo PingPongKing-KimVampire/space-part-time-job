@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import { MainBackgroundColor, WarningText } from "../styles/global";
 import {
+  Background,
   Container,
   UserInfo,
 } from "../styles/pages/ViewApplicationsPage.styles";
@@ -94,53 +95,55 @@ const ViewApplicantsPage = () => {
   };
 
   return (
-    <Container>
-      {(getApplicationsLoading || decideApplicationLoading) && (
-        <LoadingOverlay />
-      )}
-      {applications
-        .filter(({ status }) => status !== APPLICATION_STATUS.CANCELED)
-        .map(({ id, coverLetter, applicant, status, createdAt }) => (
-          <div className="item" key={id} data-id={id}>
-            {status === APPLICATION_STATUS.ACCEPTED && <AcceptedBadge />}
-            {status === APPLICATION_STATUS.REJECTED && <RejectedBadge />}
-            <UserInfo>
-              <ProfileIcon />
-              <div className="nickname">
-                {applicant?.nickname || "불러오기 실패"}
-              </div>
-              <div className="createdAt">ㆍ {createdAt}</div>
-            </UserInfo>
-            <div className="coverLetter">{coverLetter}</div>
-            {status === APPLICATION_STATUS.PENDING && (
-              <div className="decideButtons">
-                <button
-                  className="acceptButton"
-                  onClick={(e) => {
-                    onDecideButtonClick(e, APPLICATION_STATUS.ACCEPTED);
-                  }}
-                >
-                  채용
-                </button>
-                <button
-                  className="rejectButton"
-                  onClick={(e) => {
-                    onDecideButtonClick(e, APPLICATION_STATUS.REJECTED);
-                  }}
-                >
-                  채용 거절
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
-      {decideApplicationFinalError && (
-        <WarningText>{decideApplicationFinalError.message}</WarningText>
-      )}
-      {getApplicationsFinalError && (
-        <WarningText>{getApplicationsFinalError.message}</WarningText>
-      )}
-    </Container>
+    <Background>
+      <Container>
+        {(getApplicationsLoading || decideApplicationLoading) && (
+          <LoadingOverlay />
+        )}
+        {applications
+          .filter(({ status }) => status !== APPLICATION_STATUS.CANCELED)
+          .map(({ id, coverLetter, applicant, status, createdAt }) => (
+            <div className="item" key={id} data-id={id}>
+              {status === APPLICATION_STATUS.ACCEPTED && <AcceptedBadge />}
+              {status === APPLICATION_STATUS.REJECTED && <RejectedBadge />}
+              <UserInfo>
+                <ProfileIcon />
+                <div className="nickname">
+                  {applicant?.nickname || "불러오기 실패"}
+                </div>
+                <div className="createdAt">ㆍ {createdAt}</div>
+              </UserInfo>
+              <div className="coverLetter">{coverLetter}</div>
+              {status === APPLICATION_STATUS.PENDING && (
+                <div className="decideButtons">
+                  <button
+                    className="acceptButton"
+                    onClick={(e) => {
+                      onDecideButtonClick(e, APPLICATION_STATUS.ACCEPTED);
+                    }}
+                  >
+                    채용
+                  </button>
+                  <button
+                    className="rejectButton"
+                    onClick={(e) => {
+                      onDecideButtonClick(e, APPLICATION_STATUS.REJECTED);
+                    }}
+                  >
+                    채용 거절
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        {decideApplicationFinalError && (
+          <WarningText>{decideApplicationFinalError.message}</WarningText>
+        )}
+        {getApplicationsFinalError && (
+          <WarningText>{getApplicationsFinalError.message}</WarningText>
+        )}
+      </Container>
+    </Background>
   );
 };
 
