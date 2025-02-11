@@ -1,16 +1,36 @@
-import { styled, MainColor, NavigationBarHeight } from "../global.ts";
+import {
+  styled,
+  MainColor,
+  NavigationBarHeight,
+  getResponsiveStyleByBp,
+} from "../global.ts";
 
+const containerResponsiveStyle = getResponsiveStyleByBp(
+  (navigationBarHeight) => ({ height: navigationBarHeight })
+);
 export const Container = styled("div", {
   background: MainColor,
-  height: NavigationBarHeight,
+  height: NavigationBarHeight.default,
   width: "100%",
   zIndex: "2",
   boxShadow: "0 0 3px 1px #9FB0FF",
   display: "flex",
   justifyContent: "center",
   position: "fixed",
+  ...containerResponsiveStyle,
 });
 
+const contentResponsiveStyle = getResponsiveStyleByBp((navigationBarHeight) => {
+  return {
+    "& .logo img": {
+      height: `calc(${navigationBarHeight} * 0.5) !important`,
+    },
+    "& svg": {
+      width: `calc(${navigationBarHeight} * 0.6) !important`,
+      height: `calc(${navigationBarHeight} * 0.6) !important`,
+    },
+  };
+});
 export const Content = styled("div", {
   height: "100%",
   width: "1000px",
@@ -30,7 +50,7 @@ export const Content = styled("div", {
           alignItems: "center",
           gap: "12px",
           "& img": {
-            height: `calc(${NavigationBarHeight} * 0.45)`,
+            height: `calc(${NavigationBarHeight.default} * 0.5)`,
           },
         },
         "& .buttons": {
@@ -38,9 +58,9 @@ export const Content = styled("div", {
           gap: "16px",
           marginRight: "10px",
           "& svg": {
-            width: "36px",
-            height: "36px",
             cursor: "pointer",
+            width: `calc(${NavigationBarHeight.default} * 0.6)`,
+            height: `calc(${NavigationBarHeight.default} * 0.6)`,
           },
         },
       },
@@ -53,12 +73,38 @@ export const Content = styled("div", {
         "& svg": {
           position: "absolute",
           left: "10px",
-          width: "35px",
-          height: "35px",
+          width: `calc(${NavigationBarHeight.default} * 0.6)`,
+          height: `calc(${NavigationBarHeight.default} * 0.6)`,
           cursor: "pointer",
           strokeWidth: "1.8",
         },
       },
     },
+  },
+  "@bp5": {
+    width: "90%",
+    "& .buttons": {
+      gap: "14px !important",
+    },
+    ...contentResponsiveStyle["@bp5"],
+  },
+  "@bp3": {
+    "& .logo": {
+      fontSize: "22px !important",
+    },
+    "& .buttons": {
+      gap: "12px !important",
+    },
+    "& .title": {
+      fontSize: "22px !important",
+    },
+    ...contentResponsiveStyle["@bp3"],
+  },
+  "@bp1": {
+    width: "95%",
+    "& .title": {
+      fontSize: "20px !important",
+    },
+    ...contentResponsiveStyle["@bp1"],
   },
 });

@@ -33,11 +33,11 @@ export const Container = styled("div", {
   },
   "@bp4": {
     width: "90%",
-    marginTop: "calc(var(--navigation-bar-height) + 40px)",
+    marginTop: "calc(var(--navigation-bar-height-bp5) + 40px)",
     paddingBottom: "40px",
   },
   "@bp2": {
-    marginTop: "calc(var(--navigation-bar-height) + 30px)",
+    marginTop: "calc(var(--navigation-bar-height-bp3) + 30px)",
     paddingBottom: "30px",
   },
 });

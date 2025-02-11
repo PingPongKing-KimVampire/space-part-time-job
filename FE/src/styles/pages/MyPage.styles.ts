@@ -5,17 +5,22 @@ import {
   MainHoverColor,
   SubColor,
   NavigationBarHeight,
+  getResponsiveStyleByBp,
   ellipsisStyle,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 
+const backgroundResponsiveStyle = getResponsiveStyleByBp(
+  (navigationBarHeight) => ({ paddingTop: navigationBarHeight })
+);
 export const Background = styled("div", {
   width: "100%",
   height: "100%",
   display: "flex",
   flexDirection: "column",
-  paddingTop: NavigationBarHeight,
   boxSizing: "border-box",
+  paddingTop: NavigationBarHeight.default,
+  ...backgroundResponsiveStyle,
 });
 
 export const TopArea = styled("div", {

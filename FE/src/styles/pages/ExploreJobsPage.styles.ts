@@ -2,17 +2,22 @@ import {
   styled,
   SubColor,
   NavigationBarHeight,
+  getResponsiveStyleByBp,
   ellipsisStyle,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../../assets/icons/location.svg";
 
+const backgroundResponsiveStyle = getResponsiveStyleByBp(
+  (navigationBarHeight) => ({ paddingTop: navigationBarHeight })
+);
 export const Background = styled("div", {
   width: "100%",
   display: "flex",
   justifyContent: "center",
-  paddingTop: NavigationBarHeight,
+  paddingTop: NavigationBarHeight.default,
   boxSizing: "border-box",
+  ...backgroundResponsiveStyle,
 });
 
 export const Container = styled("div", {

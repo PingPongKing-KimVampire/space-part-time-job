@@ -17,11 +17,36 @@ export const MainBackgroundColor = "#F9FBFC";
 export const SubColor = "#DCE2FF";
 export const NegativeColor = "#EE4346";
 export const NegativeHoverColor = "#DD2B2E";
-export const NavigationBarHeight = "65px";
+
+export const NavigationBarHeight = {
+  default: "65px",
+  bp5: "60px",
+  bp3: "55px",
+  bp1: "50px",
+};
 document.documentElement.style.setProperty(
   "--navigation-bar-height",
-  NavigationBarHeight
+  NavigationBarHeight.default
 );
+document.documentElement.style.setProperty(
+  "--navigation-bar-height-bp5",
+  NavigationBarHeight.bp5
+);
+document.documentElement.style.setProperty(
+  "--navigation-bar-height-bp3",
+  NavigationBarHeight.bp3
+);
+document.documentElement.style.setProperty(
+  "--navigation-bar-height-bp1",
+  NavigationBarHeight.bp1
+);
+export const getResponsiveStyleByBp = (getStyle) => {
+  return {
+    "@bp5": { ...getStyle(NavigationBarHeight.bp5) },
+    "@bp3": { ...getStyle(NavigationBarHeight.bp3) },
+    "@bp1": { ...getStyle(NavigationBarHeight.bp1) },
+  };
+};
 
 export const ButtonStyle = {
   fontWeight: "bold",

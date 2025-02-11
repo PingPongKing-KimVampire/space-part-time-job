@@ -4,16 +4,21 @@ import {
   SubColor,
   MainButtonStyle,
   NavigationBarHeight,
+  getResponsiveStyleByBp,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 
+const backgroundResponsiveStyle = getResponsiveStyleByBp(
+  (navigationBarHeight) => ({ paddingTop: navigationBarHeight })
+);
 export const Background = styled("div", {
   width: "100%",
   height: "100%",
   position: "relative",
   display: "flex",
   justifyContent: "center",
-  paddingTop: NavigationBarHeight,
+  paddingTop: NavigationBarHeight.default,
+  ...backgroundResponsiveStyle,
 });
 
 export const Container = styled("div", {

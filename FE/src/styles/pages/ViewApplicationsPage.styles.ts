@@ -3,11 +3,17 @@ import {
   MainButtonStyle,
   MainColor,
   NavigationBarHeight,
+  getResponsiveStyleByBp,
   NegativeColor,
   NegativeHoverColor,
   ellipsisStyle,
 } from "../global";
 
+const containerResponsiveStyle = getResponsiveStyleByBp(
+  (navigationBarHeight) => ({
+    paddingTop: `calc(${navigationBarHeight} + 24px)`,
+  })
+);
 export const Container = styled("div", {
   width: "100%",
   height: "100%",
@@ -15,7 +21,7 @@ export const Container = styled("div", {
   flexDirection: "column",
   alignItems: "center",
   gap: "12px",
-  paddingTop: `calc(${NavigationBarHeight} + 24px)`,
+  paddingTop: `calc(${NavigationBarHeight.default} + 24px)`,
   paddingBottom: "30px",
   "& .item": {
     display: "flex",
@@ -51,6 +57,7 @@ export const Container = styled("div", {
       },
     },
   },
+  ...containerResponsiveStyle,
 });
 
 export const UserInfo = styled("div", {
