@@ -13,10 +13,33 @@ export const Background = styled("div", {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  "@media (max-height: 750px)": {
+    alignItems: "flex-start",
+  },
+  "@bp4": {
+    alignItems: "flex-start",
+  },
 });
 
 export const Container = styled("div", {
   width: "1000px",
+  marginTop: "calc(var(--navigation-bar-height) / 2)",
+  "@media (max-height: 750px)": {
+    marginTop: "calc(var(--navigation-bar-height) + 40px)",
+    paddingBottom: "40px",
+  },
+  "@bp5": {
+    width: "900px",
+  },
+  "@bp4": {
+    width: "90%",
+    marginTop: "calc(var(--navigation-bar-height) + 40px)",
+    paddingBottom: "40px",
+  },
+  "@bp2": {
+    marginTop: "calc(var(--navigation-bar-height) + 30px)",
+    paddingBottom: "30px",
+  },
 });
 
 export const HeaderContainer = styled("div", {
@@ -50,6 +73,36 @@ export const HeaderContainer = styled("div", {
     color: "#828282",
     fontSize: "14px",
     whiteSpace: "pre",
+  },
+  "@bp2": {
+    marginBottom: "25px",
+    gap: "8px",
+    "& .jobTypesContainer .jobType": {
+      fontSize: "14px",
+    },
+    "& .title": {
+      fontSize: "22px",
+    },
+    "& .subInfo": {
+      fontSize: "13px",
+    },
+  },
+  "@bp1": {
+    gap: "5px",
+    "& .jobTypesContainer": {
+      gap: "5px",
+      "& .jobType": {
+        fontSize: "13px",
+        padding: "5px 7px",
+        borderRadius: "8px",
+      },
+    },
+    "& .title": {
+      fontSize: "20px",
+    },
+    "& .subInfo": {
+      fontSize: "13px",
+    },
   },
 });
 
@@ -86,6 +139,29 @@ export const ContentContainer = styled("div", {
           lineHeight: "22px",
           whiteSpace: "pre-line",
         },
+      },
+    },
+  },
+  "@bp4": {
+    flexDirection: "column",
+    gap: "30px",
+    "& .leftSection": {
+      width: "100%",
+    },
+    "& .rightSection": {
+      width: "100%",
+      gap: "40px",
+      "& .textInfo": {
+        aspectRatio: "auto",
+      },
+    },
+  },
+  "@bp2": {
+    gap: "20px",
+    "& .rightSection": {
+      gap: "30px",
+      "& .textInfo": {
+        gap: "25px",
       },
     },
   },
@@ -165,6 +241,12 @@ export const ImageSliderContainer = styled("div", {
       right: "0%",
     },
   },
+  "@bp2": {
+    marginBottom: "10px",
+  },
+  "@bp1": {
+    marginBottom: "8px",
+  },
 });
 
 export const ProfileContainer = styled("div", {
@@ -188,6 +270,50 @@ export const ProfileContainer = styled("div", {
   "& svg": {
     width: "12%",
     fill: MainColor,
+  },
+  "@bp4": {
+    gap: "10px",
+    "& .userInfo": {
+      width: "100%",
+      "& .nickname": {
+        fontSize: "22px",
+      },
+      "& .timeTogether": {
+        fontSize: "15px",
+      },
+    },
+    "& svg": {
+      width: "68px",
+      height: "68px",
+    },
+  },
+  "@bp2": {
+    "& .userInfo": {
+      "& .nickname": {
+        fontSize: "20px",
+      },
+      "& .timeTogether": {
+        fontSize: "13px",
+      },
+    },
+    "& svg": {
+      width: "60px",
+      height: "60px",
+    },
+  },
+  "@bp1": {
+    "& .userInfo": {
+      "& .nickname": {
+        fontSize: "18px",
+      },
+      "& .timeTogether": {
+        fontSize: "12px",
+      },
+    },
+    "& svg": {
+      width: "55px",
+      height: "55px",
+    },
   },
 });
 
@@ -270,6 +396,40 @@ export const InteractionContainer = styled("div", {
         stroke: "#B0B0B0",
         strokeWidth: "0.6",
         fill: "#B0B0B0",
+      },
+    },
+  },
+  "@bp4": {
+    "& .interaction": {
+      gap: "16px",
+      "& .applyButton": {
+        background: "red",
+        padding: "16px",
+      },
+      "& svg": {
+        width: "55px",
+      },
+    },
+  },
+  "@bp3": {
+    "& .interaction": {
+      gap: "14px",
+      "& .applyButton": {
+        padding: "14px",
+        fontSize: "18px",
+      },
+      "& svg": {
+        width: "50px",
+      },
+    },
+  },
+  "@bp1": {
+    "& .interaction": {
+      gap: "10px",
+      "& .applyButton": {
+        padding: "10px",
+        fontSize: "16px",
+        borderRadius: "12px",
       },
     },
   },

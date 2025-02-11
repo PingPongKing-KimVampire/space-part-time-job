@@ -3,6 +3,7 @@ import {
   MainButtonStyle,
   MainColor,
   OptionButtonStyle,
+  ellipsisStyle,
 } from "../global";
 
 export const Background = styled("div", {
@@ -36,6 +37,9 @@ export const ScopeSettingContainer = styled("div", {
     padding: "20px 20px 15px 20px",
     marginBottom: "12px",
   },
+  "@bp1": {
+    padding: "17px 17px 13px 17px",
+  },
 });
 
 export const NeighborhoodsContainer = styled("div", {
@@ -47,16 +51,18 @@ export const NeighborhoodsContainer = styled("div", {
   marginBottom: "28px",
   "& .neighborhoodButton": {
     ...OptionButtonStyle,
-    textAlign: "left",
     borderRadius: "9px",
     width: "calc((100% - 14px) / 3)",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    "& .neighborhoodName": {
+      textAlign: "left",
+      ...ellipsisStyle,
+    },
     "& svg": {
-      position: "absolute",
-      height: "50%",
+      height: "100%",
       strokeWidth: "1",
-      top: "50%",
-      transform: "translateY(-50%)",
-      right: "10px",
     },
     "&:not(.selected)": {
       "& svg": {
@@ -67,7 +73,18 @@ export const NeighborhoodsContainer = styled("div", {
   "@bp2": {
     height: "45px",
     marginBottom: "24px",
-    "& .neighborhoodButton": { padding: "12px" },
+    "& .neighborhoodButton": {
+      padding: "12px 8px",
+      "& .neighborhoodName": {
+        fontSize: "15px",
+      },
+    },
+  },
+  "@bp1": {
+    height: "40px",
+    "& .neighborhoodButton .neighborhoodName": {
+      fontSize: "13px",
+    },
   },
 });
 
@@ -96,10 +113,17 @@ export const PlusButton = styled("button", {
 });
 
 export const CompleteButton = styled("button", {
-  width: "100%",
   ...MainButtonStyle,
-  "@bp2": {
+  width: "100%",
+  "@bp3": {
+    padding: "14px",
     fontSize: "22px",
+  },
+  "@bp2": {
     padding: "13px",
+  },
+  "@bp1": {
+    padding: "12px",
+    fontSize: "20px",
   },
 });

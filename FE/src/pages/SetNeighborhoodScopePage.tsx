@@ -190,7 +190,7 @@ const SetNeighborhoodScopePage = () => {
                 onClick={onNeighborhoodClick}
                 data-id={neighborhood.id}
               >
-                {neighborhood.name}
+                <div className="neighborhoodName">{neighborhood.name}</div>
                 <XmarkIcon onClick={onXClick} />
               </button>
             ))}

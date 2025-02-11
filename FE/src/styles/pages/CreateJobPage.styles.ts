@@ -293,20 +293,28 @@ export const PhotoContainer = styled("div", {
 
 export const PostButton = styled("button", {
   ...MainButtonStyle,
+  margin: "30px 0 35px 0",
   width: "100%",
-  bottom: "20px",
-  marginTop: "65px",
+  "@bp6": {
+    margin: "25px 0 30px 0",
+  },
   "@bp5": {
-    marginTop: "40px",
+    margin: "20px 0 30px 0",
+  },
+  "@bp4": {
+    margin: "18px 0 30px 0",
   },
   "@bp3": {
-    marginTop: "35px",
     padding: "14px",
     fontSize: "22px",
+    margin: "15px 0 25px 0",
+  },
+  "@bp2": {
+    padding: "13px",
   },
   "@bp1": {
-    marginTop: "30px",
     padding: "12px",
     fontSize: "20px",
+    margin: "10px 0 20px 0",
   },
 });

@@ -20,6 +20,18 @@ export const Container = styled("div", {
       color: "#7C7C7C",
     },
   },
+  "@bp2": {
+    gap: "15px",
+    "& .labels .label": {
+      fontSize: "12px",
+    },
+  },
+  "@bp1": {
+    gap: "13px",
+    "& .labels .label": {
+      fontSize: "12px",
+    },
+  },
 });
 
 export const Slider = styled("input", {
@@ -37,6 +49,13 @@ export const Slider = styled("input", {
     borderRadius: "20px",
     position: "relative",
     zIndex: "1",
+  },
+  "@bp2": {
+    height: "4px",
+    "&::-webkit-slider-thumb": {
+      width: "20px",
+      height: "20px",
+    },
   },
 });
 
@@ -56,5 +75,11 @@ export const MarkersContainer = styled("div", {
     height: "17px",
     background: "#EDEDED",
     borderRadius: "10px",
+  },
+  "@bp2": {
+    "& .marker": {
+      width: "15px",
+      height: "15px",
+    },
   },
 });

@@ -18,6 +18,10 @@ export const SubColor = "#DCE2FF";
 export const NegativeColor = "#EE4346";
 export const NegativeHoverColor = "#DD2B2E";
 export const NavigationBarHeight = "65px";
+document.documentElement.style.setProperty(
+  "--navigation-bar-height",
+  NavigationBarHeight
+);
 
 export const ButtonStyle = {
   fontWeight: "bold",
@@ -103,7 +107,7 @@ export const ellipsisStyle = {
 };
 
 export const ModalBackground = styled("div", {
-  position: "absolute",
+  position: "fixed",
   left: "0",
   top: "0",
   width: "100%",
@@ -122,13 +126,14 @@ export const ModalBackground = styled("div", {
     padding: "20px 24px",
     gap: "18px",
     position: "relative",
+    marginTop: "calc(var(--navigation-bar-height) / 2)",
     "& .title": {
       fontSize: "22px",
       fontWeight: "bold",
     },
     "& .textareaContainer": {
       width: "100%",
-      display: "flex",
+      display: "flex", // TODO : 여기 flexbox 관련 속성이 왜 있지?
       flexDirection: "column",
       marginBottom: "15px",
     },
@@ -151,6 +156,40 @@ export const ModalBackground = styled("div", {
     },
     "& .content": {
       lineHeight: "24px",
+    },
+  },
+  "@bp2": {
+    "& .container": {
+      width: "70%",
+    },
+  },
+  "@bp1": {
+    "& .container": {
+      width: "75%",
+      padding: "15px 18px",
+      gap: "12px",
+      "& .title": {
+        fontSize: "20px",
+      },
+      "& .textareaContainer": {
+        "& textarea": {
+          padding: "12px 14px",
+          fontSize: "16px",
+          height: "130px",
+          "&::placeholder": {
+            fontSize: "16px",
+          },
+        },
+        "& .charCounter": {
+          fontSize: "14px",
+          bottom: "-16px",
+        },
+      },
+      "& .applyButton": {
+        fontSize: "18px",
+        padding: "10px",
+        borderRadius: "12px",
+      },
     },
   },
 });
