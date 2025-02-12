@@ -15,7 +15,11 @@ import {
 } from './grpc/dto/apply-to-job-post/response.dto';
 import { JobPostService } from 'src/job-post/grpc/job-post.service';
 import { UserService } from 'src/user/user.service';
+import { UseFilters } from '@nestjs/common';
+import { GraphQLExceptionFilter } from 'src/common/exception-filter';
+import { WooJooInternalError } from 'src/util/graphql.error';
 
+@UseFilters(GraphQLExceptionFilter)
 @Resolver('JobApplication')
 export class JobApplyResolver {
   constructor(
@@ -68,18 +72,28 @@ export class JobApplyResolver {
 
   @ResolveField('jobPost')
   async resolveJobPost(@Parent() jobApplication) {
-    return {
-      __typename: 'JobPost',
-      ...(await this.jobPostService.getJobPost(jobApplication.jobPostId)),
-    };
+    try {
+      return {
+        __typename: 'JobPost',
+        ...(await this.jobPostService.getJobPost(jobApplication.jobPostId)),
+      };
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
+    }
   }
 
   @ResolveField('applicant')
   async resolveApplicant(@Parent() jobApplication) {
-    return {
-      __typename: 'UserPublicInfo',
-      ...(await this.userService.getUserPublicInfo(jobApplication.userId)),
-    };
+    try {
+      return {
+        __typename: 'UserPublicInfo',
+        ...(await this.userService.getUserPublicInfo(jobApplication.userId)),
+      };
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
+    }
   }
 
   @Mutation('decideJobApplication')

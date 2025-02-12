@@ -22,6 +22,7 @@ import {
   ApplicationStatusGrpcType,
   JobApplicationGrpc,
 } from 'src/job-apply/grpc/dto/apply-to-job-post/response.dto';
+import { WooJooInternalError } from 'src/util/graphql.error';
 
 @Resolver('JobPost')
 export class JobPostResolver {
@@ -164,45 +165,54 @@ export class JobPostResolver {
     @Parent() jobPost: JobPost,
     @Context('req') req: Request,
   ) {
-    const { id: userId } = this.parseUserDataHeader(
-      req.headers['space-part-time-job-user-data-base64'],
-    );
+    try {
+      const { id: userId } = this.parseUserDataHeader(
+        req.headers['space-part-time-job-user-data-base64'],
+      );
 
-    const response = await this.jobApplyService.listJobApplicationByUserAndPost(
-      {
-        userId,
-        jobPostId: jobPost.id,
-      },
-    );
+      const response =
+        await this.jobApplyService.listJobApplicationByUserAndPost({
+          userId,
+          jobPostId: jobPost.id,
+        });
 
-    return {
-      __typename: 'JobApplications',
-      applications: (response.jobApplicationList ?? []).map(
-        (jobApplication) => ({
-          id: jobApplication.id,
-          coverLetter: jobApplication.coverLetter,
-          createdAt: jobApplication.createdAt,
-          jobPostId: jobApplication.jobPostId,
-          userId: jobApplication.userId,
-          status: this.getEnumKeyByValue(
-            ApplicationStatusGrpcType,
-            jobApplication.status,
-          ),
-        }),
-      ),
-    };
+      return {
+        __typename: 'JobApplications',
+        applications: (response.jobApplicationList ?? []).map(
+          (jobApplication) => ({
+            id: jobApplication.id,
+            coverLetter: jobApplication.coverLetter,
+            createdAt: jobApplication.createdAt,
+            jobPostId: jobApplication.jobPostId,
+            userId: jobApplication.userId,
+            status: this.getEnumKeyByValue(
+              ApplicationStatusGrpcType,
+              jobApplication.status,
+            ),
+          }),
+        ),
+      };
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
+    }
   }
 
   @ResolveField('applicationCount')
   async resolveApplicationCount(@Parent() jobPost: JobPost) {
-    const response = await this.jobApplyService.countJobApplicationByPost({
-      jobPostId: jobPost.id,
-    });
+    try {
+      const response = await this.jobApplyService.countJobApplicationByPost({
+        jobPostId: jobPost.id,
+      });
 
-    return {
-      __typename: 'ApplicationCount',
-      count: response.jobApplicationCount,
-    };
+      return {
+        __typename: 'ApplicationCount',
+        count: response.jobApplicationCount,
+      };
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
+    }
   }
 
   @ResolveField('applications')
@@ -210,21 +220,27 @@ export class JobPostResolver {
     @Parent() jobPost: JobPost,
     @Context('req') req: Request,
   ) {
-    const user = this.parseUserDataHeader(
-      req.headers['space-part-time-job-user-data-base64'],
-    );
-    const response =
-      await this.jobApplyService.listJobApplicationsByPostForPublisher({
-        jobPostId: jobPost.id,
-        userId: user.id,
-      });
+    try {
+      const user = this.parseUserDataHeader(
+        req.headers['space-part-time-job-user-data-base64'],
+      );
+      const response =
+        await this.jobApplyService.listJobApplicationsByPostForPublisher({
+          jobPostId: jobPost.id,
+          userId: user.id,
+        });
 
-    return {
-      __typename: 'JobApplications',
-      applications: (response.jobApplicationList ?? []).map((jobApplication) =>
-        this.transformJobApplicationResponse(jobApplication),
-      ),
-    };
+      return {
+        __typename: 'JobApplications',
+        applications: (response.jobApplicationList ?? []).map(
+          (jobApplication) =>
+            this.transformJobApplicationResponse(jobApplication),
+        ),
+      };
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
+    }
   }
 
   @ResolveField('myInterested')
@@ -232,29 +248,42 @@ export class JobPostResolver {
     @Parent() jobPost: JobPost,
     @Context('req') req: Request,
   ) {
-    const user = this.parseUserDataHeader(
-      req.headers['space-part-time-job-user-data-base64'],
-    );
     try {
-      const {
-        interestedJobPost: { jobPostId, createdAt },
-      } = await this.jobPostService.getMyInterestedJobPost(jobPost.id, user.id);
-      return {
-        jobPost: await this.getJobPost(jobPostId),
-        createdAt: createdAt,
-      };
-    } catch (e) {
-      //추후 gRPC의 조회 실패 오류에만 null을 반환하게 만들기
-      console.log(e);
-      return null;
+      const user = this.parseUserDataHeader(
+        req.headers['space-part-time-job-user-data-base64'],
+      );
+      try {
+        const {
+          interestedJobPost: { jobPostId, createdAt },
+        } = await this.jobPostService.getMyInterestedJobPost(
+          jobPost.id,
+          user.id,
+        );
+        return {
+          jobPost: await this.getJobPost(jobPostId),
+          createdAt: createdAt,
+        };
+      } catch (e) {
+        //추후 gRPC의 조회 실패 오류에만 null을 반환하게 만들기
+        console.log(e);
+        return null;
+      }
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
     }
   }
 
   @ResolveField('interestedCount')
-  async resolveInterestedCount(@Parent() jobPost: JobPost): Promise<number> {
-    const { interestedCount } =
-      await this.jobPostService.countJobPostInterested(jobPost.id);
-    return interestedCount;
+  async resolveInterestedCount(@Parent() jobPost: JobPost) {
+    try {
+      const { interestedCount } =
+        await this.jobPostService.countJobPostInterested(jobPost.id);
+      return interestedCount;
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
+    }
   }
 
   @Mutation('closeJobPost')
