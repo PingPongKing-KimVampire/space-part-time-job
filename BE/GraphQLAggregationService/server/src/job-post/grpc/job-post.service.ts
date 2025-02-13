@@ -107,10 +107,7 @@ export class JobPostService implements OnModuleInit {
   private jobPostService: JobPostServiceGrpc;
   private InterestedJobPostService: InterestedJobPostServiceGrpc;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   onModuleInit() {
     const grpcUrl = this.configService.get<string>('GRPC_JOB_POST_SERVER_URL');
@@ -211,11 +208,6 @@ export class JobPostService implements OnModuleInit {
         (day) => DayOfWeekEnumMapping[day],
       );
     }
-
-    jobPost.publisher = await this.userService.getUserPublicInfo(
-      jobPost.userId,
-    );
-
     return jobPost;
   }
 
@@ -226,12 +218,6 @@ export class JobPostService implements OnModuleInit {
       );
       const { jobPost } = response;
       this.transformGrpcJobPost(jobPost);
-
-      // TODO: 컨트롤러로 이동(서비스의 다른 메서드도 마찬가지)
-      jobPost.publisher = await this.userService.getUserPublicInfo(
-        jobPost.userId,
-      );
-
       return jobPost;
     } catch (e) {
       console.error('getJobPost grpc 에러 발생:', e);
@@ -261,9 +247,6 @@ export class JobPostService implements OnModuleInit {
       );
       const { jobPost } = response;
       this.transformGrpcJobPost(jobPost);
-      jobPost.publisher = await this.userService.getUserPublicInfo(
-        jobPost.userId,
-      );
       return jobPost;
     } catch (e) {
       console.error('closeJobPost grpc 에러 발생:', e);

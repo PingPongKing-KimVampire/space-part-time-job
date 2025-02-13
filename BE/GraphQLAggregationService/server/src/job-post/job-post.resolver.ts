@@ -23,12 +23,14 @@ import {
   JobApplicationGrpc,
 } from 'src/job-apply/grpc/dto/apply-to-job-post/response.dto';
 import { WooJooInternalError } from 'src/util/graphql.error';
+import { UserService } from 'src/user/user.service';
 
 @Resolver('JobPost')
 export class JobPostResolver {
   constructor(
     private readonly jobPostService: JobPostService,
     private readonly jobApplyService: JobApplyService,
+    private readonly userService: UserService,
   ) {}
 
   @Mutation('createJobPost')
@@ -82,8 +84,6 @@ export class JobPostResolver {
   @Query('getJobPost')
   async getJobPost(@Args('id') jobPostId: string): Promise<JobPost> {
     const jobPost = await this.jobPostService.getJobPost(jobPostId);
-    // @ts-ignore
-    jobPost.publisher.__typename = 'UserPublicInfo';
     const ret = {
       __typename: 'JobPost',
       ...jobPost,
@@ -124,11 +124,6 @@ export class JobPostResolver {
       userId,
     );
 
-    result.edges.forEach((edge) => {
-      // @ts-ignore
-      edge.node.publisher.__typename = 'UserPublicInfo';
-    });
-
     return { __typename: 'JobPostConnection', ...result };
   }
 
@@ -158,6 +153,23 @@ export class JobPostResolver {
     );
 
     return { __typename: 'ViewsCountType', count: views };
+  }
+
+  @ResolveField('publisher')
+  async resolvePublisher(@Parent() jobPost, @Context('req') req: Request) {
+    try {
+      const publisher = await this.userService.getUserPublicInfo(
+        jobPost.userId,
+      );
+
+      return {
+        __typename: 'UserPublicInfo',
+        ...publisher,
+      };
+    } catch (exception: any) {
+      console.error('에러 필터: ', exception);
+      return WooJooInternalError;
+    }
   }
 
   @ResolveField('myJobApplication')
@@ -295,8 +307,6 @@ export class JobPostResolver {
       req.headers['space-part-time-job-user-data-base64'],
     );
     const jobPost = await this.jobPostService.closeJobPost(jobPostId, user.id);
-    // @ts-ignore
-    jobPost.publisher.__typename = 'UserPublicInfo';
     return { __typename: 'JobPost', ...jobPost };
   }
 
