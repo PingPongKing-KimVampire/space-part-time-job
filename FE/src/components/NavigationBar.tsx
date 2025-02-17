@@ -1,9 +1,7 @@
 import React, { useMemo } from "react";
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
-import { ReactComponent as WriteIcon } from "../assets/icons/write.svg";
 import { ReactComponent as ProfileIcon } from "../assets/icons/profile.svg";
 import { ReactComponent as BackIcon } from "../assets/icons/arrow-left.svg";
-import { ReactComponent as LocationIcon } from "../assets/icons/location.svg";
 import logoImage from "../assets/images/logo.png";
 import {
   Container,
@@ -47,23 +45,11 @@ const NavigationBar = () => {
           <img src={logoImage} />
           우주 알바
         </div>
-        <div className="buttons">
-          <LocationIcon
-            onClick={() => {
-              navigate("/search-neighborhood");
-            }}
-          />
-          <WriteIcon
-            onClick={() => {
-              navigate("/create-job");
-            }}
-          />
-          <ProfileIcon
-            onClick={() => {
-              navigate("/mypage");
-            }}
-          />
-        </div>
+        <ProfileIcon
+          onClick={() => {
+            navigate("/mypage");
+          }}
+        />
       </Content>
     </Container>
   );

@@ -1,6 +1,8 @@
 import {
   styled,
+  MainColor,
   SubColor,
+  MainHoverColor,
   NavigationBarHeight,
   getResponsiveStyleByBp,
   ellipsisStyle,
@@ -25,6 +27,26 @@ export const Container = styled("div", {
   marginTop: "40px",
   display: "flex",
   flexDirection: "column",
+  "& .createJobButton": {
+    position: "sticky",
+    bottom: "35px",
+    marginLeft: "auto",
+    background: MainColor,
+    color: "white",
+    borderRadius: "30px",
+    border: "none",
+    padding: "10px 11.75px",
+    cursor: "pointer",
+    boxShadow: "0 0 30px 10px rgba(0, 0, 0, 0.03)",
+    "& svg": {
+      width: "35px",
+      height: "35px",
+    },
+    "&:hover": {
+      background: MainHoverColor,
+      transition: "background 0.2s",
+    },
+  },
 });
 
 // TODO: CustomInput의 스타일과 재사용할 방법 없나!

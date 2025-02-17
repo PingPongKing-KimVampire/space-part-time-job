@@ -23,7 +23,7 @@ export const Container = styled("div", {
 const contentResponsiveStyle = getResponsiveStyleByBp((navigationBarHeight) => {
   return {
     "& .logo img": {
-      height: `calc(${navigationBarHeight} * 0.5) !important`,
+      height: `calc(${navigationBarHeight} * 0.45) !important`,
     },
     "& svg": {
       width: `calc(${navigationBarHeight} * 0.6) !important`,
@@ -50,18 +50,13 @@ export const Content = styled("div", {
           alignItems: "center",
           gap: "12px",
           "& img": {
-            height: `calc(${NavigationBarHeight.default} * 0.5)`,
+            height: `calc(${NavigationBarHeight.default} * 0.45)`,
           },
         },
-        "& .buttons": {
-          display: "flex",
-          gap: "16px",
-          marginRight: "10px",
-          "& svg": {
-            cursor: "pointer",
-            width: `calc(${NavigationBarHeight.default} * 0.6)`,
-            height: `calc(${NavigationBarHeight.default} * 0.6)`,
-          },
+        "& svg": {
+          cursor: "pointer",
+          width: `calc(${NavigationBarHeight.default} * 0.6)`,
+          height: `calc(${NavigationBarHeight.default} * 0.6)`,
         },
       },
       local: {
@@ -83,17 +78,11 @@ export const Content = styled("div", {
   },
   "@bp5": {
     width: "90%",
-    "& .buttons": {
-      gap: "14px !important",
-    },
     ...contentResponsiveStyle["@bp5"],
   },
   "@bp3": {
     "& .logo": {
       fontSize: "24px !important",
-    },
-    "& .buttons": {
-      gap: "12px !important",
     },
     "& .title": {
       fontSize: "24px !important",

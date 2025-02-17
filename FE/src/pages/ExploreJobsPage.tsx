@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { MainBackgroundColor } from "../styles/global";
@@ -31,10 +31,12 @@ import {
 import { JobPost, PageInfo, Filter, ApiState } from "../types/types";
 import setQueryParam from "../utils/setQueryParam";
 import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods";
+import { ReactComponent as WriteIcon } from "../assets/icons/write.svg";
 
 const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     data: residentNeighborhoods,
@@ -242,6 +244,14 @@ const ExploreJobsPage = () => {
             fetchMoreJobPosts={fetchMoreJobPosts}
           />
         </ContentContainer>
+        <button
+          className="createJobButton"
+          onClick={() => {
+            navigate("/create-job");
+          }}
+        >
+          <WriteIcon />
+        </button>
       </Container>
     </Background>
   );
