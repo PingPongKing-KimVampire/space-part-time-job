@@ -90,20 +90,20 @@ export const Content = styled("div", {
   },
   "@bp3": {
     "& .logo": {
-      fontSize: "22px !important",
+      fontSize: "24px !important",
     },
     "& .buttons": {
       gap: "12px !important",
     },
     "& .title": {
-      fontSize: "22px !important",
+      fontSize: "24px !important",
     },
     ...contentResponsiveStyle["@bp3"],
   },
   "@bp1": {
     width: "95%",
     "& .title": {
-      fontSize: "20px !important",
+      fontSize: "22px !important",
     },
     ...contentResponsiveStyle["@bp1"],
   },

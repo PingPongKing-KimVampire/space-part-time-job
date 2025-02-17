@@ -8,7 +8,6 @@ import {
   getResponsiveStyleByBp,
   ellipsisStyle,
 } from "../global";
-import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 
 const backgroundResponsiveStyle = getResponsiveStyleByBp(
   (navigationBarHeight) => ({ paddingTop: navigationBarHeight })
@@ -38,13 +37,13 @@ export const ProfileContainer = styled("div", {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  height: "80px",
+  height: "120px",
   margin: "60px 0 40px 0",
   "& .userInfo": {
     flexGrow: "1",
     display: "flex",
     alignItems: "center",
-    gap: "10px",
+    gap: "18px",
     height: "100%",
     "& svg": {
       fill: MainColor,
@@ -52,26 +51,39 @@ export const ProfileContainer = styled("div", {
       aspectRatio: "1/1",
     },
     "& .textInfo": {
-      width: "400px",
+      width: "300px",
+      gap: "10px",
       "& *": {
         ...ellipsisStyle,
       },
       "& .nickname": {
-        fontSize: "26px",
+        fontSize: "28px",
         fontWeight: "800",
-        marginBottom: "9px",
+        marginBottom: "12px",
       },
-      "& .timeTogether": {
-        color: "#828282",
+      "& .iconInfo": {
+        display: "flex",
+        alignItems: "center",
+        gap: "5px",
+        marginBottom: "4px",
+        fontWeight: "normal",
+        "& svg": {
+          width: "20px",
+          height: "20px",
+        },
       },
     },
   },
-  "& .logoutButton": {
-    ...MainButtonStyle,
-    fontSize: "17px",
-    padding: "10px 22px",
-    borderRadius: "12px",
-    whiteSpace: "nowrap",
+  "& .buttons": {
+    display: "flex",
+    gap: "10px",
+    "& button": {
+      ...MainButtonStyle,
+      fontSize: "17px",
+      padding: "10px 20px",
+      borderRadius: "12px",
+      whiteSpace: "nowrap",
+    },
   },
 });
 

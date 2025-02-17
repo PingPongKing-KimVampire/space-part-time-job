@@ -20,9 +20,9 @@ export const NegativeHoverColor = "#DD2B2E";
 
 export const NavigationBarHeight = {
   default: "65px",
-  bp5: "60px",
-  bp3: "55px",
-  bp1: "50px",
+  bp5: "63px",
+  bp3: "60px",
+  bp1: "55px",
 };
 document.documentElement.style.setProperty(
   "--navigation-bar-height",

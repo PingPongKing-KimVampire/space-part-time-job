@@ -12,7 +12,7 @@ import { BasicInfoContainer } from "../../styles/pages/ViewJobPage.styles";
 import { ReactComponent as WonIcon } from "../../assets/icons/won.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
 import { ReactComponent as LocationIcon } from "../../assets/icons/location-outline.svg";
-import { ReactComponent as ClockIcon } from "../../assets/icons/clock.svg";
+import { ReactComponent as ClockIcon } from "../../assets/icons/clock-outline.svg";
 import useViewJobContext from "../../context/ViewJobContext";
 
 const BasicInfo = () => {
