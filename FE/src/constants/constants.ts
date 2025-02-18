@@ -1,4 +1,4 @@
-export const IP_ADDRESS = "localhost";
+export const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS;
 
 export const ERROR = {
   SERVER: "* 서버가 불안정합니다. 나중에 다시 시도해주세요.",
