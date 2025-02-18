@@ -33,7 +33,7 @@ const contentResponsiveStyle = getResponsiveStyleByBp((navigationBarHeight) => {
 });
 export const Content = styled("div", {
   height: "100%",
-  width: "1000px",
+  width: "1400px",
   display: "flex",
   alignItems: "center",
   color: "white",
@@ -43,12 +43,12 @@ export const Content = styled("div", {
       main: {
         justifyContent: "space-between",
         "& .logo": {
-          fontSize: "25px",
-          fontWeight: "900",
+          fontSize: "28px",
+          fontWeight: "800",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
-          gap: "12px",
+          gap: "14px",
           "& img": {
             height: `calc(${NavigationBarHeight.default} * 0.45)`,
           },
@@ -62,7 +62,7 @@ export const Content = styled("div", {
       local: {
         justifyContent: "center",
         "& .title": {
-          fontSize: "24px",
+          fontSize: "28px",
           fontWeight: "700",
         },
         "& svg": {
@@ -76,20 +76,25 @@ export const Content = styled("div", {
       },
     },
   },
-  "@bp5": {
+  "@bp7": {
     width: "90%",
+  },
+  "@bp5": {
     ...contentResponsiveStyle["@bp5"],
   },
   "@bp3": {
     "& .logo": {
-      fontSize: "24px !important",
+      fontSize: "26px !important",
     },
     "& .title": {
-      fontSize: "24px !important",
+      fontSize: "26px !important",
     },
     ...contentResponsiveStyle["@bp3"],
   },
   "@bp1": {
+    "& .logo": {
+      fontSize: "24px !important"
+    },
     "& .title": {
       fontSize: "22px !important",
     },

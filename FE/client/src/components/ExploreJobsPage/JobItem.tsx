@@ -39,7 +39,7 @@ const JobItem: React.FC<JobItemProps> = (props) => {
         navigate(`/view-job/${id}`);
       }}
     >
-      <JobItemContextBox>
+      <JobItemContextBox className={photos.length > 0 ? "photoExists" : ""}>
         <div className="mainInfo">
           <div className="title">{title}</div>
           <div className="neighborhoodAndPostTime">

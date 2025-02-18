@@ -28,11 +28,10 @@ export const Container = styled("div", {
   marginTop: "40px",
   display: "flex",
   flexDirection: "column",
-  position: "relative",
   "& .createJobButton": {
-    position: "absolute",
+    position: "fixed",
     bottom: "35px",
-    right: "0px",
+    right: "calc((100vw - 1400px) / 2)",
     background: MainColor,
     color: "white",
     borderRadius: "30px",
@@ -51,6 +50,9 @@ export const Container = styled("div", {
   },
   "@bp7": {
     width: "90%",
+    "& .createJobButton": {
+      right: "calc(10vw / 2)",
+    }
   },
 });
 
@@ -58,7 +60,7 @@ export const Container = styled("div", {
 export const InputContainer = styled("div", {
   background: "white",
   border: "1px solid #E3E9ED",
-  padding: "10px",
+  padding: "12px",
   boxSizing: "border-box",
   width: "100%",
   position: "relative",
@@ -75,6 +77,9 @@ export const InputContainer = styled("div", {
       fontSize: "18px",
       color: "#B2B2B2",
     },
+  },
+  "@bp3": {
+    padding: "10px",
   },
   "@bp2": {
     padding: "9px",
@@ -94,8 +99,8 @@ export const NeighborhoodSelectorContainer = styled("div", {
   zIndex: "1",
   "& .selectButton": {
     height: "100%",
-    maxWidth: "200px",
-    padding: "8px 12px",
+    maxWidth: "250px",
+    padding: "10px 12px",
     background: SubColor,
     border: "none",
     fontSize: "18px",
@@ -104,7 +109,7 @@ export const NeighborhoodSelectorContainer = styled("div", {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    gap: "4px",
+    gap: "5px",
     cursor: "pointer",
     transition: "background 0.2s",
     position: "relative",
@@ -119,7 +124,7 @@ export const NeighborhoodSelectorContainer = styled("div", {
     position: "absolute",
     left: "10px",
     top: "80%",
-    padding: "6px",
+    padding: "10px 9px",
     marginTop: "0px",
     borderRadius: "18px",
     background: SubColor,
@@ -128,7 +133,7 @@ export const NeighborhoodSelectorContainer = styled("div", {
     transition: "all 0.3s",
     display: "flex",
     flexDirection: "column",
-    gap: "5px",
+    gap: "7px",
     boxSizing: "border-box",
     "&.isVisible": {
       opacity: "1",
@@ -153,6 +158,21 @@ export const NeighborhoodSelectorContainer = styled("div", {
       },
     },
   },
+  "@bp3": {
+    "& .selectButton": {
+      padding: "8px 10px",
+      fontSize: "17px",
+    },
+    "& .selectBox": {
+      padding : "8px",
+      borderRadius: "16px",
+      "& .optionButton": {
+        padding: "8px 25px",
+        fontSize: "16px",
+        borderRadius: "16px",
+      }
+    },
+  },
   "@bp2": {
     "& .selectButton": {
       padding: "6px 8px",
@@ -165,14 +185,16 @@ export const NeighborhoodSelectorContainer = styled("div", {
   },
   "@bp1": {
     "& .selectButton": {
-      width: "120px",
+      maxWidth: "140px",
     },
   },
 });
 
 export const ArrowDownIcon = styled(ArrowDown, {
-  width: "18px",
-  height: "18px",
+  minWidth: "18px",
+  minHeight: "18px",
+  maxWidth: "18px",
+  maxHeight: "18px",
   strokeWidth: "1.4",
   color: "black",
   transition: "transform 0.2s",
@@ -186,8 +208,10 @@ export const ArrowDownIcon = styled(ArrowDown, {
 });
 
 export const LocationIcon = styled(Location, {
-  width: "20px",
-  height: "20px",
+  minWidth: "20px",
+  minHeight: "20px",
+  maxWidth: "20px",
+  maxHeight: "20px",
   fill: "black",
 });
 
@@ -196,6 +220,12 @@ export const ContentContainer = styled("div", {
   marginTop: "20px",
   display: "flex",
   justifyContent: "flex-start",
+  "@bp3": {
+    marginTop: "15px",
+  },
+  "@bp1": {
+    marginTop: "5px",
+  }
 });
 
 export const JobFilterContainer = styled("div", {
@@ -208,31 +238,34 @@ export const JobFilterContainer = styled("div", {
   display: "flex",
   flexDirection: "column",
   marginBottom: "40px",
-  gap: "20px",
+  gap: "22px",
   position: "absolute",
   "& .topContainer": {
     display: "flex",
     justifyContent: "space-between",
     alignContent: "flex-end",
     "& .title": {
-      fontSize: "18px",
+      fontSize: "20px",
       fontWeight: "bold",
     },
     "& .initButton": {
       background: "none",
       border: "none",
-      fontSize: "14px",
+      fontSize: "15px",
       color: "#828282",
       textDecoration: "underline",
       cursor: "pointer",
     },
   },
+  "@bp5": {
+    width: "260px",
+  }
 });
 
 export const FilterField = styled("div", {
   display: "flex",
   flexDirection: "column",
-  gap: "8px",
+  gap: "10px",
   transition: "opacity 0.2s, height 0.2s",
   "& label": {
     fontSize: "16px",
@@ -241,26 +274,30 @@ export const FilterField = styled("div", {
 });
 
 export const ChipsContainerStyle = {
-  gap: "6px 4px",
+  gap: "8px 5px",
 };
 
 export const ChipsOptionStyle = {
-  fontSize: "14px",
-  padding: "4px 8px",
+  fontSize: "15px",
+  fontWeight: "500",
+  padding: "5px 10px",
 };
 
 export const JobListContainer = styled("div", {
-  width: "1055px",
+  width: "1050px",
   boxSizing: "border-box",
   display: "flex",
   flexDirection: "column",
-  marginLeft: "345px",
+  gap: "10px",
+  marginLeft: "350px",
+  marginBottom: "60px",
   "& .totalCount": {
     textDecoration: "underline",
     alignSelf: "flex-end",
+    fontSize: "18px",
     "& .count": {
       fontWeight: "bold",
-      fontSize: "18px",
+      fontSize: "20px",
     },
   },
   "& .jobList": {
@@ -271,14 +308,30 @@ export const JobListContainer = styled("div", {
     width: "95%",
     margin: "auto",
   },
-  "@bp2": {
+  "@bp5": {
+    marginLeft: "300px",
+    marginBottom: "40px !important",
+  },
+  "@bp4": {
+    gap: "0px",
+  },
+  "@bp3": {
     "& .totalCount": {
+      fontSize: "16px",
+      "& .count": {
+        fontSize: "18px",
+      }
+    }
+  },
+  "@bp1": {
+    "& .totalCount": {
+      alignSelf: "flex-start",
       fontSize: "14px",
       "& .count": {
         fontSize: "16px",
       },
     },
-  },
+  }
 });
 
 export const JobItemContainer = styled("div", {
@@ -287,10 +340,10 @@ export const JobItemContainer = styled("div", {
   alignItems: "center",
   width: "100%",
   position: "relative",
-  height: "140px",
+  height: "150px",
   cursor: "pointer",
   "& .imageBox": {
-    height: "82%",
+    height: "83%",
     aspectRatio: "1.4/1",
     border: "1px solid #DBDBDB",
     borderRadius: "10px",
@@ -308,7 +361,19 @@ export const JobItemContainer = styled("div", {
     position: "absolute",
     bottom: "0",
   },
-  "@bp2": {},
+  "@bp3": {
+    height: "140px",
+    "& .imageBox": {
+      height: "80%",
+      aspectRatio: "1.1/1",
+    },
+  },
+  "@bp1": {
+    height: "125px",
+    "& .imageBox": {
+      display: "none",
+    },
+  }
 });
 
 export const JobItemContextBox = styled("div", {
@@ -316,18 +381,21 @@ export const JobItemContextBox = styled("div", {
   flexDirection: "column",
   justifyContent: "space-between",
   height: "100%",
-  width: "470px",
-  padding: "25px 0",
+  padding: "28px 0",
   boxSizing: "border-box",
+  width: "100%",
+  "&.photoExists": {
+    width: "calc(100% - 200px)",
+  },
   "& .mainInfo": {
     "& .title": {
       paddingBottom: "10px",
-      fontSize: "18px",
+      fontSize: "22px",
       fontWeight: "bold",
       ...ellipsisStyle,
     },
     "& .neighborhoodAndPostTime": {
-      fontSize: "13px",
+      fontSize: "15px",
       color: "#828282",
       ...ellipsisStyle,
     },
@@ -335,13 +403,58 @@ export const JobItemContextBox = styled("div", {
   "& .subInfo": {
     ...ellipsisStyle,
     "& .pay": {
-      fontSize: "15px",
+      fontSize: "17px",
       fontWeight: "bold",
       color: "#4D4D4D",
     },
     "& .periodAndTime": {
-      fontSize: "13px",
+      fontSize: "15px",
       color: "#828282",
     },
   },
+  "@bp3": {
+    "&.photoExists": {
+      width: "calc(100% - 170px)",
+    },
+    "& .mainInfo": {
+      "& .title": {
+        fontSize: "20px",
+        fontWeight: "600",
+      },
+      "& .neighborhoodAndPostTime": {
+        fontSize: "14px",
+      }
+    },
+    "& .subInfo": {
+      "& .pay": {
+        fontSize: "15px",
+      },
+      "& .periodAndTime": {
+        fontSize: "14px",
+      }
+    }
+  },
+  "@bp1": {
+    "&.photoExists": {
+      width: "100%",
+    },
+    padding: "25px 0",
+    "& .mainInfo": {
+      "& .title": {
+        fontSize: "18px",
+        paddingBottom: "6px",
+      },
+      "& .neighborhoodAndPostTime": {
+        fontSize: "13px",
+      }
+    },
+    "& .subInfo": {
+      "& .pay": {
+        fontSize: "14px",
+      },
+      "& .periodAndTime": {
+        fontSize: "13px",
+      }
+    }
+  }
 });

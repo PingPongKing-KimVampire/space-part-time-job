@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
-import { MainBackgroundColor } from "../styles/global";
 import formatTimeAgo from "../utils/formatTimeAgo";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import useDebounce from "../utils/useDebounce";
@@ -16,7 +15,7 @@ import {
   InputContainer,
   ContentContainer,
 } from "../styles/pages/ExploreJobsPage.styles";
-import { WarningText } from "../styles/global";
+import { MainBackgroundColor, WarningText } from "../styles/global";
 import { SEARCH_JOB_POSTS } from "../api/graphql/queries.js";
 import { processSearchJobPosts } from "../api/graphql/processData";
 import {
