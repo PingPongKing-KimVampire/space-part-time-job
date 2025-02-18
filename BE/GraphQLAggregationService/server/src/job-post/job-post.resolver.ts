@@ -264,38 +264,26 @@ export class JobPostResolver {
       const user = this.parseUserDataHeader(
         req.headers['space-part-time-job-user-data-base64'],
       );
-      try {
-        const {
-          interestedJobPost: { jobPostId, createdAt },
-        } = await this.jobPostService.getMyInterestedJobPost(
-          jobPost.id,
-          user.id,
-        );
-        return {
-          jobPost: await this.getJobPost(jobPostId),
-          createdAt: createdAt,
-        };
-      } catch (e) {
-        //추후 gRPC의 조회 실패 오류에만 null을 반환하게 만들기
-        console.log(e);
-        return null;
-      }
-    } catch (exception: any) {
-      console.error('에러 필터: ', exception);
-      return WooJooInternalError;
+
+      const {
+        interestedJobPost: { jobPostId, createdAt },
+      } = await this.jobPostService.getMyInterestedJobPost(jobPost.id, user.id);
+      return {
+        jobPost: await this.getJobPost(jobPostId),
+        createdAt: createdAt,
+      };
+    } catch (e) {
+      //추후 gRPC의 조회 실패 오류에만 null을 반환하게 만들기
+      console.log(e);
+      return null;
     }
   }
 
   @ResolveField('interestedCount')
   async resolveInterestedCount(@Parent() jobPost: JobPost) {
-    try {
-      const { interestedCount } =
-        await this.jobPostService.countJobPostInterested(jobPost.id);
-      return interestedCount;
-    } catch (exception: any) {
-      console.error('에러 필터: ', exception);
-      return WooJooInternalError;
-    }
+    const { interestedCount } =
+      await this.jobPostService.countJobPostInterested(jobPost.id);
+    return interestedCount;
   }
 
   @Mutation('closeJobPost')
