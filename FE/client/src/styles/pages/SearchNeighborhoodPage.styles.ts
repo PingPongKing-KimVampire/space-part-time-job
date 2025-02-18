@@ -3,6 +3,7 @@ import {
   MainButtonStyle,
   OptionButtonStyle,
   SubColor,
+  SubHoverColor,
 } from "../global";
 
 export const Background = styled("div", {
@@ -94,7 +95,7 @@ export const SelectedContainer = styled("div", {
     color: `black !important`,
     border: `none !important`,
     "&:hover": {
-      background: `#C3CDFF !important`,
+      background: `${SubHoverColor} !important`,
       color: "black !important",
     },
   },

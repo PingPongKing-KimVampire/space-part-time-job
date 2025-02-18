@@ -1,4 +1,4 @@
-import { styled } from "../global.ts";
+import { styled } from "../global";
 
 export const Container = styled("div", {
   width: "100%",

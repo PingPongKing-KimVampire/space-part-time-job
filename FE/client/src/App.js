@@ -16,7 +16,7 @@ import AuthRoute from "./routes/AuthRoute.tsx";
 import NotFoundRoute from "./routes/NotFoundRoute.tsx";
 import { CreateJobProvider } from "./context/CreateJobContext.tsx";
 import { ViewJobProvider } from "./context/ViewJobContext.tsx";
-import { styled } from "./styles/global.ts";
+import { styled } from "./styles/global";
 
 const Background = styled("div", {
   minWidth: "calc(100vw - 15px)",

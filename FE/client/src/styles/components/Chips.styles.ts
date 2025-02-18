@@ -1,4 +1,4 @@
-import { styled, MainColor, MainHoverColor, SubColor } from "../global.ts";
+import { styled, MainColor, MainHoverColor, SubColor } from "../global";
 
 export const Container = styled("div", {
   display: "flex",

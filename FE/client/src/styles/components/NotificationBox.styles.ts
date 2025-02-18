@@ -1,4 +1,4 @@
-import { styled } from "../global.ts";
+import { styled } from "../global";
 
 export const Box = styled("div", {
   position: "fixed",

@@ -1,4 +1,4 @@
-import { styled, MainColor, NegativeColor } from "../global.ts";
+import { styled, MainColor, NegativeColor } from "../global";
 
 export const Badge = styled("div", {
   display: "flex",

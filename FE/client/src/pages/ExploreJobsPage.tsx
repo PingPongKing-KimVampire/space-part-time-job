@@ -38,13 +38,6 @@ const ExploreJobsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    data: residentNeighborhoods,
-    loading: fetchResidentNeighborhoodsLoading,
-    error: fetchResidentNeighborhoodsError,
-  } = useSelector(
-    (state: { residentNeighborhoods: ApiState }) => state.residentNeighborhoods
-  );
 
   const [selectedNeighborhoodID, setSelectedNeighborhoodID] =
     useState<string>("");
@@ -63,7 +56,31 @@ const ExploreJobsPage = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const [nextJobPosts, setNextJobPosts] = useState<JobPost[]>([]);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const isFirstFetchRef = useRef<boolean>(true);
+
+  const {
+    data: residentNeighborhoods,
+    loading: fetchResidentNeighborhoodsLoading,
+    error: fetchResidentNeighborhoodsError,
+  } = useSelector(
+    (state: { residentNeighborhoods: ApiState }) => state.residentNeighborhoods
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(document.documentElement.clientWidth <= 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("isMobile", isMobile);
+  }, [isMobile]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -237,11 +254,12 @@ const ExploreJobsPage = () => {
           {searchJobPostsFinalError && searchJobPostsFinalError.message}
         </WarningText>
         <ContentContainer>
-          <JobFilter filter={filter} setFilter={setFilter} />
+          {!isMobile && <JobFilter filter={filter} setFilter={setFilter} />}
           <JobList
             totalCount={totalCount}
             jobPosts={jobPosts}
             fetchMoreJobPosts={fetchMoreJobPosts}
+            isMobile={isMobile}
           />
         </ContentContainer>
         <button

@@ -1,4 +1,4 @@
-import { styled, MainColor } from "../global.ts";
+import { styled, MainColor } from "../global";
 
 export const Input = styled("input", {
   background: "white",

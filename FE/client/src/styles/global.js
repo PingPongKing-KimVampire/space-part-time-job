@@ -15,6 +15,7 @@ export const MainColor = "#384C9F";
 export const MainHoverColor = "#1d2b64";
 export const MainBackgroundColor = "#F9FBFC";
 export const SubColor = "#DCE2FF";
+export const SubHoverColor = "#C3CDFF";
 export const NegativeColor = "#EE4346";
 export const NegativeHoverColor = "#DD2B2E";
 

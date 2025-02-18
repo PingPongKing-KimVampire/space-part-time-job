@@ -3,7 +3,7 @@ import {
   MainColor,
   NavigationBarHeight,
   getResponsiveStyleByBp,
-} from "../global.ts";
+} from "../global";
 
 const containerResponsiveStyle = getResponsiveStyleByBp(
   (navigationBarHeight) => ({ height: navigationBarHeight })
@@ -67,7 +67,7 @@ export const Content = styled("div", {
         },
         "& svg": {
           position: "absolute",
-          left: "10px",
+          left: "0px",
           width: `calc(${NavigationBarHeight.default} * 0.6)`,
           height: `calc(${NavigationBarHeight.default} * 0.6)`,
           cursor: "pointer",
@@ -90,7 +90,6 @@ export const Content = styled("div", {
     ...contentResponsiveStyle["@bp3"],
   },
   "@bp1": {
-    width: "95%",
     "& .title": {
       fontSize: "22px !important",
     },
