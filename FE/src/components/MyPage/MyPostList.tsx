@@ -191,7 +191,7 @@ const MyPostList: React.FC<MyPostListProp> = ({
             >
               지원서 확인
               <span className="count">
-                ({applicationCount === null ? "?" : applicationCount}건)
+                ({applicationCount === null ? " - " : applicationCount}건)
               </span>
             </button>
           </div>

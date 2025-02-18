@@ -31,7 +31,7 @@ const Header = () => {
       </div>
       <div className="subInfo">
         {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestedCount}  ·  지원 ${
-          applicationCount === null ? "?" : applicationCount
+          applicationCount === null ? "-" : applicationCount
         }`}
       </div>
     </HeaderContainer>

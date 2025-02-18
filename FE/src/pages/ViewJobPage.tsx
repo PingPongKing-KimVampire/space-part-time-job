@@ -47,7 +47,7 @@ const ViewJobPage = () => {
           setJobPost({
             ...post,
             createdAt: formatTimeAgo(post.createdAt),
-            publisher: {
+            publisher: !post.publisher ? null : {
               ...post.publisher,
               createdAt: formatTimeAgo(post.publisher.createdAt),
             },

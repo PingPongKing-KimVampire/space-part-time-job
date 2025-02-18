@@ -30,7 +30,7 @@ const Profile = () => {
       const { nickname, createdAt } = processGetMyBasicInfo(myBasicInfo);
       return { nickname, timeTogether: formatTimeAgo(createdAt) };
     } catch {
-      return { nickname: "불러오기 실패", timeTogether: "불러오기 실패" };
+      return { nickname: "-", timeTogether: "-" };
     }
   }, [myBasicInfo]);
 

@@ -109,7 +109,7 @@ const ViewApplicantsPage = () => {
               <UserInfo>
                 <ProfileIcon />
                 <div className="nickname">
-                  {applicant?.nickname || "불러오기 실패"}
+                  {applicant?.nickname || "-"}
                 </div>
                 <div className="createdAt">ㆍ {createdAt}</div>
               </UserInfo>
