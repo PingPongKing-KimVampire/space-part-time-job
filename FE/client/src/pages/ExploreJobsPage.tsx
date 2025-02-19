@@ -15,7 +15,11 @@ import {
   InputContainer,
   ContentContainer,
 } from "../styles/pages/ExploreJobsPage.styles";
-import { MainBackgroundColor, WarningText } from "../styles/global";
+import {
+  MainBackgroundColor,
+  WarningText,
+  ModalBackground,
+} from "../styles/global";
 import { SEARCH_JOB_POSTS } from "../api/graphql/queries.js";
 import { processSearchJobPosts } from "../api/graphql/processData";
 import {
@@ -31,6 +35,7 @@ import { JobPost, PageInfo, Filter, ApiState } from "../types/types";
 import setQueryParam from "../utils/setQueryParam";
 import { fetchResidentNeighborhoods } from "../redux/residentNeighborhoods";
 import { ReactComponent as WriteIcon } from "../assets/icons/write.svg";
+import { ReactComponent as FilterIcon } from "../assets/icons/filter.svg";
 
 const ExploreJobsPage = () => {
   useBackgroundColor(MainBackgroundColor);
@@ -55,7 +60,9 @@ const ExploreJobsPage = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const [nextJobPosts, setNextJobPosts] = useState<JobPost[]>([]);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isFilterModalVisible, setIsFilterModalVisible] =
+    useState<boolean>(false);
+
   const isFirstFetchRef = useRef<boolean>(true);
 
   const {
@@ -65,21 +72,6 @@ const ExploreJobsPage = () => {
   } = useSelector(
     (state: { residentNeighborhoods: ApiState }) => state.residentNeighborhoods
   );
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(document.documentElement.clientWidth <= 1024);
-    };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log("isMobile", isMobile);
-  }, [isMobile]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -233,6 +225,16 @@ const ExploreJobsPage = () => {
   return (
     <Background>
       {fetchResidentNeighborhoodsLoading && <LoadingOverlay />}
+      {isFilterModalVisible && (
+        <ModalBackground>
+          <JobFilter
+            filter={filter}
+            setFilter={setFilter}
+            isModal={true}
+            setIsFilterModalVisible={setIsFilterModalVisible}
+          />
+        </ModalBackground>
+      )}
       <Container>
         <InputContainer>
           <NeighborhoodButton
@@ -252,13 +254,21 @@ const ExploreJobsPage = () => {
           {fetchResidentNeighborhoodsError && ERROR.SERVER}
           {searchJobPostsFinalError && searchJobPostsFinalError.message}
         </WarningText>
+        <button
+          className="filterButton"
+          onClick={() => {
+            setIsFilterModalVisible(true);
+          }}
+        >
+          <FilterIcon />
+          필터
+        </button>
         <ContentContainer>
-          {!isMobile && <JobFilter filter={filter} setFilter={setFilter} />}
+          <JobFilter filter={filter} setFilter={setFilter} />
           <JobList
             totalCount={totalCount}
             jobPosts={jobPosts}
             fetchMoreJobPosts={fetchMoreJobPosts}
-            isMobile={isMobile}
           />
         </ContentContainer>
         <button

@@ -25,9 +25,9 @@ const TimeRangeSelection = ({
 
   return (
     <Container
-      className={`${isSelectingOne ? "hasMarginBottom" : ""} ${
-        isMini ? "isMini" : ""
-      }`}
+      className={`timeRangeContainer ${
+        isSelectingOne ? "hasMarginBottom" : ""
+      } ${isMini ? "isMini" : ""}`}
     >
       <TimeSelection
         label="시작"
@@ -97,7 +97,7 @@ const TimeSelection = (props) => {
       </button>
       {!isMini && <label>{label}</label>}
       {isSelecting && (
-        <SelectBox className={isMini ? "isMini" : ""}>
+        <SelectBox className={`selectBox ${isMini ? "isMini" : ""}`}>
           {notSetPossible && (
             <button
               className="optionButton"

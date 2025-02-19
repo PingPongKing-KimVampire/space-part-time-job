@@ -142,6 +142,7 @@ export const ModalBackground = styled("div", {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  zIndex: "3",
   "& .container": {
     width: "400px",
     background: "white",

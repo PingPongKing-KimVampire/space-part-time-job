@@ -12,7 +12,7 @@ export const Container = styled("div", {
   background: MainColor,
   height: NavigationBarHeight.default,
   width: "100%",
-  zIndex: "2",
+  zIndex: "3",
   boxShadow: "0 0 3px 1px #9FB0FF",
   display: "flex",
   justifyContent: "center",
@@ -93,7 +93,7 @@ export const Content = styled("div", {
   },
   "@bp1": {
     "& .logo": {
-      fontSize: "24px !important"
+      fontSize: "24px !important",
     },
     "& .title": {
       fontSize: "22px !important",

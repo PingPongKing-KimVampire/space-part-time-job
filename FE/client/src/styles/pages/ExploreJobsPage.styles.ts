@@ -7,6 +7,7 @@ import {
   NavigationBarHeight,
   getResponsiveStyleByBp,
   ellipsisStyle,
+  MainButtonStyle,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../../assets/icons/location.svg";
@@ -21,6 +22,14 @@ export const Background = styled("div", {
   paddingTop: NavigationBarHeight.default,
   boxSizing: "border-box",
   ...backgroundResponsiveStyle,
+  // "& .filterContainer.isModal": {
+  //   width: "560px",
+  // },
+  // "@bp2": {
+  //   "& .filterContainer.isModal": {
+  //     width: "90% !important",
+  //   },
+  // },
 });
 
 export const Container = styled("div", {
@@ -48,11 +57,65 @@ export const Container = styled("div", {
       transition: "background 0.2s",
     },
   },
+  "& .filterButton": {
+    display: "none",
+  },
   "@bp7": {
     width: "90%",
     "& .createJobButton": {
       right: "calc(10vw / 2)",
-    }
+    },
+  },
+  "@bp4": {
+    "& .filterButton": {
+      display: "flex",
+      marginRight: "auto",
+      alignItems: "center",
+      gap: "3px",
+      fontSize: "15px",
+      fontWeight: "600",
+      padding: "8px 16px 8px 12px",
+      border: "none",
+      borderRadius: "20px",
+      marginTop: "4px",
+      cursor: "pointer",
+      zIndex: "1",
+      background: SubColor,
+      transition: "background 0.2s",
+      "&:hover": {
+        background: SubHoverColor,
+      },
+      "& svg": {
+        width: "20px",
+        top: "50%",
+        tansition: "translateY(-50%)",
+      },
+    },
+  },
+  "@bp3": {
+    "& .filterButton": {
+      fontSize: "14px",
+      padding: "7px 13px 7px 10px",
+      marginTop: "0px",
+      "& svg": {
+        width: "18px",
+      },
+    },
+  },
+  "@bp2": {
+    "& .filterButton": {
+      gap: "2px",
+      fontSize: "13px",
+      padding: "6px 11px 6px 8px",
+      "& svg": {
+        width: "16px",
+      },
+    },
+  },
+  "@bp1": {
+    "& .filterButton": {
+      padding: "5px 9px 5px 7px",
+    },
   },
 });
 
@@ -96,7 +159,7 @@ export const InputContainer = styled("div", {
 });
 
 export const NeighborhoodSelectorContainer = styled("div", {
-  zIndex: "1",
+  zIndex: "2",
   "& .selectButton": {
     height: "100%",
     maxWidth: "250px",
@@ -114,7 +177,7 @@ export const NeighborhoodSelectorContainer = styled("div", {
     transition: "background 0.2s",
     position: "relative",
     "&:hover": {
-      background: SubColor,
+      background: SubHoverColor,
     },
     "& .neighborhoodName": {
       ...ellipsisStyle,
@@ -164,13 +227,13 @@ export const NeighborhoodSelectorContainer = styled("div", {
       fontSize: "17px",
     },
     "& .selectBox": {
-      padding : "8px",
+      padding: "8px",
       borderRadius: "16px",
       "& .optionButton": {
         padding: "8px 25px",
         fontSize: "16px",
         borderRadius: "16px",
-      }
+      },
     },
   },
   "@bp2": {
@@ -220,16 +283,16 @@ export const ContentContainer = styled("div", {
   marginTop: "20px",
   display: "flex",
   justifyContent: "flex-start",
-  "@bp3": {
-    marginTop: "15px",
+  "@bp4": {
+    marginTop: "-10px",
   },
-  "@bp1": {
-    marginTop: "5px",
-  }
+  "@bp3": {
+    marginTop: "-15px",
+  },
 });
 
 export const JobFilterContainer = styled("div", {
-  width: "300px",
+  width: "320px",
   boxSizing: "border-box",
   background: "white",
   border: "1px solid #E3E9ED",
@@ -237,9 +300,9 @@ export const JobFilterContainer = styled("div", {
   padding: "20px",
   display: "flex",
   flexDirection: "column",
-  marginBottom: "40px",
   gap: "22px",
   position: "absolute",
+  maxHeight: "90%",
   "& .topContainer": {
     display: "flex",
     justifyContent: "space-between",
@@ -257,9 +320,189 @@ export const JobFilterContainer = styled("div", {
       cursor: "pointer",
     },
   },
+  "& .content": {
+    display: "flex",
+    flexDirection: "column",
+    overflowY: "auto",
+    gap: "22px",
+  },
+  "& .modalButtonGroups": {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "10px",
+    "& button": {
+      ...MainButtonStyle,
+      fontSize: "19px",
+      padding: "11px",
+      borderRadius: "14px",
+      "&.initButton": {
+        width: "40%",
+      },
+      "&.applyButton": {
+        width: "60%",
+      },
+    },
+  },
+  "&:not(.isModal)": {
+    marginBottom: "40px",
+    "& .xButton": {
+      display: "none",
+    },
+    "& .modalButtonGroups": {
+      display: "none",
+    },
+  },
+  "&.isModal": {
+    padding: "24px",
+    gap: "26px",
+    width: "560px",
+    "& .xButton": {
+      position: "absolute",
+      width: "30px",
+      height: "30px",
+      color: MainColor,
+      top: "20px",
+      right: "20px",
+      cursor: "pointer",
+    },
+    "& .topContainer": {
+      "& .title": {
+        fontSize: "22px",
+      },
+      "& .initButton": {
+        display: "none",
+      },
+    },
+    "& .content": {
+      gap: "26px",
+      "& .field": {
+        gap: "13px",
+        "& label": {
+          fontSize: "18px",
+        },
+        "& .timeRangeContainer": {
+          "&.hasMarginBottom": {
+            marginBottom: "175px",
+          },
+          "& .waveSymbol": {
+            fontSize: "20px",
+          },
+          "& .timeInputButton": {
+            padding: "12px",
+            fontSize: "15px",
+          },
+          "& .selectBox": {
+            height: "160px",
+            "& .optionButton": {
+              padding: "7px",
+              fontSize: "14px",
+            },
+          },
+        },
+      },
+    },
+  },
   "@bp5": {
-    width: "260px",
-  }
+    "&:not(.isModal)": {
+      width: "260px",
+    },
+  },
+  "@bp4": {
+    "&:not(.isModal)": {
+      display: "none",
+    },
+  },
+  "@bp3": {
+    "&.isModal": {
+      gap: "22px !important",
+      "& .topContainer .title": {
+        fontSize: "20px !important",
+      },
+      "& .content": {
+        gap: "22px !important",
+        "& .field": {
+          gap: "11px !important",
+          "& label": {
+            fontSize: "17px !important",
+          },
+          "& .timeRangeContainer": {
+            "&.hasMarginBottom": {
+              marginBottom: "155px",
+            },
+            "& .waveSymbol": {
+              fontSize: "18px",
+            },
+            "& .timeInputButton": {
+              padding: "10px",
+              fontSize: "14px",
+            },
+            "& .selectBox": {
+              height: "140px",
+            },
+          },
+        },
+      },
+      "& .modalButtonGroups button": {
+        fontSize: "18px !important",
+        padding: "10px !important",
+        borderRadius: "13px",
+      },
+    },
+  },
+  "@bp2": {
+    "&.isModal": {
+      width: "90% !important",
+    },
+  },
+  "@bp1": {
+    "&.isModal": {
+      padding: "20px !important",
+      gap: "18px !important",
+      "& .xButton": {
+        width: "25px",
+        height: "25px",
+        top: "14px",
+        right: "14px",
+      },
+      "& .topContainer .title": {
+        fontSize: "17px !important",
+      },
+      "& .content": {
+        gap: "18px !important",
+        "& .field": {
+          gap: "10px !important",
+          "& label": {
+            fontSize: "15px !important",
+          },
+          "& .timeRangeContainer": {
+            "&.hasMarginBottom": {
+              marginBottom: "145px",
+            },
+            "& .waveSymbol": {
+              fontSize: "16px",
+            },
+            "& .timeInputButton": {
+              padding: "9px",
+              fontSize: "13px",
+            },
+            "& .selectBox": {
+              height: "130px",
+              "& .optionButton": {
+                fontSize: "13px",
+                padding: "5px",
+              },
+            },
+          },
+        },
+      },
+      "& .modalButtonGroups button": {
+        fontSize: "16px !important",
+        padding: "9px !important",
+        borderRadius: "12px",
+      },
+    },
+  },
 });
 
 export const FilterField = styled("div", {
@@ -271,17 +514,24 @@ export const FilterField = styled("div", {
     fontSize: "16px",
     fontWeight: "600",
   },
+  "& .chips": {
+    gap: "8px 5px",
+    "& .option": {
+      fontSize: "15px",
+      fontWeight: "500",
+      padding: "5px 10px",
+    },
+  },
+  "@bp1": {
+    "& .chips": {
+      gap: "7px 5px",
+      "& .option": {
+        fontSize: "14px",
+        padding: "4px 8px",
+      },
+    },
+  },
 });
-
-export const ChipsContainerStyle = {
-  gap: "8px 5px",
-};
-
-export const ChipsOptionStyle = {
-  fontSize: "15px",
-  fontWeight: "500",
-  padding: "5px 10px",
-};
 
 export const JobListContainer = styled("div", {
   width: "1050px",
@@ -289,7 +539,7 @@ export const JobListContainer = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "10px",
-  marginLeft: "350px",
+  marginLeft: "370px",
   marginBottom: "60px",
   "& .totalCount": {
     textDecoration: "underline",
@@ -304,34 +554,31 @@ export const JobListContainer = styled("div", {
     display: "flex",
     flexDirection: "column",
   },
-  "&.full": {
-    width: "95%",
-    margin: "auto",
-  },
   "@bp5": {
     marginLeft: "300px",
     marginBottom: "40px !important",
   },
   "@bp4": {
     gap: "0px",
+    width: "95%",
+    margin: "auto",
   },
   "@bp3": {
     "& .totalCount": {
       fontSize: "16px",
       "& .count": {
         fontSize: "18px",
-      }
-    }
+      },
+    },
   },
   "@bp1": {
     "& .totalCount": {
-      alignSelf: "flex-start",
       fontSize: "14px",
       "& .count": {
         fontSize: "16px",
       },
     },
-  }
+  },
 });
 
 export const JobItemContainer = styled("div", {
@@ -373,7 +620,7 @@ export const JobItemContainer = styled("div", {
     "& .imageBox": {
       display: "none",
     },
-  }
+  },
 });
 
 export const JobItemContextBox = styled("div", {
@@ -423,7 +670,7 @@ export const JobItemContextBox = styled("div", {
       },
       "& .neighborhoodAndPostTime": {
         fontSize: "14px",
-      }
+      },
     },
     "& .subInfo": {
       "& .pay": {
@@ -431,8 +678,8 @@ export const JobItemContextBox = styled("div", {
       },
       "& .periodAndTime": {
         fontSize: "14px",
-      }
-    }
+      },
+    },
   },
   "@bp1": {
     "&.photoExists": {
@@ -446,7 +693,7 @@ export const JobItemContextBox = styled("div", {
       },
       "& .neighborhoodAndPostTime": {
         fontSize: "13px",
-      }
+      },
     },
     "& .subInfo": {
       "& .pay": {
@@ -454,7 +701,7 @@ export const JobItemContextBox = styled("div", {
       },
       "& .periodAndTime": {
         fontSize: "13px",
-      }
-    }
-  }
+      },
+    },
+  },
 });

@@ -7,11 +7,10 @@ type JobListProps = {
   totalCount: number;
   jobPosts: JobPost[];
   fetchMoreJobPosts: () => Promise<void>;
-  isMobile: boolean;
 };
 
 const JobList: React.FC<JobListProps> = (props) => {
-  const { totalCount, jobPosts, fetchMoreJobPosts, isMobile } = props;
+  const { totalCount, jobPosts, fetchMoreJobPosts } = props;
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const JobList: React.FC<JobListProps> = (props) => {
 
   return (
     <>
-      <JobListContainer className={isMobile ? "full" : ""}>
+      <JobListContainer>
         <p className="totalCount">
           총 <span className="count">{totalCount}</span>개의 검색 결과
         </p>

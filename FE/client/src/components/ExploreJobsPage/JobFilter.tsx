@@ -1,11 +1,9 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Chips from "../Chips.tsx";
 import {
   JobFilterContainer,
   FilterField,
-  ChipsContainerStyle,
-  ChipsOptionStyle,
 } from "../../styles/pages/ExploreJobsPage.styles";
 import {
   JOB_TYPES,
@@ -18,22 +16,33 @@ import {
 import TimeRangeSelection from "../TimeRangeSelection.tsx";
 import { Filter } from "../../types/types.ts";
 import setQueryParam from "../../utils/setQueryParam.ts";
+import { ReactComponent as XIcon } from "../../assets/icons/x-mark.svg";
 
 type JobFilterProps = {
   filter: Filter;
   setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+  isModal?: boolean;
+  setIsFilterModalVisible?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const JobFilter: React.FC<JobFilterProps> = (props) => {
   const location = useLocation();
-  const { filter, setFilter } = props;
+  const { filter, setFilter, isModal = false, setIsFilterModalVisible } = props;
   const { period, jobTypes, time, days } = filter;
+
+  const [modalValue, setModalValue] = useState({
+    period,
+    jobTypes,
+    time,
+    days,
+  });
 
   const periodToDisplay = useMemo(
     () => [PERIOD.SHORT_TERM, PERIOD.LONG_TERM],
     []
   );
 
+  // TODO : URL 쿼리 파라미터 업데이트, filter 상태 업데이트가 무한 반복되는 거 아닌가?
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const period = params.get("period") || "";
@@ -55,6 +64,7 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
     });
   }, [location.search]);
   useEffect(() => {
+    if (isModal) return;
     setQueryParam("period", filter.period);
     setQueryParam("categories", filter.jobTypes.join(","));
     setQueryParam("time", `${filter.time.start}~${filter.time.end}`);
@@ -74,7 +84,8 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
 
   const onPeriodClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const periodClicked = e.currentTarget.textContent || PERIOD.SHORT_TERM;
-    setFilter((state) => ({
+    const set = isModal ? setModalValue : setFilter;
+    set((state) => ({
       ...state,
       period: state.period === periodClicked ? null : periodClicked,
     }));
@@ -82,22 +93,28 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
 
   const onJobTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const jobTypeClicked = e.currentTarget.textContent || JOB_TYPES.SERVING;
-    setFilter((state) => ({
+    const set = isModal ? setModalValue : setFilter;
+    set((state) => ({
       ...state,
-      jobTypes: toggleSelected(jobTypes, jobTypeClicked),
+      jobTypes: toggleSelected(
+        isModal ? modalValue.jobTypes : jobTypes,
+        jobTypeClicked
+      ),
     }));
   };
 
   const onDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const dayClicked = e.currentTarget.textContent || "";
-    setFilter((state) => ({
+    const set = isModal ? setModalValue : setFilter;
+    set((state) => ({
       ...state,
-      days: toggleSelected(state.days, dayClicked),
+      days: toggleSelected(isModal ? modalValue.days : days, dayClicked),
     }));
   };
 
   const onInitClick = () => {
-    setFilter({
+    const set = isModal ? setModalValue : setFilter;
+    set({
       period: null,
       jobTypes: [],
       days: [],
@@ -106,7 +123,8 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
   };
 
   const setTime = (getTime, type) => {
-    setFilter((state) => {
+    const set = isModal ? setModalValue : setFilter;
+    set((state) => {
       const time = getTime(state.time);
       const { start, end } = time;
       if (type === "start") {
@@ -127,59 +145,82 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
     });
   };
 
+  const onXClick = () => {
+    if (setIsFilterModalVisible) setIsFilterModalVisible(false);
+  };
+
+  const onApplyClick = () => {
+    setFilter(modalValue);
+    if (setIsFilterModalVisible) setIsFilterModalVisible(false);
+  };
+
   return (
-    <JobFilterContainer>
+    <JobFilterContainer
+      className={`filterContainer ${isModal ? "isModal" : ""}`}
+    >
+      <XIcon className="xButton" onClick={onXClick} />
       <div className="topContainer">
-        <div className="title">필터</div>
+        <div className="title">{isModal ? "알바 검색 " : ""}필터</div>
         <button className="initButton" onClick={onInitClick}>
           초기화
         </button>
       </div>
-      <FilterField>
-        <label htmlFor="period">일하는 기간</label>
-        <Chips
-          id="period"
-          options={periodToDisplay}
-          onClick={onPeriodClick}
-          isSelected={(t) => t === period}
-          containerStyle={ChipsContainerStyle}
-          optionStyle={ChipsOptionStyle}
-        />
-      </FilterField>
-      <FilterField>
-        <label htmlFor="jobTypes">하는 일</label>
-        <Chips
-          id="jobTypes"
-          options={Object.values(JOB_TYPES)}
-          onClick={onJobTypeClick}
-          isSelected={(type) => jobTypes.includes(type)}
-          containerStyle={ChipsContainerStyle}
-          optionStyle={ChipsOptionStyle}
-        />
-      </FilterField>
-      {period === PERIOD.LONG_TERM && (
-        <FilterField>
-          <label htmlFor="days">일하는 요일</label>
+      <div className="content">
+        <FilterField className="field">
+          <label htmlFor="period">일하는 기간</label>
           <Chips
-            id="days"
-            options={Object.values(DAYS)}
-            onClick={onDayClick}
-            isSelected={(day) => days.includes(day)}
-            containerStyle={ChipsContainerStyle}
-            optionStyle={ChipsOptionStyle}
+            id="period"
+            options={periodToDisplay}
+            onClick={onPeriodClick}
+            isSelected={(t) => t === (isModal ? modalValue.period : period)}
           />
         </FilterField>
-      )}
-      <FilterField>
-        <label htmlFor="time">일하는 시간</label>
-        <TimeRangeSelection
-          time={time}
-          setTime={setTime}
-          isMini={true}
-          notSetPossible={true}
-          autoBoth={true}
-        />
-      </FilterField>
+        <FilterField className="field">
+          <label htmlFor="jobTypes">하는 일</label>
+          <Chips
+            id="jobTypes"
+            options={Object.values(JOB_TYPES)}
+            onClick={onJobTypeClick}
+            isSelected={(type) =>
+              isModal
+                ? modalValue.jobTypes.includes(type)
+                : jobTypes.includes(type)
+            }
+          />
+        </FilterField>
+        {((isModal && modalValue.period === PERIOD.LONG_TERM) ||
+          (!isModal && period === PERIOD.LONG_TERM)) && (
+          <FilterField className="field">
+            <label htmlFor="days">일하는 요일</label>
+            <Chips
+              id="days"
+              options={Object.values(DAYS)}
+              onClick={onDayClick}
+              isSelected={(day) =>
+                isModal ? modalValue.days.includes(day) : days.includes(day)
+              }
+            />
+          </FilterField>
+        )}
+        <FilterField className="field">
+          <label htmlFor="time">일하는 시간</label>
+          <TimeRangeSelection
+            time={isModal ? modalValue.time : time}
+            setTime={setTime}
+            isMini={true}
+            notSetPossible={true}
+          />
+        </FilterField>
+      </div>
+      {/* 필터 모달에서만 표시됨 */}
+      <div className="modalButtonGroups">
+        <button className="initButton" onClick={onInitClick}>
+          초기화
+        </button>
+        <button className="applyButton" onClick={onApplyClick}>
+          필터 적용
+        </button>
+      </div>
     </JobFilterContainer>
   );
 };
