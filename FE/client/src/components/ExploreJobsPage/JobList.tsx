@@ -37,6 +37,7 @@ const JobList: React.FC<JobListProps> = (props) => {
           총 <span className="count">{totalCount}</span>개의 검색 결과
         </p>
         <div className="jobList">
+          {totalCount === 0 && <div className="noJobNotice">아직 게시된 공고가 없어요.</div>}
           {jobPosts.map((job) => {
             const photos = job.photos || [];
             const {

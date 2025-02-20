@@ -22,14 +22,6 @@ export const Background = styled("div", {
   paddingTop: NavigationBarHeight.default,
   boxSizing: "border-box",
   ...backgroundResponsiveStyle,
-  // "& .filterContainer.isModal": {
-  //   width: "560px",
-  // },
-  // "@bp2": {
-  //   "& .filterContainer.isModal": {
-  //     width: "90% !important",
-  //   },
-  // },
 });
 
 export const Container = styled("div", {
@@ -302,7 +294,6 @@ export const JobFilterContainer = styled("div", {
   flexDirection: "column",
   gap: "22px",
   position: "absolute",
-  maxHeight: "90%",
   "& .topContainer": {
     display: "flex",
     justifyContent: "space-between",
@@ -345,7 +336,6 @@ export const JobFilterContainer = styled("div", {
     },
   },
   "&:not(.isModal)": {
-    marginBottom: "40px",
     "& .xButton": {
       display: "none",
     },
@@ -357,6 +347,7 @@ export const JobFilterContainer = styled("div", {
     padding: "24px",
     gap: "26px",
     width: "560px",
+    maxHeight: "90%",
     "& .xButton": {
       position: "absolute",
       width: "30px",
@@ -550,9 +541,20 @@ export const JobListContainer = styled("div", {
       fontSize: "20px",
     },
   },
+  "& .noJobNotice": {
+    width: "100%",
+    height: "calc(100vh - 400px)",
+    minHeight: "460px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "30px",
+    fontWeight: "bold",
+  },
   "& .jobList": {
     display: "flex",
     flexDirection: "column",
+    minHeight: "460px",
   },
   "@bp5": {
     marginLeft: "300px",
@@ -562,6 +564,14 @@ export const JobListContainer = styled("div", {
     gap: "0px",
     width: "95%",
     margin: "auto",
+    "& .jobList": {
+      minHeight: "auto",
+    },
+    "& .noJobNotice": {
+      minHeight: "auto",
+      fontSize: "28px",
+      height: "calc(100vh - 300px)",
+    }
   },
   "@bp3": {
     "& .totalCount": {
@@ -570,6 +580,14 @@ export const JobListContainer = styled("div", {
         fontSize: "18px",
       },
     },
+    "& .noJobNotice": {
+      fontSize: "24px",
+    }
+  },
+  "@bp2": {
+    "& .noJobNotice": {
+      height: "calc(100vh - 280px)",
+    }
   },
   "@bp1": {
     "& .totalCount": {
