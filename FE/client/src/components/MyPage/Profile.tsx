@@ -80,8 +80,7 @@ const Profile = () => {
     return null;
   return (
     <ProfileContainer>
-      <div className="userInfo">
-        <ProfileIcon />
+        <ProfileIcon className="profileIcon" />
         <div className="textInfo">
           <div className="nickname">{nickname}</div>
           <div className="iconInfo">
@@ -95,7 +94,6 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      </div>
       <div className="buttons">
         <button className="logoutButton" onClick={onLogoutClick}>
           로그아웃

@@ -29,12 +29,12 @@ const MyPage = () => {
       <TopArea>
         <div className="container">
           <Profile />
-          <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+          {/* <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} /> */}
         </div>
       </TopArea>
-      <BottomArea>
+      {/* <BottomArea>
         <PostList selectedTab={selectedTab} setIsLoading={setIsLoading} />
-      </BottomArea>
+      </BottomArea> */}
     </Background>
   );
 };

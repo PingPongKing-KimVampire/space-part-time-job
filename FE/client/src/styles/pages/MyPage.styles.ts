@@ -31,6 +31,16 @@ export const TopArea = styled("div", {
   "& .container": {
     width: "700px",
   },
+  "@bp4": {
+    "& .container": {
+      width: "70%",
+    }
+  },
+  // "@bp3_5": {
+  //   "& .container": {
+  //     width: "75%",
+  //   }
+  // }
 });
 
 export const ProfileContainer = styled("div", {
@@ -38,39 +48,40 @@ export const ProfileContainer = styled("div", {
   justifyContent: "space-between",
   alignItems: "center",
   height: "120px",
-  margin: "60px 0 40px 0",
-  "& .userInfo": {
-    flexGrow: "1",
-    display: "flex",
-    alignItems: "center",
-    gap: "18px",
-    height: "100%",
-    "& svg": {
-      fill: MainColor,
-      height: "100%",
-      aspectRatio: "1/1",
+  margin: "100px 0 60px",
+  "& svg": {
+    fill: MainColor,
+    aspectRatio: "1/1",
+  },
+  "& .profileIcon": {
+    height: "120px",
+    width: "120px",
+    minHeight: "120px",
+    minWidth: "120px",
+  },
+  "& .textInfo": {
+    marginRight: "auto",
+    marginLeft: "25px",
+    maxWidth: "280px",
+    "& *": {
+      ...ellipsisStyle,
     },
-    "& .textInfo": {
-      width: "300px",
-      gap: "10px",
-      "& *": {
-        ...ellipsisStyle,
-      },
-      "& .nickname": {
-        fontSize: "28px",
-        fontWeight: "800",
-        marginBottom: "12px",
-      },
-      "& .iconInfo": {
-        display: "flex",
-        alignItems: "center",
-        gap: "5px",
-        marginBottom: "4px",
-        fontWeight: "normal",
-        "& svg": {
-          width: "20px",
-          height: "20px",
-        },
+    "& .nickname": {
+      fontSize: "28px",
+      fontWeight: "800",
+      marginBottom: "12px",
+    },
+    "& .iconInfo": {
+      display: "flex",
+      alignItems: "center",
+      gap: "5px",
+      marginBottom: "4px",
+      fontWeight: "normal",
+      "& svg": {
+        width: "21px",
+        height: "21px",
+        minWidth: "21px",
+        minHeight: "21px",
       },
     },
   },
@@ -83,8 +94,66 @@ export const ProfileContainer = styled("div", {
       padding: "10px 20px",
       borderRadius: "12px",
       whiteSpace: "nowrap",
+      minWidth: "120px",
     },
   },
+  "@bp4": {
+    "& .textInfo": {
+      maxWidth: "calc(70vw - 300px)"
+    },
+    "& .buttons": {
+      flexDirection: "column",
+    }
+  },
+  "@bp3": {
+    flexDirection: "column",
+    height: "auto",
+    margin: "60px 0 40px",
+    "& .profileIcon": {
+      marginBottom: "15px",
+      height: "150px",
+      width: "150px",
+      minHeight: "150px",
+      minWidth: "150px",
+    }, 
+    "& .textInfo": {
+      margin: "auto",
+      textAlign: "center",
+      marginBottom: "35px",
+      maxWidth: "80%",
+    },
+    "& .buttons": {
+      gap: "15px",
+      flexDirection: "row",
+    }
+  },
+  "@bp1": {
+    margin: "40px 0 30px",
+    "& .profileIcon": {
+      marginBottom: "10px",
+      height: "120px",
+      width: "120px",
+      minHeight: "120px",
+      minWidth: "120px",
+    },
+    "& .textInfo": {
+      marginBottom: "25px",
+      "& .nickname": {
+        fontSize: "24px",
+      },
+      "& .iconInfo": {
+        fontSize: "15px",
+      }
+    },
+    "& .buttons": {
+      gap: "8px",
+      "& button": {
+        fontSize: "16px",
+        padding: "9px 16px",
+        minWidth: "105px",
+      }
+    }
+  }
 });
 
 export const TabsContainer = styled("div", {
