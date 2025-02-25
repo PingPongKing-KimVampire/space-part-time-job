@@ -4,7 +4,6 @@ export const { styled } = createStitches({
     bp1: "(max-width: 480px)", // 모바일
     bp2: "(max-width: 600px)", // 작은 모바일
     bp3: "(max-width: 768px)", // 태블릿 (세로)
-    bp3_5: "(max-width: 896px)",
     bp4: "(max-width: 1024px)", // 태블릿 (가로) 및 작은 데스크탑
     bp5: "(max-width: 1280px)", // 작은 데스크탑
     bp6: "(max-width: 1440px)", // 중간 크기 데스크탑
@@ -221,3 +220,19 @@ export const ModalBackground = styled("div", {
     },
   },
 });
+
+export const noItemNoticeStyle = {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: "30px",
+  fontWeight: "bold",
+  "@bp4": {
+    fontSize: "28px",
+  },
+  "@bp3": {
+    fontSize: "22px",
+  },
+};

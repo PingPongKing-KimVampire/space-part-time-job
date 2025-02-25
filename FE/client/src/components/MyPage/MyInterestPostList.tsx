@@ -96,11 +96,14 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
     setIsLoading(getInterestedPostsLoading || unmarkLoading);
   }, [getInterestedPostsLoading, unmarkLoading]);
 
+  if (getInterestedPostsLoading) return null;
+  if (myInterestPosts.length === 0)
+    return <div className="noJobNotice">아직 관심있는 공고가 없어요.</div>;
   return (
     <>
       {myInterestPosts.map(({ jobPost, createdAt }) => (
         <ListItem
-          className="item"
+          className="item interestedPostItem"
           onMouseEnter={onItemMouseEnter}
           onMouseLeave={onItemMouseLeave}
           onClick={onItemClick}

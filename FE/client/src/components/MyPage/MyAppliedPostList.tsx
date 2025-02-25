@@ -46,7 +46,9 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     if (!myApplicationsData || !myApplicationsData.listMyJobApplications)
       return;
     try {
-      const applications = processListMyApplications(myApplicationsData);
+      const applications = processListMyApplications(myApplicationsData).filter(
+        ({ status }) => status !== APPLICATION_STATUS.CANCELED
+      );
       const sortedApplications = applications.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -125,55 +127,57 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
     setIsLoading(getMyApplicationsLoading || cancelApplicationLoading);
   }, [getMyApplicationsLoading, cancelApplicationLoading]);
 
+  if (getMyApplicationsLoading) return null;
+  if (myApplications.length === 0) {
+    return <div className="noJobNotice">아직 지원한 알바가 없어요.</div>;
+  }
   return (
     <>
-      {myApplications
-        .filter(({ status }) => status !== APPLICATION_STATUS.CANCELED)
-        .map(({ id, jobPost, status, createdAt }) => (
-          <ListItem
-            className="item"
-            onMouseEnter={onItemMouseEnter}
-            onMouseLeave={onItemMouseLeave}
-            onClick={onItemClick}
-            key={id}
-            data-application-id={id}
-            data-post-id={jobPost?.id}
-          >
-            <div className="main">
-              {jobPost?.status === JOB_POST_STATUS.CLOSE && (
-                <CloseTag>마감</CloseTag>
-              )}
-              <div className="title">{jobPost?.title || "불러오기 실패"}</div>
-            </div>
-            <div className="interaction">
-              <div className="createdAt">{createdAt} 전</div>
+      {myApplications.map(({ id, jobPost, status, createdAt }) => (
+        <ListItem
+          className="item appliedPostItem"
+          onMouseEnter={onItemMouseEnter}
+          onMouseLeave={onItemMouseLeave}
+          onClick={onItemClick}
+          key={id}
+          data-application-id={id}
+          data-post-id={jobPost?.id}
+        >
+          <div className="main">
+            {jobPost?.status === JOB_POST_STATUS.CLOSE && (
+              <CloseTag>마감</CloseTag>
+            )}
+            <div className="title">{jobPost?.title || "불러오기 실패"}</div>
+          </div>
+          <div className="interaction">
+            <div className="createdAt">{createdAt} 전</div>
+            <button
+              className="viewApplicationButton"
+              onMouseEnter={onInnerClickableMouseEnter}
+              onMouseLeave={onInnerClickableMouseLeave}
+              onClick={onViewApplicationClick}
+            >
+              지원서 보기
+            </button>
+            {status === APPLICATION_STATUS.ACCEPTED && (
+              <AcceptedBadge style={{ padding: "5px 0" }} />
+            )}
+            {status === APPLICATION_STATUS.REJECTED && (
+              <RejectedBadge style={{ padding: "5px 0" }} />
+            )}
+            {status === APPLICATION_STATUS.PENDING && (
               <button
-                className="viewApplicationButton"
+                className="cancelButton"
                 onMouseEnter={onInnerClickableMouseEnter}
                 onMouseLeave={onInnerClickableMouseLeave}
-                onClick={onViewApplicationClick}
+                onClick={onCancelClick}
               >
-                지원서 보기
+                지원 취소
               </button>
-              {status === APPLICATION_STATUS.ACCEPTED && (
-                <AcceptedBadge style={{ padding: "5px 0" }} />
-              )}
-              {status === APPLICATION_STATUS.REJECTED && (
-                <RejectedBadge style={{ padding: "5px 0" }} />
-              )}
-              {status === APPLICATION_STATUS.PENDING && (
-                <button
-                  className="cancelButton"
-                  onMouseEnter={onInnerClickableMouseEnter}
-                  onMouseLeave={onInnerClickableMouseLeave}
-                  onClick={onCancelClick}
-                >
-                  지원 취소
-                </button>
-              )}
-            </div>
-          </ListItem>
-        ))}
+            )}
+          </div>
+        </ListItem>
+      ))}
       {cancelApplicationFinalError && (
         <WarningText>{cancelApplicationFinalError.message}</WarningText>
       )}

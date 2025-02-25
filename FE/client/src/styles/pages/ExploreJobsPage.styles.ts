@@ -8,6 +8,7 @@ import {
   getResponsiveStyleByBp,
   ellipsisStyle,
   MainButtonStyle,
+  noItemNoticeStyle,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../../assets/icons/location.svg";
@@ -541,24 +542,22 @@ export const JobListContainer = styled("div", {
       fontSize: "20px",
     },
   },
-  "& .noJobNotice": {
-    width: "100%",
-    height: "calc(100vh - 400px)",
-    minHeight: "460px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: "30px",
-    fontWeight: "bold",
-  },
   "& .jobList": {
     display: "flex",
     flexDirection: "column",
     minHeight: "460px",
+    "& .noJobNotice": {
+      ...noItemNoticeStyle,
+      height: "calc(100vh - 400px)",
+      minHeight: "100%",
+    },
   },
   "@bp5": {
     marginLeft: "300px",
     marginBottom: "40px !important",
+    "& .jobList": {
+      minHeight: "550px",
+    },
   },
   "@bp4": {
     gap: "0px",
@@ -566,12 +565,10 @@ export const JobListContainer = styled("div", {
     margin: "auto",
     "& .jobList": {
       minHeight: "auto",
+      "& .noJobNotice": {
+        height: "calc(100vh - 300px)",
+      },
     },
-    "& .noJobNotice": {
-      minHeight: "auto",
-      fontSize: "28px",
-      height: "calc(100vh - 300px)",
-    }
   },
   "@bp3": {
     "& .totalCount": {
@@ -580,14 +577,11 @@ export const JobListContainer = styled("div", {
         fontSize: "18px",
       },
     },
-    "& .noJobNotice": {
-      fontSize: "24px",
-    }
   },
   "@bp2": {
     "& .noJobNotice": {
       height: "calc(100vh - 280px)",
-    }
+    },
   },
   "@bp1": {
     "& .totalCount": {

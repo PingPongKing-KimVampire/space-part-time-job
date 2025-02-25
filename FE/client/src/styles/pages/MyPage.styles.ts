@@ -7,6 +7,7 @@ import {
   NavigationBarHeight,
   getResponsiveStyleByBp,
   ellipsisStyle,
+  noItemNoticeStyle,
 } from "../global";
 
 const backgroundResponsiveStyle = getResponsiveStyleByBp(
@@ -34,13 +35,18 @@ export const TopArea = styled("div", {
   "@bp4": {
     "& .container": {
       width: "70%",
-    }
+    },
   },
-  // "@bp3_5": {
-  //   "& .container": {
-  //     width: "75%",
-  //   }
-  // }
+  "@bp3": {
+    "& .container": {
+      width: "80%",
+    },
+  },
+  "@bp2": {
+    "& .container": {
+      width: "85%",
+    },
+  },
 });
 
 export const ProfileContainer = styled("div", {
@@ -99,23 +105,23 @@ export const ProfileContainer = styled("div", {
   },
   "@bp4": {
     "& .textInfo": {
-      maxWidth: "calc(70vw - 300px)"
+      maxWidth: "calc(70vw - 300px)",
     },
     "& .buttons": {
       flexDirection: "column",
-    }
+    },
   },
   "@bp3": {
     flexDirection: "column",
     height: "auto",
-    margin: "60px 0 40px",
+    margin: "60px 0 50px",
     "& .profileIcon": {
       marginBottom: "15px",
       height: "150px",
       width: "150px",
       minHeight: "150px",
       minWidth: "150px",
-    }, 
+    },
     "& .textInfo": {
       margin: "auto",
       textAlign: "center",
@@ -125,10 +131,10 @@ export const ProfileContainer = styled("div", {
     "& .buttons": {
       gap: "15px",
       flexDirection: "row",
-    }
+    },
   },
   "@bp1": {
-    margin: "40px 0 30px",
+    margin: "40px 0 35px",
     "& .profileIcon": {
       marginBottom: "10px",
       height: "120px",
@@ -143,7 +149,7 @@ export const ProfileContainer = styled("div", {
       },
       "& .iconInfo": {
         fontSize: "15px",
-      }
+      },
     },
     "& .buttons": {
       gap: "8px",
@@ -151,9 +157,9 @@ export const ProfileContainer = styled("div", {
         fontSize: "16px",
         padding: "9px 16px",
         minWidth: "105px",
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 export const TabsContainer = styled("div", {
@@ -208,6 +214,37 @@ export const TabsContainer = styled("div", {
       transform: "translateX(-100%)",
     },
   },
+  "@bp3": {
+    height: "48px",
+    "& .tabButton": {
+      fontSize: "19px",
+      width: "120px",
+    },
+    "& .tabIndicator": {
+      width: "120px",
+      height: "3.5px",
+    },
+  },
+  "@bp2": {
+    "& .tabButton": {
+      fontSize: "18px",
+      width: "110px",
+    },
+    "& .tabIndicator": {
+      width: "110px",
+    },
+  },
+  "@bp1": {
+    height: "43px",
+    "& .tabButton": {
+      fontSize: "16.5px",
+      width: "93px",
+    },
+    "& .tabIndicator": {
+      width: "93px",
+      height: "3px",
+    },
+  },
 });
 
 export const BottomArea = styled("div", {
@@ -219,7 +256,15 @@ export const BottomArea = styled("div", {
   gap: "12px",
   paddingTop: "24px",
   paddingBottom: "30px",
-  overflow: "scroll",
+  "& .noJobNotice": {
+    ...noItemNoticeStyle,
+    minHeight: "300px",
+  },
+  "@bp3": {
+    "& .noJobNotice": {
+      minHeight: "100px",
+    },
+  },
 });
 
 export const ListItem = styled("button", {
@@ -237,11 +282,19 @@ export const ListItem = styled("button", {
   "&.isHovering": {
     background: SubColor,
   },
+  "&.appliedPostItem .main": {
+    width: "calc(100% - 248px)",
+  },
+  "&.myPostItem .main": {
+    width: "calc(100% - 200px)",
+  },
+  "&.interestedPostItem .main": {
+    width: "calc(100% - 168px)",
+  },
   "& .main": {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    width: "400px",
     "& .title": {
       ...ellipsisStyle,
       textAlign: "left",
@@ -269,6 +322,70 @@ export const ListItem = styled("button", {
     "& .createdAt": {
       fontSize: "14px",
       color: "#828282",
+    },
+  },
+  "@bp4": {
+    width: "70%",
+  },
+  "@bp3": {
+    width: "80%",
+    padding: "11px 15px",
+    "&.appliedPostItem .main": {
+      width: "calc(100% - 230px)",
+    },
+    "&.myPostItem .main": {
+      width: "calc(100% - 185px)",
+    },
+    "&.interestedPostItem .main": {
+      width: "calc(100% - 162px)",
+    },
+    "& .main .title": {
+      fontSize: "17px",
+    },
+    "& .interaction": {
+      gap: "9px",
+      "& button": {
+        fontSize: "14px",
+        fontWeight: "600",
+      },
+      "& .createdAt": {
+        fontSize: "13px",
+      },
+    },
+  },
+  "@bp2": {
+    width: "85%",
+    padding: "10px 13px",
+    borderRadius: "13px",
+    "& .main .title": {
+      fontSize: "16px",
+    },
+  },
+  "@bp1": {
+    width: "90%",
+    padding: "8.5px 10px 8.5px 12px",
+    "&.appliedPostItem .main": {
+      width: "calc(100% - 203px)",
+    },
+    "&.myPostItem .main": {
+      width: "calc(100% - 160px)",
+    },
+    "&.interestedPostItem .main": {
+      width: "calc(100% - 143px)",
+    },
+    "& .main .title": {
+      fontSize: "15px",
+    },
+    "& .interaction": {
+      gap: "7px",
+      "& button": {
+        fontSize: "13px",
+        borderRadius: "7px",
+        padding: "5px 9px",
+      },
+      "& .createdAt": {
+        fontSize: "12px",
+      },
     },
   },
 });

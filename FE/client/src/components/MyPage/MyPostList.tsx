@@ -152,11 +152,15 @@ const MyPostList: React.FC<MyPostListProp> = ({
     setIsLoading(getMyJobPostsLoading || closeLoading);
   }, [getMyJobPostsLoading, closeLoading]);
 
+  if (getMyJobPostsLoading) return null;
+  if (myJobPosts.length === 0) {
+    return <div className="noJobNotice">아직 게시한 공고가 없어요.</div>;
+  }
   return (
     <>
       {myJobPosts.map(({ id, status, title, applicationCount }) => (
         <ListItem
-          className="item"
+          className="item myPostItem"
           onMouseEnter={onItemMouseEnter}
           onMouseLeave={onItemMouseLeave}
           onClick={onItemClick}
