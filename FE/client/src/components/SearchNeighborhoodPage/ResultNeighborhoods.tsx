@@ -24,23 +24,23 @@ const ResultNeighborhoods = forwardRef<
   useEffect(() => {
     const updateListHeight = () => {
       setListHeight(window.innerHeight * 0.5);
-    }
+    };
     updateListHeight();
-    window.addEventListener('resize', updateListHeight);
+    window.addEventListener("resize", updateListHeight);
     return () => {
-      window.removeEventListener('resize', updateListHeight);
-    }
+      window.removeEventListener("resize", updateListHeight);
+    };
   }, []);
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 480px)'); // @bp1
-    const updateItemHeight = (e)  => {
+    const mediaQuery = window.matchMedia("(max-width: 480px)"); // @bp1
+    const updateItemHeight = (e) => {
       setItemHeight(e.matches ? 56 : 62.8);
-    }
+    };
     updateItemHeight(mediaQuery);
     mediaQuery.addEventListener("change", updateItemHeight);
     return () => {
       mediaQuery.removeEventListener("change", updateItemHeight);
-    }
+    };
   }, []);
 
   if (loading)

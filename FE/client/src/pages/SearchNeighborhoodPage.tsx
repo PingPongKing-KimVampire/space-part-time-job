@@ -20,7 +20,7 @@ import SelectedNeighborhoods from "../components/SearchNeighborhoodPage/Selected
 import ResultNeighborhoods from "../components/SearchNeighborhoodPage/ResultNeighborhoods";
 import { MainBackgroundColor, WarningText } from "../styles/global";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
-import { processGetResidentNeighborhood } from "../api/graphql/processData"; 
+import { processGetResidentNeighborhood } from "../api/graphql/processData";
 import { Neighborhood, SelectedNeighborhood } from "../types/types";
 import { ERROR } from "../constants/constants";
 
@@ -49,27 +49,25 @@ const SearchNeighborhoodPage = () => {
     return (parseInt(level) - 1) * 100;
   };
 
-  const [
-    getResidentNeighborhood,
-    { loading: getResidentLoading },
-  ] = useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
-    onCompleted: (data) => {
-      try {
-        const neighborhoods = processGetResidentNeighborhood(data);
-        setSelectedNeighborhoods(
-          neighborhoods.map((neighborhood) => ({
-            ...neighborhood,
-            scopeValue: convertLevelToScopeValue(neighborhood.level),
-          }))
-        );
-      } catch (e) {
-        setGetResidentError(e);
-      }
-    },
-    onError: (error) => {
-      setGetResidentError(error);
-    }
-  });
+  const [getResidentNeighborhood, { loading: getResidentLoading }] =
+    useLazyQuery(GET_RESIDENT_NEIGHBORHOOD, {
+      onCompleted: (data) => {
+        try {
+          const neighborhoods = processGetResidentNeighborhood(data);
+          setSelectedNeighborhoods(
+            neighborhoods.map((neighborhood) => ({
+              ...neighborhood,
+              scopeValue: convertLevelToScopeValue(neighborhood.level),
+            }))
+          );
+        } catch (e) {
+          setGetResidentError(e);
+        }
+      },
+      onError: (error) => {
+        setGetResidentError(error);
+      },
+    });
   useEffect(() => {
     const setupTotalNeighborhoods = async () => {
       setTotalNeighborhoods((state) => ({ ...state, loading: true }));
@@ -186,11 +184,14 @@ const SearchNeighborhoodPage = () => {
           maxLength={20}
         />
         {totalNeighborhoods.error && <WarningText>{ERROR.SERVER}</WarningText>}
-        {getResidentError && <WarningText>{getResidentError.message}</WarningText>}
+        {getResidentError && (
+          <WarningText>{getResidentError.message}</WarningText>
+        )}
         <div className="content">
           <SelectedNeighborhoods
             neighborhoods={selectedNeighborhoods}
             getElements={getNeighborhoodElements}
+            loading={getResidentLoading}
           />
           <ResultNeighborhoods
             neighborhoods={filteredNeighborhoods}

@@ -5,16 +5,20 @@ import { Neighborhood } from "../../types/types";
 type SelectedNeighborhoodsProps = {
   neighborhoods: Neighborhood[];
   getElements: (neighborhoods: Neighborhood[]) => React.JSX.Element[];
+  loading: boolean;
 };
 
 const SelectedNeighborhoods: React.FC<SelectedNeighborhoodsProps> = (props) => {
-  const { neighborhoods, getElements } = props;
+  const { neighborhoods, getElements, loading } = props;
 
   const elements = useMemo(
     () => getElements(neighborhoods),
     [neighborhoods, getElements]
   );
 
+  if (loading) {
+    return <SelectedContainer className="loading" />;
+  }
   if (neighborhoods.length === 0) {
     return (
       <SelectedContainer className="empty">

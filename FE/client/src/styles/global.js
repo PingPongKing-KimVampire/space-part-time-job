@@ -1,5 +1,5 @@
 import { createStitches } from "@stitches/react";
-export const { styled } = createStitches({
+export const { styled, keyframes } = createStitches({
   media: {
     bp1: "(max-width: 480px)", // 모바일
     bp2: "(max-width: 600px)", // 작은 모바일
@@ -235,4 +235,14 @@ export const noItemNoticeStyle = {
   "@bp3": {
     fontSize: "22px",
   },
+};
+
+const skeletonLoading = keyframes({
+  "0%": { backgroundPosition: "200% 0" },
+  "100%": { backgroundPosition: "-200% 0" },
+});
+export const skeletonStyle = {
+  background: "linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%)",
+  backgroundSize: "200% 100%",
+  animation: `${skeletonLoading} 1.5s infinite linear`,
 };

@@ -4,6 +4,7 @@ import {
   OptionButtonStyle,
   SubColor,
   SubHoverColor,
+  skeletonStyle,
 } from "../global";
 
 export const Background = styled("div", {
@@ -89,6 +90,10 @@ export const SelectedContainer = styled("div", {
     alignItems: "center",
     borderRadius: "16px",
   },
+  "&.loading": {
+    borderRadius: "16px",
+    ...skeletonStyle,
+  },
   "& .searchItem": {
     ...itemStyle,
     background: `${SubColor} !important`,
@@ -116,8 +121,8 @@ export const ResultContainer = styled("div", {
     width: "100%",
     height: "52.5px",
     marginBottom: "10px",
-    background: "#EDEDED",
     borderRadius: "16px",
+    ...skeletonStyle,
   },
   "@bp1": {
     marginTop: "12px",
