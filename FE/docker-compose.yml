@@ -1,0 +1,24 @@
+services:
+  fe-client:
+    container_name: fe-client
+    build:
+      context: ./client
+    networks:
+      - fe-network
+  fe-apigateway:
+    image: nginx:latest
+    container_name: fe-apigateway
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./APIGateway/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./APIGateway/certs:/etc/nginx/certs:ro
+    depends_on:
+      - fe-client
+    networks:
+      - fe-network
+    restart: on-failure
+networks:
+  fe-network:
+    driver: bridge
