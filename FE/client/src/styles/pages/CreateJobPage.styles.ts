@@ -5,6 +5,7 @@ import {
   MainButtonStyle,
   NavigationBarHeight,
   getResponsiveStyleByBp,
+  skeletonStyle,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 
@@ -155,7 +156,13 @@ export const PlaceContainer = styled("div", {
     borderRadius: "12px",
     padding: "16px",
     boxSizing: "border-box",
-    cursor: "pointer",
+    "&:not(.loading)": {
+      cursor: "pointer",
+    },
+    "&.loading": {
+      ...skeletonStyle,
+      height: "48px",
+    },
     "& .main": {
       position: "relative",
       "& span": {

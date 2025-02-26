@@ -32,8 +32,11 @@ const PlaceField = () => {
     }).open();
   };
 
+  const [getExposureNeighborhoodsLoading, setGetExposureNeighborhoodsLoading] =
+    useState<boolean>(false);
   useEffect(() => {
     const displayExposureNeighborhoods = async () => {
+      setGetExposureNeighborhoodsLoading(true);
       try {
         const coordinate = await fetchCoordinateByAddress(input.place); // 주소 -> 좌표
         if (!coordinate) return;
@@ -49,6 +52,8 @@ const PlaceField = () => {
         });
       } catch (e) {
         console.error("Display Exposure Neighborhoods Error", e.message);
+      } finally {
+        setGetExposureNeighborhoodsLoading(false);
       }
     };
     if (input.place) displayExposureNeighborhoods();
@@ -67,27 +72,33 @@ const PlaceField = () => {
         {input.place !== "" && (
           <>
             <CustomMap markerAddress={input.place} />
-            <div
-              className="exposurePanel"
-              onClick={() => {
-                setIsExposureDetailVisible((state) => !state);
-              }}
-            >
-              <div className="main">
-                <span>
-                  {exposureNeighborhoods.main} 외{" "}
-                  {exposureNeighborhoods.sub.length}개 동네
-                </span>
-                에서 노출 <ArrowDownIcon isSelected={isExposureDetailVisible} />
-              </div>
+            {getExposureNeighborhoodsLoading && (
+              <div className="exposurePanel loading" />
+            )}
+            {!getExposureNeighborhoodsLoading && (
               <div
-                className={`exposureDetailContent ${
-                  isExposureDetailVisible ? "visible" : ""
-                }`}
+                className="exposurePanel"
+                onClick={() => {
+                  setIsExposureDetailVisible((state) => !state);
+                }}
               >
-                {exposureNeighborhoods.sub.join(", ")}
+                <div className="main">
+                  <span>
+                    {exposureNeighborhoods.main} 외{" "}
+                    {exposureNeighborhoods.sub.length}개 동네
+                  </span>
+                  에서 노출{" "}
+                  <ArrowDownIcon isSelected={isExposureDetailVisible} />
+                </div>
+                <div
+                  className={`exposureDetailContent ${
+                    isExposureDetailVisible ? "visible" : ""
+                  }`}
+                >
+                  {exposureNeighborhoods.sub.join(", ")}
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
       </PlaceContainer>
