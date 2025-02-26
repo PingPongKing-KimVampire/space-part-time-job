@@ -97,9 +97,14 @@ const ViewApplicantsPage = () => {
   return (
     <Background>
       <Container>
-        {(getApplicationsLoading || decideApplicationLoading) && (
-          <LoadingOverlay />
+        {getApplicationsLoading && (
+          <>
+            <div className="loadingItem" />
+            <div className="loadingItem" />
+            <div className="loadingItem" />
+          </>
         )}
+        {decideApplicationLoading && <LoadingOverlay />}
         {applications
           .filter(({ status }) => status !== APPLICATION_STATUS.CANCELED)
           .map(({ id, coverLetter, applicant, status, createdAt }) => (
@@ -108,9 +113,7 @@ const ViewApplicantsPage = () => {
               {status === APPLICATION_STATUS.REJECTED && <RejectedBadge />}
               <UserInfo>
                 <ProfileIcon />
-                <div className="nickname">
-                  {applicant?.nickname || "-"}
-                </div>
+                <div className="nickname">{applicant?.nickname || "-"}</div>
                 <div className="createdAt">ㆍ {createdAt}</div>
               </UserInfo>
               <div className="coverLetter">{coverLetter}</div>

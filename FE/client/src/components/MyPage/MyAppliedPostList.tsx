@@ -124,10 +124,18 @@ const MyAppliedPostList: React.FC<MyAppliedPostListProp> = ({
   };
 
   useEffect(() => {
-    setIsLoading(getMyApplicationsLoading || cancelApplicationLoading);
-  }, [getMyApplicationsLoading, cancelApplicationLoading]);
+    setIsLoading(cancelApplicationLoading);
+  }, [cancelApplicationLoading]);
 
-  if (getMyApplicationsLoading) return null;
+  if (getMyApplicationsLoading) {
+    return (
+      <>
+        <ListItem className="loadingItem" />
+        <ListItem className="loadingItem" />
+        <ListItem className="loadingItem" />
+      </>
+    );
+  }
   if (myApplications.length === 0) {
     return <div className="noJobNotice">아직 지원한 알바가 없어요.</div>;
   }

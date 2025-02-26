@@ -8,6 +8,7 @@ import {
   getResponsiveStyleByBp,
   ellipsisStyle,
   noItemNoticeStyle,
+  skeletonStyle,
 } from "../global";
 
 const backgroundResponsiveStyle = getResponsiveStyleByBp(
@@ -51,113 +52,129 @@ export const TopArea = styled("div", {
 
 export const ProfileContainer = styled("div", {
   display: "flex",
-  justifyContent: "space-between",
+  flexDirection: "column",
   alignItems: "center",
-  height: "120px",
+  gap: "5px",
   margin: "100px 0 60px",
-  "& svg": {
-    fill: MainColor,
-    aspectRatio: "1/1",
-  },
-  "& .profileIcon": {
-    height: "120px",
-    width: "120px",
-    minHeight: "120px",
-    minWidth: "120px",
-  },
-  "& .textInfo": {
-    marginRight: "auto",
-    marginLeft: "25px",
-    maxWidth: "280px",
-    "& *": {
-      ...ellipsisStyle,
-    },
-    "& .nickname": {
-      fontSize: "28px",
-      fontWeight: "800",
-      marginBottom: "12px",
-    },
-    "& .iconInfo": {
-      display: "flex",
-      alignItems: "center",
-      gap: "5px",
-      marginBottom: "4px",
-      fontWeight: "normal",
-      "& svg": {
-        width: "21px",
-        height: "21px",
-        minWidth: "21px",
-        minHeight: "21px",
-      },
-    },
-  },
-  "& .buttons": {
+  "& .content": {
+    width: "100%",
     display: "flex",
-    gap: "10px",
-    "& button": {
-      ...MainButtonStyle,
-      fontSize: "17px",
-      padding: "10px 20px",
-      borderRadius: "12px",
-      whiteSpace: "nowrap",
-      minWidth: "120px",
+    justifyContent: "space-between",
+    alignItems: "center",
+    "& svg": {
+      fill: MainColor,
+      aspectRatio: "1/1",
     },
-  },
-  "@bp4": {
-    "& .textInfo": {
-      maxWidth: "calc(70vw - 300px)",
-    },
-    "& .buttons": {
-      flexDirection: "column",
-    },
-  },
-  "@bp3": {
-    flexDirection: "column",
-    height: "auto",
-    margin: "60px 0 50px",
     "& .profileIcon": {
-      marginBottom: "15px",
-      height: "150px",
-      width: "150px",
-      minHeight: "150px",
-      minWidth: "150px",
-    },
-    "& .textInfo": {
-      margin: "auto",
-      textAlign: "center",
-      marginBottom: "35px",
-      maxWidth: "80%",
-    },
-    "& .buttons": {
-      gap: "15px",
-      flexDirection: "row",
-    },
-  },
-  "@bp1": {
-    margin: "40px 0 35px",
-    "& .profileIcon": {
-      marginBottom: "10px",
       height: "120px",
       width: "120px",
       minHeight: "120px",
       minWidth: "120px",
     },
-    "& .textInfo": {
-      marginBottom: "25px",
-      "& .nickname": {
-        fontSize: "24px",
-      },
-      "& .iconInfo": {
-        fontSize: "15px",
+  },
+  "@bp3": {
+    gap: "20px",
+    margin: "60px 0 45px",
+    "& .content": {
+      flexDirection: "column",
+      "& .profileIcon": {
+        marginBottom: "15px",
+        height: "150px",
+        width: "150px",
+        minHeight: "150px",
+        minWidth: "150px",
       },
     },
-    "& .buttons": {
-      gap: "8px",
-      "& button": {
-        fontSize: "16px",
-        padding: "9px 16px",
-        minWidth: "105px",
+  },
+  "@bp1": {
+    gap: "15px",
+    margin: "40px 0 32px",
+    "& .content": {
+      "& .profileIcon": {
+        marginBottom: "10px",
+        height: "120px",
+        width: "120px",
+        minHeight: "120px",
+        minWidth: "120px",
       },
+    },
+  },
+});
+
+export const ProfileInfoContainer = styled("div", {
+  marginRight: "auto",
+  marginLeft: "25px",
+  maxWidth: "280px",
+  "& *": {
+    ...ellipsisStyle,
+  },
+  "& .nickname": {
+    fontSize: "28px",
+    fontWeight: "800",
+    marginBottom: "12px",
+  },
+  "& .iconInfo": {
+    display: "flex",
+    alignItems: "center",
+    gap: "5px",
+    marginBottom: "4px",
+    fontWeight: "normal",
+    "& svg": {
+      width: "21px",
+      height: "21px",
+      minWidth: "21px",
+      minHeight: "21px",
+    },
+  },
+  "& .loading": {
+    ...skeletonStyle,
+    width: "100%",
+    borderRadius: "15px",
+  },
+  "@bp4": {
+    maxWidth: "calc(70vw - 300px)",
+  },
+  "@bp3": {
+    margin: "auto",
+    marginBottom: "25px",
+    textAlign: "center",
+    maxWidth: "80%",
+  },
+  "@bp1": {
+    marginBottom: "20px",
+    "& .nickname": {
+      fontSize: "24px",
+    },
+    "& .iconInfo": {
+      fontSize: "15px",
+    },
+  },
+});
+
+export const ProfileInteractionContainer = styled("div", {
+  display: "flex",
+  gap: "10px",
+  "& button": {
+    ...MainButtonStyle,
+    fontSize: "17px",
+    padding: "10px 20px",
+    borderRadius: "12px",
+    whiteSpace: "nowrap",
+    minWidth: "120px",
+  },
+  "@bp4": {
+    flexDirection: "column",
+  },
+  "@bp3": {
+    gap: "15px",
+    flexDirection: "row",
+  },
+  "@bp1": {
+    gap: "8px",
+    "& button": {
+      fontSize: "16px",
+      padding: "9px 16px",
+      minWidth: "105px",
     },
   },
 });
@@ -279,6 +296,10 @@ export const ListItem = styled("button", {
   alignItems: "center",
   border: "none",
   cursor: "pointer",
+  "&.loadingItem": {
+    ...skeletonStyle,
+    height: "56px",
+  },
   "&.isHovering": {
     background: SubColor,
   },
@@ -330,6 +351,9 @@ export const ListItem = styled("button", {
   "@bp3": {
     width: "80%",
     padding: "11px 15px",
+    "&.loadingItem": {
+      height: "50.5px",
+    },
     "&.appliedPostItem .main": {
       width: "calc(100% - 230px)",
     },
@@ -357,6 +381,9 @@ export const ListItem = styled("button", {
     width: "85%",
     padding: "10px 13px",
     borderRadius: "13px",
+    "&.loadingItem": {
+      height: "48.5px",
+    },
     "& .main .title": {
       fontSize: "16px",
     },
@@ -364,6 +391,9 @@ export const ListItem = styled("button", {
   "@bp1": {
     width: "90%",
     padding: "8.5px 10px 8.5px 12px",
+    "&.loadingItem": {
+      height: "43px",
+    },
     "&.appliedPostItem .main": {
       width: "calc(100% - 203px)",
     },

@@ -26,7 +26,7 @@ const NeighborhoodSelector: React.FC<NeighborhoodButtonProps> = (props) => {
     <NeighborhoodSelectorContainer>
       {loading && (
         <button className="selectButton loading">
-          {"\u00A0".repeat(20)}{" "}
+          {"\u00A0".repeat(20)}
           {/* \u00A0 = 줄바꿈 방지 공백 문자의 유니코드 */}
         </button>
       )}

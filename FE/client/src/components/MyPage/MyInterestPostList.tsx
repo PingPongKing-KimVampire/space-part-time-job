@@ -93,10 +93,18 @@ const MyInterestedPostList: React.FC<MyInterestPostListProps> = ({
   };
 
   useEffect(() => {
-    setIsLoading(getInterestedPostsLoading || unmarkLoading);
-  }, [getInterestedPostsLoading, unmarkLoading]);
+    setIsLoading(unmarkLoading);
+  }, [unmarkLoading]);
 
-  if (getInterestedPostsLoading) return null;
+  if (getInterestedPostsLoading) {
+    return (
+      <>
+        <ListItem className="loadingItem" />
+        <ListItem className="loadingItem" />
+        <ListItem className="loadingItem" />
+      </>
+    );
+  }
   if (myInterestPosts.length === 0)
     return <div className="noJobNotice">아직 관심있는 공고가 없어요.</div>;
   return (

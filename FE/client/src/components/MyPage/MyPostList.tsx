@@ -55,7 +55,7 @@ const MyPostList: React.FC<MyPostListProp> = ({
           isFirstFetchRef.current = false;
         } else {
           // 스크롤 다운 후 패치 -> 기존 데이터에 추가
-          setMyJobPosts(posts);
+          setMyJobPosts((state) => state.concat(posts));
         }
         setMyJobPostsPageInfo(pageInfo);
       } catch (e) {
@@ -98,13 +98,13 @@ const MyPostList: React.FC<MyPostListProp> = ({
           fetchMyJobPosts(myJobPostsPageInfo.endCursor);
         }
       },
-      { root: null, rootMargin: "0px", threshold: 1.0 }
+      { root: null, rootMargin: "0px", threshold: 0.5 }
     );
     if (bottomRef.current) observer.observe(bottomRef.current);
     return () => {
       if (bottomRef.current) observer.unobserve(bottomRef.current);
     };
-  }, [fetchMyJobPosts]);
+  }, [fetchMyJobPosts, myJobPostsPageInfo]);
 
   const [closeJobPost, { loading: closeLoading, error: closeError }] =
     useMutation(CLOSE_JOB_POST);
@@ -149,11 +149,10 @@ const MyPostList: React.FC<MyPostListProp> = ({
   };
 
   useEffect(() => {
-    setIsLoading(getMyJobPostsLoading || closeLoading);
-  }, [getMyJobPostsLoading, closeLoading]);
+    setIsLoading(closeLoading);
+  }, [closeLoading]);
 
-  if (getMyJobPostsLoading) return null;
-  if (myJobPosts.length === 0) {
+  if (!getMyJobPostsLoading && myJobPosts.length === 0) {
     return <div className="noJobNotice">아직 게시한 공고가 없어요.</div>;
   }
   return (
@@ -201,11 +200,18 @@ const MyPostList: React.FC<MyPostListProp> = ({
           </div>
         </ListItem>
       ))}
+      {getMyJobPostsLoading && (
+        <>
+          <ListItem className="loadingItem" />
+          <ListItem className="loadingItem" />
+          <ListItem className="loadingItem" />
+        </>
+      )}
+      <div ref={bottomRef} style={{ height: "10px" }} />
       {closeFinalError && <WarningText>{closeFinalError.message}</WarningText>}
       {getMyJobPostsFinalError && (
         <WarningText>{getMyJobPostsFinalError.message}</WarningText>
       )}
-      <div ref={bottomRef} style={{ height: "10px", background: "red" }} />
     </>
   );
 };

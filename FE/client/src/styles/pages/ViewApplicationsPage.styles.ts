@@ -7,6 +7,7 @@ import {
   NegativeColor,
   NegativeHoverColor,
   ellipsisStyle,
+  skeletonStyle,
 } from "../global";
 
 export const Background = styled("div", {
@@ -30,6 +31,12 @@ export const Container = styled("div", {
   gap: "12px",
   paddingTop: `calc(${NavigationBarHeight.default} + 24px)`,
   paddingBottom: "30px",
+  "& .loadingItem": {
+    ...skeletonStyle,
+    width: "100%",
+    height: "162px",
+    borderRadius: "15px",
+  },
   "& .item": {
     display: "flex",
     flexDirection: "column",
@@ -90,6 +97,9 @@ export const Container = styled("div", {
         },
       },
     },
+    "& .loadingItem": {
+      height: "150px",
+    },
   },
   "@bp1": {
     "& .item": {
@@ -101,6 +111,9 @@ export const Container = styled("div", {
           width: "48.7%",
         },
       },
+    },
+    "& .loadingItem": {
+      height: "141px",
     },
     ...containerResponsiveStyle["@bp1"],
   },
