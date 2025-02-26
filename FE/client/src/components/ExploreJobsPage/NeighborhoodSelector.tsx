@@ -10,30 +10,43 @@ type NeighborhoodButtonProps = {
   neighborhoods: Record<string, SearchNeighborhood>;
   selectedNeighborhoodID: string;
   setSelectedNeighborhoodID: React.Dispatch<React.SetStateAction<string>>;
+  loading: boolean;
 };
 
 const NeighborhoodSelector: React.FC<NeighborhoodButtonProps> = (props) => {
-  const { neighborhoods, selectedNeighborhoodID, setSelectedNeighborhoodID } =
-    props;
+  const {
+    neighborhoods,
+    selectedNeighborhoodID,
+    setSelectedNeighborhoodID,
+    loading,
+  } = props;
   const [isSelectBoxVisible, setIsSelectBoxVisible] = useState(false);
 
   return (
     <NeighborhoodSelectorContainer>
-      <button
-        className="selectButton"
-        onClick={() => {
-          setIsSelectBoxVisible((prev) => !prev);
-        }}
-      >
-        <LocationIcon />
-        <div className="neighborhoodName">
-          {(neighborhoods &&
-            selectedNeighborhoodID &&
-            neighborhoods[selectedNeighborhoodID]?.name) ||
-            ""}
-        </div>
-        <ArrowDownIcon isSelected={isSelectBoxVisible} />
-      </button>
+      {loading && (
+        <button className="selectButton loading">
+          {"\u00A0".repeat(20)}{" "}
+          {/* \u00A0 = 줄바꿈 방지 공백 문자의 유니코드 */}
+        </button>
+      )}
+      {!loading && (
+        <button
+          className="selectButton"
+          onClick={() => {
+            setIsSelectBoxVisible((prev) => !prev);
+          }}
+        >
+          <LocationIcon />
+          <div className="neighborhoodName">
+            {(neighborhoods &&
+              selectedNeighborhoodID &&
+              neighborhoods[selectedNeighborhoodID]?.name) ||
+              ""}
+          </div>
+          <ArrowDownIcon isSelected={isSelectBoxVisible} />
+        </button>
+      )}
       <div className={`selectBox ${isSelectBoxVisible ? "isVisible" : ""}`}>
         {neighborhoods &&
           Object.keys(neighborhoods).map((id) => (

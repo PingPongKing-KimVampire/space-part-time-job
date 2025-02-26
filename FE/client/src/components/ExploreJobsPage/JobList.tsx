@@ -7,10 +7,11 @@ type JobListProps = {
   totalCount: number;
   jobPosts: JobPost[];
   fetchMoreJobPosts: () => Promise<void>;
+  loading: boolean;
 };
 
 const JobList: React.FC<JobListProps> = (props) => {
-  const { totalCount, jobPosts, fetchMoreJobPosts } = props;
+  const { totalCount, jobPosts, fetchMoreJobPosts, loading } = props;
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -37,39 +38,49 @@ const JobList: React.FC<JobListProps> = (props) => {
           총 <span className="count">{totalCount}</span>개의 검색 결과
         </p>
         <div className="jobList">
-          {totalCount === 0 && <div className="noJobNotice">아직 게시된 공고가 없어요.</div>}
-          {jobPosts.map((job) => {
-            const photos = job.photos || [];
-            const {
-              id,
-              title,
-              workPeriod,
-              workTime,
-              salary,
-              addressName,
-              createdAt,
-            } = job;
-            return (
-              <JobItem
-                id={id}
-                title={title}
-                neighborhood={addressName || ""}
-                createdAt={createdAt || ""}
-                pay={{
-                  type: salary?.salaryType || "",
-                  amount: salary?.salaryAmount || 0,
-                }}
-                period={workPeriod || { type: "" }}
-                time={{
-                  type: workTime?.type || "",
-                  startTime: workTime?.startTime || "",
-                  endTime: workTime?.endTime || "",
-                }}
-                photos={photos}
-                key={id}
-              />
-            );
-          })}
+          {loading && (
+            <>
+              <div className="loadingItem" />
+              <div className="loadingItem" />
+              <div className="loadingItem" />
+            </>
+          )}
+          {!loading && totalCount === 0 && (
+            <div className="noJobNotice">아직 게시된 공고가 없어요.</div>
+          )}
+          {!loading &&
+            jobPosts.map((job) => {
+              const photos = job.photos || [];
+              const {
+                id,
+                title,
+                workPeriod,
+                workTime,
+                salary,
+                addressName,
+                createdAt,
+              } = job;
+              return (
+                <JobItem
+                  id={id}
+                  title={title}
+                  neighborhood={addressName || ""}
+                  createdAt={createdAt || ""}
+                  pay={{
+                    type: salary?.salaryType || "",
+                    amount: salary?.salaryAmount || 0,
+                  }}
+                  period={workPeriod || { type: "" }}
+                  time={{
+                    type: workTime?.type || "",
+                    startTime: workTime?.startTime || "",
+                    endTime: workTime?.endTime || "",
+                  }}
+                  photos={photos}
+                  key={id}
+                />
+              );
+            })}
         </div>
         <div ref={bottomRef} style={{ height: "10px" }} />
       </JobListContainer>

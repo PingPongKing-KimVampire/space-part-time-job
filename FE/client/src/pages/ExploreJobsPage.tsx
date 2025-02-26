@@ -106,6 +106,7 @@ const ExploreJobsPage = () => {
   );
   const [searchJobPostsFinalError, setSearchJobPostsFinalError] =
     useState<Error | null>(null);
+  const [searchJobPostsLoading, setSearchJobPostsLoading] = useState(true);
   useEffect(() => {
     if (searchJobPostsError)
       setSearchJobPostsFinalError(new Error(ERROR.SERVER));
@@ -157,6 +158,7 @@ const ExploreJobsPage = () => {
       try {
         const result: { posts: JobPost[]; endCursor: string } =
           await new Promise((resolve, reject) => {
+            setSearchJobPostsLoading(true);
             searchJobPosts({
               variables: { filters, pagination },
               onCompleted: (data) => {
@@ -179,6 +181,7 @@ const ExploreJobsPage = () => {
               },
             });
           });
+        setSearchJobPostsLoading(false);
         return result;
       } catch (e) {
         console.log("SearchJobPosts Query Error: ", e.message);
@@ -224,7 +227,6 @@ const ExploreJobsPage = () => {
 
   return (
     <Background>
-      {fetchResidentNeighborhoodsLoading && <LoadingOverlay />}
       {isFilterModalVisible && (
         <ModalBackground>
           <JobFilter
@@ -241,6 +243,7 @@ const ExploreJobsPage = () => {
             neighborhoods={residentNeighborhoods}
             selectedNeighborhoodID={selectedNeighborhoodID}
             setSelectedNeighborhoodID={setSelectedNeighborhoodID}
+            loading={fetchResidentNeighborhoodsLoading}
           />
           <input
             placeholder="주변 알바 검색"
@@ -269,6 +272,7 @@ const ExploreJobsPage = () => {
             totalCount={totalCount}
             jobPosts={jobPosts}
             fetchMoreJobPosts={fetchMoreJobPosts}
+            loading={searchJobPostsLoading}
           />
         </ContentContainer>
         <button

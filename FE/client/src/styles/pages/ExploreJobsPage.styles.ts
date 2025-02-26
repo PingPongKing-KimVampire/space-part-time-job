@@ -9,6 +9,7 @@ import {
   ellipsisStyle,
   MainButtonStyle,
   noItemNoticeStyle,
+  skeletonStyle,
 } from "../global";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 import { ReactComponent as Location } from "../../assets/icons/location.svg";
@@ -166,11 +167,17 @@ export const NeighborhoodSelectorContainer = styled("div", {
     justifyContent: "center",
     alignItems: "center",
     gap: "5px",
-    cursor: "pointer",
     transition: "background 0.2s",
     position: "relative",
-    "&:hover": {
-      background: SubHoverColor,
+    "&.loading": {
+      ...skeletonStyle,
+      whiteSpace: "pre-wrap",
+    },
+    "&:not(.loading)": {
+      cursor: "pointer",
+      "&:hover": {
+        background: SubHoverColor,
+      },
     },
     "& .neighborhoodName": {
       ...ellipsisStyle,
@@ -546,6 +553,13 @@ export const JobListContainer = styled("div", {
     display: "flex",
     flexDirection: "column",
     minHeight: "460px",
+    gap: "28px",
+    "& .loadingItem": {
+      ...skeletonStyle,
+      width: "100%",
+      height: "150px",
+      borderRadius: "16px",
+    },
     "& .noJobNotice": {
       ...noItemNoticeStyle,
       height: "calc(100vh - 400px)",
@@ -640,7 +654,7 @@ export const JobItemContextBox = styled("div", {
   flexDirection: "column",
   justifyContent: "space-between",
   height: "100%",
-  padding: "28px 0",
+  padding: "0 0 28px",
   boxSizing: "border-box",
   width: "100%",
   "&.photoExists": {
