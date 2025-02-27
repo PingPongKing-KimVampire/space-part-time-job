@@ -7,13 +7,15 @@ import {
   ellipsisStyle,
 } from "../global";
 
+const flexStartHeight = "1000px";
+
 export const Background = styled("div", {
   width: "100%",
   flex: "1",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  "@media (max-height: 750px)": {
+  [`@media (max-height: ${flexStartHeight})`]: {
     alignItems: "flex-start",
   },
   "@bp4": {
@@ -22,47 +24,53 @@ export const Background = styled("div", {
 });
 
 export const Container = styled("div", {
-  width: "1000px",
+  width: "1400px",
   marginTop: "calc(var(--navigation-bar-height) / 2)",
-  "@media (max-height: 750px)": {
-    marginTop: "calc(var(--navigation-bar-height) + 40px)",
-    paddingBottom: "40px",
+  [`@media (max-height: ${flexStartHeight})`]: {
+    marginTop: "calc(var(--navigation-bar-height) + 60px)",
+    paddingBottom: "60px",
   },
-  "@bp5": {
-    width: "900px",
+  "@bp7": {
+    width: "90%",
   },
   "@bp4": {
-    width: "90%",
-    marginTop: "calc(var(--navigation-bar-height-bp5) + 40px)",
+    marginTop: "calc(var(--navigation-bar-height-bp5) + 50px)",
+    paddingBottom: "50px",
+  },
+  "@bp3": {
+    marginTop: "calc(var(--navigation-bar-height-bp3) + 40px)",
     paddingBottom: "40px",
   },
   "@bp2": {
     marginTop: "calc(var(--navigation-bar-height-bp3) + 30px)",
     paddingBottom: "30px",
   },
+  "@bp1": {
+    marginTop: "calc(var(--navigation-bar-height-bp3) + 20px)",
+  }
 });
 
 export const HeaderContainer = styled("div", {
   width: "100%",
   display: "flex",
   flexDirection: "column",
-  gap: "10px",
-  marginBottom: "35px",
+  gap: "18px",
+  marginBottom: "45px",
   "& .jobTypesContainer": {
     display: "flex",
-    gap: "6px",
+    gap: "8px",
     "& .jobType": {
       color: MainColor,
       border: `1px solid ${MainColor}`,
-      padding: "5px 9px",
+      padding: "7px 11px",
       background: SubColor,
       borderRadius: "10px",
       fontWeight: "500",
-      fontSize: "16px",
+      fontSize: "17px",
     },
   },
   "& .title": {
-    fontSize: "24px",
+    fontSize: "30px",
     fontWeight: "bold",
     display: "flex",
     alignItems: "center",
@@ -71,14 +79,50 @@ export const HeaderContainer = styled("div", {
   },
   "& .subInfo": {
     color: "#828282",
-    fontSize: "14px",
+    fontSize: "17px",
     whiteSpace: "pre",
   },
-  "@bp2": {
+  "@bp6": {
+    gap: "16px",
+    marginBottom: "37px",
+    "& .title": {
+      fontSize: "29px",
+    },
+    "& .subInfo": {
+      fontSize: "16px",
+    },
+  },
+  "@bp4": {
+    gap: "12px",
     marginBottom: "25px",
-    gap: "8px",
+    "& .jobTypesContainer": {
+      gap: "7px",
+      "& .jobType": {
+        padding: "6px 9px",
+        fontSize: "16px",
+      },
+    },
+    "& .title": {
+      fontSize: "27px",
+    },
+  },
+  "@bp3": {
+    gap: "7px",
+    "& .jobTypesContainer .jobType": {
+        fontSize: "15px",
+    },
+    "& .title": {
+      fontSize: "25px",
+    },
+    "& .subInfo": {
+      fontSize: "14px",
+    },
+  },
+  "@bp2": {
+    gap: "5px",
     "& .jobTypesContainer .jobType": {
       fontSize: "14px",
+      padding: "5px 8px",
     },
     "& .title": {
       fontSize: "22px",
@@ -88,20 +132,20 @@ export const HeaderContainer = styled("div", {
     },
   },
   "@bp1": {
-    gap: "5px",
+    gap: "4px",
     "& .jobTypesContainer": {
-      gap: "5px",
+      gap: "6px",
       "& .jobType": {
         fontSize: "13px",
-        padding: "5px 7px",
-        borderRadius: "8px",
+        padding: "4.5px 7px",
+        borderRadius: "7.5px",
       },
     },
     "& .title": {
       fontSize: "20px",
     },
     "& .subInfo": {
-      fontSize: "13px",
+      fontSize: "12px",
     },
   },
 });
@@ -111,7 +155,7 @@ export const ContentContainer = styled("div", {
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
-  gap: "50px",
+  gap: "40px",
   "& .leftSection": {
     width: "40%",
   },
@@ -125,19 +169,32 @@ export const ContentContainer = styled("div", {
       aspectRatio: 6 / 4,
       display: "flex",
       flexDirection: "column",
-      gap: "30px",
+      gap: "40px",
       overflow: "auto",
       paddingRight: "20px",
       "& .detail": {
         "& .title": {
-          fontSize: "18px",
+          fontSize: "20px",
           fontWeight: "bold",
-          marginBottom: "10px",
+          marginBottom: "15px",
         },
         "& .description": {
-          fontSize: "14px",
+          fontSize: "18px",
           lineHeight: "22px",
           whiteSpace: "pre-line",
+        },
+      },
+    },
+  },
+  "@bp6": {
+    "& .rightSection .textInfo": {
+      gap: "30px",
+      "& .detail": {
+        "& .title": {
+          marginBottom: "12px",
+        },
+        "& .description": {
+          fontSize: "17px",
         },
       },
     },
@@ -150,21 +207,57 @@ export const ContentContainer = styled("div", {
     },
     "& .rightSection": {
       width: "100%",
-      gap: "40px",
+      gap: "36px",
       "& .textInfo": {
         aspectRatio: "auto",
+        gap: "35px",
+        "& .detail": {
+          "& .title": {
+            fontSize: "19px",
+            marginBottom: "8px",
+          },
+          "& .description": {
+            fontSize: "16px",
+          },
+        },
       },
     },
   },
   "@bp2": {
-    gap: "20px",
+    gap: "22px",
     "& .rightSection": {
-      gap: "30px",
+      gap: "28px",
       "& .textInfo": {
-        gap: "25px",
+        gap: "23px",
+        "& .detail": {
+          "& .title": {
+            fontSize: "18px",
+          },
+          "& .description": {
+            fontSize: "15px",
+          }
+        }
       },
     },
   },
+  "@bp1": {
+    gap: "19px",
+    "& .rightSection": {
+      gap: "22px",
+      "& .textInfo": {
+        gap: "20px",
+        "& .detail": {
+          "& .title": {
+            fontSize: "16.5px",
+          },
+          "& .description": {
+            fontSize: "14px",
+            lineHeight: "18px",
+          }
+        }
+      }
+    }
+  }
 });
 
 export const ImageSliderContainer = styled("div", {
@@ -241,8 +334,24 @@ export const ImageSliderContainer = styled("div", {
       right: "0%",
     },
   },
+  "@bp4": {
+    aspectRatio: "1.4/1",
+    marginBottom: "15px",
+    "& .imageList .imageBox": {
+      aspectRatio: "1.4/1",
+    },
+    "& svg": {
+      width: "5%",
+      "&.left": {
+        left: "5px",
+      },
+      "&.right": {
+        right: "5px",
+      },
+    },
+  },
   "@bp2": {
-    marginBottom: "10px",
+    marginBottom: "12px",
   },
   "@bp1": {
     marginBottom: "8px",
@@ -252,48 +361,59 @@ export const ImageSliderContainer = styled("div", {
 export const ProfileContainer = styled("div", {
   display: "flex",
   alignItems: "center",
-  gap: "6px",
+  gap: "12px",
   "& .userInfo": {
-    width: "300px",
+    width: "calc(100% - 100px)",
     "& .nickname": {
-      fontSize: "20px",
-      fontWeight: "700",
-      marginBottom: "7px",
+      fontSize: "28px",
+      fontWeight: "600",
+      marginBottom: "8px",
       ...ellipsisStyle,
     },
     "& .timeTogether": {
-      fontSize: "14px",
+      fontSize: "17px",
       color: "#828282",
       ...ellipsisStyle,
     },
   },
   "& svg": {
-    width: "12%",
+    width: "75px",
+    height: "75px",
     fill: MainColor,
   },
-  "@bp4": {
-    gap: "10px",
+  "@bp6": {
+    gap: "8px",
     "& .userInfo": {
-      width: "100%",
       "& .nickname": {
-        fontSize: "22px",
+        fontSize: "24px",
+        marginBottom: "7px",
+      },
+      "& .timeTogether": {
+        fontSize: "16px",
+      },
+    },
+    "& svg": {
+      width: "65px",
+      height: "65px",
+    },
+  },
+  "@bp4": {
+    "& .userInfo": {
+      "& .nickname": {
+        fontSize: "23px",
       },
       "& .timeTogether": {
         fontSize: "15px",
       },
     },
-    "& svg": {
-      width: "68px",
-      height: "68px",
-    },
   },
   "@bp2": {
     "& .userInfo": {
       "& .nickname": {
-        fontSize: "20px",
+        fontSize: "21px",
       },
       "& .timeTogether": {
-        fontSize: "13px",
+        fontSize: "13.5px",
       },
     },
     "& svg": {
@@ -302,12 +422,14 @@ export const ProfileContainer = styled("div", {
     },
   },
   "@bp1": {
+    gap: "6px",
     "& .userInfo": {
       "& .nickname": {
-        fontSize: "18px",
+        fontSize: "19px",
+        marginBottom: "6px",
       },
       "& .timeTogether": {
-        fontSize: "12px",
+        fontSize: "12.5px",
       },
     },
     "& svg": {
@@ -320,30 +442,29 @@ export const ProfileContainer = styled("div", {
 export const BasicInfoContainer = styled("div", {
   display: "flex",
   flexDirection: "column",
-  gap: "8px",
+  gap: "12px",
   "& .item": {
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
-    borderRadius: "10px",
+    gap: "12px",
     transition: "background 0.2s, padding 0.2s",
     "& .main": {
       display: "flex",
       alignItems: "center",
       gap: "10px",
-      fontSize: "14px",
+      fontSize: "18px",
       "& svg": {
-        width: "23px",
-        height: "23px",
+        width: "26px",
+        height: "26px",
         stroke: MainColor,
         strokeWidth: "1",
       },
       "& .hoverTarget": {
-        fontSize: "13px",
+        fontSize: "14px",
         color: MainColor,
         transition: "background 0.2s",
-        padding: "2px 7px",
-        borderRadius: "10px",
+        padding: "6px 8px",
+        borderRadius: "12px",
         marginLeft: "-5px",
         "&:hover": {
           background: SubColor,
@@ -355,22 +476,62 @@ export const BasicInfoContainer = styled("div", {
       padding: "0 20px",
     },
   },
+  "@bp6": {
+    gap: "8px",
+    "& .item": {
+      gap: "10px",
+      "& .main": {
+        fontSize: "17px",
+        "& svg": {
+          width: "24px",
+          height: "24px",
+        },
+        "& .hoverTarget": {
+          fontSize: "13px",
+        },
+      },
+    },
+  },
+  "@bp4": {
+    gap: "7px",
+    "& .item": {
+      "& .main": {
+        fontSize: "16px",
+        "& .hoverTarget": {
+          padding: "5.5px 7px",
+        },
+      },
+    },
+  },
+  "@bp2": {
+    gap: "6px",
+    "& .item": {
+      "& .main": {
+        fontSize: "15px",
+      },
+    }
+  },
+  "@bp1": {
+    gap: "4px",
+    "& .item": {
+      gap: "8px",
+      "& .main": {
+        fontSize: "14px",
+        gap: "7px",
+      }
+    }
+  }
 });
 
 export const InteractionContainer = styled("div", {
-  "& .info": {
-    color: "#828282",
-    fontSize: "13px",
-    marginBottom: "10px",
-  },
   "& .interaction": {
     display: "flex",
-    gap: "12px",
+    gap: "16px",
     "& .applyButton": {
       ...MainButtonStyle,
-      fontSize: "20px",
+      fontSize: "24px",
       padding: "12px",
-      width: "94%",
+      width: "92%",
     },
     "& svg": {
       width: "8%",
@@ -399,24 +560,21 @@ export const InteractionContainer = styled("div", {
       },
     },
   },
+  "@bp6": {
+    "& .interaction .applyButton": {
+      fontSize: "21px",
+    },
+  },
   "@bp4": {
-    "& .interaction": {
-      gap: "16px",
-      "& .applyButton": {
-        background: "red",
-        padding: "16px",
-      },
-      "& svg": {
+    "& .interaction svg": {
         width: "55px",
-      },
     },
   },
   "@bp3": {
     "& .interaction": {
       gap: "14px",
       "& .applyButton": {
-        padding: "14px",
-        fontSize: "18px",
+        fontSize: "19px",
       },
       "& svg": {
         width: "50px",
@@ -427,10 +585,13 @@ export const InteractionContainer = styled("div", {
     "& .interaction": {
       gap: "10px",
       "& .applyButton": {
+        fontSize: "17.5px",
+        borderRadius: "14px",
         padding: "10px",
-        fontSize: "16px",
-        borderRadius: "12px",
       },
+      "& svg": {
+        width: "47px",
+      }
     },
   },
 });

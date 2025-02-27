@@ -47,10 +47,12 @@ const ViewJobPage = () => {
           setJobPost({
             ...post,
             createdAt: formatTimeAgo(post.createdAt),
-            publisher: !post.publisher ? null : {
-              ...post.publisher,
-              createdAt: formatTimeAgo(post.publisher.createdAt),
-            },
+            publisher: !post.publisher
+              ? null
+              : {
+                  ...post.publisher,
+                  createdAt: formatTimeAgo(post.publisher.createdAt),
+                },
             views,
           });
         } catch (e) {

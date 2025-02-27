@@ -12,7 +12,7 @@ const Profile = () => {
       <div className="userInfo">
         <div className="nickname">{jobPost.publisher?.nickname || "-"}</div>
         <div className="timeTogether">
-          우주알바와 함께한지 {jobPost.publisher?.createdAt || "-"} 전
+          우주알바와 함께한지 {jobPost.publisher?.createdAt || "-"}
         </div>
       </div>
     </ProfileContainer>
