@@ -177,3 +177,5 @@ export enum JOB_POST_STATUS {
   OPEN = "OPEN",
   CLOSE = "CLOSE",
 }
+
+export const SPACE = "\u00A0"; // 줄바꿈 방지 공백 문자의 유니코드

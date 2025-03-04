@@ -19,8 +19,12 @@ import useViewJobContext from "../../context/ViewJobContext";
 import { WarningText } from "../../styles/global";
 
 const Interaction = () => {
-  const { jobPost, setJobPost, setIsApplicationModalVisible } =
-    useViewJobContext();
+  const {
+    jobPost,
+    setJobPost,
+    setIsApplicationModalVisible,
+    getJobPostLoading,
+  } = useViewJobContext();
   const { id, myJobApplication, myInterested, status } = jobPost;
 
   const isApplied = useMemo(() => {
@@ -66,29 +70,38 @@ const Interaction = () => {
   return (
     <InteractionContainer>
       <div className="interaction">
-        <button
-          className={`applyButton ${
-            isApplied === null || isApplied || isClosed ? "inactivated" : ""
-          }`}
-          disabled={isApplied === null || isApplied || isClosed}
-          onClick={() => {
-            setIsApplicationModalVisible(true);
-          }}
-        >
-          {isClosed
-            ? "마감된 알바에요."
-            : isApplied === null
-            ? "서버 오류로 지금은 지원할 수 없어요."
-            : isApplied
-            ? "내가 이미 지원한 알바에요."
-            : "지원하기"}
-        </button>
-        <HeartIcon
-          className={`${isClosed ? "inactivated" : ""} ${
-            myInterested ? "selected" : ""
-          }`}
-          onClick={onHeartClick}
-        />
+        {getJobPostLoading ? (
+          <>
+            <button className="applyButton loading" />
+            <HeartIcon className="inactivated" />
+          </>
+        ) : (
+          <>
+            <button
+              className={`applyButton ${
+                isApplied === null || isApplied || isClosed ? "inactivated" : ""
+              }`}
+              disabled={isApplied === null || isApplied || isClosed}
+              onClick={() => {
+                setIsApplicationModalVisible(true);
+              }}
+            >
+              {isClosed
+                ? "마감된 알바에요."
+                : isApplied === null
+                ? "서버 오류로 지금은 지원할 수 없어요."
+                : isApplied
+                ? "내가 이미 지원한 알바에요."
+                : "지원하기"}
+            </button>
+            <HeartIcon
+              className={`${isClosed ? "inactivated" : ""} ${
+                myInterested ? "selected" : ""
+              }`}
+              onClick={onHeartClick}
+            />
+          </>
+        )}
       </div>
       {markAndUnmarkFinalError && (
         <WarningText>{markAndUnmarkFinalError.message}</WarningText>

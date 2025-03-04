@@ -1,11 +1,10 @@
-import React from "react";
 import { HeaderContainer } from "../../styles/pages/ViewJobPage.styles";
 import { CloseTag } from "../../styles/global";
-import { JOB_POST_STATUS, JOB_TYPES } from "../../constants/constants";
+import { JOB_POST_STATUS, JOB_TYPES, SPACE } from "../../constants/constants";
 import useViewJobContext from "../../context/ViewJobContext";
 
 const Header = () => {
-  const { jobPost } = useViewJobContext();
+  const { jobPost, getJobPostLoading } = useViewJobContext();
   const {
     jobCategories = [],
     status,
@@ -16,6 +15,19 @@ const Header = () => {
     interestedCount,
   } = jobPost;
 
+  if (getJobPostLoading) {
+    return (
+      <HeaderContainer>
+        <div className="jobTypesContainer">
+          <div className="jobType loading">{SPACE.repeat(20)}</div>
+          <div className="jobType loading">{SPACE.repeat(20)}</div>
+          <div className="jobType loading">{SPACE.repeat(20)}</div>
+        </div>
+        <div className="title loading">{SPACE.repeat(100)}</div>
+        <div className="subInfo loading">{SPACE.repeat(50)}</div>
+      </HeaderContainer>
+    );
+  }
   return (
     <HeaderContainer>
       <div className="jobTypesContainer">

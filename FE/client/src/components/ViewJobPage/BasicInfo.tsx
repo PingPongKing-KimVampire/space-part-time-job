@@ -7,7 +7,7 @@ import {
   formatTimeForDisplay,
   formatPeriodForDisplay,
 } from "../../utils/formatJobInfoForDisplay";
-import { PERIOD } from "../../constants/constants";
+import { PERIOD, SPACE } from "../../constants/constants";
 import { BasicInfoContainer } from "../../styles/pages/ViewJobPage.styles";
 import { ReactComponent as WonIcon } from "../../assets/icons/won.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
@@ -16,7 +16,7 @@ import { ReactComponent as ClockIcon } from "../../assets/icons/clock-outline.sv
 import useViewJobContext from "../../context/ViewJobContext";
 
 const BasicInfo = () => {
-  const { jobPost } = useViewJobContext();
+  const { jobPost, getJobPostLoading } = useViewJobContext();
   const { salary, addressName, workPeriod, workTime } = jobPost;
   const pay = useMemo(() => {
     if (!salary) return null;
@@ -48,31 +48,41 @@ const BasicInfo = () => {
     );
   }, [workPeriod]);
 
-  if (!pay || !addressName || !workPeriod || !workTime) return null;
+  // if (!pay || !addressName || !workPeriod || !workTime) return null;
   // TODO: WonIcon outline 아이콘으로 다시 찾아보기
   return (
     <BasicInfoContainer>
-      <InfoItem iconElement={<WonIcon />} text={payToDisplay} />
+      <InfoItem
+        iconElement={<WonIcon />}
+        text={payToDisplay || ""}
+        loading={getJobPostLoading}
+      />
       <InfoItem
         iconElement={<LocationIcon />}
-        text={addressName}
+        text={addressName || ""}
         detail={{
           name: "지도",
           element: (
             <CustomMap className="inViewJob" markerAddress={addressName} />
           ),
         }}
+        loading={getJobPostLoading}
       />
       <InfoItem
         iconElement={<CalendarIcon />}
-        text={periodToDisplay}
+        text={periodToDisplay || ""}
         detail={
           detailCalendarElement
             ? { name: "달력", element: detailCalendarElement }
             : undefined
         }
+        loading={getJobPostLoading}
       />
-      <InfoItem iconElement={<ClockIcon />} text={timeToDisplay} />
+      <InfoItem
+        iconElement={<ClockIcon />}
+        text={timeToDisplay || ""}
+        loading={getJobPostLoading}
+      />
     </BasicInfoContainer>
   );
 };
@@ -84,10 +94,11 @@ type InfoItemProps = {
     name: string;
     element: React.JSX.Element;
   };
+  loading: boolean;
 };
 
 const InfoItem: React.FC<InfoItemProps> = (props) => {
-  const { iconElement, text, detail } = props;
+  const { iconElement, text, detail, loading } = props;
 
   const [isHovering, setHovering] = useState(false); // 호버 타겟 호버링 여부
 
@@ -95,8 +106,12 @@ const InfoItem: React.FC<InfoItemProps> = (props) => {
     <div className="item">
       <div className="main">
         {iconElement}
-        {text}
-        {detail && (
+        {loading ? (
+          <div className="infoText loading">{SPACE.repeat(30)}</div>
+        ) : (
+          <div className="infoText">{text}</div>
+        )}
+        {!loading && detail && (
           <div
             className="hoverTarget"
             onMouseEnter={() => setHovering(true)}
@@ -106,7 +121,9 @@ const InfoItem: React.FC<InfoItemProps> = (props) => {
           </div>
         )}
       </div>
-      {detail && isHovering && <div className="detail">{detail.element}</div>}
+      {!loading && detail && isHovering && (
+        <div className="detail">{detail.element}</div>
+      )}
     </div>
   );
 };

@@ -8,7 +8,7 @@ import defaultImage from "../../assets/images/jobDefault.png";
 import useViewJobContext from "../../context/ViewJobContext.tsx";
 
 const Content = () => {
-  const { jobPost } = useViewJobContext();
+  const { jobPost, getJobPostLoading } = useViewJobContext();
   const { photos, detailedDescription } = jobPost;
 
   return (
@@ -16,6 +16,7 @@ const Content = () => {
       <div className="leftSection">
         <ImageSlider
           imageUrls={photos && photos.length ? photos : [defaultImage]}
+          loading={getJobPostLoading}
         />
         <Profile />
       </div>
@@ -24,7 +25,11 @@ const Content = () => {
           <BasicInfo />
           <div className="detail">
             <div className="title">상세 내용</div>
-            <div className="description">{detailedDescription}</div>
+            {getJobPostLoading ? (
+              <div className="description loading">{"\n\n\n\n"}</div>
+            ) : (
+              <div className="description">{detailedDescription}</div>
+            )}
           </div>
         </div>
         <Interaction />

@@ -5,6 +5,7 @@ import {
   SubColor,
   MainButtonStyle,
   ellipsisStyle,
+  skeletonStyle,
 } from "../global";
 
 const flexStartHeight = "1000px";
@@ -48,6 +49,9 @@ export const Container = styled("div", {
   "@bp1": {
     marginTop: "calc(var(--navigation-bar-height-bp3) + 20px)",
   },
+  "& .loading": {
+    ...skeletonStyle,
+  },
 });
 
 export const HeaderContainer = styled("div", {
@@ -67,22 +71,34 @@ export const HeaderContainer = styled("div", {
       borderRadius: "10px",
       fontWeight: "500",
       fontSize: "17px",
+      "&.loading": {
+        border: "none",
+      },
     },
   },
   "& .title": {
     fontSize: "30px",
     fontWeight: "bold",
+    maxWidth: "100%",
     display: "flex",
     alignItems: "center",
     gap: "8px",
     "& .titleText": {
       ...ellipsisStyle,
     },
+    "&.loading": {
+      borderRadius: "15px",
+      width: "fit-content",
+    },
   },
   "& .subInfo": {
     color: "#828282",
     fontSize: "17px",
     whiteSpace: "pre",
+    "&.loading": {
+      borderRadius: "15px",
+      width: "fit-content",
+    },
   },
   "@bp6": {
     gap: "16px",
@@ -182,6 +198,9 @@ export const ContentContainer = styled("div", {
           fontSize: "18px",
           lineHeight: "22px",
           whiteSpace: "pre-line",
+          "&.loading": {
+            borderRadius: "15px",
+          },
         },
       },
     },
@@ -268,6 +287,9 @@ export const ImageSliderContainer = styled("div", {
   overflow: "hidden",
   marginBottom: "20px",
   position: "relative",
+  "&.loading": {
+    ...skeletonStyle,
+  },
   "& .imageList": {
     display: "flex",
     height: "100%",
@@ -363,17 +385,25 @@ export const ProfileContainer = styled("div", {
   alignItems: "center",
   gap: "12px",
   "& .userInfo": {
-    width: "calc(100% - 100px)",
+    maxWidth: "calc(100% - 100px)",
     "& .nickname": {
       fontSize: "28px",
       fontWeight: "600",
       marginBottom: "8px",
       ...ellipsisStyle,
+      "&.loading": {
+        width: "fit-content",
+        borderRadius: "15px",
+      },
     },
     "& .timeTogether": {
       fontSize: "17px",
       color: "#828282",
       ...ellipsisStyle,
+      "&.loading": {
+        width: "fit-content",
+        borderRadius: "15px",
+      },
     },
   },
   "& svg": {
@@ -452,12 +482,17 @@ export const BasicInfoContainer = styled("div", {
       display: "flex",
       alignItems: "center",
       gap: "10px",
-      fontSize: "18px",
       "& svg": {
         width: "26px",
         height: "26px",
         stroke: MainColor,
         strokeWidth: "1",
+      },
+      "& .infoText": {
+        fontSize: "18px",
+        "&.loading": {
+          borderRadius: "15px",
+        },
       },
       "& .hoverTarget": {
         fontSize: "14px",
@@ -531,6 +566,9 @@ export const InteractionContainer = styled("div", {
       fontSize: "24px",
       padding: "12px",
       width: "92%",
+      "&.loading": {
+        ...skeletonStyle,
+      },
     },
     "& svg": {
       width: "8%",

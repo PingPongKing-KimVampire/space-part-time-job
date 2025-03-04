@@ -6,6 +6,8 @@ type ViewJobContextType = {
   setJobPost: React.Dispatch<React.SetStateAction<JobPost>>;
   isApplicationModalVisible: boolean;
   setIsApplicationModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  getJobPostLoading: boolean;
+  setGetJobPostLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ViewJobContext = createContext<ViewJobContextType | undefined>(undefined);
@@ -32,6 +34,7 @@ export const ViewJobProvider = ({ children }) => {
   });
   const [isApplicationModalVisible, setIsApplicationModalVisible] =
     useState<boolean>(false);
+  const [getJobPostLoading, setGetJobPostLoading] = useState<boolean>(true);
 
   return (
     <ViewJobContext.Provider
@@ -40,6 +43,8 @@ export const ViewJobProvider = ({ children }) => {
         setJobPost,
         isApplicationModalVisible,
         setIsApplicationModalVisible,
+        getJobPostLoading,
+        setGetJobPostLoading,
       }}
     >
       {children}

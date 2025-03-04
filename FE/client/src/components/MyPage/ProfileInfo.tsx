@@ -8,7 +8,7 @@ import { Neighborhood, ApiState } from "../../types/types";
 import { fetchResidentNeighborhoods } from "../../redux/residentNeighborhoods";
 import { ReactComponent as LocationIcon } from "../../assets/icons/location.svg";
 import { ReactComponent as ClockIcon } from "../../assets/icons/clock.svg";
-import { ERROR } from "../../constants/constants";
+import { ERROR, SPACE } from "../../constants/constants";
 import { ProfileInfoContainer } from "../../styles/pages/MyPage.styles";
 
 type ProfileInfoProp = {
@@ -74,13 +74,13 @@ const ProfileInfo: React.FC<ProfileInfoProp> = ({ setWarning }) => {
   return (
     <ProfileInfoContainer>
       <div className={`nickname ${!isBasicInfoFetched ? "loading" : ""}`}>
-        {!isBasicInfoFetched ? "\u00A0".repeat(15) : nickname}
+        {!isBasicInfoFetched ? SPACE.repeat(15) : nickname}
       </div>
       <div className="iconInfo">
         <LocationIcon />
         <div className={!isResidentFetched ? "loading" : ""}>
           {!isResidentFetched
-            ? "\u00A0".repeat(30)
+            ? SPACE.repeat(30)
             : neighborhoodNames.join(" · ")}
         </div>
       </div>
@@ -88,7 +88,7 @@ const ProfileInfo: React.FC<ProfileInfoProp> = ({ setWarning }) => {
         <ClockIcon />
         <div className={!isBasicInfoFetched ? "loading" : ""}>
           {!isBasicInfoFetched
-            ? "\u00A0".repeat(30)
+            ? SPACE.repeat(30)
             : `우주알바와 함께한지 ${timeTogether}`}
         </div>
       </div>

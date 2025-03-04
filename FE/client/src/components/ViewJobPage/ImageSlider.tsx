@@ -5,9 +5,10 @@ import { ReactComponent as RightArrowIcon } from "../../assets/icons/arrow-right
 
 type ImageSliderProps = {
   imageUrls: string[];
+  loading: boolean;
 };
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls, loading }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageListRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,6 +31,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls }) => {
     imageListRef.current.style.transform = `translateX(${newPos}px)`;
   };
 
+  if (loading) {
+    return <ImageSliderContainer className="loading" />;
+  }
   return (
     <ImageSliderContainer ref={containerRef}>
       <div className="imageList" ref={imageListRef}>

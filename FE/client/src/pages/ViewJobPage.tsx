@@ -7,7 +7,6 @@ import Content from "../components/ViewJobPage/Content";
 import ApplicationModal from "../components/ViewJobPage/ApplicationModal";
 import useBackgroundColor from "../utils/useBackgroundColor";
 import { Background, Container } from "../styles/pages/ViewJobPage.styles";
-import LoadingOverlay from "../components/LoadingOverlay";
 import { MainBackgroundColor, WarningText } from "../styles/global";
 import { GET_JOB_POST } from "../api/graphql/queries";
 import { processGetJobPost } from "../api/graphql/processData";
@@ -19,47 +18,47 @@ import { ERROR } from "../constants/constants";
 const ViewJobPage = () => {
   useBackgroundColor(MainBackgroundColor);
   const { id = "" } = useParams();
-  const { setJobPost, isApplicationModalVisible } = useViewJobContext();
+  const { setJobPost, isApplicationModalVisible, setGetJobPostLoading } =
+    useViewJobContext();
 
-  const [
-    incrementViews,
-    { loading: incrementViewsLoading, error: incrementViewsError },
-  ] = useMutation(INCREMENT_JOB_POST_VIEWS);
+  const [incrementViews, { error: incrementViewsError }] = useMutation(
+    INCREMENT_JOB_POST_VIEWS
+  );
 
   const [getJobPostFinalError, setGetJobPostFinalError] =
     useState<Error | null>(null);
-  const [getJobPost, { loading: getJobPostLoading, error: getJobPostError }] =
-    useLazyQuery(GET_JOB_POST, {
-      variables: { id },
-      fetchPolicy: "network-only",
-      onCompleted: async (data) => {
+  const [getJobPost, { error: getJobPostError }] = useLazyQuery(GET_JOB_POST, {
+    variables: { id },
+    fetchPolicy: "network-only",
+    onCompleted: async (data) => {
+      try {
+        const post = processGetJobPost(data);
+        let incrementViewsResponse;
         try {
-          const post = processGetJobPost(data);
-          let incrementViewsResponse;
-          try {
-            incrementViewsResponse = await incrementViews({
-              variables: { id },
-            });
-          } catch {
-            throw new Error(ERROR.SERVER);
-          }
-          const views = processIncrementViews(incrementViewsResponse.data);
-          setJobPost({
-            ...post,
-            createdAt: formatTimeAgo(post.createdAt),
-            publisher: !post.publisher
-              ? null
-              : {
-                  ...post.publisher,
-                  createdAt: formatTimeAgo(post.publisher.createdAt),
-                },
-            views,
+          incrementViewsResponse = await incrementViews({
+            variables: { id },
           });
-        } catch (e) {
-          setGetJobPostFinalError(e);
+        } catch {
+          throw new Error(ERROR.SERVER);
         }
-      },
-    });
+        const views = processIncrementViews(incrementViewsResponse.data);
+        setJobPost({
+          ...post,
+          createdAt: formatTimeAgo(post.createdAt),
+          publisher: !post.publisher
+            ? null
+            : {
+                ...post.publisher,
+                createdAt: formatTimeAgo(post.publisher.createdAt),
+              },
+          views,
+        });
+      } catch (e) {
+        setGetJobPostFinalError(e);
+      }
+      setGetJobPostLoading(false);
+    },
+  });
   useEffect(() => {
     if (getJobPostError) setGetJobPostFinalError(new Error(ERROR.SERVER));
   }, [getJobPostError]);
@@ -67,6 +66,7 @@ const ViewJobPage = () => {
   useEffect(() => {
     if (isApplicationModalVisible) return;
     try {
+      setGetJobPostLoading(true);
       getJobPost();
     } catch (e) {
       console.error("GetJobPost Query Error: ", e.message);
@@ -85,10 +85,8 @@ const ViewJobPage = () => {
         <WarningText>{getJobPostFinalError.message}</WarningText>
       </Background>
     );
-  if (getJobPostLoading) return <LoadingOverlay />;
   return (
     <Background>
-      {incrementViewsLoading && <LoadingOverlay />}
       <Container>
         <Header />
         <Content />

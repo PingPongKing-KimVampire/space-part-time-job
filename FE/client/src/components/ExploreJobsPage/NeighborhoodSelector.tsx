@@ -5,6 +5,7 @@ import {
   ArrowDownIcon,
 } from "../../styles/pages/ExploreJobsPage.styles";
 import { SearchNeighborhood } from "../../types/types.ts";
+import { SPACE } from "../../constants/constants";
 
 type NeighborhoodButtonProps = {
   neighborhoods: Record<string, SearchNeighborhood>;
@@ -25,10 +26,7 @@ const NeighborhoodSelector: React.FC<NeighborhoodButtonProps> = (props) => {
   return (
     <NeighborhoodSelectorContainer>
       {loading && (
-        <button className="selectButton loading">
-          {"\u00A0".repeat(20)}
-          {/* \u00A0 = 줄바꿈 방지 공백 문자의 유니코드 */}
-        </button>
+        <button className="selectButton loading">{SPACE.repeat(20)}</button>
       )}
       {!loading && (
         <button
