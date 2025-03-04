@@ -34,11 +34,11 @@ export const ScopeSettingContainer = styled("div", {
   boxSizing: "border-box",
   marginBottom: "20px",
   "@bp2": {
-    padding: "20px 20px 15px 20px",
+    padding: "20px 20px 16px",
     marginBottom: "12px",
   },
   "@bp1": {
-    padding: "17px 17px 13px 17px",
+    padding: "17px 17px 16px",
   },
 });
 
@@ -51,6 +51,7 @@ export const NeighborhoodsContainer = styled("div", {
   marginBottom: "28px",
   "& .neighborhoodButton": {
     ...OptionButtonStyle,
+    padding: "0 12px 0 16px",
     borderRadius: "9px",
     width: "calc((100% - 14px) / 3)",
     display: "flex",
@@ -61,7 +62,8 @@ export const NeighborhoodsContainer = styled("div", {
       ...ellipsisStyle,
     },
     "& svg": {
-      height: "100%",
+      minWidth: "25px",
+      width: "25px",
       strokeWidth: "1",
     },
     "&:not(.selected)": {
@@ -70,11 +72,20 @@ export const NeighborhoodsContainer = styled("div", {
       },
     },
   },
+  "@bp3": {
+    "& .neighborhoodButton": {
+      padding: "0 10px 0 14px",
+      "& svg": {
+        width: "20px",
+        minWidth: "20px",
+      },
+    },
+  },
   "@bp2": {
     height: "45px",
     marginBottom: "24px",
     "& .neighborhoodButton": {
-      padding: "12px 8px",
+      padding: "0 8px 0 10px",
       "& .neighborhoodName": {
         fontSize: "15px",
       },

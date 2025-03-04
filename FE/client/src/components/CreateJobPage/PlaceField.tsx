@@ -71,7 +71,7 @@ const PlaceField = () => {
         />
         {input.place !== "" && (
           <>
-            <CustomMap markerAddress={input.place} />
+            <CustomMap className="inCreateJob" markerAddress={input.place} />
             {getExposureNeighborhoodsLoading && (
               <div className="exposurePanel loading" />
             )}

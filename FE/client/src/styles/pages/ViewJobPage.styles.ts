@@ -47,7 +47,7 @@ export const Container = styled("div", {
   },
   "@bp1": {
     marginTop: "calc(var(--navigation-bar-height-bp3) + 20px)",
-  }
+  },
 });
 
 export const HeaderContainer = styled("div", {
@@ -75,7 +75,9 @@ export const HeaderContainer = styled("div", {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    lineHeight: "30px",
+    "& .titleText": {
+      ...ellipsisStyle,
+    },
   },
   "& .subInfo": {
     color: "#828282",
@@ -107,9 +109,9 @@ export const HeaderContainer = styled("div", {
     },
   },
   "@bp3": {
-    gap: "7px",
+    gap: "10px",
     "& .jobTypesContainer .jobType": {
-        fontSize: "15px",
+      fontSize: "15px",
     },
     "& .title": {
       fontSize: "25px",
@@ -119,7 +121,6 @@ export const HeaderContainer = styled("div", {
     },
   },
   "@bp2": {
-    gap: "5px",
     "& .jobTypesContainer .jobType": {
       fontSize: "14px",
       padding: "5px 8px",
@@ -132,7 +133,6 @@ export const HeaderContainer = styled("div", {
     },
   },
   "@bp1": {
-    gap: "4px",
     "& .jobTypesContainer": {
       gap: "6px",
       "& .jobType": {
@@ -235,8 +235,8 @@ export const ContentContainer = styled("div", {
           },
           "& .description": {
             fontSize: "15px",
-          }
-        }
+          },
+        },
       },
     },
   },
@@ -253,11 +253,11 @@ export const ContentContainer = styled("div", {
           "& .description": {
             fontSize: "14px",
             lineHeight: "18px",
-          }
-        }
-      }
-    }
-  }
+          },
+        },
+      },
+    },
+  },
 });
 
 export const ImageSliderContainer = styled("div", {
@@ -479,7 +479,6 @@ export const BasicInfoContainer = styled("div", {
   "@bp6": {
     gap: "8px",
     "& .item": {
-      gap: "10px",
       "& .main": {
         fontSize: "17px",
         "& svg": {
@@ -509,18 +508,18 @@ export const BasicInfoContainer = styled("div", {
       "& .main": {
         fontSize: "15px",
       },
-    }
+    },
   },
   "@bp1": {
     gap: "4px",
     "& .item": {
-      gap: "8px",
+      gap: "7px",
       "& .main": {
         fontSize: "14px",
         gap: "7px",
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 export const InteractionContainer = styled("div", {
@@ -567,7 +566,7 @@ export const InteractionContainer = styled("div", {
   },
   "@bp4": {
     "& .interaction svg": {
-        width: "55px",
+      width: "55px",
     },
   },
   "@bp3": {
@@ -591,7 +590,7 @@ export const InteractionContainer = styled("div", {
       },
       "& svg": {
         width: "47px",
-      }
+      },
     },
   },
 });

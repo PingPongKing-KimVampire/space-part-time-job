@@ -66,36 +66,37 @@ export const ProfileContainer = styled("div", {
       aspectRatio: "1/1",
     },
     "& .profileIcon": {
-      height: "120px",
       width: "120px",
-      minHeight: "120px",
       minWidth: "120px",
     },
   },
   "@bp3": {
-    gap: "20px",
-    margin: "60px 0 45px",
+    gap: "15px",
+    margin: "50px 0 20px",
     "& .content": {
       flexDirection: "column",
       "& .profileIcon": {
-        marginBottom: "15px",
-        height: "150px",
-        width: "150px",
-        minHeight: "150px",
-        minWidth: "150px",
+        marginBottom: "8px",
+        width: "130px",
+        minWidth: "130px",
       },
     },
   },
+  "@bp2": {
+    gap: "6px",
+    margin: "40px 0 17px",
+    "& .content .profileIcon": {
+      width: "115px",
+      minWidth: "115px",
+    },
+  },
   "@bp1": {
-    gap: "15px",
-    margin: "40px 0 32px",
+    margin: "32px 0 17px",
     "& .content": {
       "& .profileIcon": {
         marginBottom: "10px",
-        height: "120px",
-        width: "120px",
-        minHeight: "120px",
-        minWidth: "120px",
+        width: "105px",
+        minWidth: "105px",
       },
     },
   },

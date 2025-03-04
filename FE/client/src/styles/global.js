@@ -124,6 +124,27 @@ export const CloseTag = styled("div", {
   color: "#7C7C7C",
   fontWeight: "bold",
   whiteSpace: "nowrap",
+  "&.inViewJob": {
+    fontSize: "18px",
+    padding: "9px 13px",
+    borderRadius: "12px",
+    "@bp5": {
+      fontSize: "17px",
+      padding: "8.5px 12px",
+      borderRadius: "10px",
+    },
+    "@bp4": {
+      padding: "7px 11px",
+    },
+    "@bp3": {
+      fontSize: "15px",
+    },
+    "@bp2": {
+      padding: "6px 9.5px",
+      borderRadius: "8px",
+      fontSize: "14px",
+    },
+  },
 });
 
 export const ellipsisStyle = {

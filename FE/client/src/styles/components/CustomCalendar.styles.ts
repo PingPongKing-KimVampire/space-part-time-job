@@ -10,29 +10,37 @@ export const Container = styled("div", {
     fontWeight: "bold",
     padding: "15px",
   },
+  "&.inViewJob": {
+    width: "400px",
+    "@bp5": {
+      width: "360px",
+    },
+  },
   "&.inCreateJob": {
-    marginTop: "-35px",
-    width: "350px",
+    marginTop: "-40px",
+    width: "calc(300px + 20%)",
+    "@bp3": {
+      marginTop: "-30px",
+      gap: "4px",
+    },
     "@bp2": {
       marginTop: "-25px",
-      gap: "6px",
+      width: "100%",
       "& .title": {
-        fontSize: "16px",
+        fontSize: "17px",
         padding: "10px",
       },
       "& .dateItem": {
-        padding: "6px",
-        fontSize: "14px",
+        padding: "9px",
+        fontSize: "15px",
       },
     },
     "@bp1": {
-      width: "280px",
       "& .title": {
-        fontSize: "14px",
-        padding: "8px",
+        fontSize: "15px",
       },
       "& .dateItem": {
-        padding: "4px",
+        padding: "6px",
         fontSize: "13px",
       },
     },

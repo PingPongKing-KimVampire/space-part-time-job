@@ -26,8 +26,10 @@ const Header = () => {
         ))}
       </div>
       <div className="title">
-        {status === JOB_POST_STATUS.CLOSE && <CloseTag>마감</CloseTag>}
-        {title}
+        {status === JOB_POST_STATUS.CLOSE && (
+          <CloseTag className="inViewJob">마감</CloseTag>
+        )}
+        <div className="titleText">{title}</div>
       </div>
       <div className="subInfo">
         {`${createdAt} 전  ·  조회 ${views}  ·  관심 ${interestedCount}  ·  지원 ${

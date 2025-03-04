@@ -188,6 +188,7 @@ export const LoginButton = styled("button", {
 
 export const SignupMessage = styled("div", {
   marginTop: "20px",
+  marginBottom: "40px",
   color: SubColor,
   "& span": {
     color: "white",

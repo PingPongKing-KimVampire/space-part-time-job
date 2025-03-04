@@ -166,18 +166,7 @@ const SetNeighborhoodScopePage = () => {
   return (
     <Background>
       {setResidentNeighborhoodLoading && <LoadingOverlay />}
-      <CustomMap
-        style={{
-          position: "absolute",
-          top: "0",
-          left: "0",
-          height: "100%",
-          width: "100%",
-          zIndex: "0",
-          boxSizing: "border-box",
-        }}
-        polygonLine={polygonLine}
-      />
+      <CustomMap className="inSetNeighborhoodScope" polygonLine={polygonLine} />
       <Container>
         <ScopeSettingContainer>
           <NeighborhoodsContainer>

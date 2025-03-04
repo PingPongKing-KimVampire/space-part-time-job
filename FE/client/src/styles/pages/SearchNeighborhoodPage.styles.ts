@@ -5,6 +5,7 @@ import {
   SubColor,
   SubHoverColor,
   skeletonStyle,
+  ellipsisStyle,
 } from "../global";
 
 export const Background = styled("div", {
@@ -96,6 +97,7 @@ export const SelectedContainer = styled("div", {
   },
   "& .searchItem": {
     ...itemStyle,
+    ...ellipsisStyle,
     background: `${SubColor} !important`,
     color: `black !important`,
     border: `none !important`,
@@ -110,13 +112,14 @@ export const SelectedContainer = styled("div", {
     gap: "7px",
     "& .searchItem": {
       fontSize: "15px",
+      padding: "14px",
     },
   },
 });
 
 export const ResultContainer = styled("div", {
   marginTop: "20px",
-  "& .searchItem": { ...itemStyle, marginBottom: "10px" },
+  "& .searchItem": { ...itemStyle, ...ellipsisStyle, marginBottom: "10px" },
   "& .loadingItem": {
     width: "100%",
     height: "52.5px",

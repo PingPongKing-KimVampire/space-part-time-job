@@ -6,10 +6,11 @@ type CustomMapProps = {
   style?: Record<string, string>;
   polygonLine?: Coordinate[];
   markerAddress?: string;
+  className?: string;
 };
 
 const CustomMap: React.FC<CustomMapProps> = (props) => {
-  const { style = {}, polygonLine = [], markerAddress } = props;
+  const { style = {}, polygonLine = [], markerAddress, className = "" } = props;
   const mapContainerRef = useRef(null);
   const mapRef = useRef<kakao.maps>(null);
   const polygonRef = useRef<kakao.maps.Polygon>(null);
@@ -91,7 +92,9 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
     updateMarker(markerAddress);
   }, [markerAddress]);
 
-  return <Container ref={mapContainerRef} style={style} />;
+  return (
+    <Container className={className} ref={mapContainerRef} style={style} />
+  );
 };
 
 export default CustomMap;

@@ -183,10 +183,20 @@ export const PlaceContainer = styled("div", {
       },
     },
   },
+  "@bp2": {
+    "& .exposurePanel": {
+      padding: "14px",
+      fontSize: "15px",
+    },
+  },
+  "@bp3": {
+    "& .exposurePanel": {
+      padding: "12px 14px",
+    },
+  },
 });
 export const ArrowDownIcon = styled(ArrowDown, {
   width: "26px",
-  height: "26px",
   strokeWidth: "1.6",
   color: "#7C7C7C",
   position: "absolute",
@@ -203,6 +213,10 @@ export const ArrowDownIcon = styled(ArrowDown, {
         transform: "translateY(-50%)",
       },
     },
+  },
+  "@bp1": {
+    width: "24px",
+    marginRight: "-4px",
   },
 });
 
@@ -300,6 +314,10 @@ export const PhotoContainer = styled("div", {
         },
       },
     },
+  },
+  "@bp2": {
+    marginTop: "-10px",
+    height: "calc(15vw + 30px)",
   },
 });
 

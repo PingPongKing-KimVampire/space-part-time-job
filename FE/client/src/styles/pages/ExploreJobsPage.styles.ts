@@ -85,6 +85,10 @@ export const Container = styled("div", {
         tansition: "translateY(-50%)",
       },
     },
+    "& .createJobButton": {
+      bottom: "calc(20px + 1vw)",
+      right: "calc(20px + 1vw)",
+    },
   },
   "@bp3": {
     "& .filterButton": {
@@ -95,8 +99,13 @@ export const Container = styled("div", {
         width: "18px",
       },
     },
+    "& .createJobButton svg": {
+      width: "32px",
+      height: "32px",
+    },
   },
   "@bp2": {
+    marginTop: "30px",
     "& .filterButton": {
       gap: "2px",
       fontSize: "13px",
@@ -107,8 +116,13 @@ export const Container = styled("div", {
     },
   },
   "@bp1": {
+    marginTop: "24px",
     "& .filterButton": {
       padding: "5px 9px 5px 7px",
+    },
+    "& .createJobButton svg": {
+      width: "28px",
+      height: "28px",
     },
   },
 });
@@ -284,10 +298,10 @@ export const ContentContainer = styled("div", {
   display: "flex",
   justifyContent: "flex-start",
   "@bp4": {
-    marginTop: "-10px",
+    marginTop: "0",
   },
-  "@bp3": {
-    marginTop: "-15px",
+  "@bp1": {
+    marginTop: "-10px",
   },
 });
 
@@ -568,7 +582,7 @@ export const JobListContainer = styled("div", {
   },
   "@bp5": {
     marginLeft: "300px",
-    marginBottom: "40px !important",
+    marginBottom: "40px",
     "& .jobList": {
       minHeight: "550px",
     },
@@ -576,7 +590,7 @@ export const JobListContainer = styled("div", {
   "@bp4": {
     gap: "0px",
     width: "95%",
-    margin: "auto",
+    margin: "0 auto 40px",
     "& .jobList": {
       minHeight: "auto",
       "& .noJobNotice": {
@@ -591,8 +605,12 @@ export const JobListContainer = styled("div", {
         fontSize: "18px",
       },
     },
+    "& .jobList": {
+      gap: "20px",
+    },
   },
   "@bp2": {
+    marginBottom: "25px",
     "& .noJobNotice": {
       height: "calc(100vh - 280px)",
     },
@@ -603,6 +621,9 @@ export const JobListContainer = styled("div", {
       "& .count": {
         fontSize: "16px",
       },
+    },
+    "& .jobList": {
+      marginTop: "15px",
     },
   },
 });
@@ -634,15 +655,18 @@ export const JobItemContainer = styled("div", {
     position: "absolute",
     bottom: "0",
   },
-  "@bp3": {
+  "@bp4": {
     height: "140px",
+  },
+  "@bp3": {
+    height: "110px",
     "& .imageBox": {
       height: "80%",
       aspectRatio: "1.1/1",
     },
   },
   "@bp1": {
-    height: "125px",
+    height: "100px",
     "& .imageBox": {
       display: "none",
     },
@@ -686,6 +710,7 @@ export const JobItemContextBox = styled("div", {
     },
   },
   "@bp3": {
+    padding: "0 0 20px",
     "&.photoExists": {
       width: "calc(100% - 170px)",
     },
@@ -711,7 +736,6 @@ export const JobItemContextBox = styled("div", {
     "&.photoExists": {
       width: "100%",
     },
-    padding: "25px 0",
     "& .mainInfo": {
       "& .title": {
         fontSize: "18px",

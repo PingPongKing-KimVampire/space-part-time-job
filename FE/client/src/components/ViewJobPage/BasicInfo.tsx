@@ -43,7 +43,7 @@ const BasicInfo = () => {
         dates={dates || new Set()}
         lastDate={lastDate}
         isTitleVisible={false}
-        style={{ width: "70%" }}
+        className="inViewJob"
       />
     );
   }, [workPeriod]);
@@ -59,10 +59,7 @@ const BasicInfo = () => {
         detail={{
           name: "지도",
           element: (
-            <CustomMap
-              style={{ boxShadow: "none" }}
-              markerAddress={addressName}
-            />
+            <CustomMap className="inViewJob" markerAddress={addressName} />
           ),
         }}
       />
