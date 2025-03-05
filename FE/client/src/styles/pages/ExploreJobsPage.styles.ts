@@ -394,25 +394,6 @@ export const JobFilterContainer = styled("div", {
         "& label": {
           fontSize: "18px",
         },
-        "& .timeRangeContainer": {
-          "&.hasMarginBottom": {
-            marginBottom: "175px",
-          },
-          "& .waveSymbol": {
-            fontSize: "20px",
-          },
-          "& .timeInputButton": {
-            padding: "12px",
-            fontSize: "15px",
-          },
-          "& .selectBox": {
-            height: "160px",
-            "& .optionButton": {
-              padding: "7px",
-              fontSize: "14px",
-            },
-          },
-        },
       },
     },
   },
@@ -438,21 +419,6 @@ export const JobFilterContainer = styled("div", {
           gap: "11px !important",
           "& label": {
             fontSize: "17px !important",
-          },
-          "& .timeRangeContainer": {
-            "&.hasMarginBottom": {
-              marginBottom: "155px",
-            },
-            "& .waveSymbol": {
-              fontSize: "18px",
-            },
-            "& .timeInputButton": {
-              padding: "10px",
-              fontSize: "14px",
-            },
-            "& .selectBox": {
-              height: "140px",
-            },
           },
         },
       },
@@ -487,25 +453,6 @@ export const JobFilterContainer = styled("div", {
           gap: "10px !important",
           "& label": {
             fontSize: "15px !important",
-          },
-          "& .timeRangeContainer": {
-            "&.hasMarginBottom": {
-              marginBottom: "145px",
-            },
-            "& .waveSymbol": {
-              fontSize: "16px",
-            },
-            "& .timeInputButton": {
-              padding: "9px",
-              fontSize: "13px",
-            },
-            "& .selectBox": {
-              height: "130px",
-              "& .optionButton": {
-                fontSize: "13px",
-                padding: "5px",
-              },
-            },
           },
         },
       },

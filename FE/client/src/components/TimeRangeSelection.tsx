@@ -10,7 +10,7 @@ import { START_TIMES, END_TIMES, TIME_NOT_SET } from "../constants/constants";
 const TimeRangeSelection = ({
   time,
   setTime,
-  isMini = false,
+  className = "",
   notSetPossible = false,
 }) => {
   const [isSelecting, setIsSelecting] = useState({
@@ -25,9 +25,7 @@ const TimeRangeSelection = ({
 
   return (
     <Container
-      className={`timeRangeContainer ${
-        isSelectingOne ? "hasMarginBottom" : ""
-      } ${isMini ? "isMini" : ""}`}
+      className={`${isSelectingOne ? "hasMarginBottom" : ""} ${className}`}
     >
       <TimeSelection
         label="시작"
@@ -39,10 +37,10 @@ const TimeRangeSelection = ({
         setIsSelecting={(isSelecting) =>
           setIsSelecting((state) => ({ ...state, start: isSelecting }))
         }
-        isMini={isMini}
+        className={className}
         notSetPossible={notSetPossible}
       />
-      <div className={`waveSymbol ${isMini ? "isMini" : ""}`}>~</div>
+      <div className="waveSymbol">~</div>
       <TimeSelection
         label="종료"
         time={time.end}
@@ -53,7 +51,7 @@ const TimeRangeSelection = ({
         setIsSelecting={(isSelecting) =>
           setIsSelecting((state) => ({ ...state, end: isSelecting }))
         }
-        isMini={isMini}
+        className={className}
         notSetPossible={notSetPossible}
       />
     </Container>
@@ -67,8 +65,8 @@ const TimeSelection = (props) => {
     setTime,
     isSelecting,
     setIsSelecting,
-    isMini,
     notSetPossible,
+    className,
   } = props;
   const TIMES = label === "시작" ? START_TIMES : END_TIMES;
 
@@ -84,20 +82,14 @@ const TimeSelection = (props) => {
   };
 
   return (
-    <TimeSelectionContainer>
-      <button
-        className={`timeInputButton ${isMini ? "isMini" : ""}`}
-        onClick={onTimeInputClick}
-      >
+    <TimeSelectionContainer className={className}>
+      <button className="timeInputButton" onClick={onTimeInputClick}>
         {time}
-        <ArrowDownIcon
-          className={isMini ? "isMini" : ""}
-          isSelected={isSelecting}
-        />
+        <ArrowDownIcon className={className} isSelected={isSelecting} />
       </button>
-      {!isMini && <label>{label}</label>}
+      {className !== "inExploreJobs" && <label>{label}</label>}
       {isSelecting && (
-        <SelectBox className={`selectBox ${isMini ? "isMini" : ""}`}>
+        <SelectBox className={className}>
           {notSetPossible && (
             <button
               className="optionButton"

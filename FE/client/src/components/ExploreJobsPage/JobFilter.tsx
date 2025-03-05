@@ -207,8 +207,8 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
           <TimeRangeSelection
             time={isModal ? modalValue.time : time}
             setTime={setTime}
-            isMini={true}
             notSetPossible={true}
+            className="inExploreJobs"
           />
         </FilterField>
       </div>

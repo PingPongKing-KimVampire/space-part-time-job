@@ -32,6 +32,7 @@ const TimeField = () => {
             setTime={(getNewTime) => {
               setInput((state) => ({ ...state, time: getNewTime(state.time) }));
             }}
+            className="inCreateJob"
           />
         )}
       </TimeContainer>

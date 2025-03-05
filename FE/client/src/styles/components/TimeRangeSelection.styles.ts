@@ -8,56 +8,135 @@ export const Container = styled("div", {
   alignItems: "center",
   width: "100%",
   transition: "margin-bottom 0.2s",
-  "&:not(.isMini)": {
+  "&.inCreateJob": {
     marginTop: "20px",
+    "&.hasMarginBottom": {
+      marginBottom: "215px",
+    },
+    "& .waveSymbol": {
+      fontSize: "30px",
+      fontWeight: "300",
+    },
+    "@bp2": {
+      "& .waveSymbol": {
+        fontSize: "24px",
+      },
+    },
+    "@bp1": {
+      "& .waveSymbol": {
+        fontSize: "18px",
+      },
+    },
   },
-  "&.hasMarginBottom": {
-    marginBottom: "215px",
-    "&.isMini": {
-      marginBottom: "135px",
+  "&.inExploreJobs": {
+    "&.hasMarginBottom": {
+      marginBottom: "170px",
+    },
+    "& .waveSymbol": {
+      fontSize: "20px",
+    },
+    "@bp5": {
+      "&.hasMarginBottom": {
+        marginBottom: "128px",
+      },
+      "& .waveSymbol": {
+        fontSize: "16px",
+      },
+    },
+    "@bp4": {
+      "&.hasMarginBottom": {
+        marginBottom: "155px",
+      },
+      "& .waveSymbol": {
+        fontSize: "20px",
+      },
+    },
+    "@bp1": {
+      "&.hasMarginBottom": {
+        marginBottom: "145px",
+      },
+      "& .waveSymbol": {
+        fontSize: "18px",
+      },
     },
   },
   "& .waveSymbol": {
-    fontSize: "30px",
-    fontWeight: "300",
     color: "#B2B2B2",
-    "&.isMini": {
-      fontSize: "12px",
-      fontWeight: "500",
-    },
-  },
-  "@bp2": {
-    "& .waveSymbol": {
-      fontSize: "24px",
-    },
-  },
-  "@bp1": {
-    "& .waveSymbol": {
-      fontSize: "18px",
-    },
   },
 });
 
 export const TimeSelectionContainer = styled("div", {
   width: "47%",
   position: "relative",
+  "&.inCreateJob": {
+    "& .timeInputButton": {
+      padding: "17px",
+      fontSize: "18px",
+      borderRadius: "16px",
+    },
+    "@bp2": {
+      "& .timeInputButton": {
+        padding: "14px",
+        fontSize: "16px",
+      },
+      "& label": {
+        top: "-20px",
+      },
+    },
+    "@bp1": {
+      "& .timeInputButton": {
+        padding: "12px",
+        fontSize: "14px",
+        borderRadius: "12px",
+      },
+      "& label": {
+        fontSize: "12px",
+        top: "-18px",
+      },
+    },
+  },
+  "&.inExploreJobs": {
+    width: "46%",
+    "& .timeInputButton": {
+      padding: "10px",
+      fontSize: "15px",
+      borderRadius: "10px",
+    },
+    "@bp5": {
+      "& .timeInputButton": {
+        padding: "8px",
+        fontSize: "13px",
+      },
+    },
+    "@bp4": {
+      width: "47%",
+      "& .timeInputButton": {
+        padding: "12px",
+        fontSize: "16px",
+      },
+    },
+    "@bp3": {
+      "& .timeInputButton": {
+        padding: "10px",
+        fontSize: "15px",
+      },
+    },
+    "@bp1": {
+      "& .timeInputButton": {
+        padding: "9.5px",
+        fontSize: "14px",
+      },
+    },
+  },
   "& .timeInputButton": {
     width: "100%",
     position: "relative",
     background: "none",
     border: "1px solid #B2B2B2",
-    padding: "17px",
-    fontSize: "18px",
     boxSizing: "border-box",
     cursor: "pointer",
     textAlign: "left",
-    borderRadius: "16px",
     transition: "background 0.2s",
-    "&.isMini": {
-      padding: "8px",
-      fontSize: "13px",
-      borderRadius: "10px",
-    },
     "&:hover": {
       background: SubColor,
     },
@@ -69,37 +148,15 @@ export const TimeSelectionContainer = styled("div", {
     color: "#9A9A9A",
     fontSize: "14px",
   },
-  "@bp2": {
-    "& .timeInputButton": {
-      padding: "14px",
-      fontSize: "16px",
-    },
-    "& label": {
-      top: "-20px",
-    },
-  },
-  "@bp1": {
-    "& .timeInputButton": {
-      padding: "12px",
-      fontSize: "14px",
-    },
-    "& label": {
-      fontSize: "12px",
-      top: "-18px",
-    },
-  },
 });
 
 // TODO : ArrowDownIcon 하나로 만들어서 재사용하자.
 export const ArrowDownIcon = styled(ArrowDown, {
-  width: "30px",
-  height: "30px",
   strokeWidth: "0.8",
   color: "#7C7C7C",
   position: "absolute",
   top: "50%",
   transform: "translateY(-50%)",
-  right: "15px",
   transition: "transform 0.2s",
   variants: {
     isSelected: {
@@ -111,38 +168,107 @@ export const ArrowDownIcon = styled(ArrowDown, {
       },
     },
   },
-  "&.isMini": {
+  "&.inCreateJob": {
+    width: "30px",
+    height: "30px",
+    strokeWidth: "0.8",
+    right: "15px",
+    "@bp2": {
+      width: "26px",
+      height: "26px",
+      right: "10px",
+    },
+    "@bp1": {
+      width: "22px",
+      height: "22px",
+    },
+  },
+  "&.inExploreJobs": {
     width: "18px",
     height: "18px",
     right: "7px",
     strokeWidth: "1",
-  },
-  "@bp2": {
-    width: "26px",
-    height: "26px",
-    right: "10px",
-  },
-  "@bp1": {
-    width: "22px",
-    height: "22px",
+    "@bp5": {
+      width: "16px",
+      height: "16px",
+      right: "6px",
+    },
+    "@bp4": {
+      width: "20px",
+      height: "20px",
+      right: "9px",
+    },
   },
 });
 
 export const SelectBox = styled("div", {
   position: "absolute",
-  top: "130%",
   left: "0",
   width: "100%",
-  height: "200px",
   overflow: "auto",
   borderRadius: "14px",
-  padding: "6px",
   border: "1px solid #B2B2B2",
   boxSizing: "border-box",
+  "&.inCreateJob": {
+    height: "200px",
+    padding: "6px",
+    top: "130%",
+    "& .optionButton": {
+      padding: "8px",
+      fontSize: "16px",
+    },
+    "@bp2": {
+      padding: "4px",
+      "& .optionButton": {
+        padding: "7px",
+        fontSize: "14px",
+      },
+    },
+    "@bp1": {
+      "& .optionButton": {
+        padding: "5px",
+        fontSize: "12px",
+      },
+    },
+  },
+  "&.inExploreJobs": {
+    height: "160px",
+    padding: "3px",
+    top: "120%",
+    "& .optionButton": {
+      padding: "7px",
+      fontSize: "14px",
+    },
+    "@bp5": {
+      height: "120px",
+      "& .optionButton": {
+        padding: "5px",
+        fontSize: "13px",
+      },
+    },
+    "@bp4": {
+      height: "145px",
+      "& .optionButton": {
+        padding: "7px",
+        fontSize: "15px",
+      },
+    },
+    "@bp3": {
+      "& .optionButton": {
+        padding: "6px",
+        fontSize: "14px",
+      },
+    },
+    "@bp1": {
+      height: "130px",
+      "& .optionButton": {
+        fontSize: "13px",
+        padding: "5px",
+      },
+    },
+  },
   "& .optionButton": {
     width: "100%",
-    padding: "8px",
-    fontSize: "16px",
     borderRadius: "10px",
     border: "none",
     background: "none",
@@ -155,29 +281,7 @@ export const SelectBox = styled("div", {
       color: "black",
     },
   },
-  "&.isMini": {
-    height: "130px",
-    padding: "3px",
-    top: "120%",
-    "& .optionButton": {
-      padding: "5px",
-      fontSize: "13px",
-    },
-  },
   "&::-webkit-scrollbar": {
     display: "none",
-  },
-  "@bp2": {
-    padding: "4px",
-    "& .optionButton": {
-      padding: "7px",
-      fontSize: "14px",
-    },
-  },
-  "@bp1": {
-    "& .optionButton": {
-      padding: "5px",
-      fontSize: "12px",
-    },
   },
 });
