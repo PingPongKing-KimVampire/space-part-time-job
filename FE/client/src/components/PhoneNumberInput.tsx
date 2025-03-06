@@ -47,7 +47,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
     <>
       <CustomInput
         id="phoneNumber"
-        placeholder="휴대전화번호 (- 없이 입력)"
+        placeholder="휴대전화번호"
         borderType={borderType}
         invalid={invalid}
         eventHandlers={{ onChange, onBlur }}

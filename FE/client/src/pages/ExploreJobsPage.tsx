@@ -8,7 +8,6 @@ import useDebounce from "../utils/useDebounce";
 import JobList from "../components/ExploreJobsPage/JobList";
 import JobFilter from "../components/ExploreJobsPage/JobFilter";
 import NeighborhoodButton from "../components/ExploreJobsPage/NeighborhoodSelector";
-import LoadingOverlay from "../components/LoadingOverlay";
 import {
   Background,
   Container,
@@ -113,7 +112,9 @@ const ExploreJobsPage = () => {
   }, [searchJobPostsError]);
 
   const fetchJobPosts = useCallback(
-    async (cursor): Promise<{ posts: JobPost[]; endCursor: string } | null> => {
+    async (
+      cursor
+    ): Promise<{ posts: JobPost[]; pageInfo: PageInfo } | null> => {
       const getProcessedTime = () => {
         if (
           filter.time.start === TIME_NOT_SET ||
@@ -156,7 +157,7 @@ const ExploreJobsPage = () => {
       };
       const pagination = { afterCursor: cursor, first: 20 };
       try {
-        const result: { posts: JobPost[]; endCursor: string } =
+        const result: { posts: JobPost[]; pageInfo: PageInfo } =
           await new Promise((resolve, reject) => {
             setSearchJobPostsLoading(true);
             searchJobPosts({
@@ -171,7 +172,7 @@ const ExploreJobsPage = () => {
                   }));
                   setPageInfo(pageInfo); // 페이지 정보 저장
                   setTotalCount(totalCount); // 총 개수 저장
-                  resolve({ posts, endCursor: pageInfo.endCursor });
+                  resolve({ posts, pageInfo });
                 } catch (e) {
                   reject(e);
                 }
@@ -204,9 +205,10 @@ const ExploreJobsPage = () => {
     const setupJobPosts = async () => {
       const firstResult = await fetchJobPosts(null);
       if (!firstResult) return;
-      const { posts: firstPosts, endCursor } = firstResult;
+      const { posts: firstPosts, pageInfo } = firstResult;
       setJobPosts(firstPosts);
-      const secondResult = await fetchJobPosts(endCursor);
+      if (!pageInfo.hasNextPage) return;
+      const secondResult = await fetchJobPosts(pageInfo.endCursor);
       if (!secondResult) return;
       const { posts: secondPosts } = secondResult;
       setNextJobPosts(secondPosts);

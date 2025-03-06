@@ -11,7 +11,7 @@ export const ERROR = {
     INVALID_ID_PW: "* 아이디 또는 비밀번호가 유효하지 않습니다.",
     PHONE_NUMBER_NOT_EXIST: "* 가입되지 않은 휴대폰 번호입니다.",
     ENTER_PHONE_NUMBER: "* 휴대폰 번호를 입력해주세요.",
-    ENTER_ID: "* 휴대폰 번호를 입력해주세요.",
+    ENTER_ID: "* 아이디를 입력해주세요.",
     ENTER_PW: "* 비밀번호를 입력해주세요.",
     ENTER_AUTH_NUMBER: "* 인증번호를 입력해 주세요.",
   },

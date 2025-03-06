@@ -10,7 +10,9 @@ const LevelSlider = ({ level, value, setValue }) => {
     setValue(e.target.value);
   };
 
-  const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
+  const onSliderChangeEnd = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>
+  ) => {
     const calculateLevel = (value: string): string => {
       const intValue = parseInt(value);
       const limitValues = new Array(level - 1)
@@ -34,7 +36,8 @@ const LevelSlider = ({ level, value, setValue }) => {
           step="1"
           value={value || "0"}
           onChange={onChange}
-          onMouseUp={onMouseUp}
+          onMouseUp={onSliderChangeEnd}
+          onTouchEnd={onSliderChangeEnd}
         />
         <MarkersContainer>
           {Array.from({ length: level }).map((_, index) => {

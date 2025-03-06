@@ -20,6 +20,7 @@ const AuthRoute = () => {
       if (!data?.me?.id) navigate("/login");
     },
     onError: () => {
+      setLoading(false);
       navigate("/login");
     },
   });

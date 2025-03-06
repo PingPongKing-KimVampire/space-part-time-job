@@ -16,6 +16,7 @@ export const Background = styled("div", {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  overflowX: "hidden",
   [`@media (max-height: ${flexStartHeight})`]: {
     alignItems: "flex-start",
   },
@@ -515,7 +516,9 @@ export const BasicInfoContainer = styled("div", {
     gap: "8px",
     "& .item": {
       "& .main": {
-        fontSize: "17px",
+        "& .infoText": {
+          fontSize: "17px",
+        },
         "& svg": {
           width: "24px",
           height: "24px",
@@ -530,7 +533,9 @@ export const BasicInfoContainer = styled("div", {
     gap: "7px",
     "& .item": {
       "& .main": {
-        fontSize: "16px",
+        "& .infoText": {
+          fontSize: "16px",
+        },
         "& .hoverTarget": {
           padding: "5.5px 7px",
         },
@@ -541,7 +546,9 @@ export const BasicInfoContainer = styled("div", {
     gap: "6px",
     "& .item": {
       "& .main": {
-        fontSize: "15px",
+        "& .infoText": {
+          fontSize: "15px",
+        },
       },
     },
   },
