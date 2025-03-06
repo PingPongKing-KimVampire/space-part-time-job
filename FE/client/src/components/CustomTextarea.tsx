@@ -14,10 +14,17 @@ type CustomTextareaProps = {
     onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   };
   maxLength?: number;
+  className?: string;
 };
 
 const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
-  const { placeholder, value, eventHandlers = {}, maxLength = 200 } = props;
+  const {
+    placeholder,
+    value,
+    eventHandlers = {},
+    maxLength = 200,
+    className = "",
+  } = props;
   const { onFocus, onChange, onBlur } = eventHandlers;
 
   return (
@@ -30,8 +37,9 @@ const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
         onChange={onChange}
         onBlur={onBlur}
         maxLength={maxLength}
+        className={className}
       />
-      <CharCounter className="charCounter">
+      <CharCounter className={className}>
         <span>{[...value].length}</span>/{maxLength}
       </CharCounter>
     </Container>

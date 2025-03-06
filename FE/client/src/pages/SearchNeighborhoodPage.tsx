@@ -182,6 +182,7 @@ const SearchNeighborhoodPage = () => {
             },
           }}
           maxLength={20}
+          className="inSearchNeighborhood"
         />
         {totalNeighborhoods.error && <WarningText>{ERROR.SERVER}</WarningText>}
         {getResidentError && (

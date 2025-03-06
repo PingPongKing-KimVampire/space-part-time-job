@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Input } from "../styles/components/CustomInput.styles.ts";
+import { Container, Input } from "../styles/components/CustomInput.styles.ts";
 
 export type InputProps = {
   id: string;
@@ -10,10 +10,10 @@ export type InputProps = {
   value: string;
   eventHandlers?: EventHandlers;
   children?: React.ReactNode;
-  width?: string;
   maxLength?: number;
   disabled?: boolean;
   readOnly?: boolean;
+  className?: string;
 };
 
 export type EventHandlers = {
@@ -32,19 +32,18 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     value,
     eventHandlers = {},
     children,
-    width = "100%",
     maxLength = 50,
     disabled = false,
     readOnly = false,
+    className = "",
   } = props;
   const { onChange, onFocus, onBlur } = eventHandlers;
   return (
-    <div style={{ position: "relative", width }}>
+    <Container>
       <Input
         ref={ref}
-        style={{ width: "100%" }}
         id={id}
-        className={invalid ? "invalid" : ""}
+        className={`${className} ${invalid ? "invalid" : ""}`}
         type={type}
         placeholder={placeholder}
         borderType={borderType}
@@ -56,9 +55,9 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         disabled={disabled}
         readOnly={readOnly}
         autoComplete="off"
-      ></Input>
+      />
       {children}
-    </div>
+    </Container>
   );
 });
 

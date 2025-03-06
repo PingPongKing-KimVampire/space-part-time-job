@@ -99,6 +99,7 @@ const PhoneNumberSection = (props) => {
           value={inputValue.phoneNumber}
           setValue={(value) => updateValue("phoneNumber", value)}
           onBlurStart={onPhoneNumberInputBlurStart}
+          className="inSignup"
         />
         <SendNumberButton
           onClick={sendNumberButtonClicked}
@@ -128,6 +129,7 @@ const PhoneNumberSection = (props) => {
                 checkValidation("smsCode", e.target.value);
               },
             }}
+            className="inSignup"
           />
         )}
       </PhoneNumberContainer>

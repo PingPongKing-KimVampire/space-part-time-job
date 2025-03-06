@@ -22,6 +22,7 @@ const PeriodField = () => {
         options={Object.values(PERIOD)}
         onClick={onPeriodClick}
         isSelected={(period) => period === input.period}
+        className="inCreateJob"
       />
     </FormField>
   );

@@ -41,6 +41,7 @@ const DescriptionField = () => {
         value={input.description}
         eventHandlers={{ onFocus, onChange, onBlur }}
         maxLength={2000}
+        className="inCreateJob"
       />
     </FormField>
   );

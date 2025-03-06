@@ -5,6 +5,17 @@ export const Container = styled("div", {
   flexDirection: "row",
   flexWrap: "wrap",
   gap: "9px 7px",
+  "&.inCreateJob": {
+    "@bp1": {
+      gap: "7px 5px",
+    },
+  },
+  "&.inExploreJobs": {
+    gap: "8px 5px",
+    "@bp1": {
+      gap: "7px 5px",
+    },
+  },
 });
 
 export const Option = styled("button", {
@@ -30,6 +41,21 @@ export const Option = styled("button", {
     "&:hover": {
       background: MainHoverColor,
       borderColor: MainHoverColor,
+    },
+  },
+  "&.inCreateJob": {
+    "@bp1": {
+      fontSize: "15px",
+      padding: "4px 9px",
+    },
+  },
+  "&.inExploreJobs": {
+    fontSize: "15px",
+    fontWeight: "500",
+    padding: "5px 10px",
+    "@bp1": {
+      fontSize: "14px",
+      padding: "4px 8px",
     },
   },
 });

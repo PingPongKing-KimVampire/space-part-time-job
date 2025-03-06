@@ -17,15 +17,6 @@ export const Container = styled("div", {
   "@bp3": {
     width: "85%",
   },
-  "@bp2": {
-    "& input": {
-      padding: "15px",
-      fontSize: "15px",
-      "&::placeholder": {
-        fontSize: "15px",
-      },
-    },
-  },
 });
 
 export const PhoneNumberContainer = styled("div", {

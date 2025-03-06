@@ -147,6 +147,7 @@ const PayField = () => {
           options={Object.values(VISIBLE_PAY_TYPES)}
           isSelected={(type) => type === input.pay.type}
           onClick={onPayTypeClick}
+          className="inCreateJob"
         />
         <CustomInput
           id="pay"
@@ -161,6 +162,7 @@ const PayField = () => {
             onBlur: onPayAmountBlur,
             onFocus: onPayAmountFocus,
           }}
+          className="inCreateJob"
         >
           <div className="unit">
             {input.pay.type === PAY_TYPES.MONTHLY ? "만원" : "원"}

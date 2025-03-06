@@ -36,6 +36,7 @@ const JobTypesField = () => {
         options={Object.values(JOB_TYPES)}
         onClick={onJobTypeClick}
         isSelected={(jobType: string) => input.jobTypes.includes(jobType)}
+        className="inCreateJob"
       />
     </FormField>
   );

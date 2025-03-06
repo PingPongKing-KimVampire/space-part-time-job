@@ -28,6 +28,7 @@ const TitleField = () => {
             }));
           },
         }}
+        className="inCreateJob"
       />
     </FormField>
   );

@@ -68,6 +68,7 @@ const PlaceField = () => {
           value={input.place}
           readOnly={true}
           eventHandlers={{ onFocus }}
+          className="inCreateJob placeInput"
         />
         {input.place !== "" && (
           <>

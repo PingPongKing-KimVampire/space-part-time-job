@@ -99,7 +99,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
         ))}
         {visibleDates &&
           visibleDates.map((dateInfo, index) => {
-            const classNames = ["date"];
+            const classNames = [className];
             if (setDates && dateInfo.isSelectable)
               classNames.push("selectable");
             if (!setDates) {
@@ -120,7 +120,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
 
             return (
               <DateItem
-                className={`dateItem ${classNames.join(" ")}`}
+                className={classNames.join(" ")}
                 disabled={!setDates || !dateInfo.isSelectable}
                 key={dateInfo.dateString}
                 data-date={dateInfo.dateString}

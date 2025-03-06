@@ -25,6 +25,7 @@ const TimeField = () => {
           options={Object.values(WORKTIME_TYPES)}
           onClick={onTimeTypeSelected}
           isSelected={(type) => type === input.time.type}
+          className="inCreateJob"
         />
         {input.time.type === WORKTIME_TYPES.FIXED && (
           <TimeRangeSelection

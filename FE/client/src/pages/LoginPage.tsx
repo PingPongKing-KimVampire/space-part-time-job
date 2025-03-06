@@ -28,7 +28,7 @@ import {
   LOGIN_TAB,
 } from "../constants/constants";
 import { GET_RESIDENT_NEIGHBORHOOD } from "../api/graphql/queries.js";
-import { processGetResidentNeighborhood } from "../api/graphql/processData"; 
+import { processGetResidentNeighborhood } from "../api/graphql/processData";
 import logoImage from "../assets/images/logo.png";
 
 const LoginPage = (): React.JSX.Element => {
@@ -230,6 +230,7 @@ const LoginPage = (): React.JSX.Element => {
                       }));
                     },
                   }}
+                  className="inLogin"
                 />
                 <PasswordInput
                   id="password"
@@ -244,6 +245,7 @@ const LoginPage = (): React.JSX.Element => {
                       }));
                     },
                   }}
+                  className="inLogin"
                 />
               </div>
             )}
@@ -259,6 +261,7 @@ const LoginPage = (): React.JSX.Element => {
                     }));
                   }}
                   onBlurStart={onPhoneNumberInputBlurStart}
+                  className="inLogin"
                 >
                   <PhoneNumberInputChild>
                     <button
@@ -291,6 +294,7 @@ const LoginPage = (): React.JSX.Element => {
                       }));
                     },
                   }}
+                  className="inLogin"
                 />
               </div>
             )}

@@ -474,23 +474,6 @@ export const FilterField = styled("div", {
     fontSize: "16px",
     fontWeight: "600",
   },
-  "& .chips": {
-    gap: "8px 5px",
-    "& .option": {
-      fontSize: "15px",
-      fontWeight: "500",
-      padding: "5px 10px",
-    },
-  },
-  "@bp1": {
-    "& .chips": {
-      gap: "7px 5px",
-      "& .option": {
-        fontSize: "14px",
-        padding: "4px 8px",
-      },
-    },
-  },
 });
 
 export const JobListContainer = styled("div", {

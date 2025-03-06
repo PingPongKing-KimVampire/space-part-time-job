@@ -48,24 +48,11 @@ export const Container = styled("div", {
       display: "block",
     },
   },
-  "@bp2": {
-    "& input": {
-      // TODO : input 반응형은 LoginPage 스타일과 동일
-      padding: "15px",
-    },
-  },
   "@bp1": {
     "& .title": {
       fontSize: "26px",
       marginBottom: "20px",
       lineHeight: "35px",
-    },
-    "& input": {
-      padding: "13px",
-      fontSize: "16px",
-      "&::placeholder": {
-        fontSize: "16px",
-      },
     },
   },
   "@media(max-height: 800px)": {

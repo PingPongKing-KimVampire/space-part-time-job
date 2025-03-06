@@ -4,35 +4,24 @@ import { Container, Option } from "../styles/components/Chips.styles.ts";
 type ChipsPops = {
   id: string;
   options: string[];
-  // TODO : 이 물음표 없애야함
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  // option을 인자로 전달했을 때, selected 여부 반환
-  isSelected?: (day: string) => boolean;
-  containerStyle?: Record<string, string>;
-  optionStyle?: Record<string, string>;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  isSelected?: (day: string) => boolean; // option을 인자로 전달했을 때, selected 여부 반환
+  className?: string;
 };
 
 const Chips: React.FC<ChipsPops> = (props) => {
-  const {
-    id,
-    options,
-    onClick,
-    isSelected,
-    containerStyle = {},
-    optionStyle = {},
-  } = props;
+  const { id, options, onClick, isSelected, className = "" } = props;
 
   return (
-    <Container id={id} className="chips" style={containerStyle}>
+    <Container id={id} className={className}>
       {options &&
         options.map((option) => (
           <Option
-            className={`option ${
+            className={`${className} ${
               isSelected ? (isSelected(option) ? "selected" : "") : ""
             }`}
             key={option}
             onClick={onClick}
-            style={optionStyle}
           >
             {option}
           </Option>

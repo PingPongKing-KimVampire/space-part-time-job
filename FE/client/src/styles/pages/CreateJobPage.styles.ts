@@ -94,35 +94,12 @@ export const FormFieldContainer = styled("div", {
       fontSize: "18px",
     },
   },
-  "@bp2": {
-    "& input, & textarea": {
-      // TODO : 로그인 페이지와 동일
-      padding: "15px",
-    },
-  },
   "@bp1": {
     "& > label": {
       fontSize: "18px",
       marginBottom: "10px",
       "& span": {
         fontSize: "16px",
-      },
-    },
-    "& input, & textarea": {
-      padding: "13px",
-      fontSize: "16px",
-      "&::placeholder": {
-        fontSize: "16px",
-      },
-    },
-    "& .charCounter": {
-      display: "none",
-    },
-    "& .chips": {
-      gap: "7px 5px",
-      "& .option": {
-        fontSize: "15px",
-        padding: "4px 9px",
       },
     },
   },
@@ -145,9 +122,6 @@ export const PlaceContainer = styled("div", {
   flexDirection: "column",
   gap: "10px",
   width: "100%",
-  "& input": {
-    cursor: "pointer",
-  },
   "& .exposurePanel": {
     display: "flex",
     flexDirection: "column",

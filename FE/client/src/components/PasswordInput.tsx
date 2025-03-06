@@ -12,8 +12,8 @@ const PasswordInput: React.FC<InputProps> = (props) => {
     invalid = false,
     value,
     eventHandlers,
-    width = "100%",
     maxLength = 35,
+    className = "",
   } = props;
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 보이기 여부
@@ -32,8 +32,8 @@ const PasswordInput: React.FC<InputProps> = (props) => {
         invalid={invalid}
         value={value}
         eventHandlers={eventHandlers}
-        width={width}
         maxLength={maxLength}
+        className={className}
       >
         <EyeButton type="button" onClick={onPasswordVisibleButtonClick}>
           {isPasswordVisible ? <EyeSlashIcon /> : <EyeIcon />}

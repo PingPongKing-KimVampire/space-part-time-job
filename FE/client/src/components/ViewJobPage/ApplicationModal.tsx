@@ -66,6 +66,7 @@ const ApplicationModal = () => {
                 );
               },
             }}
+            className="inApplicationModal"
           />
         </div>
         {applyFinalError && (

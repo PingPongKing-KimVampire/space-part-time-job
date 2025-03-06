@@ -49,6 +49,7 @@ const UserInfoSection = (props) => {
             onChange: (e) => updateValue("id", e.target.value),
             onBlur: () => checkValidation("id"),
           }}
+          className="inSignup"
         />
         <PasswordInput
           id="password"
@@ -60,6 +61,7 @@ const UserInfoSection = (props) => {
             onChange: (e) => updateValue("password", e.target.value),
             onBlur: () => checkValidation("password"),
           }}
+          className="inSignup"
         />
         <CustomInput
           id="nickname"
@@ -71,6 +73,7 @@ const UserInfoSection = (props) => {
             onChange: (e) => updateValue("nickname", e.target.value),
             onBlur: async () => checkValidation("nickname"),
           }}
+          className="inSignup"
         />
       </div>
       <WarningText>{warning}</WarningText>

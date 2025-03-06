@@ -173,6 +173,7 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
             options={periodToDisplay}
             onClick={onPeriodClick}
             isSelected={(t) => t === (isModal ? modalValue.period : period)}
+            className="inExploreJobs"
           />
         </FilterField>
         <FilterField className="field">
@@ -186,6 +187,7 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
                 ? modalValue.jobTypes.includes(type)
                 : jobTypes.includes(type)
             }
+            className="inExploreJobs"
           />
         </FilterField>
         {((isModal && modalValue.period === PERIOD.LONG_TERM) ||
@@ -199,6 +201,7 @@ const JobFilter: React.FC<JobFilterProps> = (props) => {
               isSelected={(day) =>
                 isModal ? modalValue.days.includes(day) : days.includes(day)
               }
+              className="inExploreJobs"
             />
           </FilterField>
         )}

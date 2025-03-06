@@ -30,18 +30,10 @@ export const Container = styled("div", {
         fontSize: "17px",
         padding: "10px",
       },
-      "& .dateItem": {
-        padding: "9px",
-        fontSize: "15px",
-      },
     },
     "@bp1": {
       "& .title": {
         fontSize: "15px",
-      },
-      "& .dateItem": {
-        padding: "6px",
-        fontSize: "13px",
       },
     },
   },
@@ -101,5 +93,15 @@ export const DateItem = styled("button", {
   "&:not(.selectable):not(.viewable)": {
     color: "#9A9A9A",
     cursor: "not-allowed",
+  },
+  "&.inCreateJob": {
+    "@bp2": {
+      padding: "9px",
+      fontSize: "15px",
+    },
+    "@bp1": {
+      padding: "6px",
+      fontSize: "13px",
+    },
   },
 });

@@ -3,14 +3,13 @@ import { Coordinate } from "../types/types.ts";
 import { Container } from "../styles/components/CustomMap.styles.ts";
 
 type CustomMapProps = {
-  style?: Record<string, string>;
   polygonLine?: Coordinate[];
   markerAddress?: string;
   className?: string;
 };
 
 const CustomMap: React.FC<CustomMapProps> = (props) => {
-  const { style = {}, polygonLine = [], markerAddress, className = "" } = props;
+  const { polygonLine = [], markerAddress, className = "" } = props;
   const mapContainerRef = useRef(null);
   const mapRef = useRef<kakao.maps>(null);
   const polygonRef = useRef<kakao.maps.Polygon>(null);
@@ -92,9 +91,7 @@ const CustomMap: React.FC<CustomMapProps> = (props) => {
     updateMarker(markerAddress);
   }, [markerAddress]);
 
-  return (
-    <Container className={className} ref={mapContainerRef} style={style} />
-  );
+  return <Container className={className} ref={mapContainerRef} />;
 };
 
 export default CustomMap;

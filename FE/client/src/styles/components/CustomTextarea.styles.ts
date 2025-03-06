@@ -25,6 +25,28 @@ export const Textarea = styled("textarea", {
   "&:focus": {
     outline: `1px solid ${MainColor}`,
   },
+  "&.inCreateJob": {
+    "@bp2": {
+      padding: "15px",
+    },
+    "@bp1": {
+      padding: "13px",
+      fontSize: "16px",
+      "&::placeholder": {
+        fontSize: "16px",
+      },
+    },
+  },
+  "&.inApplicationModal": {
+    "@bp1": {
+      padding: "12px 14px",
+      fontSize: "16px",
+      height: "130px",
+      "&::placeholder": {
+        fontSize: "16px",
+      },
+    },
+  },
 });
 
 export const CharCounter = styled("div", {
@@ -36,5 +58,16 @@ export const CharCounter = styled("div", {
   "& span": {
     color: "black",
     fontWeight: "400",
+  },
+  "&.inCreateJob": {
+    "@bp1": {
+      display: "none",
+    },
+  },
+  "&.inApplicationModal": {
+    "@bp1": {
+      fontSize: "14px",
+      bottom: "-16px",
+    },
   },
 });

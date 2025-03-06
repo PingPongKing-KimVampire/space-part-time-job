@@ -150,20 +150,8 @@ export const LoginForm = styled("form", {
   "@bp3": {
     padding: "30px 26px 24px 26px",
   },
-  "@bp2": {
-    "& input": {
-      padding: "15px",
-    },
-  },
   "@bp1": {
     padding: "27px 24px 22px 24px",
-    "& input": {
-      padding: "13px",
-      fontSize: "16px",
-      "&::placeholder": {
-        fontSize: "16px",
-      },
-    },
   },
 });
 

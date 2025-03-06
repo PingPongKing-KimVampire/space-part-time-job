@@ -8,7 +8,7 @@ type PhoneNumberInputProps = {
   setValue: (value: string) => void;
   onBlurStart?: () => void;
   children?: React.ReactNode;
-  width?: string;
+  className?: string;
 };
 
 // CustomInput을 활용해 구현한 휴대전화번호 전용 인풋 컴포넌트
@@ -21,7 +21,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
     setValue,
     onBlurStart = () => {},
     children,
-    width = "100%",
+    className = "",
   } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,9 +52,9 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
         invalid={invalid}
         eventHandlers={{ onChange, onBlur }}
         value={value}
-        width={width}
         ref={inputRef}
         maxLength={20}
+        className={className}
       >
         {children && children}
       </CustomInput>

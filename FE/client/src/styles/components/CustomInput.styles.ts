@@ -1,11 +1,17 @@
 import { styled, MainColor } from "../global";
 
+export const Container = styled("div", {
+  position: "relative",
+  width: "100%",
+});
+
 export const Input = styled("input", {
   background: "white",
   border: "1px solid #B2B2B2",
   padding: "17px",
   fontSize: "18px",
   boxSizing: "border-box",
+  width: "100%",
   "&::placeholder": {
     fontSize: "18px",
     color: "#B2B2B2",
@@ -34,6 +40,40 @@ export const Input = styled("input", {
       single: {
         borderRadius: "16px",
       },
+    },
+  },
+  "&.inCreateJob": {
+    "&.placeInput": {
+      cursor: "pointer",
+    },
+    "@bp2": {
+      padding: "15px",
+    },
+    "@bp1": {
+      padding: "13px",
+      fontSize: "16px",
+      "&::placeholder": {
+        fontSize: "16px",
+      },
+    },
+  },
+  "&.inLogin, &.inSearchNeighborhood": {
+    "@bp2": {
+      padding: "15px",
+    },
+    "@bp1": {
+      padding: "13px",
+      fontSize: "16px",
+      "&::placeholder": {
+        fontSize: "16px",
+      },
+    },
+  },
+  "&.inSignup": {
+    padding: "15px",
+    fontSize: "15px",
+    "&::placeholder": {
+      fontSize: "15px",
     },
   },
 });

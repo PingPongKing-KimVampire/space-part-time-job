@@ -37,6 +37,7 @@ const DaysField = () => {
         options={Object.values(DAYS)}
         onClick={onDayClick}
         isSelected={(day: string) => input.days.includes(day)}
+        className="inCreateJob"
       />
     </FormField>
   );

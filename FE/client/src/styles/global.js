@@ -181,8 +181,6 @@ export const ModalBackground = styled("div", {
     },
     "& .textareaContainer": {
       width: "100%",
-      display: "flex", // TODO : 여기 flexbox 관련 속성이 왜 있지?
-      flexDirection: "column",
       marginBottom: "15px",
     },
     "& .applyButton": {
@@ -218,20 +216,6 @@ export const ModalBackground = styled("div", {
       gap: "12px",
       "& .title": {
         fontSize: "20px",
-      },
-      "& .textareaContainer": {
-        "& textarea": {
-          padding: "12px 14px",
-          fontSize: "16px",
-          height: "130px",
-          "&::placeholder": {
-            fontSize: "16px",
-          },
-        },
-        "& .charCounter": {
-          fontSize: "14px",
-          bottom: "-16px",
-        },
       },
       "& .applyButton": {
         fontSize: "18px",
