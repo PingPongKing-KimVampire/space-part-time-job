@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   startOfWeek,
   endOfWeek,
@@ -54,43 +54,77 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
     return `${format(today, "yyyy.MM.dd")}~${format(lastDate, "yyyy.MM.dd")}`;
   }, [today, lastDate]);
 
-  const onDateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!setDates) return; // setDates가 없으면 날짜 선택이 불가능한 보기용 캘린더라는 뜻
-    if (onClickStart) onClickStart();
-    const date: string = e.currentTarget.getAttribute("data-date") || "";
-    if (dates.has(date)) {
+  const toggleDate = (date, addCondition) => {
+    if (!setDates) return;
+    if (addCondition) {
+      setDates((state) => new Set(state).add(date));
+    } else {
       setDates((state) => {
         const newDates = new Set(state);
         newDates.delete(date);
         return newDates;
       });
-    } else {
-      setDates((state) => new Set(state).add(date));
     }
   };
 
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const isSelectingRef = useRef<boolean | null>(null); // 드래그 중이면 boolean, 선택 중이면 true / 선택 해제 중이면 false
+  const isVisitedDateRef = useRef(false); // 드래그 후 선택 가능한 첫 DateItem을 만났는가?
 
-  const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (!setDates) return; // setDates가 없으면 날짜 선택이 불가능한 보기용 캘린더라는 뜻
-    if (!isDragging) return;
-    const element = document.elementFromPoint(e.clientX, e.clientY);
-    const date: string = element?.getAttribute("data-date") || "";
-    if (date === "") return;
-    setDates((state) => new Set(state).add(date));
+  const handleDateSelection = (element) => {
+    if (
+      !element ||
+      !element.classList.contains("dateItem") ||
+      !element.classList.contains("selectable")
+    )
+      return;
+    if (onClickStart) onClickStart();
+    const date = element.getAttribute("data-date")!;
+    if (!isVisitedDateRef.current) {
+      isSelectingRef.current = !dates.has(date);
+      isVisitedDateRef.current = true;
+    }
+    toggleDate(date, isSelectingRef.current);
+  };
+
+  const onMouseMove = (
+    e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>
+  ) => {
+    if (!setDates || !isDragging) return; // setDates가 없으면 날짜 선택이 불가능한 보기용 캘린더라는 뜻
+    let clientX: number, clientY: number;
+    if ("touches" in e) {
+      // 터치 이벤트인 경우
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      // 마우스 이벤트인 경우
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    handleDateSelection(document.elementFromPoint(clientX, clientY));
+  };
+
+  const onDragStart = (
+    e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>
+  ) => {
+    setIsDragging(true);
+    handleDateSelection(e.target);
+  };
+  const onDragEnd = () => {
+    setIsDragging(false);
+    isVisitedDateRef.current = false;
   };
 
   return (
     <Container className={className}>
       {isTitleVisible && <div className="title">{title}</div>}
       <Calendar
-        onMouseDown={() => {
-          setIsDragging(true);
-        }}
-        onMouseUp={() => {
-          setIsDragging(false);
-        }}
+        onMouseDown={onDragStart}
+        onMouseUp={onDragEnd}
         onMouseMove={onMouseMove}
+        onTouchStart={onDragStart}
+        onTouchEnd={onDragEnd}
+        onTouchMove={onMouseMove}
       >
         {Object.values(DAYS).map((day) => (
           <div className="day" key={day}>
@@ -99,7 +133,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
         ))}
         {visibleDates &&
           visibleDates.map((dateInfo, index) => {
-            const classNames = [className];
+            const classNames = ["dateItem", className];
             if (setDates && dateInfo.isSelectable)
               classNames.push("selectable");
             if (!setDates) {
@@ -124,7 +158,6 @@ const CustomCalendar: React.FC<CustomCalendarProps> = (props) => {
                 disabled={!setDates || !dateInfo.isSelectable}
                 key={dateInfo.dateString}
                 data-date={dateInfo.dateString}
-                onClick={onDateClick}
               >
                 {dateInfo.isToday ? "오늘" : format(dateInfo.date, "d")}
               </DateItem>
