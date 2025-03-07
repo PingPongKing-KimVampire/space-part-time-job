@@ -15,6 +15,9 @@ export const Container = styled("div", {
     "@bp5": {
       width: "360px",
     },
+    "@bp1": {
+      width: "100%",
+    },
   },
   "&.inCreateJob": {
     marginTop: "-40px",
@@ -94,7 +97,7 @@ export const DateItem = styled("button", {
     color: "#9A9A9A",
     cursor: "not-allowed",
   },
-  "&.inCreateJob": {
+  "&.inCreateJob, &.inViewJob": {
     "@bp2": {
       padding: "9px",
       fontSize: "15px",

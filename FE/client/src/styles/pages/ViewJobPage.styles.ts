@@ -495,14 +495,17 @@ export const BasicInfoContainer = styled("div", {
           borderRadius: "15px",
         },
       },
-      "& .hoverTarget": {
+      "& .detailButton": {
         fontSize: "14px",
         color: MainColor,
-        transition: "background 0.2s",
-        padding: "6px 8px",
-        borderRadius: "12px",
+        padding: "6px 9.5px",
+        borderRadius: "15px",
         marginLeft: "-5px",
-        "&:hover": {
+        cursor: "pointer",
+        border: "none",
+        background: "none",
+        transition: "background 0.5s",
+        "&.isSelected": {
           background: SubColor,
         },
       },
@@ -514,41 +517,47 @@ export const BasicInfoContainer = styled("div", {
   },
   "@bp6": {
     gap: "8px",
-    "& .item": {
-      "& .main": {
-        "& .infoText": {
-          fontSize: "17px",
-        },
-        "& svg": {
-          width: "24px",
-          height: "24px",
-        },
-        "& .hoverTarget": {
-          fontSize: "13px",
-        },
+    "& .item .main": {
+      "& .infoText": {
+        fontSize: "17px",
       },
+      "& svg": {
+        width: "24px",
+        height: "24px",
+      },
+    },
+  },
+  "@bp5": {
+    "& .item .main .detailButton": {
+      fontSize: "13px",
+      padding: "5px 8.5px",
     },
   },
   "@bp4": {
     gap: "7px",
-    "& .item": {
-      "& .main": {
-        "& .infoText": {
-          fontSize: "16px",
-        },
-        "& .hoverTarget": {
-          padding: "5.5px 7px",
-        },
+    "& .item .main": {
+      "& .infoText": {
+        fontSize: "16px",
       },
+      "& .detailButton": {
+        padding: "4px 7.5px",
+      },
+    },
+  },
+  "@bp3": {
+    "& .item .main .detailButton": {
+      marginLeft: "-4px",
     },
   },
   "@bp2": {
     gap: "6px",
-    "& .item": {
-      "& .main": {
-        "& .infoText": {
-          fontSize: "15px",
-        },
+    "& .item .main": {
+      "& .infoText": {
+        fontSize: "15px",
+      },
+      "& .detailButton": {
+        fontSize: "12px",
+        marginLeft: "0px",
       },
     },
   },

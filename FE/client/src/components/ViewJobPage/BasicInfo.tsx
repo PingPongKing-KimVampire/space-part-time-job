@@ -34,13 +34,19 @@ const BasicInfo = () => {
   );
 
   const detailCalendarElement = useMemo(() => {
-    if (!workPeriod) return null;
+    if (!workPeriod || !workPeriod.dates) return null;
     if (PERIOD[workPeriod.type] !== PERIOD.SHORT_TERM) return null;
-    const dates = new Set(workPeriod.dates);
-    const lastDate = max(workPeriod.dates!.map((date) => new Date(date)));
+    const dates = workPeriod.dates!.map((date) => new Date(date));
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    for (const date of dates) {
+      if (date.getTime() < today.getTime()) return null;
+    }
+    // 모든 날짜가 오늘 이후라면 캘린더를 표시하지 않음
+    const lastDate = max(dates);
     return (
       <CustomCalendar
-        dates={dates || new Set()}
+        dates={new Set(workPeriod.dates)}
         lastDate={lastDate}
         isTitleVisible={false}
         className="inViewJob"
@@ -48,8 +54,6 @@ const BasicInfo = () => {
     );
   }, [workPeriod]);
 
-  // if (!pay || !addressName || !workPeriod || !workTime) return null;
-  // TODO: WonIcon outline 아이콘으로 다시 찾아보기
   return (
     <BasicInfoContainer>
       <InfoItem
@@ -99,8 +103,7 @@ type InfoItemProps = {
 
 const InfoItem: React.FC<InfoItemProps> = (props) => {
   const { iconElement, text, detail, loading } = props;
-
-  const [isHovering, setHovering] = useState(false); // 호버 타겟 호버링 여부
+  const [isVisibleDetail, setIsVisibleDetail] = useState<boolean>(false);
 
   return (
     <div className="item">
@@ -112,16 +115,17 @@ const InfoItem: React.FC<InfoItemProps> = (props) => {
           <div className="infoText">{text}</div>
         )}
         {!loading && detail && (
-          <div
-            className="hoverTarget"
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
+          <button
+            className={`detailButton ${isVisibleDetail ? "isSelected" : ""}`}
+            onClick={() => {
+              setIsVisibleDetail((state) => !state);
+            }}
           >
             {detail.name} 보기
-          </div>
+          </button>
         )}
       </div>
-      {!loading && detail && isHovering && (
+      {!loading && detail && isVisibleDetail && (
         <div className="detail">{detail.element}</div>
       )}
     </div>
