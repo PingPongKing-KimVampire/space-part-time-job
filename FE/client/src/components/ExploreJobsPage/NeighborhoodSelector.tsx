@@ -56,6 +56,7 @@ const NeighborhoodSelector: React.FC<NeighborhoodButtonProps> = (props) => {
               data-id={id}
               onClick={(e) => {
                 const id = e.currentTarget.getAttribute("data-id") || "";
+                sessionStorage.setItem("selectedNeighborhoodID", id);
                 setSelectedNeighborhoodID(id);
                 setIsSelectBoxVisible(false);
               }}

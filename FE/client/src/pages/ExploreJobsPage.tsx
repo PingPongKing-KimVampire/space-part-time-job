@@ -92,11 +92,12 @@ const ExploreJobsPage = () => {
   }, [residentNeighborhoods]);
 
   useEffect(() => {
-    // 선택된 동이 없을 경우, 첫 번째 상주 지역을 선택
+    // 선택된 동이 없을 경우, 세션 스토리지에서 가져오거나 첫 번째 상주 지역을 선택
     const neighborhoodIds = Object.keys(residentNeighborhoods);
     if (neighborhoodIds.length === 0) return;
     if (neighborhoodIds.includes(selectedNeighborhoodID)) return;
-    setSelectedNeighborhoodID(neighborhoodIds[0]);
+    const selectedId = sessionStorage.getItem("selectedNeighborhoodID");
+    setSelectedNeighborhoodID(selectedId || neighborhoodIds[0]);
   }, [residentNeighborhoods]);
 
   const [searchJobPosts, { error: searchJobPostsError }] = useLazyQuery(
