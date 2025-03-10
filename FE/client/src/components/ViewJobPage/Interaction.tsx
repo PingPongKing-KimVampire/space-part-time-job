@@ -27,6 +27,11 @@ const Interaction = () => {
   } = useViewJobContext();
   const { id, myJobApplication, myInterested, status } = jobPost;
 
+  const [isInterested, setIsInterested] = useState<boolean | null>(null);
+  useEffect(() => {
+    setIsInterested(!!jobPost.myInterested);
+  }, [jobPost.myInterested]);
+
   const isApplied = useMemo(() => {
     if (!myJobApplication) return null; // TODO : 지원서 받아오기 실패
     return myJobApplication.some(
@@ -42,17 +47,16 @@ const Interaction = () => {
   const [markAndUnmarkFinalError, setMarkAndUnmarkFinalError] =
     useState<Error | null>(null);
   useEffect(() => {
-    if (markError || unmarkError)
-      setMarkAndUnmarkFinalError(new Error(ERROR.SERVER));
+    if (!markError && !unmarkError) return;
+    setMarkAndUnmarkFinalError(new Error(ERROR.SERVER));
+    setIsInterested(() => !!jobPost.myInterested);
   }, [markError, unmarkError]);
 
-  const onHeartClick = async () => {
-    if (!myInterested && isClosed) return; // 마감한 알바라면 mark는 불가능함
-    if (markLoading || unmarkLoading) return;
-    const mutation = myInterested ? unmarkInterest : markInterest;
-    const processData = myInterested
-      ? processUnmarkPostAsInterest
-      : processMarkPostAsInterest;
+  const requestMark = async () => {
+    const mutation = isInterested ? markInterest : unmarkInterest;
+    const processData = isInterested
+      ? processMarkPostAsInterest
+      : processUnmarkPostAsInterest;
     try {
       let response;
       try {
@@ -66,6 +70,28 @@ const Interaction = () => {
       setMarkAndUnmarkFinalError(e);
     }
   };
+
+  const onHeartClick = async () => {
+    if (!myInterested && isClosed) return; // 마감한 알바라면 mark는 불가능함
+    setIsInterested((state) => !state);
+  };
+
+  let interestTimeout: ReturnType<typeof setTimeout> | null = null; // 하트 클릭 후 타이머
+  useEffect(() => {
+    if (interestTimeout) clearTimeout(interestTimeout);
+    // 마지막 하트 클릭 후 200ms 후 요청 전송 (debounce)
+    interestTimeout = setTimeout(() => {
+      if (!!jobPost.myInterested === isInterested) return; // 현재 jobPost 상태와 동일하면 요청 보낼 필요 없음
+      if (markLoading || unmarkLoading) {
+        alert("이전 요청을 처리 중입니다.");
+        return;
+      }
+      requestMark();
+    }, 200);
+    return () => {
+      if (interestTimeout) clearTimeout(interestTimeout);
+    };
+  }, [isInterested]);
 
   return (
     <InteractionContainer>
@@ -96,7 +122,7 @@ const Interaction = () => {
             </button>
             <HeartIcon
               className={`${isClosed ? "inactivated" : ""} ${
-                myInterested ? "selected" : ""
+                isInterested ? "selected" : ""
               }`}
               onClick={onHeartClick}
             />
