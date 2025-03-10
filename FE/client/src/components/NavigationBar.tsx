@@ -43,7 +43,7 @@ const NavigationBar = () => {
           }}
         >
           <img src={logoImage} />
-          우주 알바
+          <div className="text">우주 알바</div>
         </div>
         <ProfileIcon
           onClick={() => {

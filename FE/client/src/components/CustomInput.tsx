@@ -39,14 +39,13 @@ const CustomInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   } = props;
   const { onChange, onFocus, onBlur } = eventHandlers;
   return (
-    <Container>
+    <Container borderType={borderType} className={className}>
       <Input
         ref={ref}
         id={id}
         className={`${className} ${invalid ? "invalid" : ""}`}
         type={type}
         placeholder={placeholder}
-        borderType={borderType}
         value={value}
         onChange={onChange}
         onFocus={onFocus}

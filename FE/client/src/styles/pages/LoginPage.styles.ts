@@ -112,6 +112,7 @@ export const TabButton = styled("button", {
   background: "#F8F8F8",
   color: "#7C7C7C",
   cursor: "pointer",
+  margin: "0",
   "&.left": {
     borderTopLeftRadius: "10px",
     borderRight: "none",
@@ -133,7 +134,7 @@ export const TabButton = styled("button", {
     fontSize: "18px",
   },
   "@bp1": {
-    padding: "12px",
+    padding: "14px",
     fontSize: "16px",
   },
 });
@@ -160,17 +161,19 @@ export const LoginButton = styled("button", {
   width: "100%",
   marginTop: "24px",
   "@bp6": {
-    padding: "13px",
-    marginTop: "16px !important",
-    fontSize: "22px",
+    padding: "15px",
+    fontSize: "21px",
+    marginTop: "16px",
   },
   "@bp2": {
-    padding: "12px",
+    padding: "14px",
+    fontSize: "20px",
+    marginTop: "12px",
   },
   "@bp1": {
-    padding: "10px",
+    padding: "12px",
     borderRadius: "12px",
-    fontSize: "20px",
+    fontSize: "19px",
   },
 });
 
@@ -185,14 +188,10 @@ export const SignupMessage = styled("div", {
 });
 
 export const PhoneNumberInputChild = styled("div", {
-  position: "absolute",
-  right: "12px",
-  top: "50%",
   display: "flex",
   flexDirection: "row-reverse",
   alignItems: "center",
   gap: "12px",
-  transform: "translateY(-50%)",
   "& .sendNumberButton": {
     ...MainButtonStyle,
     padding: "7px 10px",

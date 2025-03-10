@@ -587,7 +587,7 @@ export const InteractionContainer = styled("div", {
       },
     },
     "& svg": {
-      width: "8%",
+      width: "58px",
       strokeWidth: "0.6",
       stroke: "#828282",
       transition: "all 0.2s",
@@ -613,14 +613,24 @@ export const InteractionContainer = styled("div", {
       },
     },
   },
+  "@bp7": {
+    "& .interaction svg": {
+      width: "55px",
+    },
+  },
   "@bp6": {
-    "& .interaction .applyButton": {
-      fontSize: "21px",
+    "& .interaction": {
+      "& .applyButton": {
+        fontSize: "21px",
+      },
+      "& svg": {
+        width: "53px",
+      },
     },
   },
   "@bp4": {
     "& .interaction svg": {
-      width: "55px",
+      width: "51px",
     },
   },
   "@bp3": {
@@ -630,20 +640,20 @@ export const InteractionContainer = styled("div", {
         fontSize: "19px",
       },
       "& svg": {
-        width: "50px",
+        width: "49px",
       },
     },
   },
   "@bp1": {
     "& .interaction": {
-      gap: "10px",
+      gap: "12px",
       "& .applyButton": {
         fontSize: "17.5px",
         borderRadius: "14px",
         padding: "10px",
       },
       "& svg": {
-        width: "47px",
+        width: "45px",
       },
     },
   },

@@ -43,14 +43,17 @@ export const Content = styled("div", {
       main: {
         justifyContent: "space-between",
         "& .logo": {
-          fontSize: "28px",
-          fontWeight: "800",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
           gap: "14px",
           "& img": {
             height: `calc(${NavigationBarHeight.default} * 0.45)`,
+          },
+          "& .text": {
+            fontSize: "28px",
+            fontWeight: "800",
+            whiteSpace: "nowrap",
           },
         },
         "& svg": {

@@ -63,7 +63,7 @@ export const ButtonStyle = {
 export const MainButtonStyle = {
   ...ButtonStyle,
   fontSize: "24px",
-  fontWeight: "800",
+  fontWeight: "700",
   "&.inactivated": {
     background: "#E7E7E7",
     color: "#AAAAAA",

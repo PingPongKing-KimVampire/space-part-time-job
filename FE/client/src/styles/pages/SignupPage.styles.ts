@@ -30,12 +30,15 @@ export const SendNumberButton = styled("button", {
   ...MainButtonStyle,
   width: "100%",
   "@bp3": {
-    padding: "13px",
+    padding: "15px",
     fontSize: "21px",
   },
   "@bp2": {
-    padding: "12px",
+    padding: "14px",
     fontSize: "20px",
+  },
+  "@bp1": {
+    fontSize: "19px",
   },
 });
 
@@ -43,12 +46,15 @@ export const SignupButton = styled("button", {
   ...MainButtonStyle,
   margin: "30px 0",
   "@bp3": {
-    padding: "13px",
+    padding: "15px",
     fontSize: "21px",
   },
   "@bp2": {
-    padding: "12px",
+    padding: "14px",
     fontSize: "20px",
+  },
+  "@bp1": {
+    fontSize: "19px",
   },
 });
 

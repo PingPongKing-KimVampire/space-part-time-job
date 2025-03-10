@@ -31,6 +31,7 @@ export const Container = styled("div", {
   gap: "12px",
   paddingTop: `calc(${NavigationBarHeight.default} + 24px)`,
   paddingBottom: "30px",
+  boxSizing: "border-box",
   "& .loadingItem": {
     ...skeletonStyle,
     width: "100%",
