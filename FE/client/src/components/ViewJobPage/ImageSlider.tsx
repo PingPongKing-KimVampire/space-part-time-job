@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { ImageSliderContainer } from "../../styles/pages/ViewJobPage.styles";
 import { ReactComponent as LeftArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { ReactComponent as RightArrowIcon } from "../../assets/icons/arrow-right.svg";
@@ -9,17 +9,42 @@ type ImageSliderProps = {
 };
 
 const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls, loading }) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const imageListRef = useRef<HTMLDivElement | null>(null);
 
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 보여지는 이미지의 인덱스
   const [containerWidth, setContainerWidth] = useState(0); // 한 번 슬라이딩 시 움직여야 하는 거리
 
-  useEffect(() => {
-    setContainerWidth(
-      containerRef.current ? containerRef.current.clientWidth : 0
-    );
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const setContainerRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    setContainerWidth(node.clientWidth);
+    containerRef.current = node;
   }, []);
+
+  useEffect(() => {
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const handleResize = () => {
+      if (!imageListRef.current || !containerRef.current) return;
+      // resize 동안 transition 제거, transfrom 직접 업데이트
+      imageListRef.current.style.transition = "none";
+      imageListRef.current.style.transform = `translateX(-${
+        containerRef.current.clientWidth * currentIndex
+      }px)`;
+      // resize 종료 후 일정 시간 뒤 transition 복원 및 containerWidth 업데이트 (debounce)
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (!imageListRef.current || !containerRef.current) return;
+        setContainerWidth(containerRef.current.clientWidth);
+        imageListRef.current.style.transition = "transform 0.5s";
+      }, 200);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+    };
+  }, [currentIndex]);
 
   const slidingTo = (index: number) => {
     if (index < 0 || imageUrls.length <= index) return;
@@ -35,7 +60,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls, loading }) => {
     return <ImageSliderContainer className="loading" />;
   }
   return (
-    <ImageSliderContainer ref={containerRef}>
+    <ImageSliderContainer ref={setContainerRef}>
       <div className="imageList" ref={imageListRef}>
         {imageUrls.map((url) => (
           <div className="imageBox" key={url}>
