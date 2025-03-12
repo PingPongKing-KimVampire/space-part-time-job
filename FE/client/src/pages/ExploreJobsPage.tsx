@@ -45,7 +45,7 @@ const ExploreJobsPage = () => {
   const [selectedNeighborhoodID, setSelectedNeighborhoodID] =
     useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
-  const debouncedSearchValue = useDebounce(searchValue, 100);
+  const debouncedSearchValue = useDebounce(searchValue, 200);
   const [filter, setFilter] = useState<Filter>({
     period: null,
     jobTypes: [],

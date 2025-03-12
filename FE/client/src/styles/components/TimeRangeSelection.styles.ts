@@ -281,7 +281,7 @@ export const SelectBox = styled("div", {
       color: "black",
     },
   },
-  "&::-webkit-scrollbar": {
-    display: "none",
-  },
+  "&::-webkit-scrollbar": { display: "none" }, // Chrome, Edge, Safari
+  scrollbarWidth: "none", // FireFox
+  msOverflowStyle: "none", // IE
 });

@@ -261,13 +261,15 @@ export const PhotoContainer = styled("div", {
       aspectRatio: "1/1",
       boxSizing: "border-box",
       position: "relative",
-      "& img": {
+      "& > img": {
         width: "100%",
         height: "100%",
         objectFit: "cover",
+        border: "1px solid #B2B2B2",
         borderRadius: "5px",
+        boxSizing: "border-box",
       },
-      "& button": {
+      "& > button": {
         height: "24%",
         aspectRatio: "1/1",
         border: "none",

@@ -35,11 +35,15 @@ export const Container = styled("div", {
 });
 
 export const Slider = styled("input", {
-  "-webkit-appearance": "none",
+  "-webkit-appearance": "none", // Chrome, Safari, Edge
+  "-moz-appearance": "none", // Firefox
+  "-ms-appearance": "none", // IE
   width: "100%",
   height: "5px",
   background: "#EDEDED",
   margin: "0",
+  zIndex: "1",
+  // Chrome, Safari, Edge
   "&::-webkit-slider-thumb": {
     "-webkit-appearance": "none",
     width: "24px",
@@ -47,8 +51,31 @@ export const Slider = styled("input", {
     background: MainColor,
     cursor: "pointer",
     borderRadius: "20px",
-    position: "relative",
-    zIndex: "1",
+  },
+  // Firefox
+  "&::-moz-range-thumb": {
+    width: "24px",
+    height: "24px",
+    background: MainColor,
+    cursor: "pointer",
+    borderRadius: "20px",
+    border: "none", // 기본 스타일 제거
+  },
+  // IE
+  "&::-ms-thumb": {
+    width: "24px",
+    height: "24px",
+    background: MainColor,
+    cursor: "pointer",
+    borderRadius: "20px",
+    border: "none",
+  },
+  "&::-ms-track": {
+    width: "100%",
+    height: "5px",
+    background: "transparent", // 기본 트랙 스타일 제거
+    borderColor: "transparent",
+    color: "transparent",
   },
   "@bp2": {
     height: "4px",
@@ -70,6 +97,7 @@ export const MarkersContainer = styled("div", {
   justifyContent: "space-between",
   alignItems: "center",
   pointerEvents: "none",
+  zIndex: "0",
   "& .marker": {
     width: "17px",
     height: "17px",

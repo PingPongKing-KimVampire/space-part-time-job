@@ -338,6 +338,7 @@ export const JobFilterContainer = styled("div", {
     flexDirection: "column",
     overflowY: "auto",
     gap: "22px",
+    overflow: "hidden",
   },
   "& .modalButtonGroups": {
     width: "100%",

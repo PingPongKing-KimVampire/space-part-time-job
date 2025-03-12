@@ -36,6 +36,7 @@ export const Input = styled("input", {
   flex: "1",
   padding: "17px",
   fontSize: "18px",
+  border: "0",
   "&::placeholder": {
     fontSize: "18px",
     color: "#B2B2B2",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Container,
   Slider,
@@ -6,11 +6,19 @@ import {
 } from "../styles/components/LevelSlider.styles.ts";
 
 const LevelSlider = ({ level, value, setValue }) => {
+  const isChanging = useRef<boolean>(false); // Firefox에서는 onChangeEnd -> onChange 순서로 발생하기 때문에 필요
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    if (isChanging.current) {
+      setValue(e.target.value);
+    }
   };
 
-  const onSliderChangeEnd = (
+  const onChangeStart = () => {
+    isChanging.current = true;
+  };
+
+  const onChangeEnd = (
     e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>
   ) => {
     const calculateLevel = (value: string): string => {
@@ -24,6 +32,7 @@ const LevelSlider = ({ level, value, setValue }) => {
       return `${(level - 1) * 100}`;
     };
     setValue(calculateLevel(e.currentTarget.value));
+    isChanging.current = false;
   };
 
   return (
@@ -36,8 +45,10 @@ const LevelSlider = ({ level, value, setValue }) => {
           step="1"
           value={value || "0"}
           onChange={onChange}
-          onMouseUp={onSliderChangeEnd}
-          onTouchEnd={onSliderChangeEnd}
+          onMouseDown={onChangeStart}
+          onMouseUp={onChangeEnd}
+          onTouchStart={onChangeStart}
+          onTouchEnd={onChangeEnd}
         />
         <MarkersContainer>
           {Array.from({ length: level }).map((_, index) => {

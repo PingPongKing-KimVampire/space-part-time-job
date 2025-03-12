@@ -26,10 +26,18 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ imageUrls, loading }) => {
       if (!containerRef.current) return;
       setContainerWidth(containerRef.current.clientWidth);
     };
-
     window.addEventListener("resize", updateContainerWidth);
     return () => window.removeEventListener("resize", updateContainerWidth);
   }, []);
+
+  useEffect(() => {
+    // 지원하기 상호작용 후, imageUrls이 변경되었을 때 새로운 imageList 요소의 위치를 기존 위치로 업데이트하여 유지
+    if (!imageListRef.current) return;
+    imageListRef.current.style.transition = "none";
+    imageListRef.current.style.transform = `translateX(-${
+      containerWidth * currentIndex
+    }px)`;
+  }, [imageUrls]);
 
   useEffect(() => {
     if (!imageListRef.current) return;
