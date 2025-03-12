@@ -13,11 +13,15 @@ type JobListProps = {
 const JobList: React.FC<JobListProps> = (props) => {
   const { totalCount, jobPosts, fetchMoreJobPosts, loading } = props;
   const bottomRef = useRef(null);
+  const fetchMoreJobPostsRef = useRef(fetchMoreJobPosts);
+  useEffect(() => {
+    fetchMoreJobPostsRef.current = fetchMoreJobPosts;
+  }, [fetchMoreJobPosts]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) fetchMoreJobPosts();
+        if (entry.isIntersecting) fetchMoreJobPostsRef.current();
       },
       {
         root: null, // 뷰포트 기준으로 관찰
@@ -29,7 +33,7 @@ const JobList: React.FC<JobListProps> = (props) => {
     return () => {
       if (bottomRef.current) observer.unobserve(bottomRef.current);
     };
-  }, [fetchMoreJobPosts]);
+  }, []);
 
   return (
     <>

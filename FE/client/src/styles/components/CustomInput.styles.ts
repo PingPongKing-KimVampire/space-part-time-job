@@ -10,6 +10,7 @@ export const Container = styled("div", {
   alignItems: "center",
   overflow: "hidden",
   paddingRight: "10px",
+  position: "relative",
   variants: {
     borderType: {
       "multi-top": {

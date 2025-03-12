@@ -116,6 +116,14 @@ const ExploreJobsPage = () => {
     async (
       cursor
     ): Promise<{ posts: JobPost[]; pageInfo: PageInfo } | null> => {
+      if (
+        Object.keys(residentNeighborhoods).length === 0 ||
+        !selectedNeighborhoodID
+      )
+        return null;
+      const selectedNeighborhood =
+        residentNeighborhoods[selectedNeighborhoodID];
+      if (!selectedNeighborhood) return null;
       const getProcessedTime = () => {
         if (
           filter.time.start === TIME_NOT_SET ||
@@ -133,14 +141,6 @@ const ExploreJobsPage = () => {
         }
         return { startTime: filter.time.start, endTime: filter.time.end };
       };
-      if (
-        Object.keys(residentNeighborhoods).length === 0 ||
-        !selectedNeighborhoodID
-      )
-        return null;
-      const selectedNeighborhood =
-        residentNeighborhoods[selectedNeighborhoodID];
-      if (!selectedNeighborhood) return null;
       const days = filter.days.map((day) => DAYS_KEY[day]);
       const { startTime, endTime } = getProcessedTime();
 
@@ -176,14 +176,15 @@ const ExploreJobsPage = () => {
                   resolve({ posts, pageInfo });
                 } catch (e) {
                   reject(e);
+                } finally {
+                  setSearchJobPostsLoading(false);
                 }
               },
-              onError: (error) => {
+              onError: () => {
                 reject(new Error(ERROR.SERVER));
               },
             });
           });
-        setSearchJobPostsLoading(false);
         return result;
       } catch (e) {
         console.log("SearchJobPosts Query Error: ", e.message);
